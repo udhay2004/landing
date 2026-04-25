@@ -102,38 +102,29 @@ body::before {
   font-size:clamp(2rem,5vw,3.2rem); font-weight:900; line-height:1.15;
 }
 .waiting-title em { font-style:italic; color:var(--gold); }
-.session-info-card {
+
+/* not-active info card */
+.not-active-card {
   background:rgba(201,169,110,0.05); border:1px solid var(--gold-border);
-  border-radius:var(--r); padding:1.6rem 2.4rem; min-width:320px;
+  border-radius:var(--r); padding:2rem 2.8rem; min-width:320px; max-width:420px;
+  display:flex; flex-direction:column; gap:.1rem;
 }
-.session-info-row {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:2rem; padding:.5rem 0;
+.nac-header {
+  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:1.2rem;
+  display:flex; align-items:center; gap:.5rem;
+}
+.nac-header::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.nac-row {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:2rem; padding:.55rem 0;
   border-bottom:1px solid rgba(255,255,255,0.05);
-  font-size:.82rem;
 }
-.session-info-row:last-child { border-bottom:none; }
-.session-info-label { color:var(--text-dim); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; }
-.session-info-value { color:var(--text); font-weight:500; }
-
-/* countdown */
-.countdown-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; }
-.countdown-label { font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; color:var(--text-dim); }
-.countdown-blocks { display:flex; gap:1rem; align-items:center; }
-.cd-block {
-  display:flex; flex-direction:column; align-items:center; gap:.3rem;
-  background:var(--ink2); border:1px solid var(--border);
-  border-radius:12px; padding:1.2rem 1.5rem; min-width:72px;
-}
-.cd-num {
-  font-family:'DM Mono',monospace; font-size:2.2rem; font-weight:500;
-  color:var(--text); line-height:1; letter-spacing:.04em;
-}
-.cd-unit { font-size:.56rem; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); }
-.cd-sep { font-size:1.8rem; color:var(--gold-border); margin-bottom:.8rem; font-weight:300; }
-
+.nac-row:last-child { border-bottom:none; }
+.nac-label { font-size:.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.07em; white-space:nowrap; }
+.nac-value { font-size:.85rem; color:var(--text); font-weight:500; text-align:right; }
 .waiting-note {
-  font-size:.8rem; color:var(--text-dim); line-height:1.7; max-width:380px;
+  font-size:.78rem; color:var(--text-dim); line-height:1.7; max-width:380px;
 }
 
 /* no-meeting state */
@@ -402,45 +393,24 @@ body::before {
     </div>
   </div>
 
-  <!-- COUNTDOWN state -->
-  <div id="state-countdown" class="waiting-body" style="display:none;">
-    <div class="session-badge"><span>⏳</span> Session Scheduled</div>
+  <!-- NOT ACTIVE — scheduled but not yet time -->
+  <div id="state-scheduled" class="waiting-body" style="display:none;">
+    <div class="session-badge">⊘ &nbsp;Session Not Active</div>
 
     <div>
-      <h1 class="waiting-title">Your session starts<br><em>very soon.</em></h1>
+      <h1 class="waiting-title">This session is not<br><em>active yet.</em></h1>
     </div>
 
-    <div class="session-info-card">
-      <div class="session-info-row">
-        <span class="session-info-label">Guest</span>
-        <span class="session-info-value" id="info-guest">—</span>
-      </div>
-      <div class="session-info-row">
-        <span class="session-info-label">Date</span>
-        <span class="session-info-value" id="info-date">—</span>
-      </div>
-      <div class="session-info-row">
-        <span class="session-info-label">Time</span>
-        <span class="session-info-value" id="info-time">—</span>
-      </div>
-      <div class="session-info-row">
-        <span class="session-info-label">Duration</span>
-        <span class="session-info-value">30 minutes</span>
-      </div>
+    <div class="not-active-card">
+      <div class="nac-header">Your scheduled session</div>
+      <div class="nac-row"><span class="nac-label">Guest</span><span class="nac-value" id="info-guest">—</span></div>
+      <div class="nac-row"><span class="nac-label">Date</span><span class="nac-value" id="info-date">—</span></div>
+      <div class="nac-row"><span class="nac-label">Starts at</span><span class="nac-value" id="info-time">—</span></div>
+      <div class="nac-row"><span class="nac-label">Duration</span><span class="nac-value">30 minutes</span></div>
+      <div class="nac-row"><span class="nac-label">Host</span><span class="nac-value">Udhay Marwah · Comply Globally</span></div>
     </div>
 
-    <div class="countdown-wrap">
-      <p class="countdown-label">Session begins in</p>
-      <div class="countdown-blocks">
-        <div class="cd-block"><div class="cd-num" id="cd-h">00</div><div class="cd-unit">hrs</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-block"><div class="cd-num" id="cd-m">00</div><div class="cd-unit">min</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-unit">sec</div></div>
-      </div>
-    </div>
-
-    <p class="waiting-note">This page will automatically unlock and enter the live session room at your scheduled time. Please keep this tab open.</p>
+    <p class="waiting-note">Please return to this link at your scheduled time. The session room will open automatically 5 minutes before your call begins.</p>
   </div>
 </div>
 
@@ -552,7 +522,6 @@ const WINDOW_AFTER_MS   = 35 * 60 * 1000;       // close room 35 min after start
 // ─────────────────────────────────────────────────────
 
 let meeting = null;
-let countdownInterval = null;
 let sessionTimerInterval = null;
 let sessionSeconds = 0;
 
@@ -596,26 +565,6 @@ async function fetchMeeting(){
   }
 }
 
-// ── countdown ─────────────────────────────────────────
-function startCountdown(targetMs){
-  function tick(){
-    const diff = targetMs - Date.now();
-    if(diff <= 0){
-      clearInterval(countdownInterval);
-      init(); // re-check — should now be live
-      return;
-    }
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-h').textContent = pad(h);
-    document.getElementById('cd-m').textContent = pad(m);
-    document.getElementById('cd-s').textContent = pad(s);
-  }
-  tick();
-  countdownInterval = setInterval(tick, 1000);
-}
-
 // ── live session timer ────────────────────────────────
 function startLiveTimer(){
   sessionTimerInterval = setInterval(()=>{
@@ -625,7 +574,7 @@ function startLiveTimer(){
   }, 1000);
 }
 
-// ── load voiceflow ────────────────────────────────────
+// ── load voiceflow in voice mode ─────────────────────
 function loadVoiceflow(name){
   const s = document.createElement('script');
   s.type  = 'text/javascript';
@@ -635,8 +584,23 @@ function loadVoiceflow(name){
       url: 'https://general-runtime.voiceflow.com',
       versionID: 'production',
       voice: { url: 'https://runtime-api.voiceflow.com' },
-      launch: { event: { type:'launch', payload: { name } } }
+      launch: { event: { type:'launch', payload: { name } } },
+      render: {
+        mode: 'overlay',            // full-screen overlay, not a corner widget
+      },
+      autostart: true,              // open immediately without user clicking
     });
+    // Open the widget and activate voice as soon as it's ready
+    setTimeout(() => {
+      try {
+        window.voiceflow?.chat?.open();
+        // Trigger voice mode — Voiceflow exposes this on the widget
+        window.voiceflow?.chat?.interact({ type: 'voice_start' });
+      } catch(e) {
+        // fallback: just open the widget normally
+        window.voiceflow?.chat?.open();
+      }
+    }, 800);
   };
   s.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
   document.head.appendChild(s);
@@ -684,13 +648,12 @@ async function init(){
     // Live window — show session room
     goLive(meeting, urlName);
   } else if(now < startMs - WINDOW_BEFORE_MS){
-    // Too early — show countdown
+    // Too early — show "not active yet" with scheduled time
     showScreen('screen-waiting');
-    document.getElementById('state-countdown').style.display = 'flex';
+    document.getElementById('state-scheduled').style.display = 'flex';
     document.getElementById('info-guest').textContent = meeting.guest_name || urlName || '—';
     document.getElementById('info-date').textContent  = fmtDate(meeting.start);
     document.getElementById('info-time').textContent  = fmtTime(meeting.start);
-    startCountdown(startMs - WINDOW_BEFORE_MS);
   } else {
     // Expired
     showScreen('screen-waiting');
