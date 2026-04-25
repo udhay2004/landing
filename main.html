@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Comply Globally — Global Expansion Architects</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a10;
+  --ink2: #13131f;
+  --ink3: #1c1c2e;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.09);
+  --border-soft: rgba(255,255,255,0.06);
+  --gold: #c9a96e;
+  --gold-light: #e8d2a8;
+  --gold-dark: #9a7340;
+  --text: #f0ecf8;
+  --text-muted: rgba(240,236,248,0.55);
+  --text-dim: rgba(240,236,248,0.3);
+  --green: #4ade80;
+  --r: 16px;
+  --r-sm: 10px;
+  --r-lg: 24px;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(139,92,246,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(201,169,110,0.07) 0%, transparent 55%);
+  pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(10,10,16,0.9);
+  backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 700;
+  color: var(--text); letter-spacing: 0.03em;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.logo-dot {
+  width: 7px; height: 7px; background: var(--gold);
+  border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.07em;
+  color: var(--text-muted); text-decoration: none; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.btn-nav {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink);
+  background: var(--gold); border: none; cursor: pointer;
+  padding: 0.52rem 1.35rem; border-radius: 3rem; transition: all 0.2s;
+}
+.btn-nav:hover { background: var(--gold-light); transform: translateY(-1px); }
+.menu-btn {
+  display: none; background: none;
+  border: 1px solid var(--border); color: var(--text);
+  padding: 0.45rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+}
+
+/* PAGE WRAP */
+.page-wrap {
+  position: relative; z-index: 1;
+  padding-top: 62px;
+  padding-right: 400px;
+}
+
+/* FIXED FORM SIDEBAR */
+.form-sidebar {
+  position: fixed;
+  top: 62px; right: 0;
+  width: 400px;
+  height: calc(100vh - 62px);
+  z-index: 400;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 1.2rem 1.6rem;
+  background: rgba(10,8,22,0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+}
+.form-sidebar::-webkit-scrollbar { width: 4px; }
+.form-sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+.form-sidebar::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+
+/* HERO */
+.hero {
+  min-height: calc(100vh - 62px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero-left {
+  padding: 5rem 3.5rem 4rem;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: rgba(201,169,110,0.09);
+  border: 1px solid rgba(201,169,110,0.28);
+  border-radius: 2rem; padding: 0.32rem 1rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 2rem;
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 900; line-height: 1.13;
+  letter-spacing: -0.01em; margin-bottom: 1.5rem;
+}
+h1 em { font-style: italic; color: var(--gold); }
+.hero-desc {
+  font-size: 1rem; color: var(--text-muted); line-height: 1.75;
+  max-width: 480px; margin-bottom: 2.5rem;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3.5rem; }
+.btn-primary {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ink); background: var(--gold); border: none; cursor: pointer;
+  padding: 0.8rem 2rem; border-radius: 3rem; transition: all 0.25s;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,169,110,0.28); }
+.btn-outline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+  background: transparent; border: 1px solid var(--border);
+  cursor: pointer; padding: 0.8rem 2rem; border-radius: 3rem; transition: all 0.2s;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.22); color: var(--text); }
+.stats-row { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+.stat-item { display: flex; flex-direction: column; gap: 3px; }
+.stat-item strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; font-weight: 700; color: var(--text); line-height: 1;
+}
+.stat-item span { font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.09em; text-transform: uppercase; }
+.stat-div { width: 1px; height: 40px; background: var(--border); align-self: center; }
+
+/* FORM PANEL */
+.form-panel {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem 1.4rem;
+}
+.form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text);
+}
+.form-sub { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 0.9rem; }
+.form-rule { width: 32px; height: 2px; background: var(--gold); border-radius: 2px; margin-bottom: 0.9rem; }
+.fl { margin-bottom: 0.6rem; }
+.fl-label {
+  display: block; font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 0.25rem;
+}
+.fi, .fs {
+  width: 100%; padding: 0.55rem 0.8rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+  transition: all 0.2s; outline: none; -webkit-appearance: none;
+}
+.fi::placeholder { color: var(--text-dim); }
+.fi:focus, .fs:focus {
+  border-color: rgba(201,169,110,0.5);
+  background: rgba(201,169,110,0.05);
+  box-shadow: 0 0 0 3px rgba(201,169,110,0.07);
+}
+.fs option { background: #1c1c2e; color: var(--text); }
+.fl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.submit-btn {
+  width: 100%; margin-top: 0.3rem; padding: 0.72rem;
+  background: var(--gold); border: none; cursor: pointer; border-radius: 3rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink); transition: all 0.25s;
+}
+.submit-btn:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(201,169,110,0.22); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.form-note {
+  margin-top: 0.6rem; font-size: 0.6rem; color: var(--text-dim);
+  text-align: center; line-height: 1.5;
+}
+#formMsg, #formMsg2 {
+  margin-top: 0.6rem; padding: 0.5rem 0.8rem; border-radius: var(--r-sm);
+  font-size: 0.72rem; font-weight: 500; text-align: center; display: none;
+}
+#formMsg.success, #formMsg2.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; display: block; }
+#formMsg.error, #formMsg2.error { background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); color: #f97316; display: block; }
+#formMsg.loading, #formMsg2.loading { background: rgba(201,169,110,0.08); border: 1px solid rgba(201,169,110,0.25); color: var(--gold); display: block; }
+
+/* MARKETS STRIP */
+.markets-strip {
+  padding: 2.2rem 3.5rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.markets-label {
+  font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 1.2rem; text-align: center;
+}
+.markets-scroll { overflow: hidden; }
+.markets-track {
+  display: flex; white-space: nowrap;
+  animation: mscroll 22s linear infinite;
+}
+.markets-track:hover { animation-play-state: paused; }
+@keyframes mscroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.market-pill {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.35rem 1.1rem; margin: 0 0.35rem;
+  border: 1px solid var(--border); border-radius: 2rem;
+  font-size: 0.76rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+}
+
+/* VIDEO */
+.video-section {
+  padding: 5rem 3.5rem;
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: center;
+}
+.section-eyebrow {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1.1rem; display: block;
+}
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  font-weight: 900; line-height: 1.2; margin-bottom: 1.1rem;
+}
+h2 em { font-style: italic; color: var(--gold); }
+.section-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; }
+.video-frame {
+  border-radius: var(--r); overflow: hidden;
+  border: 1px solid var(--border); background: #000;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.video-frame iframe { display: block; width: 100%; aspect-ratio: 16/9; border: none; }
+
+/* SERVICES */
+.services-section {
+  padding: 5rem 3.5rem; border-top: 1px solid var(--border);
+}
+.services-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 2.8rem; flex-wrap: wrap; gap: 1.5rem;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+}
+.service-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r); padding: 1.8rem;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+}
+.service-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.service-card:hover { border-color: rgba(201,169,110,0.2); transform: translateY(-4px); background: rgba(255,255,255,0.06); }
+.service-card:hover::before { opacity: 1; }
+.card-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.3rem; font-weight: 700;
+  color: rgba(201,169,110,0.14); line-height: 1; margin-bottom: 1rem;
+}
+.card-title { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.55rem; color: var(--text); }
+.card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+/* WHO WE SERVE */
+.audience-section { padding: 5rem 3.5rem; border-top: 1px solid var(--border); }
+.audience-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-top: 2.5rem;
+}
+.audience-card {
+  border: 1px solid var(--border-soft); border-radius: var(--r);
+  padding: 1.5rem; background: var(--surface); transition: all 0.25s;
+}
+.audience-card:hover { border-color: rgba(201,169,110,0.22); transform: translateY(-3px); }
+.aud-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+.aud-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; }
+.aud-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; }
+
+/* LEADERSHIP */
+.leadership-section { padding: 5rem 3.5rem; border-top: 1px solid var(--border); }
+.leader-block {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; margin-top: 2.5rem;
+  background: rgba(201,169,110,0.04);
+  border: 1px solid rgba(201,169,110,0.14);
+  border-radius: var(--r-lg); overflow: hidden;
+}
+.leader-content { padding: 3rem; }
+.leader-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; font-weight: 900; margin-bottom: 0.4rem;
+}
+.leader-role {
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.4rem;
+}
+.leader-bio { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.8rem; }
+.ach-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.ach {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  font-size: 0.83rem; color: var(--text-muted); line-height: 1.5;
+}
+.ach-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.leader-metrics {
+  padding: 3rem; background: rgba(201,169,110,0.05);
+  border-left: 1px solid rgba(201,169,110,0.14);
+  display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;
+}
+.metric-item strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem; font-weight: 700; color: var(--gold);
+  display: block; line-height: 1;
+}
+.metric-item span { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.07em; text-transform: uppercase; }
+.m-div { height: 1px; background: var(--border); }
+
+/* FOOTER */
+footer {
+  padding: 2rem 3.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+.footer-text { font-size: 0.72rem; color: var(--text-dim); line-height: 1.6; text-align: center; }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a { font-size: 0.72rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* INLINE FORM MOBILE */
+.inline-form-mobile { display: none; padding: 0 1.5rem 3rem; }
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .page-wrap { padding-right: 360px; }
+  .form-sidebar { width: 360px; }
+  .video-section { grid-template-columns: 1fr; gap: 2rem; }
+  .leader-block { grid-template-columns: 1fr; }
+  .leader-metrics { border-left: none; border-top: 1px solid rgba(201,169,110,0.14); padding: 2rem 3rem; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
+  .m-div { display: none; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0.9rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: fixed; top: 62px; left: 0; right: 0;
+    background: rgba(10,10,16,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem; gap: 1.2rem; z-index: 499;
+  }
+  .menu-btn { display: block; }
+  .form-sidebar { display: none; }
+  .page-wrap { padding-right: 0; }
+  .inline-form-mobile { display: block; }
+  h1 { font-size: 2.2rem; }
+  .stats-row { gap: 1.5rem; }
+  .stat-div { display: none; }
+  .hero-left { padding: 3.5rem 1.5rem 3rem; }
+  .video-section, .services-section, .audience-section, .leadership-section { padding: 3.5rem 1.5rem; }
+  .services-header { flex-direction: column; align-items: flex-start; }
+  .leader-content { padding: 2rem; }
+  .leader-metrics { padding: 1.5rem 2rem; }
+  footer { flex-direction: column; text-align: center; align-items: center; padding: 2rem 1.5rem; }
+  .markets-strip { padding: 2rem 1.5rem; }
+}
+@media (max-width: 480px) {
+  .hero-left { padding: 3rem 1.2rem 2rem; }
+  h1 { font-size: 1.9rem; }
+  .fl-row { grid-template-columns: 1fr; }
+  .inline-form-mobile { padding: 0 1.2rem 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Comply Globally
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#services">Services</a>
+    <a href="#who">Who We Serve</a>
+    <a href="#leadership">Leadership</a>
+    <button class="btn-nav" onclick="document.getElementById('fname')?.focus()">Get Started</button>
+  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- FIXED FORM SIDEBAR -->
+  <aside class="form-sidebar" id="contactForm">
+    <div class="form-panel">
+      <div class="form-title">Request a Strategy Session</div>
+      <p class="form-sub">A senior expert will contact you within 24 hours.</p>
+      <div class="form-rule"></div>
+      <div class="fl">
+        <label class="fl-label" for="fname">Full Name *</label>
+        <input type="text" id="fname" class="fi" placeholder="Your full name" autocomplete="name">
+      </div>
+      <div class="fl-row">
+        <div class="fl">
+          <label class="fl-label" for="femail">Email *</label>
+          <input type="email" id="femail" class="fi" placeholder="Work email" autocomplete="email">
+        </div>
+        <div class="fl">
+          <label class="fl-label" for="fphone">Phone / WhatsApp *</label>
+          <input type="tel" id="fphone" class="fi" placeholder="+1 000 000 0000">
+        </div>
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fcompany">Company Name</label>
+        <input type="text" id="fcompany" class="fi" placeholder="Your company name">
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fmarket">Target Market *</label>
+        <select id="fmarket" class="fs">
+          <option value="" disabled selected>Select a country / region</option>
+          <option>United States (USA)</option>
+          <option>United Arab Emirates (UAE)</option>
+          <option>United Kingdom (UK)</option>
+          <option>Canada</option>
+          <option>Singapore</option>
+          <option>India</option>
+          <option>European Union</option>
+          <option>Australia</option>
+          <option>Africa</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fstage">Expansion Stage *</label>
+        <select id="fstage" class="fs">
+          <option value="" disabled selected>Where are you now?</option>
+          <option>Exploring possibilities</option>
+          <option>Planning to launch soon</option>
+          <option>Already operating overseas</option>
+          <option>Seeking restructuring</option>
+        </select>
+      </div>
+      <button class="submit-btn" id="submitMainBtn">Request Strategy Session →</button>
+      <div id="formMsg"></div>
+      <p class="form-note">🔒 Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
+    </div>
+  </aside>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-left">
+      <div class="eyebrow">
+        <div class="logo-dot"></div>
+        Global Expansion Architects
+      </div>
+      <h1>
+        Expand beyond<br>borders without<br>
+        <em>compliance friction.</em>
+      </h1>
+      <p class="hero-desc">
+        Structured legal, tax &amp; banking solutions across 30+ countries. Trusted by enterprises, unicorn founders, and Fortune 500s for seamless cross-border growth.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('fname')?.focus()">Claim Your Roadmap</button>
+        <button class="btn-outline" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item"><strong>20k+</strong><span>Expert Network</span></div>
+        <div class="stat-div"></div>
+        <div class="stat-item"><strong>1,000+</strong><span>Enterprises Served</span></div>
+        <div class="stat-div"></div>
+        <div class="stat-item"><strong>30+</strong><span>Global Markets</span></div>
+        <div class="stat-div"></div>
+        <div class="stat-item"><strong>$2.8B+</strong><span>Assets Structured</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INLINE FORM — mobile only -->
+  <div class="inline-form-mobile" id="mobileForm">
+    <div class="form-panel">
+      <div class="form-title">Request a Strategy Session</div>
+      <p class="form-sub">A senior expert will contact you within 24 hours.</p>
+      <div class="form-rule"></div>
+      <div class="fl">
+        <label class="fl-label" for="fname2">Full Name *</label>
+        <input type="text" id="fname2" class="fi" placeholder="Your full name">
+      </div>
+      <div class="fl-row">
+        <div class="fl">
+          <label class="fl-label" for="femail2">Email *</label>
+          <input type="email" id="femail2" class="fi" placeholder="Work email">
+        </div>
+        <div class="fl">
+          <label class="fl-label" for="fphone2">Phone / WhatsApp *</label>
+          <input type="tel" id="fphone2" class="fi" placeholder="+1 000 000 0000">
+        </div>
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fcompany2">Company Name</label>
+        <input type="text" id="fcompany2" class="fi" placeholder="Your company name">
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fmarket2">Target Market *</label>
+        <select id="fmarket2" class="fs">
+          <option value="" disabled selected>Select a country / region</option>
+          <option>United States (USA)</option>
+          <option>United Arab Emirates (UAE)</option>
+          <option>United Kingdom (UK)</option>
+          <option>Canada</option>
+          <option>Singapore</option>
+          <option>India</option>
+          <option>European Union</option>
+          <option>Australia</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fl">
+        <label class="fl-label" for="fstage2">Expansion Stage *</label>
+        <select id="fstage2" class="fs">
+          <option value="" disabled selected>Where are you now?</option>
+          <option>Exploring possibilities</option>
+          <option>Planning to launch soon</option>
+          <option>Already operating globally</option>
+          <option>Seeking restructuring</option>
+        </select>
+      </div>
+      <button class="submit-btn" id="submitMobileBtn">Request Strategy Session →</button>
+      <div id="formMsg2"></div>
+      <p class="form-note">🔒 Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
+    </div>
+  </div>
+
+  <!-- MARKETS TICKER -->
+  <div class="markets-strip reveal">
+    <p class="markets-label">Active markets we operate in</p>
+    <div class="markets-scroll">
+      <div class="markets-track">
+        <div class="market-pill">🇺🇸 United States</div>
+        <div class="market-pill">🇦🇪 UAE</div>
+        <div class="market-pill">🇬🇧 United Kingdom</div>
+        <div class="market-pill">🇸🇬 Singapore</div>
+        <div class="market-pill">🇮🇳 India</div>
+        <div class="market-pill">🇨🇦 Canada</div>
+        <div class="market-pill">🇪🇺 European Union</div>
+        <div class="market-pill">🇦🇺 Australia</div>
+        <div class="market-pill">🇭🇰 Hong Kong</div>
+        <div class="market-pill">🇯🇵 Japan</div>
+        <div class="market-pill">🇩🇪 Germany</div>
+        <div class="market-pill">🇫🇷 France</div>
+        <div class="market-pill">🇺🇸 United States</div>
+        <div class="market-pill">🇦🇪 UAE</div>
+        <div class="market-pill">🇬🇧 United Kingdom</div>
+        <div class="market-pill">🇸🇬 Singapore</div>
+        <div class="market-pill">🇮🇳 India</div>
+        <div class="market-pill">🇨🇦 Canada</div>
+        <div class="market-pill">🇪🇺 European Union</div>
+        <div class="market-pill">🇦🇺 Australia</div>
+        <div class="market-pill">🇭🇰 Hong Kong</div>
+        <div class="market-pill">🇯🇵 Japan</div>
+        <div class="market-pill">🇩🇪 Germany</div>
+        <div class="market-pill">🇫🇷 France</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO SECTION -->
+  <section class="video-section reveal">
+    <div>
+      <span class="section-eyebrow">Expert Insight</span>
+      <h2>Global expansion,<br><em>decoded.</em></h2>
+      <p class="section-desc" style="margin-bottom:2rem;">
+        Watch Dr. Anil Gupta — globally recognized business architect — break down the frameworks powering 1,000+ successful cross-border expansions. From entity selection to tax harmonization, this is the blueprint.
+      </p>
+      <button class="btn-primary" onclick="document.getElementById('fname')?.focus()">Start Your Expansion</button>
+    </div>
+    <div>
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/LoBQeMYXEYU?rel=0&modestbranding=1&showinfo=0"
+          title="Global Compliance Expert Breakdown — Dr. Anil Gupta"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services-section reveal" id="services">
+    <div class="services-header">
+      <div>
+        <span class="section-eyebrow">Our Framework</span>
+        <h2>Four pillars of<br>global compliance</h2>
+      </div>
+      <p style="font-size:0.86rem; color:var(--text-muted); max-width:300px; line-height:1.65;">
+        A complete architecture for cross-border operations — from formation to treasury.
+      </p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="card-num">01</div><div class="card-title">Company Formation</div><p class="card-desc">Incorporation, legal entity structuring, and secretarial compliance across 30+ jurisdictions.</p></div>
+      <div class="service-card"><div class="card-num">02</div><div class="card-title">Global Taxation</div><p class="card-desc">Cross-border tax strategy, IRS compliance, VAT registration, transfer pricing, and international payroll alignment.</p></div>
+      <div class="service-card"><div class="card-num">03</div><div class="card-title">Corporate Restructuring</div><p class="card-desc">Mergers, holding reorganizations, group restructuring, and M&amp;A advisory for agile global scaling.</p></div>
+      <div class="service-card"><div class="card-num">04</div><div class="card-title">Cross-Border Banking</div><p class="card-desc">Multi-currency accounts, FEMA compliance, treasury management, and global payment infrastructure.</p></div>
+    </div>
+  </section>
+
+  <!-- WHO WE SERVE -->
+  <section class="audience-section reveal" id="who">
+    <span class="section-eyebrow">Who We Empower</span>
+    <h2>Built for ambitious<br>global operators.</h2>
+    <div class="audience-grid">
+      <div class="audience-card"><span class="aud-icon">🚀</span><div class="aud-title">Startup Founders</div><p class="aud-desc">US, UK, UAE, Singapore expansion without compliance gaps.</p></div>
+      <div class="audience-card"><span class="aud-icon">🏢</span><div class="aud-title">Enterprises &amp; SMEs</div><p class="aud-desc">Complete governance, tax health checks, and end-to-end cross-border support.</p></div>
+      <div class="audience-card"><span class="aud-icon">📊</span><div class="aud-title">CFOs &amp; Legal Heads</div><p class="aud-desc">International tax regimes, structural optimization, and audit defense.</p></div>
+      <div class="audience-card"><span class="aud-icon">🤝</span><div class="aud-title">Investor-Backed Firms</div><p class="aud-desc">Rapid entity setup, SAFE compliance, and post-investment restructuring.</p></div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="leadership-section reveal" id="leadership">
+    <span class="section-eyebrow">Leadership</span>
+    <h2>Guided by world-class<br>advisors &amp; strategists.</h2>
+    <div class="leader-block">
+      <div class="leader-content">
+        <div class="leader-name">Dr. Anil Gupta</div>
+        <div class="leader-role">Founder &amp; Chief Strategist</div>
+        <p class="leader-bio">Renowned business architect and global compliance strategist, trusted by Fortune 500 executives, sovereign governments, and unicorn founders. Dr. Gupta has led Comply Globally's expansion to 30+ markets, delivering precision-engineered compliance frameworks that de-risk international growth.</p>
+        <div class="ach-list">
+          <div class="ach"><div class="ach-dot"></div>Cross-border compliance specialist across 30+ jurisdictions</div>
+          <div class="ach"><div class="ach-dot"></div>Trusted by global enterprises, regulators &amp; institutional investors</div>
+          <div class="ach"><div class="ach-dot"></div>Network of 20,000+ licensed legal and tax professionals worldwide</div>
+        </div>
+        <div style="margin-top:2rem;"><button class="btn-primary" onclick="document.getElementById('fname')?.focus()">Talk to the Team →</button></div>
+      </div>
+      <div class="leader-metrics">
+        <div class="metric-item"><strong>$2.8B+</strong><span>Cross-border assets structured</span></div><div class="m-div"></div>
+        <div class="metric-item"><strong>1,000+</strong><span>Organizations empowered</span></div><div class="m-div"></div>
+        <div class="metric-item"><strong>30+</strong><span>Active global markets</span></div><div class="m-div"></div>
+        <div class="metric-item"><strong>20k+</strong><span>Expert network</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Comply Globally</div>
+    <p class="footer-text">© 2025 Comply Globally — A Connect Ventures Inc. brand. Global compliance &amp; corporate services.</p>
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+  </footer>
+
+</div>
+
+<script>
+// ─── PASTE YOUR LATEST DEPLOYED WEB APP URL HERE ───────────────────
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwWnq7UzZmHOGEJVX95R0_-XxNhbrrzZyg4Z6khPknW_h1D0bNNYm8fdcMeJ-RngFFDlg/exec";
+// ───────────────────────────────────────────────────────────────────
+
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = type;
+  if (type !== 'loading') {
+    setTimeout(() => { el.textContent = ''; el.className = ''; }, 7000);
+  }
+}
+
+async function submitForm(ids, msgId) {
+  const btn = document.getElementById(
+    msgId === 'formMsg' ? 'submitMainBtn' : 'submitMobileBtn'
+  );
+
+  // Collect values
+  const name    = document.getElementById(ids.name).value.trim();
+  const email   = document.getElementById(ids.email).value.trim();
+  const phone   = document.getElementById(ids.phone).value.trim();
+  const company = document.getElementById(ids.company).value.trim() || "Not provided";
+  const country = document.getElementById(ids.country).value;
+  const stage   = document.getElementById(ids.stage).value;
+
+  // Validate
+  if (!name || !email || !phone || !country || !stage) {
+    showMsg(msgId, '❌ Please complete all required fields.', 'error');
+    return;
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    showMsg(msgId, '❌ Please enter a valid email address.', 'error');
+    return;
+  }
+
+  // Disable button + show loading
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  showMsg(msgId, '⏳ Sending your request...', 'loading');
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors', // required for Google Apps Script — we can't read response but data goes through
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ name, email, phone, company, country, stage }).toString()
+    });
+
+    // Success — clear fields
+    document.getElementById(ids.name).value    = '';
+    document.getElementById(ids.email).value   = '';
+    document.getElementById(ids.phone).value   = '';
+    document.getElementById(ids.company).value = '';
+    document.getElementById(ids.country).selectedIndex = 0;
+    document.getElementById(ids.stage).selectedIndex   = 0;
+
+    showMsg(msgId, '✅ Request received! Check your email for next steps.', 'success');
+
+  } catch (err) {
+    showMsg(msgId, '❌ Something went wrong. Please try again.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Request Strategy Session →';
+  }
+}
+
+// Desktop form
+document.getElementById('submitMainBtn').addEventListener('click', () => {
+  submitForm(
+    { name:'fname', email:'femail', phone:'fphone', company:'fcompany', country:'fmarket', stage:'fstage' },
+    'formMsg'
+  );
+});
+
+// Mobile form
+document.getElementById('submitMobileBtn').addEventListener('click', () => {
+  submitForm(
+    { name:'fname2', email:'femail2', phone:'fphone2', company:'fcompany2', country:'fmarket2', stage:'fstage2' },
+    'formMsg2'
+  );
+});
+
+// Mobile nav toggle
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Scroll reveal
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+revEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
