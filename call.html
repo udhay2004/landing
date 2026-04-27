@@ -38,7 +38,6 @@ body {
   flex-direction: column;
 }
 
-/* — AMBIENT BACKGROUND — */
 body::before {
   content: "";
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -48,7 +47,6 @@ body::before {
     radial-gradient(ellipse 40% 30% at 50% 50%, rgba(201,169,110,0.03) 0%, transparent 70%);
 }
 
-/* Subtle grid texture */
 body::after {
   content: "";
   position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.018;
@@ -57,7 +55,6 @@ body::after {
   background-size: 48px 48px;
 }
 
-/* — NAV — */
 nav {
   position: relative; z-index: 10;
   display: flex; align-items: center; justify-content: space-between;
@@ -96,7 +93,6 @@ nav {
   border-radius: 50%; box-shadow: 0 0 6px var(--green);
 }
 
-/* — MAIN LAYOUT — */
 main {
   position: relative; z-index: 1;
   flex: 1;
@@ -106,17 +102,11 @@ main {
   padding: 3rem 2rem;
 }
 
-/* — SCREENS — */
 .screen { display: none; width: 100%; max-width: 680px; }
 .screen.active { display: flex; flex-direction: column; align-items: center; }
 
-/* ============================================================
-   SCREEN 1 — READY TO BEGIN
-   ============================================================ */
-#screen-ready {
-  text-align: center;
-  gap: 0;
-}
+/* ── SCREEN 1: READY ── */
+#screen-ready { text-align: center; gap: 0; }
 
 .advisor-card {
   background: rgba(201,169,110,0.04);
@@ -143,7 +133,6 @@ main {
   color: var(--gold); text-transform: uppercase; margin-bottom: 2rem;
 }
 
-/* Avatar / AI visual */
 .ai-avatar-wrap {
   margin: 0 auto 1.8rem;
   width: 100px; height: 100px;
@@ -237,7 +226,6 @@ main {
   color: var(--text-dim); text-align: center;
 }
 
-/* Permission warning */
 .perm-warning {
   display: none;
   background: rgba(248,113,113,0.08);
@@ -248,14 +236,8 @@ main {
   line-height: 1.6;
 }
 
-/* ============================================================
-   SCREEN 2 — ACTIVE CALL
-   ============================================================ */
-#screen-call {
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 720px;
-}
+/* ── SCREEN 2: ACTIVE CALL ── */
+#screen-call { gap: 1.5rem; width: 100%; max-width: 720px; }
 
 .call-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -289,7 +271,6 @@ main {
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* Voice visualizer */
 .visualizer-wrap {
   width: 100%;
   background: rgba(201,169,110,0.03);
@@ -315,7 +296,6 @@ main {
   transform-origin: bottom;
   transition: height 0.15s ease;
 }
-/* bars will be animated via JS when speaking */
 .wave-bar:nth-child(odd) { background: var(--gold-light); }
 
 .speaking-label {
@@ -325,7 +305,6 @@ main {
 }
 .speaking-name { color: var(--gold); font-weight: 600; }
 
-/* Transcript / chat */
 .transcript-box {
   width: 100%;
   background: rgba(255,255,255,0.02);
@@ -368,7 +347,6 @@ main {
 }
 .transcript-msg.ai .t-speaker { color: var(--gold); opacity: 0.7; }
 
-/* Typing dots */
 .typing-dots {
   display: flex; gap: 5px; align-items: center;
   padding: 0.6rem 0.9rem;
@@ -385,7 +363,6 @@ main {
 .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes dot-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
 
-/* Call controls */
 .call-controls {
   display: flex; align-items: center; gap: 1rem;
   width: 100%; justify-content: center;
@@ -429,20 +406,14 @@ main {
   border-color: rgba(248,113,113,0.45);
 }
 
-/* Timer */
 .session-timer {
   font-family: 'DM Mono', monospace;
   font-size: 0.78rem; color: var(--text-dim);
   letter-spacing: 0.1em;
 }
 
-/* ============================================================
-   SCREEN 3 — ENDED
-   ============================================================ */
-#screen-ended {
-  text-align: center;
-  gap: 1.5rem;
-}
+/* ── SCREEN 3: ENDED ── */
+#screen-ended { text-align: center; gap: 1.5rem; }
 
 .ended-card {
   background: rgba(201,169,110,0.04);
@@ -454,9 +425,7 @@ main {
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--green), transparent);
 }
-.checkmark {
-  font-size: 3rem; margin-bottom: 1rem; display: block;
-}
+.checkmark { font-size: 3rem; margin-bottom: 1rem; display: block; }
 .ended-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.9rem; font-weight: 900; margin-bottom: 0.75rem;
@@ -467,10 +436,7 @@ main {
   line-height: 1.75; max-width: 420px; margin: 0 auto 2rem;
 }
 
-.next-steps {
-  display: flex; flex-direction: column; gap: 0.75rem;
-  text-align: left; margin-bottom: 2rem;
-}
+.next-steps { display: flex; flex-direction: column; gap: 0.75rem; text-align: left; margin-bottom: 2rem; }
 .next-step {
   display: flex; align-items: flex-start; gap: 0.75rem;
   font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;
@@ -494,17 +460,12 @@ main {
 }
 .btn-back:hover { background: var(--gold-light); transform: translateY(-2px); }
 
-/* ============================================================
-   SCREEN — ERROR
-   ============================================================ */
-#screen-error {
-  text-align: center; gap: 1rem;
-}
+/* ── SCREEN: ERROR ── */
+#screen-error { text-align: center; gap: 1rem; }
 .error-card {
   background: rgba(248,113,113,0.05);
   border: 1px solid rgba(248,113,113,0.2);
-  border-radius: var(--r-lg); padding: 2.5rem;
-  width: 100%;
+  border-radius: var(--r-lg); padding: 2.5rem; width: 100%;
 }
 .error-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
 .error-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; margin-bottom:0.5rem; }
@@ -517,14 +478,12 @@ main {
 }
 .btn-retry:hover { background: var(--gold-light); }
 
-/* — FOOTER — */
 footer {
   position: relative; z-index: 1;
   padding: 1rem 2.5rem;
   border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 0.75rem;
-  flex-shrink: 0;
+  flex-wrap: wrap; gap: 0.75rem; flex-shrink: 0;
 }
 .footer-brand { font-family:'Playfair Display',serif; font-size:0.85rem; font-weight:700; }
 .footer-note { font-size:0.62rem; color:var(--text-dim); }
@@ -532,7 +491,6 @@ footer {
 .footer-links a { font-size:0.62rem; color:var(--text-dim); text-decoration:none; transition:color 0.2s; }
 .footer-links a:hover { color:var(--gold); }
 
-/* — RESPONSIVE — */
 @media (max-width: 600px) {
   nav { padding: 0.9rem 1.2rem; }
   main { padding: 2rem 1rem; }
@@ -546,7 +504,6 @@ footer {
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="https://udhay2004.github.io/landing/" class="logo">
     <div class="logo-dot"></div>
@@ -560,10 +517,9 @@ footer {
   </div>
 </nav>
 
-<!-- MAIN -->
 <main>
 
-  <!-- ══ SCREEN 1: READY ══ -->
+  <!-- SCREEN 1: READY -->
   <section class="screen active" id="screen-ready">
     <div class="advisor-card">
       <div class="eyebrow">
@@ -609,7 +565,7 @@ footer {
     </div>
   </section>
 
-  <!-- ══ SCREEN 2: ACTIVE CALL ══ -->
+  <!-- SCREEN 2: ACTIVE CALL -->
   <section class="screen" id="screen-call">
 
     <div class="call-header">
@@ -629,10 +585,8 @@ footer {
       </div>
     </div>
 
-    <!-- Voice visualizer -->
     <div class="visualizer-wrap">
       <div class="waveform" id="waveform">
-        <!-- 20 bars -->
         <div class="wave-bar" style="height:16px"></div>
         <div class="wave-bar" style="height:28px"></div>
         <div class="wave-bar" style="height:44px"></div>
@@ -661,12 +615,10 @@ footer {
       </div>
     </div>
 
-    <!-- Live transcript -->
     <div class="transcript-box" id="transcript-box">
       <div style="font-size:0.65rem;color:var(--text-dim);text-align:center;text-transform:uppercase;letter-spacing:0.1em;">Live Transcript</div>
     </div>
 
-    <!-- Controls -->
     <div class="call-controls">
       <button class="ctrl-btn" id="mic-btn">
         <div class="ctrl-icon active" id="mic-icon">🎤</div>
@@ -685,7 +637,7 @@ footer {
 
   </section>
 
-  <!-- ══ SCREEN 3: ENDED ══ -->
+  <!-- SCREEN 3: ENDED -->
   <section class="screen" id="screen-ended">
     <div class="ended-card">
       <span class="checkmark">✅</span>
@@ -713,7 +665,7 @@ footer {
     </div>
   </section>
 
-  <!-- ══ SCREEN: ERROR ══ -->
+  <!-- SCREEN: ERROR -->
   <section class="screen" id="screen-error">
     <div class="error-card">
       <span class="error-icon">⚠️</span>
@@ -727,7 +679,6 @@ footer {
 
 </main>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-brand">Comply Globally</div>
   <p class="footer-note">© 2025 Comply Globally — A Connect Ventures Inc. brand</p>
@@ -738,85 +689,36 @@ footer {
   </div>
 </footer>
 
-<!-- ================================================================
-     VAPI INTEGRATION
-     ================================================================
-     SETUP INSTRUCTIONS:
-     1. Sign up at https://vapi.ai
-     2. Create an assistant with the system prompt below (copy from comment)
-     3. Replace YOUR_VAPI_PUBLIC_KEY and YOUR_ASSISTANT_ID below
-     4. Deploy this file to your GitHub Pages site
-     ================================================================ -->
-
-<!--
-VAPI ASSISTANT SYSTEM PROMPT — paste this in your Vapi dashboard:
-
-You are Dr. Priya, a senior global expansion strategist at Comply Globally,
-a world-class cross-border compliance firm trusted by Fortune 500s and unicorn founders.
-
-YOUR PERSONA:
-- Warm, confident, deeply knowledgeable, and human-sounding
-- Speak in clear, natural sentences — this is a voice call, never use lists or bullet points
-- Never say "As an AI" — you are Dr. Priya, a human expert advisor
-- Use natural filler words: "great question", "exactly", "so", "absolutely"
-- Sound like a trusted advisor, not a salesperson
-
-YOUR CONSULTATION FLOW:
-1. Greet the guest warmly by name (use {{guestName}} if available, otherwise "there").
-   Introduce yourself as Dr. Priya from Comply Globally.
-   Ask them to briefly describe their business and the market they want to expand into.
-
-2. Listen carefully, then provide REAL strategic insight tailored to their answer:
-   - Best legal entity type (LLC, LLP, Branch Office, Wholly Owned Subsidiary, Free Zone LLC)
-   - Key tax considerations (double taxation treaties, transfer pricing, withholding tax, VAT/GST)
-   - Banking setup (multi-currency accounts, FEMA compliance for Indian clients, treasury management)
-   - Timeline and cost estimates (keep these ranges, note that team will confirm exact figures)
-   - Any compliance red flags specific to their industry and target country
-
-3. Handle follow-up questions confidently. If asked something highly specific
-   (exact treaty article numbers, precise filing deadlines), say:
-   "I'll have the exact details in your written roadmap — I want to make sure those numbers are verified."
-
-4. After 15-20 minutes, wrap up warmly:
-   - Summarise the 3 key actions they should take
-   - Tell them the team will email a full written roadmap within 24 hours
-   - Let them know a follow-up call will be scheduled
-   - Thank them genuinely and close the session
-
-RULES:
-- One natural conversational turn at a time — don't monologue for more than 3-4 sentences
-- Always bring the conversation back to their specific situation
-- Never make up specific numbers — say the team will confirm
-- Stay warm, professional, and human throughout
--->
-
 <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js"></script>
 <script>
-// ══════════════════════════════════════════════════
-//  CONFIGURATION — Replace these two values
-// ══════════════════════════════════════════════════
-const VAPI_PUBLIC_KEY  = "0dfe1eed-df4c-4808-81ef-313a65d7f04c";   // from vapi.ai dashboard
-const VAPI_ASSISTANT_ID = "5014b5d3-a64a-4c1b-9ab3-3bb9e521a368";     // from your assistant settings
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURATION
+//  After deploying the Cloudflare Worker, paste its URL below.
+// ═══════════════════════════════════════════════════════════
+const WORKER_URL      = "https://cv.udhaymarwah96.workers.dev/"; // ← replace after deploying worker
+const VAPI_PUBLIC_KEY = "0dfe1eed-df4c-4808-81ef-313a65d7f04c";
+const ASSISTANT_ID    = "5014b5d3-a64a-4c1b-9ab3-3bb9e521a368";
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  READ GUEST NAME FROM URL PARAMS
-// ══════════════════════════════════════════════════
+//  Cal.com sends ?name=Udhay after booking redirect
+// ═══════════════════════════════════════════════════════════
 const params    = new URLSearchParams(window.location.search);
 const guestName = params.get('name') || '';
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════════
-let vapi        = null;
-let isMuted     = false;
+// ═══════════════════════════════════════════════════════════
+let vapi         = null;
+let isMuted      = false;
 let isAISpeaking = false;
 let timerInterval = null;
-let sessionSecs = 0;
-let waveAnimId  = null;
+let sessionSecs  = 0;
+let waveAnimId   = null;
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  HELPERS
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.toggle('active', s.id === id);
@@ -841,9 +743,9 @@ function stopTimer() {
   if (timerInterval) clearInterval(timerInterval);
 }
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  WAVEFORM ANIMATION
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 const bars = document.querySelectorAll('.wave-bar');
 const baseHeights = [16,28,44,36,20,52,40,24,48,32,56,36,44,20,52,28,40,16,32,24];
 
@@ -877,9 +779,9 @@ function setSpeakingLabel(speaker) {
   }
 }
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  TRANSCRIPT
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 function addTranscript(role, text) {
   const box = document.getElementById('transcript-box');
   const msg = document.createElement('div');
@@ -895,8 +797,7 @@ function addTranscript(role, text) {
 
 function showTypingDots() {
   const box = document.getElementById('transcript-box');
-  const existing = box.querySelector('.typing-dots');
-  if (existing) return;
+  if (box.querySelector('.typing-dots')) return;
   const dots = document.createElement('div');
   dots.className = 'typing-dots';
   dots.innerHTML = '<span></span><span></span><span></span>';
@@ -905,21 +806,20 @@ function showTypingDots() {
 }
 
 function removeTypingDots() {
-  const box = document.getElementById('transcript-box');
-  const dots = box.querySelector('.typing-dots');
+  const dots = document.getElementById('transcript-box').querySelector('.typing-dots');
   if (dots) dots.remove();
 }
 
-// ══════════════════════════════════════════════════
-//  VAPI SESSION
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  START SESSION — fetches token from Cloudflare Worker first
+// ═══════════════════════════════════════════════════════════
 async function startSession() {
   const btn = document.getElementById('start-btn');
   btn.disabled = true;
   btn.innerHTML = '<span>⏳</span> Connecting...';
 
+  // 1. Check mic permission
   try {
-    // Check mic permission first
     await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
     document.getElementById('perm-warning').style.display = 'block';
@@ -928,10 +828,31 @@ async function startSession() {
     return;
   }
 
+  // 2. Get a secure session token from our Cloudflare Worker
+  let sessionToken;
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assistantId: ASSISTANT_ID, guestName: guestName || 'there' })
+    });
+    const data = await res.json();
+    if (!data.token) throw new Error(data.error || 'No token returned');
+    sessionToken = data.token;
+  } catch (err) {
+    console.error('Token fetch error:', err);
+    document.getElementById('error-msg').textContent =
+      'Could not connect to session server. Please try again in a moment.';
+    btn.disabled = false;
+    btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
+    showScreen('screen-error');
+    return;
+  }
+
+  // 3. Start Vapi with the token
   try {
     vapi = new Vapi(VAPI_PUBLIC_KEY);
 
-    // ── Event listeners ──
     vapi.on('call-start', () => {
       showScreen('screen-call');
       startTimer();
@@ -952,7 +873,6 @@ async function startSession() {
     });
 
     vapi.on('message', (msg) => {
-      // transcript messages
       if (msg.type === 'transcript') {
         if (msg.role === 'assistant' && msg.transcriptType === 'final') {
           removeTypingDots();
@@ -980,29 +900,22 @@ async function startSession() {
       showScreen('screen-error');
     });
 
-    // ── Start the call ──
-    await vapi.start({
-      assistantId: VAPI_ASSISTANT_ID,
-      assistantOverrides: {
-        variableValues: {
-          guestName: guestName || 'there'
-        }
-      }
-    });
+    // Start with token (not assistantId — token already has the assistant baked in)
+    await vapi.start({ token: sessionToken });
 
   } catch (err) {
-    console.error('Start error:', err);
+    console.error('Vapi start error:', err);
     document.getElementById('error-msg').textContent =
-      'Could not connect. Please check your internet and try again.';
+      'Could not start the call. Please refresh and try again.';
     btn.disabled = false;
     btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
     showScreen('screen-error');
   }
 }
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  CONTROLS
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 document.getElementById('start-btn').addEventListener('click', startSession);
 
 document.getElementById('mic-btn').addEventListener('click', () => {
@@ -1030,13 +943,13 @@ document.getElementById('retry-btn').addEventListener('click', () => {
   btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
 });
 
-// ══════════════════════════════════════════════════
-//  PREFILL GUEST NAME if in URL
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  PERSONALISED GREETING from URL param
+// ═══════════════════════════════════════════════════════════
 if (guestName) {
   document.querySelector('.advisor-desc').insertAdjacentHTML('beforebegin',
     `<p style="font-size:0.82rem;color:var(--gold);margin-bottom:0.75rem;font-weight:500;">
-      Welcome back, ${guestName} ✦
+      Welcome, ${guestName} ✦
     </p>`
   );
 }
