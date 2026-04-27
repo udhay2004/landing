@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Strategy Session — Comply Globally</title>
+<title>AI Strategy Session — Comply Globally</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -12,7 +12,8 @@
   --ink3: #18172a;
   --gold: #c9a96e;
   --gold-light: #e8d2a8;
-  --gold-dim: rgba(201,169,110,0.12);
+  --gold-dark: #9a7340;
+  --gold-dim: rgba(201,169,110,0.10);
   --gold-border: rgba(201,169,110,0.22);
   --text: #f0ecf8;
   --text-muted: rgba(240,236,248,0.55);
@@ -21,692 +22,1025 @@
   --green: #4ade80;
   --red: #f87171;
   --r: 16px;
+  --r-lg: 24px;
 }
+
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+html { scroll-behavior: smooth; }
+
 body {
   background: var(--ink);
   font-family: 'DM Sans', sans-serif;
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── ambient bg ── */
+/* — AMBIENT BACKGROUND — */
 body::before {
-  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 50% at 15% 20%, rgba(139,92,246,0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(201,169,110,0.07) 0%, transparent 55%);
+    radial-gradient(ellipse 70% 55% at 12% 15%, rgba(139,92,246,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 78%, rgba(201,169,110,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(201,169,110,0.03) 0%, transparent 70%);
 }
 
-/* ═══════════════════════════════════════════
-   SCREEN MANAGER
-═══════════════════════════════════════════ */
-.screen { display:none; position:relative; z-index:1; min-height:100vh; }
-.screen.active { display:flex; flex-direction:column; }
-
-/* ── shared nav ── */
-.top-bar {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:1.1rem 2.5rem;
-  background:rgba(7,7,15,0.85); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border); flex-shrink:0;
+/* Subtle grid texture */
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.018;
+  background-image: linear-gradient(rgba(201,169,110,0.8) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201,169,110,0.8) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
+
+/* — NAV — */
+nav {
+  position: relative; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(7,7,15,0.88);
+  backdrop-filter: blur(24px) saturate(150%);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
 .logo {
-  display:flex; align-items:center; gap:.5rem;
-  font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--text);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--text); letter-spacing: 0.03em;
+  display: flex; align-items: center; gap: 0.5rem;
+  text-decoration: none;
 }
 .logo-dot {
-  width:7px; height:7px; background:var(--gold); border-radius:50%;
-  box-shadow:0 0 8px var(--gold); animation:pulse 2s ease-in-out infinite;
+  width: 7px; height: 7px;
+  background: var(--gold); border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold);
+  animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+@keyframes pulse { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 
-/* ═══════════════════════════════════════════
-   SCREEN 1 — LOADING
-═══════════════════════════════════════════ */
-#screen-loading {
-  align-items:center; justify-content:center;
+.nav-right {
+  display: flex; align-items: center; gap: 1rem;
 }
-.loader-ring {
-  width:64px; height:64px; border-radius:50%;
-  border:2px solid var(--gold-border);
-  border-top-color:var(--gold);
-  animation:spin 1s linear infinite;
-  margin-bottom:1.5rem;
+.secure-badge {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.65rem; color: var(--text-dim);
+  letter-spacing: 0.08em; text-transform: uppercase;
 }
-@keyframes spin { to{transform:rotate(360deg)} }
-.loader-text { font-size:.78rem; color:var(--text-dim); letter-spacing:.12em; text-transform:uppercase; }
-
-/* ═══════════════════════════════════════════
-   SCREEN 2 — WAITING ROOM / COUNTDOWN
-═══════════════════════════════════════════ */
-#screen-waiting {
-  flex-direction:column;
-}
-.waiting-body {
-  flex:1; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  padding:3rem 2rem; text-align:center; gap:2.5rem;
-}
-.session-badge {
-  display:inline-flex; align-items:center; gap:.6rem;
-  background:var(--gold-dim); border:1px solid var(--gold-border);
-  border-radius:2rem; padding:.35rem 1.1rem;
-  font-size:.65rem; font-weight:600; letter-spacing:.12em;
-  color:var(--gold); text-transform:uppercase;
-}
-.waiting-title {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,5vw,3.2rem); font-weight:900; line-height:1.15;
-}
-.waiting-title em { font-style:italic; color:var(--gold); }
-
-/* not-active info card */
-.not-active-card {
-  background:rgba(201,169,110,0.05); border:1px solid var(--gold-border);
-  border-radius:var(--r); padding:2rem 2.8rem; min-width:320px; max-width:420px;
-  display:flex; flex-direction:column; gap:.1rem;
-}
-.nac-header {
-  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--gold); margin-bottom:1.2rem;
-  display:flex; align-items:center; gap:.5rem;
-}
-.nac-header::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; }
-.nac-row {
-  display:flex; justify-content:space-between; align-items:baseline;
-  gap:2rem; padding:.55rem 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-.nac-row:last-child { border-bottom:none; }
-.nac-label { font-size:.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.07em; white-space:nowrap; }
-.nac-value { font-size:.85rem; color:var(--text); font-weight:500; text-align:right; }
-.waiting-note {
-  font-size:.78rem; color:var(--text-dim); line-height:1.7; max-width:380px;
+.secure-dot {
+  width: 6px; height: 6px; background: var(--green);
+  border-radius: 50%; box-shadow: 0 0 6px var(--green);
 }
 
-/* no-meeting state */
-.no-meeting-wrap { text-align:center; }
-.no-meeting-wrap h2 {
-  font-family:'Playfair Display',serif;
-  font-size:2rem; font-weight:700; margin-bottom:.75rem;
+/* — MAIN LAYOUT — */
+main {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
 }
-.no-meeting-wrap p { font-size:.9rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.8rem; }
-.btn-gold {
-  display:inline-block; background:var(--gold); color:#0a0a10;
-  font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700;
-  letter-spacing:.06em; text-transform:uppercase; text-decoration:none;
-  padding:.85rem 2rem; border-radius:3rem; transition:all .25s;
-}
-.btn-gold:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,.25); }
 
-/* ═══════════════════════════════════════════
-   SCREEN 3 — LIVE SESSION
-═══════════════════════════════════════════ */
-#screen-live { flex-direction:column; height:100vh; overflow:hidden; }
+/* — SCREENS — */
+.screen { display: none; width: 100%; max-width: 680px; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
 
-.live-top-bar {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.9rem 2rem;
-  background:rgba(7,7,15,0.92); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border); flex-shrink:0;
+/* ============================================================
+   SCREEN 1 — READY TO BEGIN
+   ============================================================ */
+#screen-ready {
+  text-align: center;
+  gap: 0;
 }
+
+.advisor-card {
+  background: rgba(201,169,110,0.04);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-lg);
+  padding: 2.8rem 3rem;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.advisor-card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(201,169,110,0.09);
+  border: 1px solid var(--gold-border);
+  border-radius: 2rem; padding: 0.3rem 0.9rem;
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 2rem;
+}
+
+/* Avatar / AI visual */
+.ai-avatar-wrap {
+  margin: 0 auto 1.8rem;
+  width: 100px; height: 100px;
+  position: relative;
+}
+.ai-avatar {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--ink3), #0d0c1e);
+  border: 1.5px solid var(--gold-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem;
+  position: relative; z-index: 1;
+  box-shadow: 0 0 0 8px rgba(201,169,110,0.04), 0 0 0 16px rgba(201,169,110,0.02);
+}
+.ai-avatar-ring {
+  position: absolute; inset: -12px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,169,110,0.15);
+  animation: ring-pulse 3s ease-in-out infinite;
+}
+.ai-avatar-ring2 {
+  position: absolute; inset: -22px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,169,110,0.07);
+  animation: ring-pulse 3s ease-in-out infinite 0.8s;
+}
+@keyframes ring-pulse {
+  0%,100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+.advisor-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem; font-weight: 900;
+  margin-bottom: 0.2rem;
+}
+.advisor-role {
+  font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2rem;
+}
+.advisor-desc {
+  font-size: 0.88rem; color: var(--text-muted);
+  line-height: 1.75; max-width: 440px; margin: 0 auto 2rem;
+}
+
+.session-meta {
+  display: flex; gap: 0.8rem; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 2.2rem;
+}
+.meta-pill {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 2rem; padding: 0.3rem 0.9rem;
+  font-size: 0.68rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 0.35rem;
+}
+
+.topics-list {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.6rem; text-align: left; margin-bottom: 2.5rem;
+}
+.topic-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.78rem; color: var(--text-muted);
+}
+.topic-dot {
+  width: 5px; height: 5px; background: var(--gold);
+  border-radius: 50%; flex-shrink: 0;
+}
+
+.start-btn {
+  width: 100%; padding: 1rem 2rem;
+  background: var(--gold); border: none; border-radius: 3rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); cursor: pointer;
+  transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+}
+.start-btn:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201,169,110,0.28);
+}
+.start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.start-note {
+  margin-top: 1rem; font-size: 0.65rem;
+  color: var(--text-dim); text-align: center;
+}
+
+/* Permission warning */
+.perm-warning {
+  display: none;
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: var(--r); padding: 1rem 1.2rem;
+  font-size: 0.8rem; color: #fca5a5;
+  text-align: center; margin-top: 1rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   SCREEN 2 — ACTIVE CALL
+   ============================================================ */
+#screen-call {
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 720px;
+}
+
+.call-header {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
+}
+.call-advisor-info {
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.call-avatar-sm {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(145deg, var(--ink3), #0d0c1e);
+  border: 1px solid var(--gold-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.call-name { font-size: 0.95rem; font-weight: 600; }
+.call-sub { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
+
 .live-badge {
-  display:flex; align-items:center; gap:.5rem;
-  font-size:.7rem; font-weight:600; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--green);
+  display: flex; align-items: center; gap: 0.4rem;
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.22);
+  border-radius: 2rem; padding: 0.3rem 0.8rem;
+  font-size: 0.65rem; font-weight: 600;
+  color: var(--green); letter-spacing: 0.08em; text-transform: uppercase;
 }
-.live-dot {
-  width:8px; height:8px; background:var(--green); border-radius:50%;
-  box-shadow:0 0 10px var(--green); animation:livepulse 1.4s ease-in-out infinite;
+.live-dot-anim {
+  width: 6px; height: 6px; background: var(--green);
+  border-radius: 50%; box-shadow: 0 0 6px var(--green);
+  animation: blink 1.4s ease-in-out infinite;
 }
-@keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.8)} }
-.timer-display {
-  font-family:'DM Mono',monospace; font-size:.82rem; color:var(--text-muted);
-  letter-spacing:.06em; font-weight:500;
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* Voice visualizer */
+.visualizer-wrap {
+  width: 100%;
+  background: rgba(201,169,110,0.03);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-lg);
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.5rem;
+  position: relative; overflow: hidden;
 }
-.client-pill {
-  display:flex; align-items:center; gap:.4rem;
-  background:var(--gold-dim); border:1px solid var(--gold-border);
-  border-radius:2rem; padding:.28rem .9rem;
-  font-size:.65rem; color:var(--gold); letter-spacing:.05em;
+.visualizer-wrap::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-/* main layout */
-.live-layout {
-  flex:1; display:grid; grid-template-columns:1fr 360px;
-  overflow:hidden;
+.waveform {
+  display: flex; align-items: center; gap: 4px;
+  height: 64px;
 }
+.wave-bar {
+  width: 4px; border-radius: 4px;
+  background: var(--gold);
+  transform-origin: bottom;
+  transition: height 0.15s ease;
+}
+/* bars will be animated via JS when speaking */
+.wave-bar:nth-child(odd) { background: var(--gold-light); }
 
-/* avatar panel */
-.avatar-panel {
-  position:relative; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  background:rgba(10,8,22,.55);
-  border-right:1px solid var(--border);
-  padding:2rem; gap:2rem;
+.speaking-label {
+  font-size: 0.72rem; color: var(--text-muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.5rem;
 }
-.corner { position:absolute; width:26px; height:26px; border-color:rgba(201,169,110,.2); border-style:solid; }
-.corner-tl { top:14px; left:14px; border-width:2px 0 0 2px; }
-.corner-tr { top:14px; right:14px; border-width:2px 2px 0 0; }
-.corner-bl { bottom:14px; left:14px; border-width:0 0 2px 2px; }
-.corner-br { bottom:14px; right:14px; border-width:0 2px 2px 0; }
+.speaking-name { color: var(--gold); font-weight: 600; }
 
-.avatar-orb {
-  position:relative; width:200px; height:200px;
-  border-radius:50%; display:flex; align-items:center; justify-content:center;
+/* Transcript / chat */
+.transcript-box {
+  width: 100%;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  max-height: 240px; overflow-y: auto;
+  padding: 1rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  scroll-behavior: smooth;
 }
-.orb-glow {
-  position:absolute; inset:-40px; border-radius:50%;
-  background:radial-gradient(circle, rgba(201,169,110,.12) 0%, transparent 65%);
-  animation:breathe 3.5s ease-in-out infinite;
-}
-@keyframes breathe { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.08);opacity:1} }
-.orb-ring {
-  position:absolute; inset:-12px; border-radius:50%;
-  border:1.5px solid transparent;
-  background:conic-gradient(from 0deg, var(--gold), rgba(201,169,110,.08), var(--gold)) border-box;
-  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite:destination-out; mask-composite:exclude;
-  animation:spin 8s linear infinite;
-}
-.orb-ring2 {
-  position:absolute; inset:-24px; border-radius:50%;
-  border:1px solid rgba(201,169,110,.1);
-  animation:spin 18s linear infinite reverse;
-}
-.orb-inner {
-  width:200px; height:200px; border-radius:50%;
-  background:linear-gradient(135deg,#1a1630,#0d0b1a);
-  border:1px solid rgba(201,169,110,.2);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:.4rem; overflow:hidden; position:relative;
-}
-.orb-inner::before {
-  content:""; position:absolute; top:0; left:0; right:0; height:50%;
-  background:linear-gradient(to bottom, rgba(201,169,110,.06),transparent);
-  border-radius:50% 50% 0 0/50% 50% 0 0;
-}
-.av-initials {
-  font-family:'Playfair Display',serif; font-size:3.6rem; font-weight:700;
-  color:var(--gold); line-height:1; position:relative; z-index:1;
-}
-.av-label {
-  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
-  color:rgba(201,169,110,.45); position:relative; z-index:1;
-}
-.speak-bars {
-  display:flex; align-items:flex-end; gap:4px; height:30px;
-  opacity:0; transition:opacity .4s;
-}
-.speak-bars.on { opacity:1; }
-.bar { width:4px; background:var(--gold); border-radius:2px; min-height:4px; }
-.bar:nth-child(1){animation:b1 .9s ease-in-out infinite}
-.bar:nth-child(2){animation:b2 .7s ease-in-out infinite .1s}
-.bar:nth-child(3){animation:b1 1.1s ease-in-out infinite .2s}
-.bar:nth-child(4){animation:b2 .8s ease-in-out infinite .05s}
-.bar:nth-child(5){animation:b1 .95s ease-in-out infinite .15s}
-@keyframes b1{0%,100%{height:6px}50%{height:26px}}
-@keyframes b2{0%,100%{height:14px}50%{height:7px}}
+.transcript-box::-webkit-scrollbar { width: 3px; }
+.transcript-box::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
 
-.name-plate { text-align:center; }
-.name-plate h2 {
-  font-family:'Playfair Display',serif;
-  font-size:1.4rem; font-weight:700; margin-bottom:.2rem;
+.transcript-msg {
+  display: flex; flex-direction: column; gap: 0.15rem;
+  max-width: 88%;
 }
-.name-plate p { font-size:.72rem; color:var(--text-muted); letter-spacing:.05em; }
+.transcript-msg.ai { align-self: flex-start; }
+.transcript-msg.user { align-self: flex-end; }
+.t-bubble {
+  padding: 0.6rem 0.9rem; border-radius: 14px;
+  font-size: 0.8rem; line-height: 1.5;
+}
+.transcript-msg.ai .t-bubble {
+  background: rgba(201,169,110,0.09);
+  border: 1px solid rgba(201,169,110,0.18);
+  border-top-left-radius: 4px;
+  color: var(--text);
+}
+.transcript-msg.user .t-bubble {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-top-right-radius: 4px;
+  color: var(--text-muted);
+}
+.t-speaker {
+  font-size: 0.58rem; color: var(--text-dim);
+  letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 0 0.4rem;
+}
+.transcript-msg.ai .t-speaker { color: var(--gold); opacity: 0.7; }
 
-.self-view {
-  position:absolute; bottom:1.5rem; left:1.5rem;
-  width:110px; height:82px;
-  background:rgba(20,18,35,.9);
-  border:1px solid rgba(201,169,110,.18); border-radius:10px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem;
+/* Typing dots */
+.typing-dots {
+  display: flex; gap: 5px; align-items: center;
+  padding: 0.6rem 0.9rem;
+  background: rgba(201,169,110,0.09);
+  border: 1px solid rgba(201,169,110,0.18);
+  border-radius: 14px; border-top-left-radius: 4px;
+  align-self: flex-start;
 }
-.self-view-icon { font-size:1.7rem; }
-.self-view-lbl { font-size:.52rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.1em; }
+.typing-dots span {
+  width: 6px; height: 6px; background: var(--gold);
+  border-radius: 50%; animation: dot-bounce 1.2s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
 
-/* info panel */
-.info-panel {
-  display:flex; flex-direction:column;
-  background:rgba(7,7,15,.7); overflow-y:auto;
+/* Call controls */
+.call-controls {
+  display: flex; align-items: center; gap: 1rem;
+  width: 100%; justify-content: center;
 }
-.info-panel::-webkit-scrollbar { width:3px; }
-.info-panel::-webkit-scrollbar-thumb { background:rgba(201,169,110,.18); border-radius:3px; }
-
-.panel-section {
-  padding:1.4rem 1.4rem 0;
-  border-bottom:1px solid var(--border);
-  padding-bottom:1.4rem;
+.ctrl-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  background: none; border: none; cursor: pointer;
+  transition: all 0.2s;
 }
-.panel-label {
-  font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--text-dim); margin-bottom:1rem;
-  display:flex; align-items:center; gap:.4rem;
-}
-.panel-label::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--gold); }
-
-/* meeting details */
-.detail-row {
-  display:flex; flex-direction:column; gap:.2rem; margin-bottom:.8rem;
-}
-.detail-row:last-child { margin-bottom:0; }
-.detail-key { font-size:.6rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.08em; }
-.detail-val { font-size:.82rem; color:var(--text); }
-
-/* agenda */
-.agenda-item {
-  display:flex; gap:.75rem; align-items:flex-start;
-  padding:.55rem 0; border-bottom:1px solid rgba(255,255,255,.04);
-}
-.agenda-item:last-child { border-bottom:none; }
-.agenda-num {
-  font-family:'DM Mono',monospace; font-size:.65rem; font-weight:500;
-  color:var(--gold); width:18px; flex-shrink:0; margin-top:1px;
-}
-.agenda-text { font-size:.78rem; color:var(--text-muted); line-height:1.5; }
-
-/* notes area */
-.notes-area {
-  width:100%; background:rgba(255,255,255,.03);
-  border:1px solid var(--border); border-radius:10px;
-  color:var(--text); font-family:'DM Sans',sans-serif; font-size:.8rem;
-  padding:.75rem; resize:none; outline:none; line-height:1.6;
-  min-height:90px; transition:border-color .2s;
-}
-.notes-area:focus { border-color:rgba(201,169,110,.35); }
-.notes-area::placeholder { color:var(--text-dim); }
-
-/* end session area */
-.end-section { padding:1.4rem; margin-top:auto; }
-.end-btn {
-  width:100%; padding:.75rem;
-  background:rgba(248,113,113,.1); border:1px solid rgba(248,113,113,.28);
-  color:var(--red); cursor:pointer; border-radius:3rem;
-  font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:600;
-  letter-spacing:.07em; text-transform:uppercase; transition:all .2s;
-  display:flex; align-items:center; justify-content:center; gap:.5rem;
-}
-.end-btn:hover { background:rgba(248,113,113,.2); transform:translateY(-1px); }
-
-/* bottom controls */
-.live-controls {
-  display:flex; align-items:center; justify-content:center; gap:1.2rem;
-  padding:1rem 2rem;
-  background:rgba(7,7,15,.92); backdrop-filter:blur(20px);
-  border-top:1px solid var(--border); flex-shrink:0;
-}
-.ctrl {
-  display:flex; flex-direction:column; align-items:center; gap:.3rem;
-  background:none; border:none; cursor:pointer; transition:all .2s;
-}
+.ctrl-btn:hover { transform: translateY(-2px); }
 .ctrl-icon {
-  width:46px; height:46px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.1rem; transition:all .25s;
-  border:1px solid var(--border); background:rgba(255,255,255,.04);
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  transition: all 0.2s;
 }
-.ctrl-icon.on { background:var(--gold-dim); border-color:var(--gold-border); }
-.ctrl-icon.muted { background:rgba(248,113,113,.1); border-color:rgba(248,113,113,.25); }
-.ctrl-lbl { font-size:.58rem; color:var(--text-dim); letter-spacing:.06em; text-transform:uppercase; }
+.ctrl-icon.active {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+}
+.ctrl-icon.muted {
+  background: rgba(248,113,113,0.12);
+  border-color: rgba(248,113,113,0.3);
+}
+.ctrl-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* ── responsive ── */
-@media(max-width:768px){
-  .top-bar, .live-top-bar { padding:.85rem 1.2rem; }
-  .live-layout { grid-template-columns:1fr; }
-  .info-panel { display:none; }
-  .live-controls { padding:.8rem 1rem; }
-  .waiting-body { padding:2rem 1.2rem; gap:2rem; }
-  .cd-block { padding:.9rem 1rem; min-width:60px; }
-  .cd-num { font-size:1.7rem; }
+.end-call-btn {
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.28);
+  color: var(--red); border-radius: 3rem;
+  padding: 0.6rem 1.8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.end-call-btn:hover {
+  background: rgba(248,113,113,0.18);
+  border-color: rgba(248,113,113,0.45);
+}
+
+/* Timer */
+.session-timer {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem; color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   SCREEN 3 — ENDED
+   ============================================================ */
+#screen-ended {
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.ended-card {
+  background: rgba(201,169,110,0.04);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-lg); padding: 3rem;
+  width: 100%; position: relative; overflow: hidden;
+}
+.ended-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+.checkmark {
+  font-size: 3rem; margin-bottom: 1rem; display: block;
+}
+.ended-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; font-weight: 900; margin-bottom: 0.75rem;
+}
+.ended-title em { font-style: italic; color: var(--gold); }
+.ended-desc {
+  font-size: 0.9rem; color: var(--text-muted);
+  line-height: 1.75; max-width: 420px; margin: 0 auto 2rem;
+}
+
+.next-steps {
+  display: flex; flex-direction: column; gap: 0.75rem;
+  text-align: left; margin-bottom: 2rem;
+}
+.next-step {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;
+}
+.step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold-dim); border: 1px solid var(--gold-border);
+  font-size: 0.62rem; font-weight: 700; color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+.btn-back {
+  display: inline-block;
+  background: var(--gold); color: var(--ink);
+  padding: 0.8rem 2.2rem; border-radius: 3rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  text-decoration: none; transition: all 0.25s;
+}
+.btn-back:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+/* ============================================================
+   SCREEN — ERROR
+   ============================================================ */
+#screen-error {
+  text-align: center; gap: 1rem;
+}
+.error-card {
+  background: rgba(248,113,113,0.05);
+  border: 1px solid rgba(248,113,113,0.2);
+  border-radius: var(--r-lg); padding: 2.5rem;
+  width: 100%;
+}
+.error-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+.error-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; margin-bottom:0.5rem; }
+.error-desc { font-size:0.85rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.5rem; }
+.btn-retry {
+  background: var(--gold); color: var(--ink);
+  padding: 0.75rem 2rem; border-radius: 3rem; border: none;
+  font-family: 'DM Sans',sans-serif; font-size:0.82rem; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+}
+.btn-retry:hover { background: var(--gold-light); }
+
+/* — FOOTER — */
+footer {
+  position: relative; z-index: 1;
+  padding: 1rem 2.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.75rem;
+  flex-shrink: 0;
+}
+.footer-brand { font-family:'Playfair Display',serif; font-size:0.85rem; font-weight:700; }
+.footer-note { font-size:0.62rem; color:var(--text-dim); }
+.footer-links { display:flex; gap:1.2rem; }
+.footer-links a { font-size:0.62rem; color:var(--text-dim); text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--gold); }
+
+/* — RESPONSIVE — */
+@media (max-width: 600px) {
+  nav { padding: 0.9rem 1.2rem; }
+  main { padding: 2rem 1rem; }
+  .advisor-card, .ended-card { padding: 2rem 1.4rem; }
+  .topics-list { grid-template-columns: 1fr; }
+  .visualizer-wrap { padding: 2rem 1.2rem; }
+  .call-controls { gap: 0.6rem; }
+  footer { padding: 1rem 1.2rem; flex-direction: column; text-align: center; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ SCREEN: LOADING ═══ -->
-<div id="screen-loading" class="screen active">
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;">
-    <div class="loader-ring"></div>
-    <p class="loader-text">Verifying your session…</p>
+<!-- NAV -->
+<nav>
+  <a href="https://udhay2004.github.io/landing/" class="logo">
+    <div class="logo-dot"></div>
+    Comply Globally
+  </a>
+  <div class="nav-right">
+    <div class="secure-badge">
+      <div class="secure-dot"></div>
+      Encrypted Session
+    </div>
   </div>
-</div>
+</nav>
 
-<!-- ═══ SCREEN: WAITING ═══ -->
-<div id="screen-waiting" class="screen">
-  <div class="top-bar">
-    <div class="logo"><div class="logo-dot"></div>Comply Globally</div>
-    <span style="font-size:.7rem;color:var(--text-dim);letter-spacing:.08em;">Strategy Session Portal</span>
-  </div>
+<!-- MAIN -->
+<main>
 
-  <!-- NO MEETING state -->
-  <div id="state-no-meeting" class="waiting-body" style="display:none;">
-    <div class="no-meeting-wrap">
-      <div class="session-badge" style="margin:0 auto 1.8rem;">
-        <span>⊘</span> No Active Session
+  <!-- ══ SCREEN 1: READY ══ -->
+  <section class="screen active" id="screen-ready">
+    <div class="advisor-card">
+      <div class="eyebrow">
+        <span>✦</span> AI Strategy Consultation
       </div>
-      <h2>Your session hasn't<br>been scheduled yet.</h2>
-      <p>Book a strategy session with our team and you'll receive a personalised link to join at your scheduled time.</p>
-      <a href="https://udhay2004.github.io/landing/" class="btn-gold">Book a Strategy Session →</a>
+
+      <div class="ai-avatar-wrap">
+        <div class="ai-avatar-ring2"></div>
+        <div class="ai-avatar-ring"></div>
+        <div class="ai-avatar">🎙️</div>
+      </div>
+
+      <div class="advisor-name">Dr. Priya</div>
+      <div class="advisor-role">Senior Global Expansion Strategist · Comply Globally</div>
+
+      <p class="advisor-desc">
+        Your AI strategy advisor is ready. In the next 20 minutes, we'll map your complete global expansion roadmap — covering entity structure, taxation, banking, and compliance.
+      </p>
+
+      <div class="session-meta">
+        <div class="meta-pill">⏱ ~20 min session</div>
+        <div class="meta-pill">🔒 Confidential</div>
+        <div class="meta-pill">📋 Transcript emailed</div>
+      </div>
+
+      <div class="topics-list">
+        <div class="topic-item"><div class="topic-dot"></div>Legal entity selection</div>
+        <div class="topic-item"><div class="topic-dot"></div>Cross-border taxation</div>
+        <div class="topic-item"><div class="topic-dot"></div>Banking infrastructure</div>
+        <div class="topic-item"><div class="topic-dot"></div>Market entry strategy</div>
+        <div class="topic-item"><div class="topic-dot"></div>FEMA / IRS compliance</div>
+        <div class="topic-item"><div class="topic-dot"></div>Holding structures</div>
+      </div>
+
+      <button class="start-btn" id="start-btn">
+        <span>🎙️</span> Begin Strategy Session
+      </button>
+
+      <p class="start-note">🔒 Microphone access required &nbsp;·&nbsp; Powered by Claude AI + Vapi</p>
+      <div class="perm-warning" id="perm-warning">
+        Microphone access was denied. Please allow microphone permissions in your browser and refresh the page to start the session.
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- NOT ACTIVE — scheduled but not yet time -->
-  <div id="state-scheduled" class="waiting-body" style="display:none;">
-    <div class="session-badge">⊘ &nbsp;Session Not Active</div>
+  <!-- ══ SCREEN 2: ACTIVE CALL ══ -->
+  <section class="screen" id="screen-call">
 
-    <div>
-      <h1 class="waiting-title">This session is not<br><em>active yet.</em></h1>
+    <div class="call-header">
+      <div class="call-advisor-info">
+        <div class="call-avatar-sm">🎙️</div>
+        <div>
+          <div class="call-name">Dr. Priya</div>
+          <div class="call-sub">Strategy Advisor · AI</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div class="session-timer" id="session-timer">00:00</div>
+        <div class="live-badge">
+          <div class="live-dot-anim"></div>
+          Live
+        </div>
+      </div>
     </div>
 
-    <div class="not-active-card">
-      <div class="nac-header">Your scheduled session</div>
-      <div class="nac-row"><span class="nac-label">Guest</span><span class="nac-value" id="info-guest">—</span></div>
-      <div class="nac-row"><span class="nac-label">Date</span><span class="nac-value" id="info-date">—</span></div>
-      <div class="nac-row"><span class="nac-label">Starts at</span><span class="nac-value" id="info-time">—</span></div>
-      <div class="nac-row"><span class="nac-label">Duration</span><span class="nac-value">30 minutes</span></div>
-      <div class="nac-row"><span class="nac-label">Host</span><span class="nac-value">Udhay Marwah · Comply Globally</span></div>
+    <!-- Voice visualizer -->
+    <div class="visualizer-wrap">
+      <div class="waveform" id="waveform">
+        <!-- 20 bars -->
+        <div class="wave-bar" style="height:16px"></div>
+        <div class="wave-bar" style="height:28px"></div>
+        <div class="wave-bar" style="height:44px"></div>
+        <div class="wave-bar" style="height:36px"></div>
+        <div class="wave-bar" style="height:20px"></div>
+        <div class="wave-bar" style="height:52px"></div>
+        <div class="wave-bar" style="height:40px"></div>
+        <div class="wave-bar" style="height:24px"></div>
+        <div class="wave-bar" style="height:48px"></div>
+        <div class="wave-bar" style="height:32px"></div>
+        <div class="wave-bar" style="height:56px"></div>
+        <div class="wave-bar" style="height:36px"></div>
+        <div class="wave-bar" style="height:44px"></div>
+        <div class="wave-bar" style="height:20px"></div>
+        <div class="wave-bar" style="height:52px"></div>
+        <div class="wave-bar" style="height:28px"></div>
+        <div class="wave-bar" style="height:40px"></div>
+        <div class="wave-bar" style="height:16px"></div>
+        <div class="wave-bar" style="height:32px"></div>
+        <div class="wave-bar" style="height:24px"></div>
+      </div>
+      <div class="speaking-label" id="speaking-label">
+        <span>Connecting to</span>
+        <span class="speaking-name">Dr. Priya</span>
+        <span>...</span>
+      </div>
     </div>
 
-    <p class="waiting-note">Please return to this link at your scheduled time. The session room will open automatically 5 minutes before your call begins.</p>
-  </div>
-</div>
-
-<!-- ═══ SCREEN: LIVE SESSION ═══ -->
-<div id="screen-live" class="screen">
-  <header class="live-top-bar">
-    <div class="logo"><div class="logo-dot"></div>Comply Globally</div>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <div class="live-badge"><div class="live-dot"></div>Live Session</div>
-      <div class="client-pill" id="live-pill">🔒 Secure</div>
+    <!-- Live transcript -->
+    <div class="transcript-box" id="transcript-box">
+      <div style="font-size:0.65rem;color:var(--text-dim);text-align:center;text-transform:uppercase;letter-spacing:0.1em;">Live Transcript</div>
     </div>
-    <div class="timer-display" id="live-timer">00:00</div>
-  </header>
 
-  <main class="live-layout">
-    <!-- Avatar -->
-    <div class="avatar-panel">
-      <div class="corner corner-tl"></div>
-      <div class="corner corner-tr"></div>
-      <div class="corner corner-bl"></div>
-      <div class="corner corner-br"></div>
+    <!-- Controls -->
+    <div class="call-controls">
+      <button class="ctrl-btn" id="mic-btn">
+        <div class="ctrl-icon active" id="mic-icon">🎤</div>
+        <span class="ctrl-label">Mic</span>
+      </button>
 
-      <div class="avatar-orb">
-        <div class="orb-glow"></div>
-        <div class="orb-ring2"></div>
-        <div class="orb-ring"></div>
-        <div class="orb-inner">
-          <div class="av-initials">CG</div>
-          <div class="av-label">Comply Globally</div>
+      <button class="end-call-btn" id="end-call-btn">
+        ✕ End Session
+      </button>
+
+      <div class="ctrl-btn" style="cursor:default;">
+        <div class="ctrl-icon active" id="vol-icon">🔊</div>
+        <span class="ctrl-label">Speaker</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ SCREEN 3: ENDED ══ -->
+  <section class="screen" id="screen-ended">
+    <div class="ended-card">
+      <span class="checkmark">✅</span>
+      <div class="ended-title">Session <em>complete.</em></div>
+      <p class="ended-desc">
+        Excellent conversation! Your full consultation transcript and personalised expansion roadmap will be emailed to you within 24 hours by our team.
+      </p>
+
+      <div class="next-steps">
+        <div class="next-step">
+          <div class="step-num">1</div>
+          Check your email — your session transcript is on its way.
+        </div>
+        <div class="next-step">
+          <div class="step-num">2</div>
+          Our senior advisor will review the session and prepare your written roadmap.
+        </div>
+        <div class="next-step">
+          <div class="step-num">3</div>
+          You'll receive a follow-up call to finalise your expansion strategy.
         </div>
       </div>
 
-      <div class="speak-bars" id="speak-bars">
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div>
-      </div>
-
-      <div class="name-plate">
-        <h2>Strategy Session</h2>
-        <p id="live-guest-name">Welcome — your session is live.</p>
-      </div>
-
-      <div class="self-view">
-        <div class="self-view-icon">👤</div>
-        <div class="self-view-lbl">You</div>
-      </div>
+      <a href="https://udhay2004.github.io/landing/" class="btn-back">← Return to Comply Globally</a>
     </div>
+  </section>
 
-    <!-- Info panel -->
-    <div class="info-panel">
-
-      <div class="panel-section">
-        <div class="panel-label">Session Details</div>
-        <div class="detail-row"><div class="detail-key">Guest</div><div class="detail-val" id="live-detail-guest">—</div></div>
-        <div class="detail-row"><div class="detail-key">Time</div><div class="detail-val" id="live-detail-time">—</div></div>
-        <div class="detail-row"><div class="detail-key">Host</div><div class="detail-val">Udhay Marwah</div></div>
-        <div class="detail-row"><div class="detail-key">Company</div><div class="detail-val">Comply Globally</div></div>
-      </div>
-
-      <div class="panel-section">
-        <div class="panel-label">Session Agenda</div>
-        <div class="agenda-item"><div class="agenda-num">01</div><div class="agenda-text">Introduction & goals overview</div></div>
-        <div class="agenda-item"><div class="agenda-num">02</div><div class="agenda-text">Target market deep-dive</div></div>
-        <div class="agenda-item"><div class="agenda-num">03</div><div class="agenda-text">Legal & compliance structure</div></div>
-        <div class="agenda-item"><div class="agenda-num">04</div><div class="agenda-text">Banking & treasury strategy</div></div>
-        <div class="agenda-item"><div class="agenda-num">05</div><div class="agenda-text">Next steps & roadmap</div></div>
-      </div>
-
-      <div class="panel-section">
-        <div class="panel-label">Session Notes</div>
-        <textarea class="notes-area" placeholder="Take notes here… they won't be saved automatically."></textarea>
-      </div>
-
-      <div class="end-section">
-        <button class="end-btn" id="end-btn">⊗ &nbsp;End Session</button>
-      </div>
+  <!-- ══ SCREEN: ERROR ══ -->
+  <section class="screen" id="screen-error">
+    <div class="error-card">
+      <span class="error-icon">⚠️</span>
+      <div class="error-title">Connection Issue</div>
+      <p class="error-desc" id="error-msg">
+        Unable to start the session. Please check your microphone permissions and try again.
+      </p>
+      <button class="btn-retry" id="retry-btn">Try Again</button>
     </div>
-  </main>
+  </section>
 
-  <footer class="live-controls">
-    <button class="ctrl" id="mic-btn">
-      <div class="ctrl-icon on" id="mic-icon">🎤</div>
-      <span class="ctrl-lbl">Mic</span>
-    </button>
-    <button class="ctrl" id="spk-btn">
-      <div class="ctrl-icon on" id="spk-icon">🔊</div>
-      <span class="ctrl-lbl">Speaker</span>
-    </button>
-    <button class="ctrl" id="vid-btn">
-      <div class="ctrl-icon on" id="vid-icon">📹</div>
-      <span class="ctrl-lbl">Video</span>
-    </button>
-    <button class="ctrl" id="share-btn">
-      <div class="ctrl-icon" id="share-icon">🖥️</div>
-      <span class="ctrl-lbl">Share</span>
-    </button>
-  </footer>
-</div>
+</main>
 
-<!-- VOICEFLOW (loads only in live session) -->
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Comply Globally</div>
+  <p class="footer-note">© 2025 Comply Globally — A Connect Ventures Inc. brand</p>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="https://udhay2004.github.io/landing/">Home</a>
+  </div>
+</footer>
+
+<!-- ================================================================
+     VAPI INTEGRATION
+     ================================================================
+     SETUP INSTRUCTIONS:
+     1. Sign up at https://vapi.ai
+     2. Create an assistant with the system prompt below (copy from comment)
+     3. Replace YOUR_VAPI_PUBLIC_KEY and YOUR_ASSISTANT_ID below
+     4. Deploy this file to your GitHub Pages site
+     ================================================================ -->
+
+<!--
+VAPI ASSISTANT SYSTEM PROMPT — paste this in your Vapi dashboard:
+
+You are Dr. Priya, a senior global expansion strategist at Comply Globally,
+a world-class cross-border compliance firm trusted by Fortune 500s and unicorn founders.
+
+YOUR PERSONA:
+- Warm, confident, deeply knowledgeable, and human-sounding
+- Speak in clear, natural sentences — this is a voice call, never use lists or bullet points
+- Never say "As an AI" — you are Dr. Priya, a human expert advisor
+- Use natural filler words: "great question", "exactly", "so", "absolutely"
+- Sound like a trusted advisor, not a salesperson
+
+YOUR CONSULTATION FLOW:
+1. Greet the guest warmly by name (use {{guestName}} if available, otherwise "there").
+   Introduce yourself as Dr. Priya from Comply Globally.
+   Ask them to briefly describe their business and the market they want to expand into.
+
+2. Listen carefully, then provide REAL strategic insight tailored to their answer:
+   - Best legal entity type (LLC, LLP, Branch Office, Wholly Owned Subsidiary, Free Zone LLC)
+   - Key tax considerations (double taxation treaties, transfer pricing, withholding tax, VAT/GST)
+   - Banking setup (multi-currency accounts, FEMA compliance for Indian clients, treasury management)
+   - Timeline and cost estimates (keep these ranges, note that team will confirm exact figures)
+   - Any compliance red flags specific to their industry and target country
+
+3. Handle follow-up questions confidently. If asked something highly specific
+   (exact treaty article numbers, precise filing deadlines), say:
+   "I'll have the exact details in your written roadmap — I want to make sure those numbers are verified."
+
+4. After 15-20 minutes, wrap up warmly:
+   - Summarise the 3 key actions they should take
+   - Tell them the team will email a full written roadmap within 24 hours
+   - Let them know a follow-up call will be scheduled
+   - Thank them genuinely and close the session
+
+RULES:
+- One natural conversational turn at a time — don't monologue for more than 3-4 sentences
+- Always bring the conversation back to their specific situation
+- Never make up specific numbers — say the team will confirm
+- Stay warm, professional, and human throughout
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js"></script>
 <script>
-// ─────────────────────────────────────────────────────
-//  CONFIG — replace these two values
-// ─────────────────────────────────────────────────────
-const JSONBIN_BIN_ID    = "YOUR_BIN_ID";        // e.g. "64abc123def456"
-const JSONBIN_API_KEY   = "YOUR_API_KEY";        // X-Access-Key from jsonbin.io
-const WINDOW_BEFORE_MS  = 5 * 60 * 1000;        // open room 5 min early
-const WINDOW_AFTER_MS   = 35 * 60 * 1000;       // close room 35 min after start
-// ─────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+//  CONFIGURATION — Replace these two values
+// ══════════════════════════════════════════════════
+const VAPI_PUBLIC_KEY  = "YOUR_VAPI_PUBLIC_KEY";   // from vapi.ai dashboard
+const VAPI_ASSISTANT_ID = "YOUR_ASSISTANT_ID";     // from your assistant settings
 
-let meeting = null;
-let sessionTimerInterval = null;
-let sessionSeconds = 0;
+// ══════════════════════════════════════════════════
+//  READ GUEST NAME FROM URL PARAMS
+// ══════════════════════════════════════════════════
+const params    = new URLSearchParams(window.location.search);
+const guestName = params.get('name') || '';
 
-// ── util ──────────────────────────────────────────────
-function pad(n){ return String(n).padStart(2,'0'); }
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+let vapi        = null;
+let isMuted     = false;
+let isAISpeaking = false;
+let timerInterval = null;
+let sessionSecs = 0;
+let waveAnimId  = null;
 
-function fmt(iso){
-  const d = new Date(iso);
-  return d.toLocaleString('en-IN', {
-    weekday:'long', year:'numeric', month:'long',
-    day:'numeric', hour:'2-digit', minute:'2-digit',
-    timeZoneName:'short'
+// ══════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.toggle('active', s.id === id);
   });
 }
 
-function fmtDate(iso){
-  return new Date(iso).toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-}
-function fmtTime(iso){
-  return new Date(iso).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
-}
-
-// ── screen switcher ───────────────────────────────────
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>{
-    s.classList.toggle('active', s.id===id);
-  });
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 }
 
-// ── fetch meeting from JSONBin ────────────────────────
-async function fetchMeeting(){
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-      headers: { 'X-Access-Key': JSONBIN_API_KEY }
-    });
-    const json = await res.json();
-    return json.record?.meeting || null;
-  } catch(e){
-    console.warn('JSONBin fetch failed:', e);
-    return null;
-  }
-}
-
-// ── live session timer ────────────────────────────────
-function startLiveTimer(){
-  sessionTimerInterval = setInterval(()=>{
-    sessionSeconds++;
-    document.getElementById('live-timer').textContent =
-      pad(Math.floor(sessionSeconds/60)) + ':' + pad(sessionSeconds%60);
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    sessionSecs++;
+    document.getElementById('session-timer').textContent = formatTime(sessionSecs);
   }, 1000);
 }
 
-// ── load voiceflow in voice mode ─────────────────────
-function loadVoiceflow(name){
-  const s = document.createElement('script');
-  s.type  = 'text/javascript';
-  s.onload = () => {
-    window.voiceflow?.chat?.load({
-      verify: { projectID: '69eb51abea3f2a4428074aeb' },
-      url: 'https://general-runtime.voiceflow.com',
-      versionID: 'production',
-      voice: { url: 'https://runtime-api.voiceflow.com' },
-      launch: { event: { type:'launch', payload: { name } } },
-      render: {
-        mode: 'overlay',            // full-screen overlay, not a corner widget
-      },
-      autostart: true,              // open immediately without user clicking
+function stopTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+// ══════════════════════════════════════════════════
+//  WAVEFORM ANIMATION
+// ══════════════════════════════════════════════════
+const bars = document.querySelectorAll('.wave-bar');
+const baseHeights = [16,28,44,36,20,52,40,24,48,32,56,36,44,20,52,28,40,16,32,24];
+
+function animateWave(active) {
+  if (waveAnimId) cancelAnimationFrame(waveAnimId);
+  if (!active) {
+    bars.forEach((b, i) => { b.style.height = baseHeights[i] + 'px'; b.style.opacity = '0.3'; });
+    return;
+  }
+  function frame() {
+    bars.forEach((b, i) => {
+      const h = isAISpeaking
+        ? 8 + Math.abs(Math.sin(Date.now() / 180 + i * 0.6)) * 52
+        : 4 + Math.abs(Math.sin(Date.now() / 300 + i * 0.8)) * 12;
+      b.style.height = h + 'px';
+      b.style.opacity = isAISpeaking ? '1' : '0.5';
     });
-    // Open the widget and activate voice as soon as it's ready
-    setTimeout(() => {
-      try {
-        window.voiceflow?.chat?.open();
-        // Trigger voice mode — Voiceflow exposes this on the widget
-        window.voiceflow?.chat?.interact({ type: 'voice_start' });
-      } catch(e) {
-        // fallback: just open the widget normally
-        window.voiceflow?.chat?.open();
-      }
-    }, 800);
-  };
-  s.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
-  document.head.appendChild(s);
+    waveAnimId = requestAnimationFrame(frame);
+  }
+  frame();
 }
 
-// ── ambient speaking animation ────────────────────────
-function startAmbient(){
-  setInterval(()=>{
-    if(Math.random()>.75){
-      const b = document.getElementById('speak-bars');
-      b.classList.add('on');
-      setTimeout(()=>b.classList.remove('on'), 1800+Math.random()*2500);
-    }
-  }, 6000);
-}
-
-// ── main init ─────────────────────────────────────────
-async function init(){
-  showScreen('screen-loading');
-
-  // URL params (from cal.com redirect)
-  const params   = new URLSearchParams(location.search);
-  const urlName  = params.get('name') || '';
-  const urlCo    = params.get('company') || '';
-
-  // If no JSONBin configured, go straight to live (dev mode)
-  if(JSONBIN_BIN_ID === 'YOUR_BIN_ID'){
-    goLive({ guest_name: urlName || 'Guest', start: new Date().toISOString() });
-    return;
-  }
-
-  meeting = await fetchMeeting();
-
-  if(!meeting || !meeting.start){
-    showScreen('screen-waiting');
-    document.getElementById('state-no-meeting').style.display = 'flex';
-    return;
-  }
-
-  const startMs = new Date(meeting.start).getTime();
-  const endMs   = new Date(meeting.end || (startMs + 30*60*1000)).getTime();
-  const now     = Date.now();
-
-  if(now >= startMs - WINDOW_BEFORE_MS && now <= endMs + WINDOW_AFTER_MS){
-    // Live window — show session room
-    goLive(meeting, urlName);
-  } else if(now < startMs - WINDOW_BEFORE_MS){
-    // Too early — show "not active yet" with scheduled time
-    showScreen('screen-waiting');
-    document.getElementById('state-scheduled').style.display = 'flex';
-    document.getElementById('info-guest').textContent = meeting.guest_name || urlName || '—';
-    document.getElementById('info-date').textContent  = fmtDate(meeting.start);
-    document.getElementById('info-time').textContent  = fmtTime(meeting.start);
+function setSpeakingLabel(speaker) {
+  const label = document.getElementById('speaking-label');
+  if (speaker === 'ai') {
+    label.innerHTML = `<span class="speaking-name">Dr. Priya</span><span>is speaking...</span>`;
+  } else if (speaker === 'user') {
+    label.innerHTML = `<span>You are</span><span class="speaking-name">speaking...</span>`;
   } else {
-    // Expired
-    showScreen('screen-waiting');
-    document.getElementById('state-no-meeting').style.display = 'flex';
+    label.innerHTML = `<span style="color:var(--text-dim)">Listening...</span>`;
   }
 }
 
-function goLive(m, urlName){
-  const guestName = urlName || m.guest_name || 'Guest';
-  showScreen('screen-live');
-  document.getElementById('live-pill').textContent      = '👤 ' + guestName;
-  document.getElementById('live-guest-name').textContent = 'Welcome, ' + guestName;
-  document.getElementById('live-detail-guest').textContent = guestName;
-  document.getElementById('live-detail-time').textContent  = m.start ? fmtTime(m.start) : '—';
-  startLiveTimer();
-  startAmbient();
-  loadVoiceflow(guestName);
+// ══════════════════════════════════════════════════
+//  TRANSCRIPT
+// ══════════════════════════════════════════════════
+function addTranscript(role, text) {
+  const box = document.getElementById('transcript-box');
+  const msg = document.createElement('div');
+  msg.className = `transcript-msg ${role}`;
+  const speaker = role === 'ai' ? 'Dr. Priya' : 'You';
+  msg.innerHTML = `
+    <span class="t-speaker">${speaker}</span>
+    <div class="t-bubble">${text}</div>
+  `;
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
 }
 
-// ── controls ──────────────────────────────────────────
-let micOn=true, spkOn=true, vidOn=true, shareOn=false;
+function showTypingDots() {
+  const box = document.getElementById('transcript-box');
+  const existing = box.querySelector('.typing-dots');
+  if (existing) return;
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  box.appendChild(dots);
+  box.scrollTop = box.scrollHeight;
+}
 
-document.getElementById('mic-btn').onclick = () => {
-  micOn=!micOn;
-  const el=document.getElementById('mic-icon');
-  el.textContent=micOn?'🎤':'🔇';
-  el.className='ctrl-icon '+(micOn?'on':'muted');
-};
-document.getElementById('spk-btn').onclick = () => {
-  spkOn=!spkOn;
-  const el=document.getElementById('spk-icon');
-  el.textContent=spkOn?'🔊':'🔕';
-  el.className='ctrl-icon '+(spkOn?'on':'');
-};
-document.getElementById('vid-btn').onclick = () => {
-  vidOn=!vidOn;
-  const el=document.getElementById('vid-icon');
-  el.textContent=vidOn?'📹':'🚫';
-  el.className='ctrl-icon '+(vidOn?'on':'muted');
-};
-document.getElementById('share-btn').onclick = () => {
-  shareOn=!shareOn;
-  document.getElementById('share-icon').className='ctrl-icon '+(shareOn?'on':'');
-};
-document.getElementById('end-btn').onclick = () => {
-  if(confirm('End this strategy session?')){
-    clearInterval(sessionTimerInterval);
-    window.location.href='https://udhay2004.github.io/landing/';
+function removeTypingDots() {
+  const box = document.getElementById('transcript-box');
+  const dots = box.querySelector('.typing-dots');
+  if (dots) dots.remove();
+}
+
+// ══════════════════════════════════════════════════
+//  VAPI SESSION
+// ══════════════════════════════════════════════════
+async function startSession() {
+  const btn = document.getElementById('start-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Connecting...';
+
+  try {
+    // Check mic permission first
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (err) {
+    document.getElementById('perm-warning').style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
+    return;
   }
-};
 
-// ── boot ─────────────────────────────────────────────
-init();
+  try {
+    vapi = new Vapi(VAPI_PUBLIC_KEY);
+
+    // ── Event listeners ──
+    vapi.on('call-start', () => {
+      showScreen('screen-call');
+      startTimer();
+      animateWave(true);
+      setSpeakingLabel('idle');
+    });
+
+    vapi.on('speech-start', () => {
+      isAISpeaking = true;
+      setSpeakingLabel('ai');
+      showTypingDots();
+    });
+
+    vapi.on('speech-end', () => {
+      isAISpeaking = false;
+      setSpeakingLabel('idle');
+      removeTypingDots();
+    });
+
+    vapi.on('message', (msg) => {
+      // transcript messages
+      if (msg.type === 'transcript') {
+        if (msg.role === 'assistant' && msg.transcriptType === 'final') {
+          removeTypingDots();
+          addTranscript('ai', msg.transcript);
+        }
+        if (msg.role === 'user' && msg.transcriptType === 'final') {
+          addTranscript('user', msg.transcript);
+          setSpeakingLabel('user');
+          setTimeout(() => setSpeakingLabel('idle'), 800);
+        }
+      }
+    });
+
+    vapi.on('call-end', () => {
+      stopTimer();
+      if (waveAnimId) cancelAnimationFrame(waveAnimId);
+      showScreen('screen-ended');
+    });
+
+    vapi.on('error', (err) => {
+      console.error('Vapi error:', err);
+      stopTimer();
+      document.getElementById('error-msg').textContent =
+        err?.message || 'Something went wrong. Please try again.';
+      showScreen('screen-error');
+    });
+
+    // ── Start the call ──
+    await vapi.start({
+      assistantId: VAPI_ASSISTANT_ID,
+      assistantOverrides: {
+        variableValues: {
+          guestName: guestName || 'there'
+        }
+      }
+    });
+
+  } catch (err) {
+    console.error('Start error:', err);
+    document.getElementById('error-msg').textContent =
+      'Could not connect. Please check your internet and try again.';
+    btn.disabled = false;
+    btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
+    showScreen('screen-error');
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  CONTROLS
+// ══════════════════════════════════════════════════
+document.getElementById('start-btn').addEventListener('click', startSession);
+
+document.getElementById('mic-btn').addEventListener('click', () => {
+  if (!vapi) return;
+  isMuted = !isMuted;
+  vapi.setMuted(isMuted);
+  const icon = document.getElementById('mic-icon');
+  icon.textContent = isMuted ? '🔇' : '🎤';
+  icon.className   = `ctrl-icon ${isMuted ? 'muted' : 'active'}`;
+});
+
+document.getElementById('end-call-btn').addEventListener('click', () => {
+  if (confirm('End the strategy session?')) {
+    if (vapi) vapi.stop();
+    stopTimer();
+    if (waveAnimId) cancelAnimationFrame(waveAnimId);
+    showScreen('screen-ended');
+  }
+});
+
+document.getElementById('retry-btn').addEventListener('click', () => {
+  showScreen('screen-ready');
+  const btn = document.getElementById('start-btn');
+  btn.disabled = false;
+  btn.innerHTML = '<span>🎙️</span> Begin Strategy Session';
+});
+
+// ══════════════════════════════════════════════════
+//  PREFILL GUEST NAME if in URL
+// ══════════════════════════════════════════════════
+if (guestName) {
+  document.querySelector('.advisor-desc').insertAdjacentHTML('beforebegin',
+    `<p style="font-size:0.82rem;color:var(--gold);margin-bottom:0.75rem;font-weight:500;">
+      Welcome back, ${guestName} ✦
+    </p>`
+  );
+}
 </script>
+
 </body>
 </html>
