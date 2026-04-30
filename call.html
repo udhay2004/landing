@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Dr. CV — Strategy Session</title>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -18,7 +14,6 @@
     overflow: hidden;
   }
 
-  /* Main container */
   .call-container {
     display: flex;
     flex-direction: column;
@@ -26,58 +21,41 @@
     background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%);
   }
 
-  /* Top bar */
   .top-bar {
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0,0,0,0.4);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    border-bottom: 1px solid rgba(0,212,255,0.1);
     z-index: 10;
   }
 
-  .brand {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: #00d4ff;
-    font-weight: 600;
-  }
+  .brand { font-size: 11px; letter-spacing: 3px; color: #00d4ff; font-weight: 600; }
 
   .status-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 6px 14px;
-    border-radius: 40px;
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 14px; border-radius: 40px;
   }
 
   .status-light {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+    width: 8px; height: 8px; border-radius: 50%;
+    transition: all 0.3s ease;
   }
-
-  .status-light.ready { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
-  .status-light.listening { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: pulse 1s infinite; }
+  .status-light.ready    { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+  .status-light.listening{ background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: pulse 1s infinite; }
   .status-light.speaking { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; animation: pulse 0.5s infinite; }
   .status-light.thinking { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; animation: pulse 1.2s infinite; }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.9); }
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%    { opacity:0.5; transform:scale(0.9); }
   }
 
-  .status-text {
-    font-size: 12px;
-    font-weight: 500;
-    color: #cbd5e1;
-  }
+  .status-text { font-size: 12px; font-weight: 500; color: #cbd5e1; }
 
-  /* Avatar section */
   .avatar-section {
     flex: 1;
     display: flex;
@@ -88,122 +66,104 @@
   }
 
   canvas {
-    width: auto;
-    height: auto;
-    max-width: 90vw;
-    max-height: 70vh;
+    width: auto; height: auto;
+    max-width: 90vw; max-height: 70vh;
     border-radius: 32px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   }
 
-  /* Controls */
+  /* Transcript bubble */
+  .transcript-bubble {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    max-width: 80%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 16px;
+    padding: 10px 18px;
+    color: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .transcript-bubble.visible { opacity: 1; }
+  .transcript-bubble.user-text { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+
   .controls {
     padding: 20px 24px 30px;
     display: flex;
     justify-content: center;
     gap: 16px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0,0,0,0.2);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    border-top: 1px solid rgba(0,212,255,0.1);
   }
 
   .ctrl-btn {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(30, 30, 40, 0.9);
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(30,30,40,0.9);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: white; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.2s ease;
   }
-
   .ctrl-btn:hover {
-    background: rgba(0, 212, 255, 0.15);
+    background: rgba(0,212,255,0.15);
     border-color: #00d4ff;
     transform: scale(1.05);
   }
-
   .ctrl-btn.mic-btn {
-    background: rgba(0, 212, 255, 0.1);
+    background: rgba(0,212,255,0.1);
     border-color: #00d4ff;
-    width: 64px;
-    height: 64px;
+    width: 64px; height: 64px;
   }
-
   .ctrl-btn.mic-btn.active {
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(239,68,68,0.2);
     border-color: #ef4444;
     animation: micPulse 1.3s infinite;
   }
+  .ctrl-btn.muted { opacity: 0.5; }
 
   @keyframes micPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-    50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+    0%,100%{ box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+    50%    { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
   }
 
-  .ctrl-btn.muted {
-    opacity: 0.5;
-  }
-
-  /* Loading overlay */
   .loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.9);
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.9);
     backdrop-filter: blur(20px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     z-index: 100;
     transition: opacity 0.5s ease;
   }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
 
-  .loading-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .loading-content {
-    text-align: center;
-  }
-
+  .loading-content { text-align: center; }
   .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 2px solid rgba(0, 212, 255, 0.2);
+    width: 50px; height: 50px;
+    border: 2px solid rgba(0,212,255,0.2);
     border-top-color: #00d4ff;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 20px;
   }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { color: #94a3b8; font-size: 14px; }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .loading-text {
-    color: #94a3b8;
-    font-size: 14px;
-  }
-
-  /* Error toast */
   .error-toast {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
+    position: fixed; bottom: 100px; left: 50%;
     transform: translateX(-50%);
-    background: rgba(239, 68, 68, 0.9);
+    background: rgba(239,68,68,0.9);
     backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    border-radius: 40px;
-    color: white;
-    font-size: 13px;
-    z-index: 100;
-    display: none;
+    padding: 10px 20px; border-radius: 40px;
+    color: white; font-size: 13px;
+    z-index: 100; display: none;
     white-space: nowrap;
   }
 
@@ -229,22 +189,23 @@
 
   <div class="avatar-section">
     <canvas id="avatarCanvas" width="600" height="600"></canvas>
+    <div class="transcript-bubble" id="transcriptBubble"></div>
   </div>
 
   <div class="controls">
-    <button class="ctrl-btn" id="resetBtn" title="Reset">
+    <button class="ctrl-btn" id="resetBtn" title="Reset conversation">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
         <path d="M3 3v5h5"/>
       </svg>
     </button>
-    <button class="ctrl-btn mic-btn" id="micBtn" title="Click to speak">
+    <button class="ctrl-btn mic-btn" id="micBtn" title="Hold to speak / tap to toggle">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
       </svg>
     </button>
-    <button class="ctrl-btn" id="muteBtn" title="Mute">
+    <button class="ctrl-btn" id="muteBtn" title="Mute AI voice">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M11 5 6 9H2v6h4l5 4V5z"/>
         <line x1="23" y1="9" x2="17" y2="15"/>
@@ -264,277 +225,260 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// PROFESSIONAL VOICE CALL WITH REALISTIC AVATAR
-// ════════════════════════════════════════════════════════════════
-
-// ─── CONFIGURATION ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════
 const WORKER_URL = 'https://drcv.onrender.com';
-const WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEBHOOK_URL'; // Replace!
 
-// Get lead data from URL or session storage
 const params = new URLSearchParams(window.location.search);
 let LEAD = {
-  name: decodeURIComponent(params.get('name') || ''),
-  email: decodeURIComponent(params.get('email') || ''),
-  company: decodeURIComponent(params.get('company') || ''),
-  country: decodeURIComponent(params.get('country') || ''),
-  stage: decodeURIComponent(params.get('stage') || ''),
-  leadId: params.get('leadId') || '',
+  name:      decodeURIComponent(params.get('name')    || ''),
+  email:     decodeURIComponent(params.get('email')   || ''),
+  company:   decodeURIComponent(params.get('company') || ''),
+  country:   decodeURIComponent(params.get('country') || ''),
+  stage:     decodeURIComponent(params.get('stage')   || ''),
+  leadId:    params.get('leadId')    || '',
   sessionId: params.get('sessionId') || ''
 };
 
-// If no URL params, try session storage
 if (!LEAD.name) {
   const stored = sessionStorage.getItem('leadData');
-  if (stored) {
-    LEAD = JSON.parse(stored);
-  }
+  if (stored) try { LEAD = JSON.parse(stored); } catch(e) {}
 }
-
-// Generate IDs if missing
-if (!LEAD.leadId) LEAD.leadId = 'lead_' + Date.now();
+if (!LEAD.leadId)    LEAD.leadId    = 'lead_' + Date.now();
 if (!LEAD.sessionId) LEAD.sessionId = 'sess_' + Date.now();
 
-// ─── AVATAR CANVAS ────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// AVATAR CANVAS
+// ═══════════════════════════════════════════════════════════
 const canvas = document.getElementById('avatarCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = 600;
+const ctx    = canvas.getContext('2d');
+canvas.width  = 600;
 canvas.height = 600;
 
-let mouthOpen = 0;
-let eyeBlink = 1;
+let mouthOpen        = 0;
+let eyeBlink         = 1;
 let headX = 0, headY = 0;
-let speakingIntensity = 0;
-let listeningIntensity = 0;
-let blinkTimer = 0;
+let isSpeakingAnim   = false;
+let isListeningAnim  = false;
 
 function drawAvatar() {
   const cx = 300, cy = 280;
-  
   ctx.clearRect(0, 0, 600, 600);
-  
-  // Background gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, 600);
-  bgGrad.addColorStop(0, '#0a0a0f');
-  bgGrad.addColorStop(1, '#12121a');
-  ctx.fillStyle = bgGrad;
+
+  // Background
+  const bg = ctx.createLinearGradient(0, 0, 0, 600);
+  bg.addColorStop(0, '#0a0a0f');
+  bg.addColorStop(1, '#12121a');
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, 600, 600);
-  
-  // Head
+
+  // Listening ring
+  if (isListeningAnim) {
+    const t = Date.now() / 500;
+    const r = 190 + Math.sin(t) * 8;
+    const grad = ctx.createRadialGradient(cx, cy, r - 10, cx, cy, r + 10);
+    grad.addColorStop(0, 'rgba(239,68,68,0)');
+    grad.addColorStop(0.5, 'rgba(239,68,68,0.15)');
+    grad.addColorStop(1, 'rgba(239,68,68,0)');
+    ctx.beginPath();
+    ctx.arc(cx + headX, cy + headY, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
   ctx.save();
   ctx.translate(headX * 0.5, headY * 0.3);
-  
-  // Face oval
+
+  // Face
   ctx.beginPath();
   ctx.ellipse(cx, cy, 150, 180, 0, 0, Math.PI * 2);
-  const skinGrad = ctx.createLinearGradient(cx - 50, cy - 60, cx + 50, cy + 80);
-  skinGrad.addColorStop(0, '#e8b87a');
-  skinGrad.addColorStop(0.5, '#d4a06a');
-  skinGrad.addColorStop(1, '#c08a55');
-  ctx.fillStyle = skinGrad;
+  const skin = ctx.createLinearGradient(cx - 50, cy - 60, cx + 50, cy + 80);
+  skin.addColorStop(0, '#e8b87a');
+  skin.addColorStop(0.5, '#d4a06a');
+  skin.addColorStop(1, '#c08a55');
+  ctx.fillStyle = skin;
   ctx.fill();
-  
+
   // Hair
   ctx.beginPath();
   ctx.ellipse(cx, cy - 150, 160, 90, 0, 0, Math.PI * 2);
   ctx.fillStyle = '#2a1a0a';
   ctx.fill();
-  
-  // Eyes
+
   const eyeY = cy - 30;
-  const eyeOpen = eyeBlink;
-  
-  // Left eye
-  ctx.fillStyle = '#f0ede8';
-  ctx.beginPath();
-  ctx.ellipse(cx - 45, eyeY, 18, 12 * eyeOpen, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#4a2a18';
-  ctx.beginPath();
-  ctx.ellipse(cx - 45, eyeY, 10, 10 * eyeOpen, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#0a0a0a';
-  ctx.beginPath();
-  ctx.arc(cx - 45, eyeY, 5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.arc(cx - 48, eyeY - 3, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Right eye
-  ctx.fillStyle = '#f0ede8';
-  ctx.beginPath();
-  ctx.ellipse(cx + 45, eyeY, 18, 12 * eyeOpen, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#4a2a18';
-  ctx.beginPath();
-  ctx.ellipse(cx + 45, eyeY, 10, 10 * eyeOpen, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#0a0a0a';
-  ctx.beginPath();
-  ctx.arc(cx + 45, eyeY, 5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.arc(cx + 42, eyeY - 3, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-  
+
+  // Eyes
+  [cx - 45, cx + 45].forEach(ex => {
+    ctx.fillStyle = '#f0ede8';
+    ctx.beginPath();
+    ctx.ellipse(ex, eyeY, 18, 12 * eyeBlink, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#4a2a18';
+    ctx.beginPath();
+    ctx.ellipse(ex, eyeY, 10, 10 * eyeBlink, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#0a0a0a';
+    ctx.beginPath();
+    ctx.arc(ex, eyeY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Shine
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(ex - 3, eyeY - 3, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
   // Eyebrows
-  ctx.beginPath();
-  ctx.moveTo(cx - 75, eyeY - 20);
-  ctx.quadraticCurveTo(cx - 55, eyeY - 28, cx - 35, eyeY - 22);
   ctx.lineWidth = 7;
   ctx.strokeStyle = '#3a2510';
-  ctx.stroke();
-  
-  ctx.beginPath();
-  ctx.moveTo(cx + 75, eyeY - 20);
-  ctx.quadraticCurveTo(cx + 55, eyeY - 28, cx + 35, eyeY - 22);
-  ctx.stroke();
-  
+  [[cx - 75, cx - 55, cx - 35], [cx + 75, cx + 55, cx + 35]].forEach(([x1, xm, x2]) => {
+    ctx.beginPath();
+    ctx.moveTo(x1, eyeY - 20);
+    ctx.quadraticCurveTo(xm, eyeY - 28, x2, eyeY - 22);
+    ctx.stroke();
+  });
+
   // Nose
   ctx.beginPath();
   ctx.moveTo(cx, eyeY + 10);
   ctx.quadraticCurveTo(cx + 3, eyeY + 30, cx, eyeY + 40);
-  ctx.strokeStyle = 'rgba(100, 60, 30, 0.3)';
+  ctx.strokeStyle = 'rgba(100,60,30,0.3)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
-  
+
   // Mouth
   const mouthY = cy + 45;
-  const mouthW = 40;
-  const openAmount = mouthOpen * 12;
-  
+  const mw = 40;
+  const openAmt = mouthOpen * 14;
+
   ctx.fillStyle = '#b55a50';
   ctx.beginPath();
-  ctx.moveTo(cx - mouthW, mouthY - 3);
-  ctx.quadraticCurveTo(cx - 15, mouthY - 9, cx, mouthY - 6);
-  ctx.quadraticCurveTo(cx + 15, mouthY - 9, cx + mouthW, mouthY - 3);
-  ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.6, cx - mouthW, mouthY - 3);
+  ctx.moveTo(cx - mw, mouthY - 3);
+  ctx.quadraticCurveTo(cx, mouthY - 10, cx + mw, mouthY - 3);
+  ctx.quadraticCurveTo(cx, mouthY + openAmt * 0.6 + 5, cx - mw, mouthY - 3);
   ctx.fill();
-  
-  if (mouthOpen > 0.1) {
+
+  if (mouthOpen > 0.15) {
     ctx.fillStyle = '#3a1510';
     ctx.beginPath();
-    ctx.moveTo(cx - mouthW + 12, mouthY);
-    ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.7, cx + mouthW - 12, mouthY);
+    ctx.ellipse(cx, mouthY + openAmt * 0.3, mw * 0.7, openAmt * 0.5 + 1, 0, 0, Math.PI);
+    ctx.fill();
+
+    // Teeth
+    ctx.fillStyle = '#f5f5f0';
+    ctx.beginPath();
+    ctx.ellipse(cx, mouthY + 2, mw * 0.55, 4, 0, 0, Math.PI);
     ctx.fill();
   }
-  
+
   // Shoulders
   ctx.fillStyle = '#1a1a24';
   ctx.beginPath();
-  ctx.moveTo(cx - 120, cy + 160);
-  ctx.quadraticCurveTo(cx, cy + 250, cx + 120, cy + 160);
+  ctx.moveTo(cx - 130, cy + 170);
+  ctx.quadraticCurveTo(cx, cy + 260, cx + 130, cy + 170);
+  ctx.lineTo(cx + 150, cy + 320);
+  ctx.lineTo(cx - 150, cy + 320);
+  ctx.closePath();
   ctx.fill();
-  
+
+  // Collar / subtle shirt detail
+  ctx.strokeStyle = 'rgba(0,212,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 20, cy + 168);
+  ctx.lineTo(cx, cy + 200);
+  ctx.lineTo(cx + 20, cy + 168);
+  ctx.stroke();
+
   ctx.restore();
-  
+
   requestAnimationFrame(drawAvatar);
 }
 
 drawAvatar();
 
-// Eye blink animation
+// Blink
 setInterval(() => {
   eyeBlink = 0;
-  setTimeout(() => { eyeBlink = 1; }, 100);
-}, 4000);
+  setTimeout(() => { eyeBlink = 1; }, 120);
+}, 3500 + Math.random() * 2000);
 
-// Head movement
+// Head drift
 setInterval(() => {
-  headX = (Math.random() - 0.5) * 4;
-  headY = (Math.random() - 0.5) * 3;
-  setTimeout(() => {
-    headX = 0;
-    headY = 0;
-  }, 800);
+  headX = (Math.random() - 0.5) * 6;
+  headY = (Math.random() - 0.5) * 4;
+  setTimeout(() => { headX = 0; headY = 0; }, 900);
 }, 5000);
 
-// Mouth animation based on speaking
-function updateMouth() {
-  if (speakingIntensity > 0) {
-    mouthOpen = 0.2 + Math.random() * 0.6;
+// Mouth animation — smooth, natural
+let mouthTarget = 0;
+function animateMouth() {
+  if (isSpeakingAnim) {
+    // Stochastic mouth for natural speech feel
+    const t = Date.now();
+    mouthTarget = 0.3 + 0.5 * Math.abs(Math.sin(t / 120)) * Math.abs(Math.sin(t / 70));
   } else {
-    mouthOpen = mouthOpen * 0.9;
+    mouthTarget = 0;
   }
-  setTimeout(updateMouth, 80);
+  // Smooth lerp
+  mouthOpen += (mouthTarget - mouthOpen) * 0.25;
+  setTimeout(animateMouth, 50);
 }
-updateMouth();
+animateMouth();
 
-// ─── VOICE STATE ──────────────────────────────────────────────
-let isListening = false;
-let isSpeaking = false;
-let voiceMuted = false;
-let recognition = null;
-let voices = [];
-let speechQueue = [];
-let isProcessingQueue = false;
-let currentUtterance = null;
-let history = [];
-let turns = 0;
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let isListening      = false;
+let isSpeaking       = false;
+let voiceMuted       = false;
+let recognition      = null;
+let voices           = [];
+let history          = [];
+let turns            = 0;
 
-// Update UI status
-function updateUIStatus(status) {
-  const light = document.getElementById('statusLight');
-  const text = document.getElementById('statusText');
-  
-  light.className = 'status-light ' + status;
-  
-  const statusMap = {
-    ready: 'Ready',
-    listening: 'Listening...',
-    thinking: 'Thinking...',
-    speaking: 'Speaking...'
-  };
-  
-  text.textContent = statusMap[status] || status;
-  
-  if (status === 'listening') listeningIntensity = 0.5;
-  else if (status === 'speaking') speakingIntensity = 0.6;
-  else {
-    listeningIntensity = 0;
-    speakingIntensity = 0;
-  }
+// Recognition control
+let recogEnabled     = false;   // set true only when we WANT recognition running
+let recogRunning     = false;   // actual state
+let silenceTimer     = null;
+let currentTranscript = '';
+
+// TTS control — Promise-based queue
+let ttsQueue         = [];
+let ttsBusy          = false;
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function setStatus(status, text) {
+  document.getElementById('statusLight').className = 'status-light ' + status;
+  document.getElementById('statusText').textContent = text || {
+    ready: 'Ready', listening: 'Listening…', thinking: 'Thinking…', speaking: 'Speaking…'
+  }[status] || status;
 }
 
-// ─── SYSTEM PROMPT ────────────────────────────────────────────
-function buildSystemPrompt() {
-  const context = LEAD.name ? `
-LEAD CONTEXT (You already know this):
-- Name: ${LEAD.name}
-- Company: ${LEAD.company || 'Not provided'}
-- Target Market: ${LEAD.country || 'Not specified'}
-- Expansion Stage: ${LEAD.stage || 'Exploring'}
-
-Start the conversation by saying: "Hi ${LEAD.name}! Thanks for joining. I'm Dr. CV, your global expansion strategist.` : '';
-  
-  return `You are Dr. CV, a warm, professional Global Expansion Strategist at Comply Globally.
-${context}
-
-VOICE CONVERSATION RULES:
-- Max 2-3 sentences per response
-- One question at a time
-- Natural, conversational tone
-- Never say "As an AI"
-
-Start naturally and ask ONE question to understand their needs.`;
+function showTranscript(text, isUser) {
+  const el = document.getElementById('transcriptBubble');
+  el.textContent = text;
+  el.className = 'transcript-bubble visible' + (isUser ? ' user-text' : '');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('visible'), isUser ? 3000 : 5000);
 }
 
-// ─── TTS FUNCTIONS ────────────────────────────────────────────
-function cleanForSpeech(text) {
-  return text
-    .replace(/\*\*/g, '')
-    .replace(/\*/g, '')
-    .replace(/\bUAE\b/g, 'the U A E')
-    .replace(/\bUSA\b/g, 'the U S A')
-    .replace(/\bLLC\b/g, 'L L C')
-    .replace(/\$(\d+)B\b/g, '$$$1 billion')
-    .trim();
+function showError(msg) {
+  const t = document.getElementById('errorToast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
 }
 
+// ═══════════════════════════════════════════════════════════
+// VOICE LOADING
+// ═══════════════════════════════════════════════════════════
 function loadVoices() {
   voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
 }
@@ -542,308 +486,445 @@ speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
 function getBestVoice() {
-  const preferred = ['Samantha', 'Google UK English Female', 'Google US English'];
+  // Prefer natural-sounding female voices
+  const preferred = [
+    'Samantha',
+    'Google UK English Female',
+    'Google US English Female',
+    'Microsoft Aria',
+    'Karen',
+    'Moira',
+    'Victoria'
+  ];
   for (const name of preferred) {
-    const voice = voices.find(v => v.name.includes(name));
-    if (voice) return voice;
+    const v = voices.find(v => v.name.includes(name));
+    if (v) return v;
   }
-  return voices[0];
+  // Fallback: first female, then first english
+  return voices.find(v => /female/i.test(v.name)) || voices[0] || null;
 }
 
-function processSpeechQueue() {
-  if (isProcessingQueue || speechQueue.length === 0 || isSpeaking) return;
-  
-  isProcessingQueue = true;
-  const text = speechQueue.shift();
-  
-  if (!text.trim() || voiceMuted) {
-    isProcessingQueue = false;
-    processSpeechQueue();
-    return;
-  }
-  
-  const cleaned = cleanForSpeech(text);
-  if (speechSynthesis.speaking) speechSynthesis.cancel();
-  
-  currentUtterance = new SpeechSynthesisUtterance(cleaned);
-  const voice = getBestVoice();
-  if (voice) currentUtterance.voice = voice;
-  currentUtterance.rate = 0.92;
-  currentUtterance.pitch = 1.05;
-  
-  currentUtterance.onstart = () => {
-    isSpeaking = true;
-    speakingIntensity = 0.6;
-    updateUIStatus('speaking');
-  };
-  
-  currentUtterance.onend = () => {
-    isSpeaking = false;
-    speakingIntensity = 0;
-    currentUtterance = null;
-    isProcessingQueue = false;
-    
-    if (speechQueue.length > 0) {
-      processSpeechQueue();
-    } else {
-      updateUIStatus('ready');
-      // Auto-start listening after speaking
-      if (!voiceMuted) {
-        setTimeout(() => startListening(), 500);
+// ═══════════════════════════════════════════════════════════
+// TTS — Promise-based, serialized
+// ═══════════════════════════════════════════════════════════
+function cleanForSpeech(text) {
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/#/g, '')
+    .replace(/\bUAE\b/g, 'the U.A.E.')
+    .replace(/\bUSA\b/g, 'the U.S.A.')
+    .replace(/\bLLC\b/g, 'L.L.C.')
+    .replace(/\bCEO\b/g, 'C.E.O.')
+    .replace(/\$(\d+)B\b/gi, '$$$1 billion')
+    .replace(/\$(\d+)M\b/gi, '$$$1 million')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Speak one chunk — returns a Promise that resolves when done
+function speakChunk(text) {
+  return new Promise((resolve) => {
+    if (!text.trim() || voiceMuted) { resolve(); return; }
+
+    const cleaned = cleanForSpeech(text);
+    if (!cleaned) { resolve(); return; }
+
+    const utt = new SpeechSynthesisUtterance(cleaned);
+    const voice = getBestVoice();
+    if (voice) utt.voice = voice;
+    utt.rate  = 0.88;   // slightly slower = more natural
+    utt.pitch = 1.02;
+    utt.volume = 1.0;
+
+    utt.onstart = () => {
+      isSpeaking      = true;
+      isSpeakingAnim  = true;
+      setStatus('speaking');
+    };
+
+    utt.onend = () => {
+      isSpeaking     = false;
+      isSpeakingAnim = false;
+      resolve();
+    };
+
+    utt.onerror = (e) => {
+      // 'interrupted' is fine (cancelled intentionally), anything else log
+      if (e.error !== 'interrupted' && e.error !== 'canceled') {
+        console.warn('TTS error:', e.error);
       }
-    }
-  };
-  
-  currentUtterance.onerror = () => {
-    isSpeaking = false;
-    speakingIntensity = 0;
-    isProcessingQueue = false;
-    updateUIStatus('ready');
-  };
-  
-  speechSynthesis.speak(currentUtterance);
+      isSpeaking     = false;
+      isSpeakingAnim = false;
+      resolve();
+    };
+
+    // Chrome bug workaround: cancel any stuck utterance
+    if (speechSynthesis.speaking) speechSynthesis.cancel();
+    speechSynthesis.speak(utt);
+  });
 }
 
-function speak(text) {
+// Enqueue text and process serially
+async function speak(text) {
   if (!text.trim() || voiceMuted) return;
-  speechQueue.push(text);
-  processSpeechQueue();
+  ttsQueue.push(text);
+  if (!ttsBusy) await drainTTSQueue();
+}
+
+async function drainTTSQueue() {
+  if (ttsBusy) return;
+  ttsBusy = true;
+
+  while (ttsQueue.length > 0) {
+    const chunk = ttsQueue.shift();
+    await speakChunk(chunk);
+    // Small gap between sentences for naturalness
+    await delay(80);
+  }
+
+  ttsBusy = false;
+  isSpeaking = false;
+  isSpeakingAnim = false;
+
+  // Only start listening if recognition is wanted and we're not already
+  if (recogEnabled && !recogRunning) {
+    setStatus('ready');
+    await delay(300);
+    startRecog();
+  } else {
+    setStatus('ready');
+  }
 }
 
 function stopSpeaking() {
-  speechQueue = [];
-  if (currentUtterance) {
+  ttsQueue = [];
+  ttsBusy  = false;
+  isSpeaking     = false;
+  isSpeakingAnim = false;
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
     speechSynthesis.cancel();
-    currentUtterance = null;
   }
-  isSpeaking = false;
-  speakingIntensity = 0;
-  isProcessingQueue = false;
 }
 
-// ─── SPEECH RECOGNITION ───────────────────────────────────────
-function initRecognition() {
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════════════════════
+// SPEECH RECOGNITION — clean, non-overlapping
+// ═══════════════════════════════════════════════════════════
+function initRecog() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     showError('Speech recognition requires Chrome or Edge');
     return false;
   }
-  
+
   recognition = new SR();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-  
-  let finalTranscript = '';
-  let silenceTimeout = null;
-  
+  recognition.lang            = 'en-US';
+  recognition.continuous      = false;   // FIXED: one-shot per turn avoids loops
+  recognition.interimResults  = true;
+  recognition.maxAlternatives = 1;
+
   recognition.onstart = () => {
-    isListening = true;
-    listeningIntensity = 0.5;
-    finalTranscript = '';
-    updateUIStatus('listening');
+    recogRunning      = true;
+    isListening       = true;
+    isListeningAnim   = true;
+    currentTranscript = '';
+    setStatus('listening');
     document.getElementById('micBtn').classList.add('active');
   };
-  
+
   recognition.onresult = (event) => {
-    if (silenceTimeout) clearTimeout(silenceTimeout);
-    
-    let newFinal = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
+    // Reset silence timer on every result
+    clearTimeout(silenceTimer);
+
+    let interim = '';
+    currentTranscript = '';
+
+    for (let i = 0; i < event.results.length; i++) {
       if (event.results[i].isFinal) {
-        newFinal += event.results[i][0].transcript + ' ';
+        currentTranscript += event.results[i][0].transcript + ' ';
+      } else {
+        interim += event.results[i][0].transcript;
       }
     }
-    
-    if (newFinal) {
-      finalTranscript += newFinal;
-      listeningIntensity = 0.3 + Math.random() * 0.3;
-    }
-    
-    silenceTimeout = setTimeout(() => {
-      if (finalTranscript.trim()) {
-        const userText = finalTranscript.trim();
-        stopListening();
-        sendMessage(userText);
-      } else if (!isSpeaking) {
-        stopListening();
-        setTimeout(() => startListening(), 500);
-      }
-    }, 1000);
+
+    // Show live interim text
+    if (interim) showTranscript(interim.trim(), true);
+
+    // Wait for a pause — 1.5s feels natural (not too eager)
+    silenceTimer = setTimeout(() => {
+      if (recogRunning) recognition.stop();
+    }, 1500);
   };
-  
-  recognition.onerror = (event) => {
-    if (event.error === 'no-speech' && !isSpeaking) {
-      stopListening();
-      setTimeout(() => startListening(), 500);
-    } else if (event.error !== 'aborted') {
-      showError('Mic error: ' + event.error);
-      stopListening();
+
+  recognition.onnomatch = () => {
+    // User spoke but we couldn't understand — restart listening
+    cleanupRecog();
+    if (recogEnabled) setTimeout(() => startRecog(), 400);
+  };
+
+  recognition.onerror = (e) => {
+    const ignorable = ['no-speech', 'aborted'];
+    if (!ignorable.includes(e.error)) {
+      console.warn('Recognition error:', e.error);
+      showError('Mic error: ' + e.error + '. Try again.');
+    }
+    cleanupRecog();
+    // Only restart for no-speech, not for real errors
+    if (e.error === 'no-speech' && recogEnabled && !isSpeaking) {
+      setTimeout(() => startRecog(), 500);
     }
   };
-  
+
   recognition.onend = () => {
-    isListening = false;
-    listeningIntensity = 0;
-    document.getElementById('micBtn').classList.remove('active');
-    if (!isSpeaking) updateUIStatus('ready');
+    cleanupRecog();
+
+    const spoken = currentTranscript.trim();
+    if (spoken && recogEnabled) {
+      // We got something — process it
+      recogEnabled = false;  // disable until response is done
+      handleUserSpeech(spoken);
+    } else if (recogEnabled && !isSpeaking) {
+      // Nothing heard, try again
+      setTimeout(() => startRecog(), 400);
+    }
   };
-  
+
   return true;
 }
 
-function startListening() {
-  if (isSpeaking) {
-    setTimeout(() => startListening(), 500);
-    return;
-  }
-  if (isListening) return;
-  if (!recognition && !initRecognition()) return;
-  
+function cleanupRecog() {
+  recogRunning    = false;
+  isListening     = false;
+  isListeningAnim = false;
+  clearTimeout(silenceTimer);
+  document.getElementById('micBtn').classList.remove('active');
+}
+
+function startRecog() {
+  if (isSpeaking || recogRunning || !recogEnabled) return;
+  if (!recognition && !initRecog()) return;
+
   try {
     recognition.start();
   } catch (e) {
+    // If start() throws (already running), recreate
+    console.warn('Recognition start error:', e.message);
     recognition = null;
-    initRecognition();
-    setTimeout(() => startListening(), 300);
+    if (initRecog()) {
+      setTimeout(() => { if (recogEnabled && !isSpeaking) recognition.start(); }, 300);
+    }
   }
 }
 
-function stopListening() {
-  if (!isListening) return;
-  try {
-    recognition.stop();
-  } catch (e) {}
+function stopRecog() {
+  recogEnabled = false;
+  clearTimeout(silenceTimer);
+  if (recogRunning) {
+    try { recognition.stop(); } catch(e) {}
+  }
+  cleanupRecog();
 }
 
-// ─── API CALL ─────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// HANDLE USER SPEECH
+// ═══════════════════════════════════════════════════════════
+function handleUserSpeech(text) {
+  showTranscript(text, true);
+  sendMessage(text);
+}
+
+// ═══════════════════════════════════════════════════════════
+// SYSTEM PROMPT
+// ═══════════════════════════════════════════════════════════
+function buildSystemPrompt() {
+  const ctx = LEAD.name
+    ? `\nLEAD CONTEXT:\n- Name: ${LEAD.name}\n- Company: ${LEAD.company || 'Not provided'}\n- Target Market: ${LEAD.country || 'Not specified'}\n- Expansion Stage: ${LEAD.stage || 'Exploring'}\n`
+    : '';
+
+  return `You are Dr. CV, a warm and expert Global Expansion Strategist at Comply Globally.${ctx}
+
+CRITICAL VOICE RULES — follow these strictly:
+1. Keep EVERY response to 1-3 short sentences maximum. Voice responses must be brief.
+2. Ask only ONE question per response. Never pile questions.
+3. Speak naturally — contractions, normal pacing, no bullet points or lists.
+4. Never say "As an AI", "I cannot", or any robotic disclaimers.
+5. Be warm, confident, consultative — like a trusted advisor on a phone call.
+6. Never repeat the lead's name more than once per response.
+7. Never read out URLs, email addresses, or long numbers.
+8. End with a question to keep the conversation flowing.`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// API CALL — streaming, sentence-based TTS dispatch
+// ═══════════════════════════════════════════════════════════
 async function sendMessage(userText) {
   if (!userText.trim()) return;
-  
-  stopListening();
-  updateUIStatus('thinking');
-  
+
+  stopSpeaking();
+  setStatus('thinking');
+
   history.push({ role: 'user', content: userText });
   turns++;
-  
-  let fullReply = '';
-  let speechBuffer = '';
-  
+
+  let fullReply   = '';
+  let speechBuf   = '';
+
+  // Sentence boundary regex — splits on . ! ? followed by space or end
+  const SENT_RE = /[^.!?…]+[.!?…]+(?:\s|$)/g;
+
+  function flushBuffer(force) {
+    const sentences = speechBuf.match(SENT_RE);
+    if (!sentences) return;
+
+    const toSpeak = force
+      ? sentences
+      : sentences.slice(0, -1);  // keep last (possibly incomplete) sentence buffered
+
+    const remaining = force
+      ? ''
+      : (sentences[sentences.length - 1] || '');
+
+    toSpeak.forEach(s => {
+      const clean = s.trim();
+      if (clean) speak(clean);
+    });
+
+    speechBuf = remaining;
+  }
+
   try {
     const response = await fetch(WORKER_URL + '/chat', {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: buildSystemPrompt(),
+        system:   buildSystemPrompt(),
         messages: history
       })
     });
-    
+
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    
-    const reader = response.body.getReader();
+
+    const reader  = response.body.getReader();
     const decoder = new TextDecoder();
-    
+    let   buffer  = '';
+
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
-      
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();  // keep incomplete line
+
       for (const line of lines) {
-        const data = line.slice(6);
-        if (data === '[DONE]') continue;
-        
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') continue;
+
         try {
-          const parsed = JSON.parse(data);
+          const parsed = JSON.parse(raw);
           if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-            const textChunk = parsed.delta.text;
-            fullReply += textChunk;
-            speechBuffer += textChunk;
-            
-            const sentences = speechBuffer.match(/[^.!?]*[.!?]+/g);
-            if (sentences && sentences.length > 1) {
-              for (let i = 0; i < sentences.length - 1; i++) {
-                speak(sentences[i].trim());
-              }
-              speechBuffer = sentences[sentences.length - 1];
-            }
+            const chunk = parsed.delta.text;
+            fullReply += chunk;
+            speechBuf += chunk;
+            flushBuffer(false);
           }
-        } catch (e) {}
+        } catch(e) { /* incomplete JSON chunk, skip */ }
       }
     }
-    
-    if (speechBuffer.trim()) speak(speechBuffer.trim());
-    
+
+    // Flush whatever is left
+    flushBuffer(true);
+    if (speechBuf.trim()) { speak(speechBuf.trim()); speechBuf = ''; }
+
+    // Save to history
     history.push({ role: 'assistant', content: fullReply.trim() });
-    if (history.length > 20) history = history.slice(-20);
-    
+    if (history.length > 24) history = history.slice(-24);
+
+    // Show transcript
+    showTranscript(fullReply.trim(), false);
+
+    // Re-enable listening — drainTTSQueue will trigger it after speaking finishes
+    recogEnabled = true;
+
   } catch (err) {
-    showError('Connection issue. Please refresh.');
-    updateUIStatus('ready');
+    console.error('API error:', err);
+    showError('Connection issue — please try again.');
+    setStatus('ready');
+    recogEnabled = true;
+    setTimeout(() => startRecog(), 600);
   }
 }
 
-function showError(msg) {
-  const toast = document.getElementById('errorToast');
-  toast.textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => {
-    toast.style.display = 'none';
-  }, 4000);
-}
-
-// ─── INITIALIZATION ───────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
 async function init() {
-  const loadingOverlay = document.getElementById('loadingOverlay');
+  const overlay     = document.getElementById('loadingOverlay');
   const loadingText = document.getElementById('loadingText');
-  
-  loadingText.textContent = 'Initializing Dr. CV...';
-  await new Promise(r => setTimeout(r, 800));
-  
-  loadingText.textContent = 'Ready!';
-  await new Promise(r => setTimeout(r, 400));
-  
-  loadingOverlay.classList.add('hidden');
-  
-  initRecognition();
+
+  stopSpeaking();
+  stopRecog();
+  history = [];
+  turns   = 0;
+
+  loadingText.textContent = 'Initializing Dr. CV…';
+  await delay(600);
+  loadingText.textContent = 'Loading voices…';
   loadVoices();
-  
-  // Build greeting
-  const firstName = LEAD.name ? LEAD.name.split(' ')[0] : '';
+  await delay(400);
+  loadingText.textContent = 'Ready!';
+  await delay(300);
+  overlay.classList.add('hidden');
+
+  initRecog();
+
+  // Build a natural greeting
+  const first = LEAD.name ? LEAD.name.split(' ')[0] : '';
   let greeting;
-  
-  if (firstName && LEAD.country) {
-    greeting = `Hi ${firstName}! Great to have you here. I'm Dr. CV, your global expansion strategist. I see you're looking at expanding to ${LEAD.country}. Tell me, what's the main challenge you're facing with global growth right now?`;
-  } else if (firstName) {
-    greeting = `Hi ${firstName}! Thanks for joining. I'm Dr. CV. Tell me about your business - what markets are you looking to expand into?`;
+
+  if (first && LEAD.country) {
+    greeting = `Hi ${first}, thanks for joining! I'm Dr. CV, your global expansion strategist here at Comply Globally. I can see you're looking at ${LEAD.country} — that's a great market. What's the biggest challenge you're running into with your expansion so far?`;
+  } else if (first) {
+    greeting = `Hey ${first}! Great to have you here. I'm Dr. CV, your global expansion strategist. Tell me a bit about your business — which markets are you thinking about expanding into?`;
   } else {
-    greeting = `Welcome! I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
+    greeting = `Welcome! I'm Dr. CV, your global expansion strategist at Comply Globally. Tell me about your business — which markets are you looking to expand into, and where are you in the process?`;
   }
-  
+
+  // Add greeting to history so follow-ups have context
   history.push({ role: 'assistant', content: greeting });
-  updateUIStatus('speaking');
+
+  // Speak greeting — recognition will auto-start when done via drainTTSQueue
+  recogEnabled = true;
   await speak(greeting);
 }
 
-// ─── EVENT HANDLERS ───────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════════════════════════
 document.getElementById('micBtn').addEventListener('click', () => {
+  if (isSpeaking) {
+    // Interrupt AI — user wants to speak
+    stopSpeaking();
+    recogEnabled = true;
+    setTimeout(() => startRecog(), 200);
+    return;
+  }
   if (isListening) {
-    stopListening();
+    // Manual stop — process what we have
+    stopRecog();
   } else {
-    if (isSpeaking) stopSpeaking();
-    startListening();
+    recogEnabled = true;
+    startRecog();
   }
 });
 
 document.getElementById('resetBtn').addEventListener('click', () => {
-  history = [];
-  turns = 0;
   stopSpeaking();
-  stopListening();
-  updateUIStatus('ready');
-  setTimeout(() => init(), 500);
+  stopRecog();
+  setTimeout(() => init(), 300);
 });
 
 let muted = false;
@@ -851,11 +932,23 @@ document.getElementById('muteBtn').addEventListener('click', function() {
   muted = !muted;
   voiceMuted = muted;
   this.classList.toggle('muted', muted);
-  if (muted) stopSpeaking();
+  if (muted) {
+    stopSpeaking();
+    setStatus('ready');
+  }
 });
 
-// Start!
-init();
+// ═══════════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════════
+// Wait for voices to load on some browsers before init
+if (speechSynthesis.getVoices().length > 0) {
+  init();
+} else {
+  speechSynthesis.addEventListener('voiceschanged', () => init(), { once: true });
+  // Fallback if event never fires
+  setTimeout(() => init(), 1500);
+}
 </script>
 </body>
 </html>
