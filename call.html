@@ -7,198 +7,120 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --void: #020408;
-  --deep: #04080f;
-  --surface: #060c16;
-  --panel: rgba(6,20,40,0.8);
-  --teal: #00d4c8;
-  --teal2: #00f5e8;
-  --teal-dim: rgba(0,212,200,0.15);
-  --teal-glow: rgba(0,212,200,0.06);
+  --void: #020408; --deep: #04080f;
+  --teal: #00d4c8; --teal2: #00f5e8;
+  --teal-dim: rgba(0,212,200,0.15); --teal-glow: rgba(0,212,200,0.06);
   --teal-border: rgba(0,212,200,0.2);
-  --amber: #f59e0b;
-  --amber-dim: rgba(245,158,11,0.12);
+  --amber: #f59e0b; --amber-dim: rgba(245,158,11,0.12);
   --red: #ef4444;
-  --red-dim: rgba(239,68,68,0.15);
-  --text: #e2f4f3;
-  --muted: rgba(226,244,243,0.45);
-  --dim: rgba(226,244,243,0.18);
-  --hint: rgba(226,244,243,0.1);
-  --display: 'Orbitron', monospace;
-  --body: 'Space Grotesk', sans-serif;
-  --mono: 'Space Mono', monospace;
+  --text: #e2f4f3; --muted: rgba(226,244,243,0.45);
+  --dim: rgba(226,244,243,0.18); --hint: rgba(226,244,243,0.1);
+  --display: 'Orbitron', monospace; --body: 'Space Grotesk', sans-serif; --mono: 'Space Mono', monospace;
 }
-
 html, body { height: 100%; background: var(--void); color: var(--text); font-family: var(--body); overflow: hidden; }
-
 #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
 body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+  content: ''; position: fixed; inset: 0; z-index: 1000; pointer-events: none;
   background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,200,0.012) 2px, rgba(0,212,200,0.012) 4px);
   animation: scanroll 8s linear infinite;
 }
 @keyframes scanroll { from{background-position:0 0} to{background-position:0 40px} }
-
 body::after {
-  content: '';
-  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  content: ''; position: fixed; inset: 0; z-index: 999; pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-size: 140px; opacity: 0.4; mix-blend-mode: overlay;
 }
-
 .ambient {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,212,200,0.06) 0%, transparent 65%),
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,212,200,0.06) 0%, transparent 65%),
     radial-gradient(ellipse 40% 35% at 20% 80%, rgba(0,100,200,0.05) 0%, transparent 55%),
     radial-gradient(ellipse 50% 45% at 80% 20%, rgba(245,158,11,0.03) 0%, transparent 55%);
 }
 
-/* ═══ LOADING SCREEN ═══ */
+/* LOADING */
 #loadingScreen {
   position: fixed; inset: 0; z-index: 200;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: var(--void);
-  gap: 1.5rem;
+  background: var(--void); gap: 1.5rem;
 }
-.loading-logo {
-  font-family: var(--display); font-size: 0.65rem; font-weight: 700;
-  letter-spacing: 0.3em; color: var(--teal); text-transform: uppercase;
-}
-.loading-bar-wrap {
-  width: 240px; height: 2px; background: rgba(0,212,200,0.1);
-  position: relative; overflow: hidden;
-}
-.loading-bar {
-  position: absolute; left: -100%; top: 0; bottom: 0; width: 60%;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent);
-  animation: loadslide 1.2s ease infinite;
-}
+.loading-logo { font-family: var(--display); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.3em; color: var(--teal); text-transform: uppercase; }
+.loading-bar-wrap { width: 240px; height: 2px; background: rgba(0,212,200,0.1); position: relative; overflow: hidden; }
+.loading-bar { position: absolute; left: -100%; top: 0; bottom: 0; width: 60%; background: linear-gradient(90deg, transparent, var(--teal), transparent); animation: loadslide 1.2s ease infinite; }
 @keyframes loadslide { 0%{left:-60%} 100%{left:110%} }
-.loading-text {
-  font-family: var(--display); font-size: 0.52rem; letter-spacing: 0.2em;
-  color: var(--dim); text-transform: uppercase;
-}
+.loading-text { font-family: var(--display); font-size: 0.52rem; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; }
 #loadingScreen.hidden { display: none; }
 
-/* ═══ APP ═══ */
-#app {
-  position: relative; z-index: 10;
-  height: 100%; display: none; flex-direction: column;
-}
+/* APP */
+#app { position: relative; z-index: 10; height: 100%; display: none; flex-direction: column; }
 #app.visible { display: flex; animation: fadeUp 0.6s ease both; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-/* ═══ TOP BAR ═══ */
-.top-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem; height: 52px;
-  background: rgba(2,4,8,0.9);
-  border-bottom: 1px solid var(--teal-border);
-  flex-shrink: 0; position: relative;
-}
-.top-bar::after {
-  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent); opacity: 0.4;
-}
-.brand {
-  font-family: var(--display); font-size: 0.62rem; font-weight: 700;
-  letter-spacing: 0.3em; color: var(--teal); text-transform: uppercase;
-  display: flex; align-items: center; gap: 0.75rem;
-}
-.brand-icon {
-  width: 20px; height: 20px; border: 1px solid var(--teal);
-  display: flex; align-items: center; justify-content: center;
-  transform: rotate(45deg); position: relative;
-}
+/* TOP BAR */
+.top-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 52px; background: rgba(2,4,8,0.9); border-bottom: 1px solid var(--teal-border); flex-shrink: 0; position: relative; }
+.top-bar::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--teal), transparent); opacity: 0.4; }
+.brand { font-family: var(--display); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.3em; color: var(--teal); text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem; }
+.brand-icon { width: 20px; height: 20px; border: 1px solid var(--teal); display: flex; align-items: center; justify-content: center; transform: rotate(45deg); position: relative; }
 .brand-icon::after { content: ''; width: 6px; height: 6px; background: var(--teal); transform: rotate(-45deg); }
-
 .top-bar-right { display: flex; align-items: center; gap: 1.5rem; }
 .sys-stat { display: flex; align-items: center; gap: 0.5rem; font-family: var(--display); font-size: 0.55rem; letter-spacing: 0.15em; color: var(--dim); }
 .sys-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 6px var(--teal); animation: syspulse 2s ease infinite; }
 @keyframes syspulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 .sys-dot.warn { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+.lead-badge { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(245,158,11,0.3); padding: 0.2rem 0.6rem; letter-spacing: 0.05em; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Lead badge in top bar */
-.lead-badge {
-  font-family: var(--mono); font-size: 0.6rem; color: var(--amber);
-  background: var(--amber-dim); border: 1px solid rgba(245,158,11,0.3);
-  padding: 0.2rem 0.6rem; letter-spacing: 0.05em;
-  max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
+/* AUTO-MIC indicator */
+.auto-badge { font-family: var(--display); font-size: 0.5rem; letter-spacing: 0.15em; color: var(--teal); background: rgba(0,212,200,0.08); border: 1px solid var(--teal-border); padding: 0.2rem 0.5rem; cursor: pointer; transition: all 0.2s; }
+.auto-badge.off { color: var(--dim); background: transparent; border-color: rgba(255,255,255,0.06); }
 
-/* ═══ MAIN ═══ */
 .main-content { flex: 1; display: flex; overflow: hidden; }
 
-/* ═══ LEFT PANEL ═══ */
-.side-panel-left {
-  width: 200px; flex-shrink: 0;
-  background: rgba(2,4,8,0.85);
-  border-right: 1px solid var(--teal-border);
-  display: flex; flex-direction: column;
-  padding: 1.5rem 1rem; gap: 1.5rem; overflow-y: auto;
-}
+/* LEFT PANEL */
+.side-panel-left { width: 200px; flex-shrink: 0; background: rgba(2,4,8,0.85); border-right: 1px solid var(--teal-border); display: flex; flex-direction: column; padding: 1.5rem 1rem; gap: 1.5rem; overflow-y: auto; }
 .side-panel-left::-webkit-scrollbar { width: 2px; }
 .side-panel-left::-webkit-scrollbar-thumb { background: var(--teal); }
-
-.data-block { }
-.data-label {
-  font-family: var(--display); font-size: 0.5rem; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal);
-  margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--teal-border);
-}
+.data-block {}
+.data-label { font-family: var(--display); font-size: 0.5rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--teal-border); }
 .data-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.3rem; }
 .data-item { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.05em; line-height: 1.4; }
 .data-item strong { color: var(--teal2); font-weight: 700; display: block; }
 .data-item.highlight strong { color: var(--amber); }
-
 .signal-bars { display: flex; gap: 3px; align-items: flex-end; height: 16px; }
 .bar { width: 4px; background: var(--teal); border-radius: 1px; opacity: 0.9; }
-.bar:nth-child(1){height:4px} .bar:nth-child(2){height:7px} .bar:nth-child(3){height:11px} .bar:nth-child(4){height:16px} .bar:nth-child(5){height:13px;opacity:0.3}
-
+.bar:nth-child(1){height:4px}.bar:nth-child(2){height:7px}.bar:nth-child(3){height:11px}.bar:nth-child(4){height:16px}.bar:nth-child(5){height:13px;opacity:0.3}
 .waveform { display: flex; align-items: center; gap: 2px; height: 20px; padding: 2px 0; }
 .wave-bar { width: 3px; background: var(--teal); border-radius: 2px; transition: height 0.15s ease; min-height: 2px; }
 
-/* ═══ CENTER ═══ */
-.center-area {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  padding: 1.5rem 2rem; position: relative; overflow: hidden;
-}
-.center-area::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,212,200,0.04) 0%, transparent 70%);
-  pointer-events: none;
-}
+/* CENTER */
+.center-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1rem 2rem; position: relative; overflow: hidden; }
+.center-area::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,212,200,0.04) 0%, transparent 70%); pointer-events: none; }
 
-.avatar-zone { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; flex: 1; justify-content: center; }
-.avatar-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+.avatar-zone { display: flex; flex-direction: column; align-items: center; gap: 1rem; flex: 1; justify-content: center; }
 
+/* BIGGER avatar container */
+.avatar-container { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
 .orbital { position: absolute; border-radius: 50%; border: 1px solid rgba(0,212,200,0.15); pointer-events: none; }
-.orbital-1 { width: 240px; height: 240px; animation: orbitSpin 20s linear infinite; }
-.orbital-2 { width: 270px; height: 270px; border-style: dashed; border-color: rgba(0,212,200,0.08); animation: orbitSpin 35s linear infinite reverse; }
-.orbital-3 { width: 300px; height: 300px; border-color: rgba(245,158,11,0.06); animation: orbitSpin 50s linear infinite; }
+.orbital-1 { width: 310px; height: 310px; animation: orbitSpin 20s linear infinite; }
+.orbital-2 { width: 345px; height: 345px; border-style: dashed; border-color: rgba(0,212,200,0.08); animation: orbitSpin 35s linear infinite reverse; }
+.orbital-3 { width: 380px; height: 380px; border-color: rgba(245,158,11,0.06); animation: orbitSpin 50s linear infinite; }
 .orbital-1::before, .orbital-1::after { content: ''; position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; background: var(--teal); border-radius: 50%; box-shadow: 0 0 8px var(--teal); }
-.orbital-1::before { transform: translate(-50%,-50%) rotate(0deg) translateY(-120px); animation: orbitDot 20s linear infinite; }
-.orbital-1::after { transform: translate(-50%,-50%) rotate(180deg) translateY(-120px); animation: orbitDot 20s linear infinite; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.orbital-1::before { transform: translate(-50%,-50%) rotate(0deg) translateY(-155px); animation: orbitDot 20s linear infinite; }
+.orbital-1::after { transform: translate(-50%,-50%) rotate(180deg) translateY(-155px); animation: orbitDot 20s linear infinite; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
 @keyframes orbitSpin { to{transform:rotate(360deg)} }
-@keyframes orbitDot { to{transform:translate(-50%,-50%) rotate(360deg) translateY(-120px)} }
+@keyframes orbitDot { to{transform:translate(-50%,-50%) rotate(360deg) translateY(-155px)} }
 
-.avatar-glow { position: absolute; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(0,212,200,0.08) 0%, transparent 70%); transition: all 0.5s ease; }
+.avatar-glow { position: absolute; width: 290px; height: 290px; border-radius: 50%; background: radial-gradient(circle, rgba(0,212,200,0.08) 0%, transparent 70%); transition: all 0.5s ease; }
 .avatar-glow.listening { background: radial-gradient(circle, rgba(239,68,68,0.12) 0%, transparent 70%); animation: glowPulse 1.5s ease infinite; }
 .avatar-glow.speaking { background: radial-gradient(circle, rgba(0,212,200,0.15) 0%, transparent 70%); }
 @keyframes glowPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.1);opacity:0.6} }
 
-.avatar-hex { position: relative; z-index: 2; width: 180px; height: 180px; clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%); overflow: hidden; transition: all 0.5s; }
-.avatar-hex.speaking { box-shadow: 0 0 40px rgba(0,212,200,0.3); filter: drop-shadow(0 0 20px rgba(0,212,200,0.4)); }
+/* BIGGER hex */
+.avatar-hex { position: relative; z-index: 2; width: 240px; height: 240px; clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%); overflow: hidden; transition: all 0.5s; }
+.avatar-hex.speaking { filter: drop-shadow(0 0 20px rgba(0,212,200,0.4)); }
 .avatar-hex.listening { filter: drop-shadow(0 0 20px rgba(239,68,68,0.4)); }
-canvas#face { display: block; width: 180px; height: 180px; }
+canvas#face { display: block; width: 240px; height: 240px; }
 
-.avatar-hud { position: absolute; z-index: 3; width: 190px; height: 190px; pointer-events: none; }
+.avatar-hud { position: absolute; z-index: 3; width: 256px; height: 256px; pointer-events: none; }
 .avatar-hud svg { width: 100%; height: 100%; }
 
 .avatar-nameplate { text-align: center; }
@@ -206,23 +128,16 @@ canvas#face { display: block; width: 180px; height: 180px; }
 .avatar-role { font-family: var(--display); font-size: 0.55rem; font-weight: 500; letter-spacing: 0.25em; color: var(--teal); text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .avatar-role::before, .avatar-role::after { content: ''; width: 16px; height: 1px; background: var(--teal); opacity: 0.5; }
 
-.status-bar {
-  width: 100%; max-width: 400px;
-  background: rgba(0,212,200,0.04); border: 1px solid var(--teal-border);
-  padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem;
-  position: relative; overflow: hidden;
-}
+.status-bar { width: 100%; max-width: 400px; background: rgba(0,212,200,0.04); border: 1px solid var(--teal-border); padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; position: relative; overflow: hidden; }
 .status-bar::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--teal); transition: background 0.3s; }
 .status-bar.listening::before { background: var(--red); }
 .status-bar.speaking::before { background: var(--teal2); animation: statusPulse 0.8s ease infinite; }
 @keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
 .status-indicator { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; box-shadow: 0 0 6px var(--teal); transition: all 0.3s; }
 .status-bar.listening .status-indicator { background: var(--red); box-shadow: 0 0 6px var(--red); animation: blink 0.9s ease infinite; }
 .status-bar.speaking .status-indicator { background: var(--teal2); box-shadow: 0 0 10px var(--teal2); }
 .status-bar.thinking .status-indicator { background: var(--amber); box-shadow: 0 0 6px var(--amber); animation: blink 1.2s ease infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
-
 #statusText { font-family: var(--display); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); flex: 1; transition: color 0.3s; }
 .status-bar.listening #statusText { color: var(--red); }
 .status-bar.speaking #statusText { color: var(--teal2); }
@@ -233,21 +148,19 @@ canvas#face { display: block; width: 180px; height: 180px; }
 .transcript-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; font-family: var(--display); font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
 .transcript-header::before { content: ''; flex: 1; height: 1px; background: var(--teal-border); }
 .transcript-header::after { content: ''; width: 20px; height: 1px; background: var(--teal-border); }
-
-#transcript { background: rgba(0,0,0,0.4); border: 1px solid var(--teal-border); padding: 1rem 1.25rem; min-height: 80px; max-height: 120px; overflow-y: auto; position: relative; scrollbar-width: none; }
+#transcript { background: rgba(0,0,0,0.4); border: 1px solid var(--teal-border); padding: 1rem 1.25rem; min-height: 70px; max-height: 100px; overflow-y: auto; scrollbar-width: none; }
 #transcript::-webkit-scrollbar { display: none; }
 #transcript.listening { border-color: rgba(239,68,68,0.35); }
 #transcript.speaking { border-color: rgba(0,212,200,0.35); }
 #userLine { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); margin-bottom: 0.5rem; min-height: 1em; font-style: italic; }
 #botLine { font-family: var(--body); font-size: 0.85rem; color: var(--text); line-height: 1.7; font-weight: 300; }
 
-.controls-zone { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+.controls-zone { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; flex-shrink: 0; }
 .controls { display: flex; align-items: center; gap: 1rem; }
 .ctrl-btn { width: 48px; height: 48px; background: transparent; border: 1px solid var(--teal-border); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: all 0.2s; position: relative; overflow: hidden; }
 .ctrl-btn::before { content: ''; position: absolute; inset: 0; background: var(--teal-glow); opacity: 0; transition: opacity 0.2s; }
 .ctrl-btn:hover { border-color: var(--teal); color: var(--teal); }
 .ctrl-btn:hover::before { opacity: 1; }
-
 .mic-btn { width: 72px; height: 72px; background: rgba(0,212,200,0.08); border: 2px solid var(--teal); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--teal); clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%); transition: all 0.25s; position: relative; overflow: hidden; }
 .mic-btn::before { content: ''; position: absolute; inset: 0; background: var(--teal); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s ease; }
 .mic-btn:hover { color: var(--void); }
@@ -256,61 +169,46 @@ canvas#face { display: block; width: 180px; height: 180px; }
 .mic-btn.active::before { background: transparent; }
 @keyframes micActive { 0%,100%{box-shadow:0 0 30px rgba(239,68,68,0.25)} 50%{box-shadow:0 0 50px rgba(239,68,68,0.5)} }
 .mic-icon { position: relative; z-index: 1; }
-.hint-text { font-family: var(--display); font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hint); text-align: center; }
+.hint-text { font-family: var(--display); font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--hint); text-align: center; }
 
-/* ═══ RIGHT PANEL ═══ */
+/* RIGHT PANEL */
 .side-panel-right { width: 220px; flex-shrink: 0; background: rgba(2,4,8,0.85); border-left: 1px solid var(--teal-border); display: flex; flex-direction: column; padding: 1.5rem 1rem; gap: 1.5rem; overflow-y: auto; }
 .side-panel-right::-webkit-scrollbar { width: 2px; }
 .side-panel-right::-webkit-scrollbar-thumb { background: var(--teal); }
-
 .expertise-list { display: flex; flex-direction: column; gap: 0.5rem; }
 .exp-chip { font-family: var(--display); font-size: 0.52rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0.4rem 0.6rem; border: 1px solid var(--teal-border); background: rgba(0,212,200,0.03); display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
 .exp-chip:hover { border-color: rgba(0,212,200,0.4); color: var(--teal2); background: var(--teal-dim); }
 .exp-chip::before { content: ''; width: 4px; height: 4px; background: var(--teal); border-radius: 50%; opacity: 0.6; flex-shrink: 0; }
-
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 .mini-stat { background: rgba(0,212,200,0.04); border: 1px solid var(--teal-border); padding: 0.7rem 0.5rem; text-align: center; }
 .mini-stat strong { font-family: var(--display); font-size: 1rem; font-weight: 900; color: var(--teal); display: block; letter-spacing: 0.05em; }
 .mini-stat span { font-family: var(--display); font-size: 0.45rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
-
-/* Lead qualification score */
-.qual-score { 
-  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2);
-  padding: 0.75rem;
-}
+.qual-score { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); padding: 0.75rem; }
 .qual-label { font-family: var(--display); font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.5rem; }
 .qual-bar-wrap { height: 4px; background: rgba(245,158,11,0.1); margin-bottom: 0.4rem; }
 .qual-bar { height: 100%; background: var(--amber); width: 0%; transition: width 1s ease; }
 .qual-text { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); }
 
-#errBanner {
-  display: none; position: fixed; top: 68px; left: 50%; transform: translateX(-50%);
-  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4);
-  color: #fca5a5; padding: 0.5rem 1.5rem;
-  font-family: var(--display); font-size: 0.62rem; letter-spacing: 0.1em;
-  white-space: nowrap; z-index: 999;
-  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-}
+#errBanner { display: none; position: fixed; top: 68px; left: 50%; transform: translateX(-50%); background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 0.5rem 1.5rem; font-family: var(--display); font-size: 0.62rem; letter-spacing: 0.1em; white-space: nowrap; z-index: 999; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
 
 @media (max-width: 900px) { .side-panel-left, .side-panel-right { display: none; } }
 @media (max-width: 600px) {
   .top-bar { padding: 0 1rem; }
-  .center-area { padding: 1rem; }
-  .avatar-hex { width: 150px; height: 150px; }
-  canvas#face { width: 150px; height: 150px; }
-  .orbital-1 { width: 200px; height: 200px; }
-  .orbital-2 { width: 225px; height: 225px; }
-  .orbital-3 { width: 250px; height: 250px; }
+  .center-area { padding: 0.5rem 1rem; }
+  .avatar-hex { width: 200px; height: 200px; }
+  canvas#face { width: 200px; height: 200px; }
+  .avatar-container { width: 220px; height: 220px; }
+  .orbital-1 { width: 260px; height: 260px; }
+  .orbital-2 { width: 290px; height: 290px; }
+  .orbital-3 { width: 320px; height: 320px; }
 }
 </style>
 </head>
 <body>
-
 <canvas id="stars"></canvas>
 <div class="ambient"></div>
 <div id="errBanner"></div>
 
-<!-- Loading -->
 <div id="loadingScreen">
   <div class="loading-logo">Comply Globally</div>
   <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
@@ -318,35 +216,28 @@ canvas#face { display: block; width: 180px; height: 180px; }
 </div>
 
 <script>
-// Stars
 (function(){
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  let stars = [];
-  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
-  function initStars(){ stars=[]; for(let i=0;i<120;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2,o:Math.random()*0.5+0.1,s:Math.random()*0.3+0.1}); }
-  function drawStars(){ ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s=>{ s.o+=Math.sin(Date.now()*0.001*s.s)*0.005; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=`rgba(0,212,200,${Math.max(0.05,Math.min(0.6,s.o))})`; ctx.fill(); }); requestAnimationFrame(drawStars); }
-  resize(); initStars(); drawStars();
-  window.addEventListener('resize',()=>{ resize(); initStars(); });
+  const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  function initStars(){stars=[];for(let i=0;i<120;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2,o:Math.random()*0.5+0.1,s:Math.random()*0.3+0.1});}
+  function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.o+=Math.sin(Date.now()*0.001*s.s)*0.005;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,212,200,${Math.max(0.05,Math.min(0.6,s.o))})`;ctx.fill();});requestAnimationFrame(drawStars);}
+  resize();initStars();drawStars();
+  window.addEventListener('resize',()=>{resize();initStars();});
 })();
 </script>
 
-<!-- APP -->
 <div id="app">
   <div class="top-bar">
-    <div class="brand">
-      <div class="brand-icon"></div>
-      Comply Globally
-    </div>
+    <div class="brand"><div class="brand-icon"></div>Comply Globally</div>
     <div class="top-bar-right">
       <div class="lead-badge" id="leadBadge">—</div>
+      <div class="auto-badge" id="autoBadge" title="Toggle auto-mic after Dr. CV speaks">AUTO-MIC: ON</div>
       <div class="sys-stat"><div class="sys-dot"></div>SECURE</div>
       <div class="sys-stat"><div class="sys-dot warn"></div>ENCRYPTED</div>
     </div>
   </div>
 
   <div class="main-content">
-    <!-- LEFT -->
     <aside class="side-panel-left">
       <div class="data-block">
         <div class="data-label">Lead Profile</div>
@@ -376,7 +267,6 @@ canvas#face { display: block; width: 180px; height: 180px; }
       </div>
     </aside>
 
-    <!-- CENTER -->
     <div class="center-area">
       <div class="avatar-zone">
         <div class="avatar-container">
@@ -385,17 +275,17 @@ canvas#face { display: block; width: 180px; height: 180px; }
           <div class="orbital orbital-1"></div>
           <div class="avatar-glow" id="avatarGlow"></div>
           <div class="avatar-hex" id="avatarHex">
-            <canvas id="face" width="340" height="340"></canvas>
+            <canvas id="face" width="460" height="460"></canvas>
           </div>
           <div class="avatar-hud">
-            <svg viewBox="0 0 190 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="95,2 185,49 185,141 95,188 5,141 5,49" stroke="rgba(0,212,200,0.25)" stroke-width="1" fill="none"/>
-              <line x1="2" y1="49" x2="15" y2="49" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
-              <line x1="5" y1="49" x2="5" y2="62" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
-              <line x1="188" y1="141" x2="175" y2="141" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
-              <line x1="185" y1="141" x2="185" y2="128" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
-              <text x="8" y="100" fill="rgba(0,212,200,0.45)" font-family="monospace" font-size="5">ID//CV-7</text>
-              <text x="155" y="90" fill="rgba(0,212,200,0.45)" font-family="monospace" font-size="5">LIVE</text>
+            <svg viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="128,3 250,67 250,189 128,253 6,189 6,67" stroke="rgba(0,212,200,0.25)" stroke-width="1" fill="none"/>
+              <line x1="3" y1="67" x2="20" y2="67" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
+              <line x1="6" y1="67" x2="6" y2="84" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
+              <line x1="253" y1="189" x2="236" y2="189" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
+              <line x1="250" y1="189" x2="250" y2="172" stroke="rgba(0,212,200,0.6)" stroke-width="1.5"/>
+              <text x="10" y="136" fill="rgba(0,212,200,0.45)" font-family="monospace" font-size="6">ID//CV-7</text>
+              <text x="210" y="124" fill="rgba(0,212,200,0.45)" font-family="monospace" font-size="6">LIVE</text>
             </svg>
           </div>
         </div>
@@ -405,7 +295,7 @@ canvas#face { display: block; width: 180px; height: 180px; }
         </div>
       </div>
 
-      <div style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
+      <div style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:0.6rem;align-items:center;">
         <div class="status-bar" id="statusBar">
           <div class="status-indicator"></div>
           <span id="statusText">INITIALISING</span>
@@ -433,12 +323,11 @@ canvas#face { display: block; width: 180px; height: 180px; }
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             </button>
           </div>
-          <div class="hint-text">Click mic to speak &nbsp;·&nbsp; Space bar shortcut</div>
+          <div class="hint-text" id="hintText">Mic opens automatically after Dr. CV speaks · Space to speak</div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT -->
     <aside class="side-panel-right">
       <div class="data-block">
         <div class="data-label">Expertise</div>
@@ -475,10 +364,9 @@ canvas#face { display: block; width: 180px; height: 180px; }
 </div>
 
 <script>
-// ═══ CLOUDFLARE WORKER URL — replace after deploying ═══
-const WORKER_URL = 'https://drcv.onrender.com'; // e.g. https://comply-cv-proxy.onrender.com
+// ═══ CONFIG ═══
+const WORKER_URL = 'https://drcv.onrender.com';
 
-// ═══ READ URL PARAMS ═══
 const params = new URLSearchParams(window.location.search);
 const LEAD = {
   name:    decodeURIComponent(params.get('name')    || ''),
@@ -488,231 +376,450 @@ const LEAD = {
   stage:   decodeURIComponent(params.get('stage')   || '')
 };
 
-// ═══ SYSTEM PROMPT — personalized per lead ═══
 function buildSystemPrompt() {
-  const leadContext = LEAD.name
-    ? `
-LEAD CONTEXT (already submitted — DO NOT ask them to repeat this):
+  const leadContext = LEAD.name ? `
+LEAD CONTEXT (you already know this — do NOT ask them to repeat):
 - Name: ${LEAD.name}
 - Company: ${LEAD.company || 'Not provided'}
 - Target Market: ${LEAD.country || 'Not specified'}
 - Expansion Stage: ${LEAD.stage || 'Not specified'}
 - Email: ${LEAD.email || 'Not provided'}
+Use their name naturally. Dive deeper, don't repeat basics.` : '';
 
-Use their name naturally in conversation. You already know the above — dive deeper.`
-    : '';
-
-  return `You are Dr. CV, a Senior Global Expansion Strategist at Comply Globally.
+  return `You are Dr. CV, Senior Global Expansion Strategist at Comply Globally.
 ${leadContext}
 
-CORE GOAL: Qualify this lead and guide them toward booking a paid engagement with Comply Globally. You are having a VOICE conversation — keep responses SHORT (2-4 sentences max), natural, and spoken-word friendly.
+CORE GOAL: Qualify this lead and guide them toward a paid engagement. Voice conversation — keep ALL responses to 2-3 sentences max.
 
-QUALIFICATION FOCUS — extract and assess:
-1. Revenue / funding stage (bootstrapped? funded? how much ARR?)
-2. Urgency (planning now vs just exploring?)
-3. Specific pain points (tax? banking? compliance? entity structure?)
-4. Decision-making authority (are they the founder / CFO?)
-5. Budget signals (have they worked with consultants before? at what cost?)
+QUALIFICATION — extract naturally through conversation:
+1. Revenue or funding stage
+2. Urgency (ready now vs exploring?)
+3. Specific pain point (tax? banking? entity? compliance?)
+4. Are they the decision maker?
+5. Budget signals
 
-PERSONALITY: Intelligent, calm, warm. Senior consultant — not a salesperson. Slightly persuasive, never pushy.
+PERSONALITY: Warm, intelligent, confident. Senior consultant energy. Not robotic, not salesy.
 
-TONE: Conversational. Simple language for complex topics. Natural filler: "That's a great point", "Let me think through that with you."
+CONVERSATION STYLE (CRITICAL — this is voice):
+- Max 2-3 sentences per response. Never longer.
+- One question at a time. Never two.
+- No bullet points. No numbered lists. No markdown. Plain spoken sentences only.
+- Natural speech: "That makes sense", "Good question", "Let me think through that with you"
+- Never say "As an AI" or "I'm an AI"
+- When writing acronyms for TTS, write them as full words: write "UAE" as "the U A E", write "IT firm" as "I T firm" NOT "I dot T dot firm", write "LLC" as "L L C", write "FEMA" as "F E M A"
+- Numbers: write "$2.8 billion" not "$2.8B"
 
-CONVERSATION FLOW:
-1. Greet them by name warmly, acknowledge what they submitted, ask ONE follow-up to go deeper.
-2. Ask one focused question at a time to assess urgency and budget fit.
-3. Once enough context — provide sharp, specific strategic insight relevant to their market/stage.
-4. Soft CTA: "Based on what you've shared, our team could have your structure ready in about 3–4 weeks. Would it make sense to connect you with one of our senior advisors?"
+FLOW:
+1. Greet by name, acknowledge what they submitted, ask ONE sharp follow-up
+2. Qualify through natural back-and-forth — one question each turn
+3. Once you have enough context, give a sharp specific insight
+4. Soft CTA: "Based on what you've shared, our team could have your structure ready in about 3 to 4 weeks. Would it make sense to connect you with one of our senior advisors?"
 
-SPEAKING STYLE (voice interface):
-- Spell acronyms: "U-A-E", "U-S C-Corp", "F-E-M-A"
-- No bullet points, no markdown, no numbered lists
-- Sound like a senior consultant, NOT a chatbot
-- Never say "As an AI"
-- Short answers — this is a VOICE call
+KNOWLEDGE: Delaware C-Corp and LLC, UAE Freezone, Singapore incorporation, cross-border tax, Stripe, Mercury, Wise banking, FEMA India outbound rules, holding structures.
 
-KNOWLEDGE: Expert in US Delaware C-Corp/LLC, UAE Freezone, Singapore incorporation, cross-border tax, Stripe/Mercury/Wise banking, FEMA India outbound rules, holding structures.
-
-BOUNDARIES: No tax evasion. If asked, redirect to compliant optimization.`;
+HARD RULE: Never more than 3 sentences. Short answers keep the conversation flowing naturally.`;
 }
 
 // ═══ STATE ═══
-let history = [];
-let isListening = false;
-let isSpeaking = false;
-let voiceMuted = false;
-let recognition = null;
-let voices = [];
-let turns = 0;
-let sessionStart = null;
-let qualScore = 0;
+let history = [], isListening = false, isSpeaking = false;
+let voiceMuted = false, autoMic = true;
+let recognition = null, voices = [], turns = 0, sessionStart = null, qualScore = 0;
+let mouthOpen=0, mouthTarget=0, eyeOpen=1, blinkTimer=120;
+let headBob=0, headBobDir=1, pupilOffX=0, pupilOffY=0, pupilTargetX=0, pupilTargetY=0, breathPhase=0;
+let silenceTimer = null;
 
-// Avatar state
-let mouthOpen=0,mouthTarget=0,eyeOpen=1,blinkTimer=120,headBob=0,headBobDir=1;
-let pupilOffX=0,pupilOffY=0,pupilTargetX=0,pupilTargetY=0,breathPhase=0;
+// ═══ AVATAR — lighter skin ═══
+const faceCanvas = document.getElementById('face');
+const fCtx = faceCanvas.getContext('2d');
+const CW = faceCanvas.width, CH = faceCanvas.height;
 
-// ═══ AVATAR ═══
-const canvas2 = document.getElementById('face');
-const ctx2 = canvas2.getContext('2d');
-const CW=canvas2.width, CH=canvas2.height;
-
-function drawFace(){
-  ctx2.clearRect(0,0,CW,CH);
-  breathPhase+=0.018;
-  const breathY=Math.sin(breathPhase)*1.5;
+function drawFace() {
+  fCtx.clearRect(0, 0, CW, CH);
+  breathPhase += 0.018;
+  const breathY = Math.sin(breathPhase) * 2;
   blinkTimer--;
-  if(blinkTimer<=0){blinkTimer=Math.random()*200+100;eyeOpen=0;}
-  eyeOpen=Math.min(1,eyeOpen+0.15);
-  if(isSpeaking){headBob+=0.05*headBobDir;if(Math.abs(headBob)>2)headBobDir*=-1;}
-  else{headBob*=0.88;}
-  pupilOffX+=(pupilTargetX-pupilOffX)*0.04;
-  pupilOffY+=(pupilTargetY-pupilOffY)*0.04;
-  if(Math.random()<0.008){pupilTargetX=(Math.random()-0.5)*10;pupilTargetY=(Math.random()-0.5)*8;}
-  mouthOpen+=(mouthTarget-mouthOpen)*0.28;
-  const cx=CW/2,cy=CH/2+headBob+breathY;
-  ctx2.save();
-  ctx2.beginPath();
-  ctx2.ellipse(cx,cy+6,108,120,0,0,Math.PI*2);
-  const fg=ctx2.createRadialGradient(cx-15,cy-30,10,cx,cy,120);
-  fg.addColorStop(0,'#3a2a1c');fg.addColorStop(0.5,'#2a1e14');fg.addColorStop(1,'#1a1208');
-  ctx2.fillStyle=fg;ctx2.fill();
-  ctx2.beginPath();ctx2.ellipse(cx-18,cy-35,42,36,-0.3,0,Math.PI*2);
-  ctx2.fillStyle='rgba(255,220,160,0.04)';ctx2.fill();ctx2.restore();
-  ctx2.save();
-  ctx2.beginPath();ctx2.ellipse(cx,cy-95,112,50,0,Math.PI,Math.PI*2);
-  ctx2.fillStyle='#0e0904';ctx2.fill();
-  [-1,1].forEach(s=>{ctx2.beginPath();ctx2.ellipse(cx+s*100,cy-30,20,80,s*0.2,0,Math.PI*2);ctx2.fillStyle='#0e0904';ctx2.fill();});
-  ctx2.restore();
-  ctx2.save();
-  [-1,1].forEach(s=>{
-    ctx2.beginPath();ctx2.arc(cx+s*102,cy+18,5,0,Math.PI*2);ctx2.fillStyle='rgba(0,212,200,0.8)';ctx2.fill();
-    ctx2.beginPath();ctx2.arc(cx+s*102,cy+28,3,0,Math.PI*2);ctx2.fillStyle='rgba(0,212,200,0.5)';ctx2.fill();
-  });ctx2.restore();
-  const eyeY=cy-20,eyeGap=32;
-  [-1,1].forEach(side=>{
-    const ex=cx+side*eyeGap;
-    ctx2.save();
-    ctx2.beginPath();ctx2.ellipse(ex,eyeY-2,20,10,0,0,Math.PI*2);ctx2.fillStyle='rgba(40,20,60,0.5)';ctx2.fill();
-    ctx2.beginPath();ctx2.ellipse(ex,eyeY,16,11*eyeOpen,0,0,Math.PI*2);ctx2.fillStyle='#f5ede0';ctx2.fill();
-    ctx2.beginPath();ctx2.ellipse(ex+pupilOffX*0.3,eyeY+pupilOffY*0.2,10,10*eyeOpen,0,0,Math.PI*2);
-    const ig=ctx2.createRadialGradient(ex+pupilOffX*0.3,eyeY+pupilOffY*0.2,0,ex+pupilOffX*0.3,eyeY,10);
-    ig.addColorStop(0,'#005c5c');ig.addColorStop(0.6,'#003535');ig.addColorStop(1,'#001515');
-    ctx2.fillStyle=ig;ctx2.fill();
-    ctx2.beginPath();ctx2.ellipse(ex+pupilOffX*0.3,eyeY+pupilOffY*0.2,5,5*eyeOpen,0,0,Math.PI*2);ctx2.fillStyle='#000';ctx2.fill();
-    ctx2.beginPath();ctx2.ellipse(ex+pupilOffX*0.3,eyeY,10,10*eyeOpen,0,0,Math.PI*2);ctx2.strokeStyle='rgba(0,212,200,0.4)';ctx2.lineWidth=1.5;ctx2.stroke();
-    ctx2.beginPath();ctx2.ellipse(ex+4,eyeY-3*eyeOpen,3,2.5*eyeOpen,-0.4,0,Math.PI*2);ctx2.fillStyle='rgba(255,255,255,0.75)';ctx2.fill();
-    ctx2.strokeStyle='#0e0904';ctx2.lineWidth=1.5;ctx2.lineCap='round';
-    for(let i=-3;i<=3;i++){ctx2.beginPath();ctx2.moveTo(ex+i*4.5,eyeY-10*eyeOpen);ctx2.lineTo(ex+i*4.5+i*0.8,eyeY-15*eyeOpen);ctx2.stroke();}
-    ctx2.restore();
+  if (blinkTimer <= 0) { blinkTimer = Math.random() * 200 + 100; eyeOpen = 0; }
+  eyeOpen = Math.min(1, eyeOpen + 0.15);
+  if (isSpeaking) { headBob += 0.05 * headBobDir; if (Math.abs(headBob) > 2) headBobDir *= -1; }
+  else { headBob *= 0.88; }
+  pupilOffX += (pupilTargetX - pupilOffX) * 0.04;
+  pupilOffY += (pupilTargetY - pupilOffY) * 0.04;
+  if (Math.random() < 0.008) { pupilTargetX = (Math.random()-0.5)*12; pupilTargetY = (Math.random()-0.5)*10; }
+  mouthOpen += (mouthTarget - mouthOpen) * 0.28;
+
+  const cx = CW/2, cy = CH/2 + headBob + breathY;
+
+  // Face — much lighter warm skin tone
+  fCtx.save();
+  fCtx.beginPath();
+  fCtx.ellipse(cx, cy+8, 138, 155, 0, 0, Math.PI*2);
+  const fg = fCtx.createRadialGradient(cx-20, cy-40, 10, cx, cy, 160);
+  fg.addColorStop(0, '#f5c9a0');   // light warm highlight
+  fg.addColorStop(0.4, '#e8b07a'); // medium warm
+  fg.addColorStop(0.8, '#d4956a'); // slightly deeper at edges
+  fg.addColorStop(1, '#c07d50');
+  fCtx.fillStyle = fg; fCtx.fill();
+  // subtle highlight
+  fCtx.beginPath(); fCtx.ellipse(cx-22, cy-45, 50, 44, -0.3, 0, Math.PI*2);
+  fCtx.fillStyle = 'rgba(255,235,200,0.12)'; fCtx.fill();
+  fCtx.restore();
+
+  // Hair — dark rich brown
+  fCtx.save();
+  fCtx.beginPath(); fCtx.ellipse(cx, cy-122, 142, 64, 0, Math.PI, Math.PI*2);
+  fCtx.fillStyle = '#1a0f05'; fCtx.fill();
+  [-1,1].forEach(s => {
+    fCtx.beginPath(); fCtx.ellipse(cx+s*128, cy-38, 24, 100, s*0.18, 0, Math.PI*2);
+    fCtx.fillStyle = '#150c03'; fCtx.fill();
   });
-  ctx2.save();
-  const browY=eyeY-22,browLift=isSpeaking?-1.5:0;
-  [-1,1].forEach(side=>{
-    const bx=cx+side*eyeGap;
-    ctx2.beginPath();ctx2.moveTo(bx-18,browY+browLift+3);ctx2.quadraticCurveTo(bx,browY+browLift-2,bx+18,browY+browLift+4);
-    ctx2.strokeStyle='#1a0e06';ctx2.lineWidth=3;ctx2.lineCap='round';ctx2.stroke();
-  });ctx2.restore();
-  ctx2.save();
-  ctx2.strokeStyle='rgba(0,0,0,0.35)';ctx2.lineWidth=1.5;ctx2.lineCap='round';
-  ctx2.beginPath();ctx2.moveTo(cx-5,cy);ctx2.quadraticCurveTo(cx-10,cy+14,cx-6,cy+18);
-  ctx2.moveTo(cx+5,cy);ctx2.quadraticCurveTo(cx+10,cy+14,cx+6,cy+18);ctx2.stroke();ctx2.restore();
-  const lipY=cy+44,lipW=28,openH=mouthOpen*12;
-  ctx2.save();
-  ctx2.beginPath();
-  ctx2.moveTo(cx-lipW,lipY);ctx2.quadraticCurveTo(cx-14,lipY-6,cx-4,lipY-3);
-  ctx2.quadraticCurveTo(cx,lipY-8,cx+4,lipY-3);ctx2.quadraticCurveTo(cx+14,lipY-6,cx+lipW,lipY);
-  ctx2.quadraticCurveTo(cx,lipY+openH*0.3,cx-lipW,lipY);
-  ctx2.fillStyle=isSpeaking?'#8b3a2a':'#7a3525';ctx2.fill();
-  ctx2.beginPath();ctx2.moveTo(cx-lipW,lipY);ctx2.quadraticCurveTo(cx,lipY+10+openH,cx+lipW,lipY);
-  ctx2.quadraticCurveTo(cx,lipY+5+openH*0.4,cx-lipW,lipY);ctx2.fillStyle='#9e4535';ctx2.fill();
-  if(mouthOpen>0.15){ctx2.beginPath();ctx2.ellipse(cx,lipY+openH*0.4,lipW-4,openH*0.5,0,0,Math.PI*2);ctx2.fillStyle='#1a0808';ctx2.fill();}
-  ctx2.restore();
-  ctx2.save();
-  const bo=isSpeaking?0.09:0.05;
-  [-1,1].forEach(s=>{const bx=cx+s*62;const bg=ctx2.createRadialGradient(bx,cy+28,0,bx,cy+28,22);bg.addColorStop(0,`rgba(200,100,80,${bo})`);bg.addColorStop(1,'transparent');ctx2.fillStyle=bg;ctx2.beginPath();ctx2.arc(bx,cy+28,22,0,Math.PI*2);ctx2.fill();});
-  ctx2.restore();
-  ctx2.save();
-  ctx2.beginPath();ctx2.moveTo(cx-30,cy+115);ctx2.quadraticCurveTo(cx,cy+130,cx+30,cy+115);ctx2.lineTo(cx+45,cy+160);ctx2.quadraticCurveTo(cx,cy+175,cx-45,cy+160);ctx2.closePath();ctx2.fillStyle='#1a1208';ctx2.fill();ctx2.restore();
+  // hair shine
+  fCtx.beginPath(); fCtx.ellipse(cx+20, cy-130, 30, 18, 0.4, 0, Math.PI*2);
+  fCtx.fillStyle = 'rgba(255,200,140,0.06)'; fCtx.fill();
+  fCtx.restore();
+
+  // Earrings
+  fCtx.save();
+  [-1,1].forEach(s => {
+    fCtx.beginPath(); fCtx.arc(cx+s*130, cy+22, 6, 0, Math.PI*2);
+    fCtx.fillStyle = 'rgba(0,212,200,0.85)'; fCtx.fill();
+    fCtx.beginPath(); fCtx.arc(cx+s*130, cy+35, 4, 0, Math.PI*2);
+    fCtx.fillStyle = 'rgba(0,212,200,0.55)'; fCtx.fill();
+  });
+  fCtx.restore();
+
+  // Eyes
+  const eyeY = cy-26, eyeGap = 40;
+  [-1,1].forEach(side => {
+    const ex = cx + side*eyeGap;
+    fCtx.save();
+    // shadow
+    fCtx.beginPath(); fCtx.ellipse(ex, eyeY-2, 26, 13, 0, 0, Math.PI*2);
+    fCtx.fillStyle = 'rgba(30,10,0,0.3)'; fCtx.fill();
+    // white
+    fCtx.beginPath(); fCtx.ellipse(ex, eyeY, 20, 13*eyeOpen, 0, 0, Math.PI*2);
+    fCtx.fillStyle = '#fff8f0'; fCtx.fill();
+    // iris
+    fCtx.beginPath(); fCtx.ellipse(ex+pupilOffX*0.3, eyeY+pupilOffY*0.2, 13, 13*eyeOpen, 0, 0, Math.PI*2);
+    const ig = fCtx.createRadialGradient(ex+pupilOffX*0.3, eyeY+pupilOffY*0.2, 0, ex+pupilOffX*0.3, eyeY, 13);
+    ig.addColorStop(0, '#2d6060'); ig.addColorStop(0.6, '#1a3535'); ig.addColorStop(1, '#0a1818');
+    fCtx.fillStyle = ig; fCtx.fill();
+    // pupil
+    fCtx.beginPath(); fCtx.ellipse(ex+pupilOffX*0.3, eyeY+pupilOffY*0.2, 6, 6*eyeOpen, 0, 0, Math.PI*2);
+    fCtx.fillStyle = '#050808'; fCtx.fill();
+    // teal limbal ring
+    fCtx.beginPath(); fCtx.ellipse(ex+pupilOffX*0.3, eyeY, 13, 13*eyeOpen, 0, 0, Math.PI*2);
+    fCtx.strokeStyle = 'rgba(0,212,200,0.35)'; fCtx.lineWidth = 1.5; fCtx.stroke();
+    // catchlight
+    fCtx.beginPath(); fCtx.ellipse(ex+5, eyeY-4*eyeOpen, 4, 3*eyeOpen, -0.4, 0, Math.PI*2);
+    fCtx.fillStyle = 'rgba(255,255,255,0.8)'; fCtx.fill();
+    // lashes
+    fCtx.strokeStyle = '#120800'; fCtx.lineWidth = 1.8; fCtx.lineCap = 'round';
+    for (let i=-3; i<=3; i++) {
+      fCtx.beginPath(); fCtx.moveTo(ex+i*5.5, eyeY-13*eyeOpen); fCtx.lineTo(ex+i*5.5+i*1, eyeY-19*eyeOpen); fCtx.stroke();
+    }
+    fCtx.restore();
+  });
+
+  // Eyebrows — warm dark brown
+  fCtx.save();
+  const browY = eyeY-28, browLift = isSpeaking ? -2 : 0;
+  [-1,1].forEach(side => {
+    const bx = cx+side*eyeGap;
+    fCtx.beginPath(); fCtx.moveTo(bx-22, browY+browLift+4); fCtx.quadraticCurveTo(bx, browY+browLift-3, bx+22, browY+browLift+5);
+    fCtx.strokeStyle = '#2a1505'; fCtx.lineWidth = 3.5; fCtx.lineCap = 'round'; fCtx.stroke();
+  });
+  fCtx.restore();
+
+  // Nose
+  fCtx.save();
+  fCtx.strokeStyle = 'rgba(150,80,30,0.3)'; fCtx.lineWidth = 1.8; fCtx.lineCap = 'round';
+  fCtx.beginPath(); fCtx.moveTo(cx-6, cy-4); fCtx.quadraticCurveTo(cx-12, cy+18, fCtx.moveTo(cx-6, cy-4), cx-8, cy+22);
+  fCtx.beginPath(); fCtx.moveTo(cx-6, cy); fCtx.quadraticCurveTo(cx-13, cy+18, cx-8, cy+22);
+  fCtx.moveTo(cx+6, cy); fCtx.quadraticCurveTo(cx+13, cy+18, cx+8, cy+22);
+  fCtx.stroke();
+  fCtx.restore();
+
+  // Lips — warm rose
+  const lipY = cy+56, lipW = 35, openH = mouthOpen*15;
+  fCtx.save();
+  fCtx.beginPath();
+  fCtx.moveTo(cx-lipW, lipY); fCtx.quadraticCurveTo(cx-18, lipY-8, cx-5, lipY-4);
+  fCtx.quadraticCurveTo(cx, lipY-10, cx+5, lipY-4); fCtx.quadraticCurveTo(cx+18, lipY-8, cx+lipW, lipY);
+  fCtx.quadraticCurveTo(cx, lipY+openH*0.3, cx-lipW, lipY);
+  fCtx.fillStyle = isSpeaking ? '#c0605a' : '#b05555'; fCtx.fill();
+  fCtx.beginPath();
+  fCtx.moveTo(cx-lipW, lipY); fCtx.quadraticCurveTo(cx, lipY+13+openH, cx+lipW, lipY);
+  fCtx.quadraticCurveTo(cx, lipY+6+openH*0.4, cx-lipW, lipY);
+  fCtx.fillStyle = '#c86860'; fCtx.fill();
+  if (mouthOpen > 0.1) {
+    fCtx.beginPath(); fCtx.ellipse(cx, lipY+openH*0.4, lipW-5, openH*0.5, 0, 0, Math.PI*2);
+    fCtx.fillStyle = '#1a0505'; fCtx.fill();
+    // teeth hint
+    if (mouthOpen > 0.3) {
+      fCtx.beginPath(); fCtx.ellipse(cx, lipY+openH*0.2, lipW-10, openH*0.22, 0, 0, Math.PI*2);
+      fCtx.fillStyle = 'rgba(255,248,240,0.7)'; fCtx.fill();
+    }
+  }
+  fCtx.restore();
+
+  // Blush — subtle warm pink
+  fCtx.save();
+  const blushO = isSpeaking ? 0.12 : 0.07;
+  [-1,1].forEach(s => {
+    const bx = cx+s*78;
+    const bg = fCtx.createRadialGradient(bx, cy+34, 0, bx, cy+34, 28);
+    bg.addColorStop(0, `rgba(220,100,80,${blushO})`); bg.addColorStop(1, 'transparent');
+    fCtx.fillStyle = bg; fCtx.beginPath(); fCtx.arc(bx, cy+34, 28, 0, Math.PI*2); fCtx.fill();
+  });
+  fCtx.restore();
+
+  // Neck
+  fCtx.save();
+  fCtx.beginPath();
+  fCtx.moveTo(cx-38, cy+148); fCtx.quadraticCurveTo(cx, cy+165, cx+38, cy+148);
+  fCtx.lineTo(cx+55, cy+200); fCtx.quadraticCurveTo(cx, cy+220, cx-55, cy+200); fCtx.closePath();
+  fCtx.fillStyle = '#d4956a'; fCtx.fill();
+  fCtx.restore();
+
   requestAnimationFrame(drawFace);
 }
 requestAnimationFrame(drawFace);
 
 // Waveform
-function animateWaveform(active){ const bars=document.querySelectorAll('.wave-bar'); bars.forEach(bar=>{ bar.style.height=(active?(3+Math.random()*17):(2+Math.random()*4))+'px'; }); }
-setInterval(()=>animateWaveform(isSpeaking||isListening),120);
+function animateWaveform(active) {
+  document.querySelectorAll('.wave-bar').forEach(b => { b.style.height = (active ? 3+Math.random()*17 : 2+Math.random()*4)+'px'; });
+}
+setInterval(() => animateWaveform(isSpeaking || isListening), 120);
 
 // Timer
-function updateTimer(){ if(!sessionStart)return; const s=Math.floor((Date.now()-sessionStart)/1000); const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); const el=document.getElementById('sessionTime'); if(el)el.innerHTML=`<strong>${m}:${sec}</strong>Duration`; }
-setInterval(updateTimer,1000);
+function updateTimer() {
+  if (!sessionStart) return;
+  const s = Math.floor((Date.now()-sessionStart)/1000);
+  const el = document.getElementById('sessionTime');
+  if (el) el.innerHTML = `<strong>${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}</strong>Duration`;
+}
+setInterval(updateTimer, 1000);
 
-// Mouth
-function animateMouth(){ if(!isSpeaking){mouthTarget=0;return;} mouthTarget=0.15+Math.random()*0.85; setTimeout(animateMouth,70+Math.random()*130); }
+// Mouth animation
+function animateMouth() {
+  if (!isSpeaking) { mouthTarget = 0; return; }
+  mouthTarget = 0.15 + Math.random() * 0.85;
+  setTimeout(animateMouth, 60 + Math.random() * 120);
+}
 
-// Voices
-function loadVoices(){ voices=speechSynthesis.getVoices().filter(v=>v.lang.startsWith('en')); }
-speechSynthesis.onvoiceschanged=loadVoices; loadVoices();
+// ═══ VOICES ═══
+function loadVoices() { voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en')); }
+speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
 
-function getBestVoice(){ const pref=['Samantha','Karen','Moira','Fiona','Serena','Victoria','Google UK English Female','Google US English','Zira']; for(const n of pref){const v=voices.find(v=>v.name.includes(n));if(v)return v;} return voices[0]||null; }
+function getBestVoice() {
+  const pref = ['Samantha','Karen','Moira','Fiona','Serena','Victoria','Google UK English Female','Google US English','Zira'];
+  for (const n of pref) { const v = voices.find(v => v.name.includes(n)); if (v) return v; }
+  return voices[0] || null;
+}
 
-function speak(text){ if(voiceMuted||!text.trim())return Promise.resolve(); return new Promise(resolve=>{ const utt=new SpeechSynthesisUtterance(text); const v=getBestVoice(); if(v)utt.voice=v; utt.rate=0.95;utt.pitch=1.05;utt.volume=1; utt.onstart=()=>{ isSpeaking=true;setStatus('speaking');animateMouth(); document.getElementById('avatarHex').classList.add('speaking'); document.getElementById('avatarGlow').classList.add('speaking'); }; utt.onend=()=>{ isSpeaking=false;mouthTarget=0; document.getElementById('avatarHex').classList.remove('speaking'); document.getElementById('avatarGlow').classList.remove('speaking'); resolve(); }; utt.onerror=()=>{isSpeaking=false;mouthTarget=0;resolve();}; speechSynthesis.speak(utt); }); }
-function stopSpeaking(){ speechSynthesis.cancel();isSpeaking=false;mouthTarget=0; document.getElementById('avatarHex').classList.remove('speaking'); document.getElementById('avatarGlow').classList.remove('speaking','listening'); }
+// ═══ TTS TEXT CLEANER ═══
+// Fixes "I.T." → "I T", removes dots between letters, cleans markdown
+function cleanForSpeech(text) {
+  return text
+    // Remove markdown
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/#{1,6}\s/g, '')
+    // Fix "I.T." / "U.A.E." style — remove dots between single letters
+    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\./g, '$1 $2 $3 $4')
+    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\./g, '$1 $2 $3')
+    .replace(/\b([A-Z])\.([A-Z])\./g, '$1 $2')
+    // Common business acronyms — space them out for natural speech
+    .replace(/\bUAE\b/g, 'the U A E')
+    .replace(/\bUSA\b/g, 'the U S A')
+    .replace(/\bUS\b/g, 'U S')
+    .replace(/\bLLC\b/g, 'L L C')
+    .replace(/\bLLP\b/g, 'L L P')
+    .replace(/\bINC\b/gi, 'Inc')
+    .replace(/\bFEMA\b/g, 'F E M A')
+    .replace(/\bGST\b/g, 'G S T')
+    .replace(/\bVAT\b/g, 'V A T')
+    .replace(/\bIRS\b/g, 'I R S')
+    .replace(/\bITR\b/g, 'I T R')
+    // IT as a word (not as acronym mid-sentence) — only when standalone
+    .replace(/\bI\.T\.\b/g, 'I T')
+    .replace(/\bIT firm\b/gi, 'tech firm')
+    .replace(/\bIT company\b/gi, 'tech company')
+    .replace(/\bIT sector\b/gi, 'tech sector')
+    // Money
+    .replace(/\$(\d+\.?\d*)B\b/g, '$$$1 billion')
+    .replace(/\$(\d+\.?\d*)M\b/g, '$$$1 million')
+    .replace(/\$(\d+\.?\d*)K\b/g, '$$$1 thousand')
+    // Remove em-dashes, replace with pause comma
+    .replace(/—/g, ', ')
+    .replace(/\.\.\./g, ', ')
+    // Clean extra spaces
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
-// Speech recognition
-function initRecognition(){ const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(!SR){showErr('Speech recognition requires Chrome');return;} recognition=new SR(); recognition.continuous=false;recognition.interimResults=true;recognition.lang='en-US'; recognition.onresult=e=>{ const text=Array.from(e.results).map(r=>r[0].transcript).join(''); document.getElementById('userLine').textContent='↗ '+text; if(e.results[e.results.length-1].isFinal){stopListening();sendMessage(text.trim());} }; recognition.onerror=e=>{if(e.error!=='no-speech')showErr('Mic: '+e.error);stopListening();}; recognition.onend=()=>{if(isListening)stopListening();}; }
+function speak(text) {
+  if (voiceMuted || !text.trim()) return Promise.resolve();
+  const cleaned = cleanForSpeech(text);
+  return new Promise(resolve => {
+    speechSynthesis.cancel(); // clear queue
+    const utt = new SpeechSynthesisUtterance(cleaned);
+    const v = getBestVoice(); if (v) utt.voice = v;
+    utt.rate = 0.92; utt.pitch = 1.05; utt.volume = 1;
+    utt.onstart = () => {
+      isSpeaking = true; setStatus('speaking'); animateMouth();
+      document.getElementById('avatarHex').classList.add('speaking');
+      document.getElementById('avatarGlow').classList.add('speaking');
+    };
+    utt.onend = () => {
+      isSpeaking = false; mouthTarget = 0;
+      document.getElementById('avatarHex').classList.remove('speaking');
+      document.getElementById('avatarGlow').classList.remove('speaking');
+      // Auto-mic: start listening after Dr. CV finishes speaking
+      if (autoMic && !voiceMuted) {
+        setTimeout(() => { if (!isListening && !isSpeaking) startListening(); }, 400);
+      } else {
+        setStatus('ready');
+      }
+      resolve();
+    };
+    utt.onerror = () => { isSpeaking = false; mouthTarget = 0; setStatus('ready'); resolve(); };
+    speechSynthesis.speak(utt);
+  });
+}
 
-function startListening(){ if(isSpeaking)stopSpeaking(); if(!recognition)return; isListening=true; recognition.start(); setStatus('listening'); document.getElementById('micBtn').classList.add('active'); document.getElementById('avatarGlow').classList.add('listening'); document.getElementById('transcript').classList.add('listening'); document.getElementById('userLine').textContent=''; }
-function stopListening(){ if(!isListening)return; isListening=false; try{recognition.stop();}catch(e){} document.getElementById('micBtn').classList.remove('active'); document.getElementById('avatarGlow').classList.remove('listening'); document.getElementById('transcript').classList.remove('listening'); setStatus('thinking'); }
+function stopSpeaking() {
+  speechSynthesis.cancel(); isSpeaking = false; mouthTarget = 0;
+  document.getElementById('avatarHex').classList.remove('speaking');
+  document.getElementById('avatarGlow').classList.remove('speaking', 'listening');
+}
 
-// ═══ API CALL via Cloudflare Worker ═══
-async function sendMessage(userText){ 
-  if(!userText){setStatus('ready');return;}
-  history.push({role:'user',content:userText});
+// ═══ SPEECH RECOGNITION — with silence detection ═══
+function initRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showErr('Speech recognition requires Chrome'); return; }
+  recognition = new SR();
+  recognition.continuous = true;       // keep listening until user stops
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = e => {
+    clearTimeout(silenceTimer);
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('userLine').textContent = '↗ ' + transcript;
+
+    // Check if last result is final
+    const lastResult = e.results[e.results.length - 1];
+    if (lastResult.isFinal) {
+      // Wait a moment to catch any trailing words, then send
+      silenceTimer = setTimeout(() => {
+        const finalText = Array.from(e.results).map(r => r[0].transcript).join('').trim();
+        if (finalText) { stopListening(); sendMessage(finalText); }
+      }, 800);
+    } else {
+      // Still speaking — reset silence timer
+      silenceTimer = setTimeout(() => {
+        const text = Array.from(e.results).map(r => r[0].transcript).join('').trim();
+        if (text) { stopListening(); sendMessage(text); }
+      }, 2000); // 2s silence = done speaking
+    }
+  };
+
+  recognition.onerror = e => {
+    if (e.error === 'no-speech') {
+      // No speech detected — just restart if auto-mic
+      stopListening();
+      if (autoMic) setTimeout(() => { if (!isSpeaking && !isListening) startListening(); }, 1000);
+    } else if (e.error !== 'aborted') {
+      showErr('Mic: ' + e.error);
+      stopListening();
+    }
+  };
+  recognition.onend = () => { if (isListening) { isListening = false; updateMicUI(false); } };
+}
+
+function updateMicUI(active) {
+  document.getElementById('micBtn').classList.toggle('active', active);
+  document.getElementById('avatarGlow').classList.toggle('listening', active);
+  document.getElementById('transcript').classList.toggle('listening', active);
+}
+
+function startListening() {
+  if (isSpeaking || isListening) return;
+  if (!recognition) { initRecognition(); }
+  try {
+    isListening = true;
+    recognition.start();
+    setStatus('listening');
+    updateMicUI(true);
+    document.getElementById('userLine').textContent = '';
+  } catch(e) {
+    isListening = false;
+  }
+}
+
+function stopListening() {
+  clearTimeout(silenceTimer);
+  if (!isListening) return;
+  isListening = false;
+  try { recognition.stop(); } catch(e) {}
+  updateMicUI(false);
+  setStatus('thinking');
+}
+
+// ═══ API ═══
+async function sendMessage(userText) {
+  if (!userText) { setStatus('ready'); return; }
+  history.push({ role: 'user', content: userText });
   turns++;
-  document.getElementById('turnNum').textContent=turns;
-  const botLine=document.getElementById('botLine');
-  botLine.textContent='';
-  document.getElementById('userLine').textContent='↗ '+userText;
-  let fullReply='',buffer='';
-  let speakingPromise=Promise.resolve();
-  function enqueueSpeech(text){ const t=text.trim(); if(!t)return; speakingPromise=speakingPromise.then(()=>speak(t)); }
-  try{
-    const res=await fetch(WORKER_URL + '/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:buildSystemPrompt(),messages:history})
+  document.getElementById('turnNum').textContent = turns;
+  const botLine = document.getElementById('botLine');
+  botLine.textContent = '';
+  document.getElementById('userLine').textContent = '↗ ' + userText;
+
+  let fullReply = '', buffer = '';
+  let speakingPromise = Promise.resolve();
+  function enqueueSpeech(chunk) { const t = chunk.trim(); if (!t) return; speakingPromise = speakingPromise.then(() => speak(t)); }
+
+  try {
+    const res = await fetch(WORKER_URL + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: buildSystemPrompt(), messages: history })
     });
-    if(!res.ok){ const err=await res.json().catch(()=>({error:{message:res.statusText}})); throw new Error(err.error?.message||res.statusText); }
-    const reader=res.body.getReader();
-    const dec=new TextDecoder();
-    while(true){
-      const{done,value}=await reader.read();
-      if(done)break;
-      const lines=dec.decode(value).split('\n').filter(l=>l.startsWith('data: '));
-      for(const line of lines){
-        const raw=line.slice(6);
-        if(raw==='[DONE]')continue;
-        try{
-          const j=JSON.parse(raw);
-          if(j.type==='content_block_delta'&&j.delta?.text){
-            const chunk=j.delta.text;
-            fullReply+=chunk;buffer+=chunk;
-            botLine.textContent=fullReply;
-            botLine.parentElement.scrollTop=botLine.parentElement.scrollHeight;
-            const matches=[...buffer.matchAll(/[^.!?]*[.!?]+/g)];
-            for(const m of matches){enqueueSpeech(m[0]);buffer=buffer.slice(m.index+m[0].length);}
+    if (!res.ok) { const err = await res.json().catch(() => ({ error: { message: res.statusText } })); throw new Error(err.error?.message || res.statusText); }
+
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read(); if (done) break;
+      const lines = dec.decode(value).split('\n').filter(l => l.startsWith('data: '));
+      for (const line of lines) {
+        const raw = line.slice(6); if (raw === '[DONE]') continue;
+        try {
+          const j = JSON.parse(raw);
+          if (j.type === 'content_block_delta' && j.delta?.text) {
+            const chunk = j.delta.text;
+            fullReply += chunk; buffer += chunk;
+            botLine.textContent = fullReply;
+            botLine.parentElement.scrollTop = botLine.parentElement.scrollHeight;
+            // Speak sentence by sentence as they stream in
+            const matches = [...buffer.matchAll(/[^.!?]*[.!?]+\s*/g)];
+            for (const m of matches) { enqueueSpeech(m[0]); buffer = buffer.slice(m.index + m[0].length); }
           }
-        }catch(e){}
+        } catch(e) {}
       }
     }
-    enqueueSpeech(buffer);
+    if (buffer.trim()) enqueueSpeech(buffer);
     await speakingPromise;
-    history.push({role:'assistant',content:fullReply.trim()});
-    if(history.length>24)history=history.slice(-24);
+
+    history.push({ role: 'assistant', content: fullReply.trim() });
+    if (history.length > 24) history = history.slice(-24);
     updateQualScore(turns);
-    setStatus('ready');
-  }catch(err){
-    showErr(err.message.length>80?err.message.slice(0,80)+'…':err.message);
-    isSpeaking=false;
+
+  } catch (err) {
+    showErr(err.message.length > 80 ? err.message.slice(0,80) + '…' : err.message);
+    isSpeaking = false;
     document.getElementById('avatarHex').classList.remove('speaking');
     document.getElementById('avatarGlow').classList.remove('speaking','listening');
     setStatus('ready');
@@ -720,80 +827,101 @@ async function sendMessage(userText){
   }
 }
 
-// Lead qualification score (simple heuristic based on conversation depth)
-function updateQualScore(t){
-  const score=Math.min(100,t*12+(LEAD.company?10:0)+(LEAD.stage&&LEAD.stage!=='Exploring possibilities'?15:0));
-  qualScore=score;
-  document.getElementById('qualBar').style.width=score+'%';
-  document.getElementById('qualText').textContent=
-    score<30?'Early stage — probing':
-    score<55?'Warming up — engaged':
-    score<75?'Interested — qualified':
-    'Hot lead — high intent';
+function updateQualScore(t) {
+  const score = Math.min(100, t*12 + (LEAD.company?10:0) + (LEAD.stage && LEAD.stage!=='Exploring possibilities'?15:0));
+  qualScore = score;
+  document.getElementById('qualBar').style.width = score + '%';
+  document.getElementById('qualText').textContent =
+    score < 30 ? 'Early — probing' : score < 55 ? 'Warming up' : score < 75 ? 'Qualified' : 'Hot lead';
 }
 
-// Status
-function setStatus(s){ const bar=document.getElementById('statusBar'),text=document.getElementById('statusText'); const labels={ready:'READY',listening:'LISTENING',thinking:'PROCESSING',speaking:'TRANSMITTING'}; text.textContent=labels[s]||s.toUpperCase(); bar.className='status-bar '+s; document.getElementById('statusTime').textContent=new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
-function showErr(msg){ const b=document.getElementById('errBanner'); b.textContent='⚠ '+msg; b.style.display='block'; setTimeout(()=>b.style.display='none',6000); }
+function setStatus(s) {
+  const bar = document.getElementById('statusBar'), text = document.getElementById('statusText');
+  const labels = { ready:'READY', listening:'LISTENING', thinking:'PROCESSING', speaking:'TRANSMITTING' };
+  text.textContent = labels[s] || s.toUpperCase();
+  bar.className = 'status-bar ' + s;
+  document.getElementById('statusTime').textContent = new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+function showErr(msg) { const b=document.getElementById('errBanner'); b.textContent='⚠ '+msg; b.style.display='block'; setTimeout(()=>b.style.display='none',6000); }
 
 // ═══ INIT ═══
-async function init(){
-  const loadText=document.getElementById('loadingText');
-  loadText.textContent='Reading your profile...';
-  await new Promise(r=>setTimeout(r,800));
-  loadText.textContent='Preparing Dr. CV...';
-  await new Promise(r=>setTimeout(r,900));
-  loadText.textContent='Securing connection...';
-  await new Promise(r=>setTimeout(r,700));
+async function init() {
+  const lt = document.getElementById('loadingText');
+  lt.textContent = 'Reading your profile...'; await new Promise(r=>setTimeout(r,700));
+  lt.textContent = 'Preparing Dr. CV...';     await new Promise(r=>setTimeout(r,900));
+  lt.textContent = 'Securing connection...';  await new Promise(r=>setTimeout(r,600));
   document.getElementById('loadingScreen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
-  sessionStart=Date.now();
+  sessionStart = Date.now();
   initRecognition();
   loadVoices();
-  // Fill lead info in sidebar
-  document.getElementById('infoName').textContent=LEAD.name||'—';
-  document.getElementById('infoCompany').textContent=LEAD.company||'—';
-  document.getElementById('infoCountry').textContent=LEAD.country||'—';
-  document.getElementById('infoStage').textContent=LEAD.stage||'—';
-  document.getElementById('leadBadge').textContent=LEAD.name?(LEAD.name+(LEAD.company?' · '+LEAD.company:'')):'Guest Session';
-  // Build opener using their name
-  const firstName=LEAD.name?LEAD.name.split(' ')[0]:'';
+
+  document.getElementById('infoName').textContent = LEAD.name || '—';
+  document.getElementById('infoCompany').textContent = LEAD.company || '—';
+  document.getElementById('infoCountry').textContent = LEAD.country || '—';
+  document.getElementById('infoStage').textContent = LEAD.stage || '—';
+  document.getElementById('leadBadge').textContent = LEAD.name ? (LEAD.name + (LEAD.company?' · '+LEAD.company:'')) : 'Guest Session';
+
+  const firstName = LEAD.name ? LEAD.name.split(' ')[0] : '';
   let opener;
-  if(firstName&&LEAD.country&&LEAD.stage){
-    opener=`Hi ${firstName}, welcome! I've had a look at your submission — you're exploring expansion to ${LEAD.country} and you mentioned you're currently at the "${LEAD.stage}" stage. That's a great time to start structuring properly. Can I ask — what's the primary driver for you right now? Is it tax optimization, setting up banking, or getting a formal entity in place?`;
-  } else if(firstName){
-    opener=`Hi ${firstName}, great to connect! I'm Dr. CV, your global expansion strategist at Comply Globally. I can see you've already shared some details with us — I'd love to dive in. What's the most pressing challenge you're trying to solve with your international expansion right now?`;
+  if (firstName && LEAD.country && LEAD.stage) {
+    opener = `Hi ${firstName}! Great to connect. I can see you're looking at expanding to ${LEAD.country} and you're currently at the ${LEAD.stage} stage — that's a really good time to get the structure right. Quick question — what's your biggest concern right now? Is it the entity setup, the tax side, or getting banking in place?`;
+  } else if (firstName) {
+    opener = `Hi ${firstName}, great to connect! I'm Dr. CV, your global expansion strategist at Comply Globally. I can see you've shared some details with us already. What's the most pressing challenge you're trying to solve right now?`;
   } else {
-    opener=`Hi, welcome to your Comply Globally strategy session. I'm Dr. CV. I'd love to understand your business better — what kind of business are you currently running, and which markets are you looking to expand into?`;
+    opener = `Hi, welcome to your Comply Globally strategy session. I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
   }
-  history.push({role:'assistant',content:opener});
-  document.getElementById('botLine').textContent=opener;
+
+  history.push({ role: 'assistant', content: opener });
+  document.getElementById('botLine').textContent = opener;
   setStatus('speaking');
   await speak(opener);
-  setStatus('ready');
+  // speak() itself handles auto-mic via onend callback
 }
 
-// Events
-document.getElementById('micBtn').addEventListener('click',()=>{ if(isListening)stopListening(); else startListening(); });
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  history=[];turns=0;stopSpeaking();
-  document.getElementById('userLine').textContent='';
-  document.getElementById('botLine').textContent='Session reset.';
-  document.getElementById('turnNum').textContent='0';
-  document.getElementById('qualBar').style.width='0%';
-  document.getElementById('qualText').textContent='Assessing...';
-  document.getElementById('avatarGlow').className='avatar-glow';
+// ═══ EVENTS ═══
+document.getElementById('micBtn').addEventListener('click', () => {
+  if (isListening) stopListening();
+  else { if (isSpeaking) stopSpeaking(); startListening(); }
+});
+
+document.getElementById('autoBadge').addEventListener('click', function() {
+  autoMic = !autoMic;
+  this.textContent = 'AUTO-MIC: ' + (autoMic ? 'ON' : 'OFF');
+  this.classList.toggle('off', !autoMic);
+  document.getElementById('hintText').textContent = autoMic
+    ? 'Mic opens automatically after Dr. CV speaks · Space to speak'
+    : 'Click mic or press Space to speak';
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  history = []; turns = 0; stopSpeaking(); clearTimeout(silenceTimer);
+  document.getElementById('userLine').textContent = '';
+  document.getElementById('botLine').textContent = 'Session reset.';
+  document.getElementById('turnNum').textContent = '0';
+  document.getElementById('qualBar').style.width = '0%';
+  document.getElementById('qualText').textContent = 'Assessing...';
+  document.getElementById('avatarGlow').className = 'avatar-glow';
   setStatus('ready');
-  setTimeout(()=>init(),500);
+  setTimeout(() => init(), 500);
 });
-let muteOn=false;
-document.getElementById('muteBtn').addEventListener('click',function(){
-  muteOn=!muteOn;voiceMuted=muteOn;
-  this.style.color=muteOn?'var(--teal)':'';
-  this.style.borderColor=muteOn?'var(--teal)':'';
-  if(muteOn)stopSpeaking();
+
+let muteOn = false;
+document.getElementById('muteBtn').addEventListener('click', function() {
+  muteOn = !muteOn; voiceMuted = muteOn;
+  this.style.color = muteOn ? 'var(--teal)' : '';
+  this.style.borderColor = muteOn ? 'var(--teal)' : '';
+  if (muteOn) stopSpeaking();
 });
-document.addEventListener('keydown',e=>{ if(e.code==='Space'&&!e.target.matches('input,textarea,select')){ e.preventDefault(); if(!isListening)startListening(); } });
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !e.target.matches('input,textarea,select')) {
+    e.preventDefault();
+    if (isSpeaking) { stopSpeaking(); startListening(); }
+    else if (isListening) stopListening();
+    else startListening();
+  }
+});
 
 init();
 </script>
