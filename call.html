@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Dr. CV — AI Strategy Session</title>
+<title>Dr. CV — Strategy Session</title>
 <style>
   * {
     margin: 0;
@@ -12,22 +12,73 @@
   }
 
   body {
-    background: #0a0a0f;
-    overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #0a0a0f;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  /* Fullscreen video chat layout */
-  .video-chat {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%);
+  /* Main container */
+  .call-container {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%);
   }
 
-  /* Main avatar container */
-  .avatar-container {
+  /* Top bar */
+  .top-bar {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #00d4ff;
+    font-weight: 600;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px 14px;
+    border-radius: 40px;
+  }
+
+  .status-light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .status-light.ready { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+  .status-light.listening { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: pulse 1s infinite; }
+  .status-light.speaking { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; animation: pulse 0.5s infinite; }
+  .status-light.thinking { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; animation: pulse 1.2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.9); }
+  }
+
+  .status-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+  }
+
+  /* Avatar section */
+  .avatar-section {
     flex: 1;
     display: flex;
     align-items: center;
@@ -36,93 +87,32 @@
     min-height: 0;
   }
 
-  /* Canvas for realistic avatar */
-  #avatarCanvas {
+  canvas {
     width: auto;
     height: auto;
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: 70vh;
     border-radius: 32px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.1);
-    cursor: pointer;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
 
-  /* Status indicator (minimal) */
-  .status-indicator {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    padding: 8px 20px;
-    border-radius: 60px;
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    z-index: 10;
-  }
-
-  .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-  }
-
-  .status-dot.ready {
-    background: #22c55e;
-    box-shadow: 0 0 8px #22c55e;
-  }
-
-  .status-dot.listening {
-    background: #ef4444;
-    box-shadow: 0 0 12px #ef4444;
-    animation: pulse 1s ease infinite;
-  }
-
-  .status-dot.speaking {
-    background: #00d4ff;
-    box-shadow: 0 0 12px #00d4ff;
-    animation: pulse 0.5s ease infinite;
-  }
-
-  .status-dot.thinking {
-    background: #f59e0b;
-    box-shadow: 0 0 8px #f59e0b;
-    animation: pulse 1.2s ease infinite;
-  }
-
-  .status-text {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.9); }
-  }
-
-  /* Controls bar */
+  /* Controls */
   .controls {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
+    padding: 20px 24px 30px;
     display: flex;
-    gap: 12px;
-    z-index: 20;
+    justify-content: center;
+    gap: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
   }
 
   .ctrl-btn {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(30, 30, 40, 0.9);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     color: white;
     cursor: pointer;
     display: flex;
@@ -132,40 +122,47 @@
   }
 
   .ctrl-btn:hover {
-    background: rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.15);
     border-color: #00d4ff;
     transform: scale(1.05);
   }
 
   .ctrl-btn.mic-btn {
-    background: rgba(0, 212, 255, 0.15);
+    background: rgba(0, 212, 255, 0.1);
     border-color: #00d4ff;
+    width: 64px;
+    height: 64px;
   }
 
   .ctrl-btn.mic-btn.active {
-    background: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.2);
     border-color: #ef4444;
-    animation: micPulse 1.3s ease infinite;
+    animation: micPulse 1.3s infinite;
   }
 
   @keyframes micPulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-    50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
   }
 
-  /* Loading screen */
-  .loading-screen {
+  .ctrl-btn.muted {
+    opacity: 0.5;
+  }
+
+  /* Loading overlay */
+  .loading-overlay {
     position: fixed;
     inset: 0;
-    background: #0a0a0f;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 100;
     transition: opacity 0.5s ease;
   }
 
-  .loading-screen.hidden {
+  .loading-overlay.hidden {
     opacity: 0;
     pointer-events: none;
   }
@@ -175,13 +172,13 @@
   }
 
   .loading-spinner {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border: 2px solid rgba(0, 212, 255, 0.2);
     border-top-color: #00d4ff;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
   }
 
   @keyframes spin {
@@ -189,41 +186,8 @@
   }
 
   .loading-text {
-    color: rgba(255, 255, 255, 0.7);
+    color: #94a3b8;
     font-size: 14px;
-    letter-spacing: 1px;
-  }
-
-  /* Minimal top bar */
-  .top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    z-index: 20;
-    pointer-events: none;
-  }
-
-  .brand {
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: #00d4ff;
-    font-weight: 600;
-  }
-
-  .lead-name {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 4px 12px;
-    border-radius: 20px;
-    pointer-events: auto;
   }
 
   /* Error toast */
@@ -235,7 +199,7 @@
     background: rgba(239, 68, 68, 0.9);
     backdrop-filter: blur(10px);
     padding: 10px 20px;
-    border-radius: 30px;
+    border-radius: 40px;
     color: white;
     font-size: 13px;
     z-index: 100;
@@ -243,48 +207,45 @@
     white-space: nowrap;
   }
 
-  @media (max-width: 768px) {
-    .controls { bottom: 20px; right: 20px; }
-    .ctrl-btn { width: 42px; height: 42px; }
-    .status-indicator { bottom: 20px; padding: 6px 16px; }
+  @media (max-width: 640px) {
     .top-bar { padding: 12px 16px; }
-    .brand { font-size: 10px; }
-    .lead-name { font-size: 10px; }
+    .controls { padding: 16px 20px 24px; gap: 12px; }
+    .ctrl-btn { width: 48px; height: 48px; }
+    .ctrl-btn.mic-btn { width: 56px; height: 56px; }
+    .status-text { font-size: 11px; }
   }
 </style>
 </head>
 <body>
 
-<div class="video-chat">
+<div class="call-container">
   <div class="top-bar">
     <div class="brand">COMPLY GLOBALLY</div>
-    <div class="lead-name" id="leadNameDisplay">—</div>
+    <div class="status-badge">
+      <div class="status-light" id="statusLight"></div>
+      <span class="status-text" id="statusText">Initializing...</span>
+    </div>
   </div>
 
-  <div class="avatar-container">
-    <canvas id="avatarCanvas" width="800" height="800"></canvas>
-  </div>
-
-  <div class="status-indicator">
-    <div class="status-dot" id="statusDot"></div>
-    <span class="status-text" id="statusText">Initializing...</span>
+  <div class="avatar-section">
+    <canvas id="avatarCanvas" width="600" height="600"></canvas>
   </div>
 
   <div class="controls">
-    <button class="ctrl-btn" id="resetBtn" title="Reset conversation">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="ctrl-btn" id="resetBtn" title="Reset">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
         <path d="M3 3v5h5"/>
       </svg>
     </button>
     <button class="ctrl-btn mic-btn" id="micBtn" title="Click to speak">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
       </svg>
     </button>
-    <button class="ctrl-btn" id="muteBtn" title="Mute voice">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="ctrl-btn" id="muteBtn" title="Mute">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M11 5 6 9H2v6h4l5 4V5z"/>
         <line x1="23" y1="9" x2="17" y2="15"/>
         <line x1="17" y1="9" x2="23" y2="15"/>
@@ -295,399 +256,218 @@
   <div class="error-toast" id="errorToast"></div>
 </div>
 
-<div class="loading-screen" id="loadingScreen">
+<div class="loading-overlay" id="loadingOverlay">
   <div class="loading-content">
     <div class="loading-spinner"></div>
-    <div class="loading-text" id="loadingText">Initializing Dr. CV...</div>
+    <div class="loading-text" id="loadingText">Starting your session...</div>
   </div>
 </div>
 
 <script>
 // ════════════════════════════════════════════════════════════════
-// REALISTIC HUMAN AVATAR - PHOTOREALISTIC RENDERING
+// PROFESSIONAL VOICE CALL WITH REALISTIC AVATAR
 // ════════════════════════════════════════════════════════════════
 
-const canvas = document.getElementById('avatarCanvas');
-const ctx = canvas.getContext('2d');
-
-// Set canvas size for retina display
-const size = 800;
-canvas.width = size;
-canvas.height = size;
-
-// ─── AVATAR STATE ─────────────────────────────────────────────
-let mouthOpen = 0;
-let leftEyeBlink = 1;
-let rightEyeBlink = 1;
-let headAngleX = 0;
-let headAngleY = 0;
-let breathScale = 0;
-let lastTimestamp = 0;
-let speakingIntensity = 0;
-let listeningIntensity = 0;
-let eyebrowRaise = 0;
-let smileIntensity = 0;
-
-// Animation loop
-let animationId = null;
-
-// ─── DRAW REALISTIC HUMAN FACE ────────────────────────────────
-function drawAvatar() {
-  const w = size;
-  const h = size;
-  const cx = w / 2;
-  const cy = h / 2 - 20;
-  
-  ctx.clearRect(0, 0, w, h);
-  
-  // Background gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
-  bgGrad.addColorStop(0, '#0a0a0f');
-  bgGrad.addColorStop(1, '#12121a');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, w, h);
-  
-  // Subtle vignette
-  const vignette = ctx.createRadialGradient(cx, cy, 200, cx, cy, 450);
-  vignette.addColorStop(0, 'rgba(0,0,0,0)');
-  vignette.addColorStop(1, 'rgba(0,0,0,0.4)');
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, w, h);
-  
-  // ─── HEAD SHAPE (Oval with jaw definition) ───────────────────
-  ctx.save();
-  
-  // Head rotation transform
-  const headRotX = headAngleX * 0.015;
-  const headRotY = headAngleY * 0.02;
-  
-  // Head dimensions
-  const headW = 320;
-  const headH = 380;
-  
-  // Draw head with realistic skin gradient
-  const skinBase = '#e8b87a';
-  const skinShadow = '#c49464';
-  const skinHighlight = '#f5d0a8';
-  
-  // Head path (realistic oval with defined chin)
-  ctx.beginPath();
-  ctx.ellipse(cx + headRotX * 15, cy + headRotY * 10, headW / 2, headH / 2, 0, 0, Math.PI * 2);
-  
-  // Skin gradient
-  const skinGrad = ctx.createLinearGradient(cx - 80, cy - 100, cx + 80, cy + 150);
-  skinGrad.addColorStop(0, skinHighlight);
-  skinGrad.addColorStop(0.4, skinBase);
-  skinGrad.addColorStop(1, skinShadow);
-  ctx.fillStyle = skinGrad;
-  ctx.fill();
-  
-  // Jaw line definition
-  ctx.beginPath();
-  ctx.ellipse(cx + headRotX * 12, cy + 100 + headRotY * 8, 130, 70, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(180, 120, 70, 0.15)';
-  ctx.fill();
-  
-  // ─── NECK ────────────────────────────────────────────────────
-  ctx.beginPath();
-  ctx.moveTo(cx - 60, cy + 160);
-  ctx.quadraticCurveTo(cx, cy + 220, cx + 60, cy + 160);
-  ctx.fillStyle = skinShadow;
-  ctx.fill();
-  
-  // ─── HAIR (Styled professional look) ─────────────────────────
-  ctx.beginPath();
-  ctx.ellipse(cx + headRotX * 8, cy - 150 + headRotY * 5, 170, 100, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#2a1a0a';
-  ctx.fill();
-  
-  // Hair details
-  ctx.beginPath();
-  ctx.ellipse(cx - 70 + headRotX * 10, cy - 130, 60, 80, -0.3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(cx + 70 + headRotX * 10, cy - 130, 60, 80, 0.3, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Hair highlight
-  ctx.beginPath();
-  ctx.ellipse(cx - 40, cy - 170, 40, 25, -0.2, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(60, 40, 20, 0.5)';
-  ctx.fill();
-  
-  // ─── EYEBROWS ────────────────────────────────────────────────
-  const browY = cy - 45;
-  const browRaiseOffset = eyebrowRaise * 4;
-  
-  // Left eyebrow
-  ctx.beginPath();
-  ctx.moveTo(cx - 95, browY - 10 + browRaiseOffset);
-  ctx.quadraticCurveTo(cx - 70, browY - 20 + browRaiseOffset, cx - 45, browY - 12 + browRaiseOffset);
-  ctx.lineWidth = 9;
-  ctx.strokeStyle = '#3a2510';
-  ctx.lineCap = 'round';
-  ctx.stroke();
-  
-  // Right eyebrow
-  ctx.beginPath();
-  ctx.moveTo(cx + 95, browY - 10 + browRaiseOffset);
-  ctx.quadraticCurveTo(cx + 70, browY - 20 + browRaiseOffset, cx + 45, browY - 12 + browRaiseOffset);
-  ctx.stroke();
-  
-  // ─── EYES (Realistic with iris and reflection) ───────────────
-  const eyeY = cy - 20;
-  const leftEyeX = cx - 55;
-  const rightEyeX = cx + 55;
-  
-  // Eye whites
-  ctx.fillStyle = '#f0ede8';
-  ctx.shadowBlur = 0;
-  
-  // Left eye
-  ctx.beginPath();
-  ctx.ellipse(leftEyeX, eyeY, 22, 14 * leftEyeBlink, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Right eye
-  ctx.beginPath();
-  ctx.ellipse(rightEyeX, eyeY, 22, 14 * rightEyeBlink, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Iris (hazel/brown)
-  ctx.fillStyle = '#4a2a18';
-  ctx.beginPath();
-  ctx.ellipse(leftEyeX, eyeY, 12, 12 * leftEyeBlink, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(rightEyeX, eyeY, 12, 12 * rightEyeBlink, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Pupils
-  ctx.fillStyle = '#0a0a0a';
-  ctx.beginPath();
-  ctx.arc(leftEyeX + (headAngleX * 0.2), eyeY + (headAngleY * 0.1), 5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(rightEyeX + (headAngleX * 0.2), eyeY + (headAngleY * 0.1), 5, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Eye highlights
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
-  ctx.beginPath();
-  ctx.arc(leftEyeX - 4, eyeY - 3, 3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(rightEyeX - 4, eyeY - 3, 3, 0, Math.PI * 2);
-  ctx.fill();
-  
-  ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  ctx.beginPath();
-  ctx.arc(leftEyeX + 3, eyeY + 2, 1.5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(rightEyeX + 3, eyeY + 2, 1.5, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Eye lines (lower lid)
-  ctx.beginPath();
-  ctx.ellipse(leftEyeX, eyeY + 3, 20, 6, 0, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(100, 60, 30, 0.3)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.ellipse(rightEyeX, eyeY + 3, 20, 6, 0, 0, Math.PI * 2);
-  ctx.stroke();
-  
-  // ─── NOSE (Defined bridge and nostrils) ──────────────────────
-  ctx.beginPath();
-  ctx.moveTo(cx - 8, cy + 5);
-  ctx.quadraticCurveTo(cx, cy + 35, cx + 8, cy + 5);
-  ctx.strokeStyle = 'rgba(150, 90, 50, 0.35)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  
-  // Nostrils
-  ctx.beginPath();
-  ctx.ellipse(cx - 12, cy + 30, 5, 4, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(120, 70, 40, 0.3)';
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(cx + 12, cy + 30, 5, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // Nose bridge shadow
-  ctx.beginPath();
-  ctx.moveTo(cx - 3, cy - 10);
-  ctx.lineTo(cx - 1, cy + 20);
-  ctx.lineTo(cx - 5, cy + 25);
-  ctx.fillStyle = 'rgba(100, 60, 30, 0.1)';
-  ctx.fill();
-  
-  // ─── MOUTH (Dynamic based on speaking) ───────────────────────
-  const mouthY = cy + 48;
-  const mouthW = 45;
-  const openAmount = mouthOpen * 12;
-  const smileAmount = smileIntensity * 6;
-  
-  // Lip color
-  ctx.fillStyle = '#b55a50';
-  ctx.beginPath();
-  ctx.moveTo(cx - mouthW, mouthY - 5 - smileAmount * 0.3);
-  ctx.quadraticCurveTo(cx - 20, mouthY - 12 - smileAmount * 0.5, cx, mouthY - 8 - smileAmount * 0.4);
-  ctx.quadraticCurveTo(cx + 20, mouthY - 12 - smileAmount * 0.5, cx + mouthW, mouthY - 5 - smileAmount * 0.3);
-  ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.5 + smileAmount * 0.2, cx - mouthW, mouthY - 5 - smileAmount * 0.3);
-  ctx.fill();
-  
-  // Inner mouth when open
-  if (mouthOpen > 0.1) {
-    ctx.fillStyle = '#3a1510';
-    ctx.beginPath();
-    ctx.moveTo(cx - mouthW + 10, mouthY - 2);
-    ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.7, cx + mouthW - 10, mouthY - 2);
-    ctx.fill();
-    
-    // Teeth hint
-    if (mouthOpen > 0.3) {
-      ctx.fillStyle = '#f0e8d8';
-      for (let i = -3; i <= 3; i++) {
-        ctx.fillRect(cx + i * 6 - 3, mouthY - openAmount * 0.3, 4, 4);
-      }
-    }
-  }
-  
-  // Lower lip shadow
-  ctx.beginPath();
-  ctx.ellipse(cx, mouthY + 3 + openAmount * 0.2, 35, 8, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(80, 40, 25, 0.2)';
-  ctx.fill();
-  
-  // ─── CHEEKS (Blush / warmth) ─────────────────────────────────
-  const blushAlpha = (speakingIntensity * 0.15) + (listeningIntensity * 0.1);
-  ctx.fillStyle = `rgba(220, 100, 80, ${blushAlpha + 0.08})`;
-  ctx.beginPath();
-  ctx.ellipse(cx - 85, cy + 20, 30, 20, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(cx + 85, cy + 20, 30, 20, 0, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // ─── EARRINGS (Subtle professional) ──────────────────────────
-  ctx.fillStyle = '#c0a060';
-  ctx.beginPath();
-  ctx.arc(cx - 110, cy + 15, 4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(cx + 110, cy + 15, 4, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // ─── SHOULDERS / SUIT JACKET ─────────────────────────────────
-  ctx.fillStyle = '#1a1a24';
-  ctx.beginPath();
-  ctx.moveTo(cx - 180, cy + 220);
-  ctx.quadraticCurveTo(cx, cy + 300, cx + 180, cy + 220);
-  ctx.lineTo(cx + 150, cy + 380);
-  ctx.lineTo(cx - 150, cy + 380);
-  ctx.fill();
-  
-  // Tie
-  ctx.fillStyle = '#2a3a5a';
-  ctx.beginPath();
-  ctx.moveTo(cx - 15, cy + 190);
-  ctx.lineTo(cx, cy + 260);
-  ctx.lineTo(cx + 15, cy + 190);
-  ctx.fill();
-  
-  // Collar
-  ctx.beginPath();
-  ctx.moveTo(cx - 80, cy + 170);
-  ctx.lineTo(cx, cy + 195);
-  ctx.lineTo(cx + 80, cy + 170);
-  ctx.fillStyle = '#1e1e28';
-  ctx.fill();
-  ctx.strokeStyle = '#2a2a35';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  
-  ctx.restore();
-  
-  // ─── SOFT OUTLINE GLOW ───────────────────────────────────────
-  ctx.shadowBlur = 0;
-}
-
-// ─── ANIMATION LOOP ───────────────────────────────────────────
-let lastMouthUpdate = 0;
-
-function animateAvatar() {
-  const now = Date.now();
-  const delta = Math.min(33, now - (lastTimestamp || now));
-  lastTimestamp = now;
-  
-  // Smooth mouth movement
-  const targetMouth = speakingIntensity * 0.7 + (listeningIntensity * 0.2);
-  mouthOpen = mouthOpen * 0.85 + targetMouth * 0.15;
-  
-  // Eye blink (random)
-  if (Math.random() < 0.008) {
-    leftEyeBlink = 0;
-    rightEyeBlink = 0;
-    setTimeout(() => {
-      leftEyeBlink = 1;
-      rightEyeBlink = 1;
-    }, 120);
-  }
-  
-  // Head movement (subtle)
-  headAngleX = Math.sin(now * 0.002) * 3 + (speakingIntensity * 2);
-  headAngleY = Math.sin(now * 0.0015) * 2;
-  
-  // Eyebrow raise when speaking
-  eyebrowRaise = eyebrowRaise * 0.9 + speakingIntensity * 0.3;
-  
-  // Smile intensity
-  smileIntensity = smileIntensity * 0.92 + speakingIntensity * 0.25;
-  
-  // Breathing
-  breathScale = Math.sin(now * 0.003) * 0.02;
-  
-  // Draw the avatar
-  drawAvatar();
-  
-  animationId = requestAnimationFrame(animateAvatar);
-}
-
-// Start animation
-animateAvatar();
-
-// ─── CONFIGURATION ────────────────────────────────────────────
+// ─── CONFIGURATION ─────────────────────────────────────────────
 const WORKER_URL = 'https://drcv.onrender.com';
-const WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEBHOOK_URL'; // Replace with your Apps Script URL
+const WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEBHOOK_URL'; // Replace!
 
-// Session management
-const sessionId = localStorage.getItem('dr_cv_session_id') || 
-                  'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-localStorage.setItem('dr_cv_session_id', sessionId);
-
-// Parse lead info from URL
+// Get lead data from URL or session storage
 const params = new URLSearchParams(window.location.search);
-const LEAD = {
+let LEAD = {
   name: decodeURIComponent(params.get('name') || ''),
   email: decodeURIComponent(params.get('email') || ''),
   company: decodeURIComponent(params.get('company') || ''),
   country: decodeURIComponent(params.get('country') || ''),
   stage: decodeURIComponent(params.get('stage') || ''),
-  sessionId: sessionId,
-  leadId: params.get('leadId') || sessionId,
-  startTime: Date.now()
+  leadId: params.get('leadId') || '',
+  sessionId: params.get('sessionId') || ''
 };
 
-// Update UI with lead name
-document.getElementById('leadNameDisplay').textContent = LEAD.name || 'Guest';
+// If no URL params, try session storage
+if (!LEAD.name) {
+  const stored = sessionStorage.getItem('leadData');
+  if (stored) {
+    LEAD = JSON.parse(stored);
+  }
+}
+
+// Generate IDs if missing
+if (!LEAD.leadId) LEAD.leadId = 'lead_' + Date.now();
+if (!LEAD.sessionId) LEAD.sessionId = 'sess_' + Date.now();
+
+// ─── AVATAR CANVAS ────────────────────────────────────────────
+const canvas = document.getElementById('avatarCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 600;
+canvas.height = 600;
+
+let mouthOpen = 0;
+let eyeBlink = 1;
+let headX = 0, headY = 0;
+let speakingIntensity = 0;
+let listeningIntensity = 0;
+let blinkTimer = 0;
+
+function drawAvatar() {
+  const cx = 300, cy = 280;
+  
+  ctx.clearRect(0, 0, 600, 600);
+  
+  // Background gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, 600);
+  bgGrad.addColorStop(0, '#0a0a0f');
+  bgGrad.addColorStop(1, '#12121a');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, 600, 600);
+  
+  // Head
+  ctx.save();
+  ctx.translate(headX * 0.5, headY * 0.3);
+  
+  // Face oval
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, 150, 180, 0, 0, Math.PI * 2);
+  const skinGrad = ctx.createLinearGradient(cx - 50, cy - 60, cx + 50, cy + 80);
+  skinGrad.addColorStop(0, '#e8b87a');
+  skinGrad.addColorStop(0.5, '#d4a06a');
+  skinGrad.addColorStop(1, '#c08a55');
+  ctx.fillStyle = skinGrad;
+  ctx.fill();
+  
+  // Hair
+  ctx.beginPath();
+  ctx.ellipse(cx, cy - 150, 160, 90, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#2a1a0a';
+  ctx.fill();
+  
+  // Eyes
+  const eyeY = cy - 30;
+  const eyeOpen = eyeBlink;
+  
+  // Left eye
+  ctx.fillStyle = '#f0ede8';
+  ctx.beginPath();
+  ctx.ellipse(cx - 45, eyeY, 18, 12 * eyeOpen, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#4a2a18';
+  ctx.beginPath();
+  ctx.ellipse(cx - 45, eyeY, 10, 10 * eyeOpen, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#0a0a0a';
+  ctx.beginPath();
+  ctx.arc(cx - 45, eyeY, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(cx - 48, eyeY - 3, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Right eye
+  ctx.fillStyle = '#f0ede8';
+  ctx.beginPath();
+  ctx.ellipse(cx + 45, eyeY, 18, 12 * eyeOpen, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#4a2a18';
+  ctx.beginPath();
+  ctx.ellipse(cx + 45, eyeY, 10, 10 * eyeOpen, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#0a0a0a';
+  ctx.beginPath();
+  ctx.arc(cx + 45, eyeY, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(cx + 42, eyeY - 3, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Eyebrows
+  ctx.beginPath();
+  ctx.moveTo(cx - 75, eyeY - 20);
+  ctx.quadraticCurveTo(cx - 55, eyeY - 28, cx - 35, eyeY - 22);
+  ctx.lineWidth = 7;
+  ctx.strokeStyle = '#3a2510';
+  ctx.stroke();
+  
+  ctx.beginPath();
+  ctx.moveTo(cx + 75, eyeY - 20);
+  ctx.quadraticCurveTo(cx + 55, eyeY - 28, cx + 35, eyeY - 22);
+  ctx.stroke();
+  
+  // Nose
+  ctx.beginPath();
+  ctx.moveTo(cx, eyeY + 10);
+  ctx.quadraticCurveTo(cx + 3, eyeY + 30, cx, eyeY + 40);
+  ctx.strokeStyle = 'rgba(100, 60, 30, 0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  
+  // Mouth
+  const mouthY = cy + 45;
+  const mouthW = 40;
+  const openAmount = mouthOpen * 12;
+  
+  ctx.fillStyle = '#b55a50';
+  ctx.beginPath();
+  ctx.moveTo(cx - mouthW, mouthY - 3);
+  ctx.quadraticCurveTo(cx - 15, mouthY - 9, cx, mouthY - 6);
+  ctx.quadraticCurveTo(cx + 15, mouthY - 9, cx + mouthW, mouthY - 3);
+  ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.6, cx - mouthW, mouthY - 3);
+  ctx.fill();
+  
+  if (mouthOpen > 0.1) {
+    ctx.fillStyle = '#3a1510';
+    ctx.beginPath();
+    ctx.moveTo(cx - mouthW + 12, mouthY);
+    ctx.quadraticCurveTo(cx, mouthY + openAmount * 0.7, cx + mouthW - 12, mouthY);
+    ctx.fill();
+  }
+  
+  // Shoulders
+  ctx.fillStyle = '#1a1a24';
+  ctx.beginPath();
+  ctx.moveTo(cx - 120, cy + 160);
+  ctx.quadraticCurveTo(cx, cy + 250, cx + 120, cy + 160);
+  ctx.fill();
+  
+  ctx.restore();
+  
+  requestAnimationFrame(drawAvatar);
+}
+
+drawAvatar();
+
+// Eye blink animation
+setInterval(() => {
+  eyeBlink = 0;
+  setTimeout(() => { eyeBlink = 1; }, 100);
+}, 4000);
+
+// Head movement
+setInterval(() => {
+  headX = (Math.random() - 0.5) * 4;
+  headY = (Math.random() - 0.5) * 3;
+  setTimeout(() => {
+    headX = 0;
+    headY = 0;
+  }, 800);
+}, 5000);
+
+// Mouth animation based on speaking
+function updateMouth() {
+  if (speakingIntensity > 0) {
+    mouthOpen = 0.2 + Math.random() * 0.6;
+  } else {
+    mouthOpen = mouthOpen * 0.9;
+  }
+  setTimeout(updateMouth, 80);
+}
+updateMouth();
 
 // ─── VOICE STATE ──────────────────────────────────────────────
 let isListening = false;
 let isSpeaking = false;
 let voiceMuted = false;
-let autoMic = true;
 let recognition = null;
 let voices = [];
 let speechQueue = [];
@@ -695,45 +475,63 @@ let isProcessingQueue = false;
 let currentUtterance = null;
 let history = [];
 let turns = 0;
-let currentScore = 0;
+
+// Update UI status
+function updateUIStatus(status) {
+  const light = document.getElementById('statusLight');
+  const text = document.getElementById('statusText');
+  
+  light.className = 'status-light ' + status;
+  
+  const statusMap = {
+    ready: 'Ready',
+    listening: 'Listening...',
+    thinking: 'Thinking...',
+    speaking: 'Speaking...'
+  };
+  
+  text.textContent = statusMap[status] || status;
+  
+  if (status === 'listening') listeningIntensity = 0.5;
+  else if (status === 'speaking') speakingIntensity = 0.6;
+  else {
+    listeningIntensity = 0;
+    speakingIntensity = 0;
+  }
+}
 
 // ─── SYSTEM PROMPT ────────────────────────────────────────────
 function buildSystemPrompt() {
   const context = LEAD.name ? `
-LEAD CONTEXT (You already know this - NEVER ask to repeat):
+LEAD CONTEXT (You already know this):
 - Name: ${LEAD.name}
 - Company: ${LEAD.company || 'Not provided'}
 - Target Market: ${LEAD.country || 'Not specified'}
 - Expansion Stage: ${LEAD.stage || 'Exploring'}
-- Email: ${LEAD.email || 'Not provided'}
 
-Start by saying: "Hi ${LEAD.name}! Great to have you here. I'm Dr. CV, your global expansion strategist.` : '';
+Start the conversation by saying: "Hi ${LEAD.name}! Thanks for joining. I'm Dr. CV, your global expansion strategist.` : '';
   
-  return `You are Dr. CV, a warm, confident Global Expansion Strategist.
+  return `You are Dr. CV, a warm, professional Global Expansion Strategist at Comply Globally.
 ${context}
 
-SPEECH RULES (CRITICAL FOR VOICE):
-- Maximum 2-3 sentences per response
-- One question at a time only
-- No bullet points or markdown
+VOICE CONVERSATION RULES:
+- Max 2-3 sentences per response
+- One question at a time
 - Natural, conversational tone
 - Never say "As an AI"
 
-GOAL: Qualify the lead naturally through conversation.`;
+Start naturally and ask ONE question to understand their needs.`;
 }
 
-// ─── TTS FUNCTIONS ───────────────────────────────────────────
+// ─── TTS FUNCTIONS ────────────────────────────────────────────
 function cleanForSpeech(text) {
   return text
     .replace(/\*\*/g, '')
     .replace(/\*/g, '')
-    .replace(/`/g, '')
     .replace(/\bUAE\b/g, 'the U A E')
     .replace(/\bUSA\b/g, 'the U S A')
     .replace(/\bLLC\b/g, 'L L C')
-    .replace(/\bFEMA\b/g, 'F E M A')
     .replace(/\$(\d+)B\b/g, '$$$1 billion')
-    .replace(/\$(\d+)M\b/g, '$$$1 million')
     .trim();
 }
 
@@ -744,7 +542,7 @@ speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
 function getBestVoice() {
-  const preferred = ['Samantha', 'Karen', 'Google UK English Female', 'Google US English', 'Zira'];
+  const preferred = ['Samantha', 'Google UK English Female', 'Google US English'];
   for (const name of preferred) {
     const voice = voices.find(v => v.name.includes(name));
     if (voice) return voice;
@@ -771,12 +569,12 @@ function processSpeechQueue() {
   const voice = getBestVoice();
   if (voice) currentUtterance.voice = voice;
   currentUtterance.rate = 0.92;
-  currentUtterance.pitch = 1.02;
+  currentUtterance.pitch = 1.05;
   
   currentUtterance.onstart = () => {
     isSpeaking = true;
     speakingIntensity = 0.6;
-    updateStatus('speaking');
+    updateUIStatus('speaking');
   };
   
   currentUtterance.onend = () => {
@@ -787,10 +585,12 @@ function processSpeechQueue() {
     
     if (speechQueue.length > 0) {
       processSpeechQueue();
-    } else if (autoMic && !voiceMuted && !isListening) {
-      setTimeout(() => startListening(), 400);
     } else {
-      updateStatus('ready');
+      updateUIStatus('ready');
+      // Auto-start listening after speaking
+      if (!voiceMuted) {
+        setTimeout(() => startListening(), 500);
+      }
     }
   };
   
@@ -798,7 +598,7 @@ function processSpeechQueue() {
     isSpeaking = false;
     speakingIntensity = 0;
     isProcessingQueue = false;
-    updateStatus('ready');
+    updateUIStatus('ready');
   };
   
   speechSynthesis.speak(currentUtterance);
@@ -841,46 +641,39 @@ function initRecognition() {
     isListening = true;
     listeningIntensity = 0.5;
     finalTranscript = '';
-    updateStatus('listening');
-    updateMicUI(true);
+    updateUIStatus('listening');
+    document.getElementById('micBtn').classList.add('active');
   };
   
   recognition.onresult = (event) => {
     if (silenceTimeout) clearTimeout(silenceTimeout);
     
-    let interimTranscript = '';
     let newFinal = '';
-    
     for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
-        newFinal += transcript + ' ';
-      } else {
-        interimTranscript += transcript;
+        newFinal += event.results[i][0].transcript + ' ';
       }
     }
     
     if (newFinal) {
       finalTranscript += newFinal;
+      listeningIntensity = 0.3 + Math.random() * 0.3;
     }
-    
-    // Show visual feedback with subtle mic animation
-    listeningIntensity = 0.3 + Math.random() * 0.3;
     
     silenceTimeout = setTimeout(() => {
       if (finalTranscript.trim()) {
         const userText = finalTranscript.trim();
         stopListening();
         sendMessage(userText);
-      } else if (autoMic && !isSpeaking) {
+      } else if (!isSpeaking) {
         stopListening();
         setTimeout(() => startListening(), 500);
       }
-    }, 1200);
+    }, 1000);
   };
   
   recognition.onerror = (event) => {
-    if (event.error === 'no-speech' && autoMic && !isSpeaking) {
+    if (event.error === 'no-speech' && !isSpeaking) {
       stopListening();
       setTimeout(() => startListening(), 500);
     } else if (event.error !== 'aborted') {
@@ -892,16 +685,11 @@ function initRecognition() {
   recognition.onend = () => {
     isListening = false;
     listeningIntensity = 0;
-    updateMicUI(false);
-    if (!isSpeaking) updateStatus('ready');
+    document.getElementById('micBtn').classList.remove('active');
+    if (!isSpeaking) updateUIStatus('ready');
   };
   
   return true;
-}
-
-function updateMicUI(active) {
-  const micBtn = document.getElementById('micBtn');
-  micBtn.classList.toggle('active', active);
 }
 
 function startListening() {
@@ -926,8 +714,6 @@ function stopListening() {
   try {
     recognition.stop();
   } catch (e) {}
-  isListening = false;
-  listeningIntensity = 0;
 }
 
 // ─── API CALL ─────────────────────────────────────────────────
@@ -935,7 +721,7 @@ async function sendMessage(userText) {
   if (!userText.trim()) return;
   
   stopListening();
-  updateStatus('thinking');
+  updateUIStatus('thinking');
   
   history.push({ role: 'user', content: userText });
   turns++;
@@ -949,8 +735,7 @@ async function sendMessage(userText) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         system: buildSystemPrompt(),
-        messages: history,
-        leadInfo: LEAD
+        messages: history
       })
     });
     
@@ -992,92 +777,12 @@ async function sendMessage(userText) {
     if (speechBuffer.trim()) speak(speechBuffer.trim());
     
     history.push({ role: 'assistant', content: fullReply.trim() });
-    if (history.length > 24) history = history.slice(-24);
-    
-    updateQualScore();
-    sendConversationUpdate(userText, fullReply);
+    if (history.length > 20) history = history.slice(-20);
     
   } catch (err) {
-    showError('Connection error. Please refresh.');
-    updateStatus('ready');
+    showError('Connection issue. Please refresh.');
+    updateUIStatus('ready');
   }
-}
-
-function updateQualScore() {
-  let score = 20;
-  if (LEAD.company) score += 10;
-  if (LEAD.stage && LEAD.stage !== 'Exploring possibilities') score += 10;
-  if (turns > 3) score += Math.min(25, turns * 3);
-  
-  const conversationText = history.map(h => h.content.toLowerCase()).join(' ');
-  const keywords = {
-    revenue: 8, funding: 8, raised: 10, million: 12,
-    urgent: 12, ready: 8, budget: 10, founder: 6
-  };
-  
-  for (const [word, points] of Object.entries(keywords)) {
-    if (conversationText.includes(word)) score += points;
-  }
-  
-  currentScore = Math.min(100, score);
-  
-  if (currentScore >= 70 && turns >= 5) {
-    finalizeLead();
-  }
-}
-
-async function sendConversationUpdate(userMsg, botMsg) {
-  try {
-    fetch(WEBHOOK_URL + '?action=update', {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({
-        leadId: LEAD.leadId,
-        sessionId: LEAD.sessionId,
-        name: LEAD.name,
-        turnNumber: turns,
-        userMessage: userMsg,
-        botResponse: botMsg,
-        qualificationScore: currentScore
-      })
-    });
-  } catch (e) {}
-}
-
-async function finalizeLead() {
-  const calendarLink = `https://cal.com/connectventures/strategy-call?name=${encodeURIComponent(LEAD.name)}&email=${encodeURIComponent(LEAD.email)}`;
-  
-  // Speak the qualification message
-  const qualificationMsg = `Excellent conversation! Based on what you've shared, you're a great fit for our strategy session. I'll send a calendar link to your email right now.`;
-  speak(qualificationMsg);
-  
-  // Send to webhook
-  fetch(WEBHOOK_URL + '?action=complete', {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify({
-      leadId: LEAD.leadId,
-      qualificationScore: currentScore,
-      turnCount: turns
-    })
-  });
-}
-
-// ─── UI UPDATE FUNCTIONS ──────────────────────────────────────
-function updateStatus(status) {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
-  
-  dot.className = 'status-dot ' + status;
-  
-  const labels = {
-    ready: 'Ready',
-    listening: 'Listening...',
-    thinking: 'Thinking...',
-    speaking: 'Speaking...'
-  };
-  
-  text.textContent = labels[status] || status;
 }
 
 function showError(msg) {
@@ -1091,39 +796,34 @@ function showError(msg) {
 
 // ─── INITIALIZATION ───────────────────────────────────────────
 async function init() {
+  const loadingOverlay = document.getElementById('loadingOverlay');
   const loadingText = document.getElementById('loadingText');
-  const loadingScreen = document.getElementById('loadingScreen');
-  
-  loadingText.textContent = 'Loading your profile...';
-  await new Promise(r => setTimeout(r, 600));
   
   loadingText.textContent = 'Initializing Dr. CV...';
   await new Promise(r => setTimeout(r, 800));
   
-  loadingText.textContent = 'Ready...';
+  loadingText.textContent = 'Ready!';
   await new Promise(r => setTimeout(r, 400));
   
-  loadingScreen.classList.add('hidden');
+  loadingOverlay.classList.add('hidden');
   
   initRecognition();
   loadVoices();
   
-  // Build and speak initial greeting
+  // Build greeting
   const firstName = LEAD.name ? LEAD.name.split(' ')[0] : '';
   let greeting;
   
-  if (firstName && LEAD.country && LEAD.stage) {
-    greeting = `Hi ${firstName}! Great to connect. I see you're looking at expanding to ${LEAD.country} and you're at the ${LEAD.stage} stage. That's a perfect time to get your structure right. Quick question - what's your biggest concern right now? Is it the entity setup, tax, or getting banking in place?`;
-  } else if (firstName && LEAD.country) {
-    greeting = `Hi ${firstName}! Thanks for joining. I see you're interested in ${LEAD.country} expansion. Tell me, what's the main challenge you're facing with global growth right now?`;
+  if (firstName && LEAD.country) {
+    greeting = `Hi ${firstName}! Great to have you here. I'm Dr. CV, your global expansion strategist. I see you're looking at expanding to ${LEAD.country}. Tell me, what's the main challenge you're facing with global growth right now?`;
   } else if (firstName) {
-    greeting = `Hi ${firstName}, great to have you! I'm Dr. CV, your global expansion strategist. Tell me about your business - what markets are you looking at expanding into?`;
+    greeting = `Hi ${firstName}! Thanks for joining. I'm Dr. CV. Tell me about your business - what markets are you looking to expand into?`;
   } else {
-    greeting = `Welcome to your Comply Globally strategy session. I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
+    greeting = `Welcome! I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
   }
   
   history.push({ role: 'assistant', content: greeting });
-  updateStatus('speaking');
+  updateUIStatus('speaking');
   await speak(greeting);
 }
 
@@ -1141,33 +841,20 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   history = [];
   turns = 0;
   stopSpeaking();
-  updateStatus('ready');
+  stopListening();
+  updateUIStatus('ready');
   setTimeout(() => init(), 500);
 });
 
-let muteState = false;
+let muted = false;
 document.getElementById('muteBtn').addEventListener('click', function() {
-  muteState = !muteState;
-  voiceMuted = muteState;
-  this.style.opacity = muteState ? '0.5' : '1';
-  if (muteState) stopSpeaking();
+  muted = !muted;
+  voiceMuted = muted;
+  this.classList.toggle('muted', muted);
+  if (muted) stopSpeaking();
 });
 
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space' && !e.target.matches('input,button')) {
-    e.preventDefault();
-    if (isSpeaking) {
-      stopSpeaking();
-      startListening();
-    } else if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
-  }
-});
-
-// Start everything
+// Start!
 init();
 </script>
 </body>
