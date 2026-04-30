@@ -21,35 +21,24 @@
 }
 html,body{height:100%;background:var(--void);color:var(--text);font-family:var(--body);overflow:hidden}
 
-/* ─── BACKGROUND LAYERS ─── */
 #starCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* Grain */
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-size:180px;opacity:.38;mix-blend-mode:overlay}
-
-/* Scanlines */
 .scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,212,255,.01) 2px,rgba(0,212,255,.01) 4px);
   animation:scanroll 8s linear infinite}
 @keyframes scanroll{from{background-position:0 0}to{background-position:0 60px}}
-
-/* Ambient glow */
 .ambient{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 40%,rgba(0,212,255,.055) 0%,transparent 65%),
+  background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(0,212,255,.055) 0%,transparent 65%),
     radial-gradient(ellipse 40% 35% at 15% 75%,rgba(139,92,246,.04) 0%,transparent 55%),
     radial-gradient(ellipse 50% 45% at 85% 20%,rgba(245,158,11,.025) 0%,transparent 55%)}
-
-/* Corner decorations */
 .corner-deco{position:fixed;z-index:8;pointer-events:none;width:60px;height:60px}
 .corner-deco.tl{top:0;left:0;border-top:1px solid var(--teal);border-left:1px solid var(--teal);opacity:.4}
 .corner-deco.tr{top:0;right:0;border-top:1px solid var(--teal);border-right:1px solid var(--teal);opacity:.4}
 .corner-deco.bl{bottom:0;left:0;border-bottom:1px solid var(--teal);border-left:1px solid var(--teal);opacity:.4}
 .corner-deco.br{bottom:0;right:0;border-bottom:1px solid var(--teal);border-right:1px solid var(--teal);opacity:.4}
 
-/* ─── LOADING ─── */
 #loadingScreen{
   position:fixed;inset:0;z-index:999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -76,12 +65,10 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 .loading-text{font-family:var(--display);font-size:.5rem;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
 #loadingScreen.hidden{display:none}
 
-/* ─── APP ─── */
 #app{position:relative;z-index:10;height:100%;display:none;flex-direction:column}
 #app.visible{display:flex;animation:fadeUp .6s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── TOP BAR ─── */
 .top-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:0 2rem;height:58px;
@@ -108,15 +95,12 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 .sys-stat{display:flex;align-items:center;gap:.45rem;font-family:var(--display);font-size:.52rem;letter-spacing:.15em;color:var(--dim)}
 .sys-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:syspulse 2s ease infinite}
 @keyframes syspulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
-.sys-dot.warn{background:var(--amber);box-shadow:0 0 6px var(--amber)}
 .lead-badge{font-family:var(--mono);font-size:.58rem;color:var(--amber);background:var(--amber-dim);border:1px solid rgba(245,158,11,.28);padding:.2rem .7rem;letter-spacing:.05em;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .auto-badge{font-family:var(--display);font-size:.48rem;letter-spacing:.15em;color:var(--teal);background:rgba(0,212,255,.07);border:1px solid var(--teal-border);padding:.22rem .6rem;cursor:pointer;transition:all .2s}
 .auto-badge.off{color:var(--dim);background:transparent;border-color:rgba(255,255,255,.06)}
 
-/* ─── MAIN CONTENT ─── */
 .main-content{flex:1;display:flex;overflow:hidden}
 
-/* ─── LEFT PANEL ─── */
 .side-panel-left{
   width:210px;flex-shrink:0;
   background:rgba(0,0,12,.88);
@@ -139,27 +123,22 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 .data-item strong{color:var(--teal2);font-weight:700;display:block}
 .data-item.highlight strong{color:var(--amber)}
 
-/* Waveform bars */
 .waveform{display:flex;align-items:center;gap:2px;height:22px;padding:2px 0}
 .wave-bar{width:3px;background:var(--teal);border-radius:2px;transition:height .12s ease;min-height:2px}
 
-/* Signal meter */
 .signal-wrap{display:flex;flex-direction:column;gap:.5rem}
 .signal-bars{display:flex;gap:3px;align-items:flex-end;height:18px}
 .s-bar{width:5px;background:var(--teal);border-radius:1px;opacity:.9}
 .s-bar:nth-child(1){height:4px}.s-bar:nth-child(2){height:8px}.s-bar:nth-child(3){height:12px}.s-bar:nth-child(4){height:17px}.s-bar:nth-child(5){height:14px;opacity:.25}
 .signal-text{font-family:var(--mono);font-size:.52rem;color:var(--dim)}
 
-/* Minimap data viz */
 .data-viz{height:40px;border:1px solid var(--teal-border);background:rgba(0,212,255,.02);position:relative;overflow:hidden}
 .data-viz canvas{display:block;width:100%;height:100%}
 
-/* ─── CENTER ─── */
 .center-area{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   padding:1.2rem 2rem 1rem;position:relative;overflow:hidden;
 }
-/* Hex grid background pattern */
 .center-area::before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background-image:
@@ -170,10 +149,8 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 
 .avatar-zone{display:flex;flex-direction:column;align-items:center;gap:1.1rem;flex:1;justify-content:center}
 
-/* ─── AVATAR CONTAINER ─── */
 .avatar-container{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center}
 
-/* Orbital rings */
 .orbital{position:absolute;border-radius:50%;pointer-events:none}
 .orbital-1{
   width:330px;height:330px;
@@ -190,7 +167,6 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
   border:1px solid rgba(139,92,246,.05);
   animation:orbitSpin 55s linear infinite;
 }
-/* Orbital dots */
 .orbit-dot{
   position:absolute;top:50%;left:50%;
   width:7px;height:7px;border-radius:50%;
@@ -205,7 +181,6 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 @keyframes od3{0%{transform:rotate(90deg) translateX(185px) translate(-50%,-50%)}100%{transform:rotate(450deg) translateX(185px) translate(-50%,-50%)}}
 @keyframes orbitSpin{to{transform:rotate(360deg)}}
 
-/* Avatar glow */
 .avatar-glow{
   position:absolute;width:310px;height:310px;border-radius:50%;
   background:radial-gradient(circle,rgba(0,212,255,.07) 0%,transparent 70%);
@@ -215,7 +190,6 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 .avatar-glow.speaking{background:radial-gradient(circle,rgba(0,212,255,.15) 0%,transparent 70%)}
 @keyframes glowPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.6}}
 
-/* Hex clip avatar */
 .avatar-hex{
   position:relative;z-index:2;width:255px;height:255px;
   clip-path:polygon(50% 0%,96% 25%,96% 75%,50% 100%,4% 75%,4% 25%);
@@ -225,11 +199,9 @@ html,body{height:100%;background:var(--void);color:var(--text);font-family:var(-
 .avatar-hex.listening{filter:drop-shadow(0 0 18px rgba(239,68,68,.45))}
 canvas#face{display:block;width:255px;height:255px}
 
-/* HUD overlay */
 .avatar-hud{position:absolute;z-index:3;width:270px;height:270px;pointer-events:none}
 .avatar-hud svg{width:100%;height:100%}
 
-/* Nameplate */
 .avatar-nameplate{text-align:center}
 .avatar-nameplate h2{
   font-family:var(--display);font-size:1.15rem;font-weight:900;
@@ -244,7 +216,6 @@ canvas#face{display:block;width:255px;height:255px}
 .avatar-role::before,.avatar-role::after{content:"";width:18px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
 .avatar-role::after{background:linear-gradient(90deg,var(--teal),transparent)}
 
-/* ─── STATUS BAR ─── */
 .status-bar{
   width:100%;max-width:430px;
   background:rgba(0,212,255,.04);border:1px solid var(--teal-border);
@@ -273,7 +244,6 @@ canvas#face{display:block;width:255px;height:255px}
 .status-bar.thinking #statusText{color:var(--amber)}
 .status-time{font-family:var(--mono);font-size:.58rem;color:var(--dim)}
 
-/* ─── TRANSCRIPT ─── */
 .transcript-section{width:100%;max-width:540px}
 .transcript-header{
   display:flex;align-items:center;gap:.7rem;margin-bottom:.45rem;
@@ -294,7 +264,6 @@ canvas#face{display:block;width:255px;height:255px}
 #userLine{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-bottom:.5rem;min-height:1em;font-style:italic}
 #botLine{font-family:var(--body);font-size:.88rem;color:var(--text);line-height:1.75;font-weight:300}
 
-/* ─── CONTROLS ─── */
 .controls-zone{display:flex;flex-direction:column;align-items:center;gap:.65rem;flex-shrink:0}
 .controls{display:flex;align-items:center;gap:1.1rem}
 
@@ -333,7 +302,6 @@ canvas#face{display:block;width:255px;height:255px}
 
 .hint-text{font-family:var(--display);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--hint);text-align:center}
 
-/* ─── RIGHT PANEL ─── */
 .side-panel-right{
   width:225px;flex-shrink:0;
   background:rgba(0,0,12,.88);border-left:1px solid var(--teal-border);
@@ -369,7 +337,6 @@ canvas#face{display:block;width:255px;height:255px}
 .qual-bar::after{content:"";position:absolute;right:0;top:-2px;bottom:-2px;width:6px;background:var(--amber);box-shadow:0 0 8px var(--amber)}
 .qual-text{font-family:var(--mono);font-size:.58rem;color:var(--muted)}
 
-/* ─── ERROR BANNER ─── */
 #errBanner{
   display:none;position:fixed;top:72px;left:50%;transform:translateX(-50%);
   background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:#fca5a5;
@@ -410,7 +377,6 @@ canvas#face{display:block;width:255px;height:255px}
   <div class="loading-text" id="loadingText">Initialising Dr. CV...</div>
 </div>
 
-<!-- Stars -->
 <script>
 (function(){
   const cv=document.getElementById('starCanvas'),ctx=cv.getContext('2d');
@@ -452,7 +418,6 @@ canvas#face{display:block;width:255px;height:255px}
 
   <div class="main-content">
 
-    <!-- LEFT PANEL -->
     <aside class="side-panel-left">
       <div class="data-block">
         <div class="data-label">Lead Profile</div>
@@ -461,6 +426,7 @@ canvas#face{display:block;width:255px;height:255px}
           <div class="data-item"><strong id="infoCompany">—</strong>Company</div>
           <div class="data-item"><strong id="infoCountry">—</strong>Market</div>
           <div class="data-item"><strong id="infoStage">—</strong>Stage</div>
+          <div class="data-item"><strong id="infoSessionId">—</strong>Session ID</div>
         </div>
       </div>
       <div class="data-block">
@@ -500,7 +466,6 @@ canvas#face{display:block;width:255px;height:255px}
       </div>
     </aside>
 
-    <!-- CENTER -->
     <div class="center-area">
       <div class="avatar-zone">
         <div class="avatar-container">
@@ -515,22 +480,14 @@ canvas#face{display:block;width:255px;height:255px}
             <canvas id="face" width="460" height="460"></canvas>
           </div>
           <div class="avatar-hud">
-            <svg viewBox="0 0 270 270" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Outer hex frame -->
+            <svg viewBox="0 0 270 270" fill="none">
               <polygon points="135,3 263,70 263,200 135,267 7,200 7,70" stroke="rgba(0,212,255,0.2)" stroke-width="1" fill="none"/>
-              <!-- Corner marks -->
               <line x1="4" y1="70" x2="22" y2="70" stroke="rgba(0,212,255,0.7)" stroke-width="1.5"/>
               <line x1="7" y1="70" x2="7" y2="88" stroke="rgba(0,212,255,0.7)" stroke-width="1.5"/>
               <line x1="266" y1="200" x2="248" y2="200" stroke="rgba(0,212,255,0.7)" stroke-width="1.5"/>
               <line x1="263" y1="200" x2="263" y2="182" stroke="rgba(0,212,255,0.7)" stroke-width="1.5"/>
-              <line x1="4" y1="200" x2="22" y2="200" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
-              <line x1="266" y1="70" x2="248" y2="70" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
-              <!-- ID labels -->
               <text x="12" y="150" fill="rgba(0,212,255,0.4)" font-family="monospace" font-size="6.5">ID//CV-7</text>
               <text x="220" y="138" fill="rgba(0,212,255,0.4)" font-family="monospace" font-size="6.5">LIVE</text>
-              <!-- Scan line animated via CSS -->
-              <line x1="30" y1="85" x2="240" y2="85" stroke="rgba(0,212,255,0.08)" stroke-width="1" stroke-dasharray="4 8"/>
-              <line x1="30" y1="185" x2="240" y2="185" stroke="rgba(0,212,255,0.08)" stroke-width="1" stroke-dasharray="4 8"/>
             </svg>
           </div>
         </div>
@@ -574,7 +531,6 @@ canvas#face{display:block;width:255px;height:255px}
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
     <aside class="side-panel-right">
       <div class="data-block">
         <div class="data-label">Expertise</div>
@@ -612,504 +568,841 @@ canvas#face{display:block;width:255px;height:255px}
 </div>
 
 <script>
-// ═══ CONFIG ═══
-const WORKER_URL='https://drcv.onrender.com';
-const params=new URLSearchParams(window.location.search);
-const LEAD={
-  name:decodeURIComponent(params.get('name')||''),
-  email:decodeURIComponent(params.get('email')||''),
-  company:decodeURIComponent(params.get('company')||''),
-  country:decodeURIComponent(params.get('country')||''),
-  stage:decodeURIComponent(params.get('stage')||'')
+// ════════════════════════════════════════════════════════════════
+// IMPROVED VERSION - FIXED VOICE ISSUES + UNIQUE LINKS
+// ════════════════════════════════════════════════════════════════
+
+// ─── CONFIGURATION ─────────────────────────────────────────────
+const WORKER_URL = 'https://drcv.onrender.com';
+const WEBHOOK_URL = 'YOUR_APPS_SCRIPT_WEBHOOK_URL'; // Replace with your Apps Script URL
+
+// Generate unique session ID for this lead
+const sessionId = localStorage.getItem('dr_cv_session_id') || 
+                  'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+localStorage.setItem('dr_cv_session_id', sessionId);
+
+// Parse URL parameters
+const params = new URLSearchParams(window.location.search);
+const LEAD = {
+  name: decodeURIComponent(params.get('name') || ''),
+  email: decodeURIComponent(params.get('email') || ''),
+  company: decodeURIComponent(params.get('company') || ''),
+  country: decodeURIComponent(params.get('country') || ''),
+  stage: decodeURIComponent(params.get('stage') || ''),
+  sessionId: sessionId,
+  leadId: params.get('leadId') || sessionId,
+  startTime: Date.now()
 };
 
-function buildSystemPrompt(){
-  const lc=LEAD.name?`
-LEAD CONTEXT (you already know this — do NOT ask them to repeat):
-- Name: ${LEAD.name}
-- Company: ${LEAD.company||'Not provided'}
-- Target Market: ${LEAD.country||'Not specified'}
-- Expansion Stage: ${LEAD.stage||'Not specified'}
-- Email: ${LEAD.email||'Not provided'}
-Use their name naturally. Dive deeper, don't repeat basics.`:'';
+// Store lead data in session storage
+sessionStorage.setItem('leadData', JSON.stringify(LEAD));
+
+// ─── IMPROVED SYSTEM PROMPT ───────────────────────────────────
+function buildSystemPrompt() {
+  const leadContext = LEAD.name ? `
+CRITICAL LEAD CONTEXT (You already know this - DO NOT ask them to repeat basic info):
+- Lead Name: ${LEAD.name}
+- Company: ${LEAD.company || 'Not provided'}
+- Target Market: ${LEAD.country || 'Not specified'}
+- Expansion Stage: ${LEAD.stage || 'Not specified'}
+- Email: ${LEAD.email || 'Not provided'}
+
+IMPORTANT: Start the conversation by greeting them by name and acknowledging something specific from their profile.
+Example: "Hi ${LEAD.name || 'there'}! I see you're looking at expanding to ${LEAD.country || 'new markets'} and you're at the ${LEAD.stage || 'planning'} stage - that's a perfect time to get your structure right."
+
+DO NOT ask them to repeat their name, company, or target market.` : '';
+
   return `You are Dr. CV, Senior Global Expansion Strategist at Comply Globally.
-${lc}
-CORE GOAL: Qualify this lead and guide them toward a paid engagement. Voice conversation — keep ALL responses to 2-3 sentences max.
-QUALIFICATION — extract naturally through conversation:
-1. Revenue or funding stage
-2. Urgency (ready now vs exploring?)
-3. Specific pain point (tax? banking? entity? compliance?)
-4. Are they the decision maker?
-5. Budget signals
-PERSONALITY: Warm, intelligent, confident. Senior consultant energy. Not robotic, not salesy.
-CONVERSATION STYLE (CRITICAL — this is voice):
-- Max 2-3 sentences per response. Never longer.
-- One question at a time. Never two.
-- No bullet points. No numbered lists. No markdown. Plain spoken sentences only.
-- Natural speech: "That makes sense", "Good question", "Let me think through that with you"
-- Never say "As an AI" or "I'm an AI"
-- When writing acronyms for TTS, write them as full words: write "UAE" as "the U A E", "LLC" as "L L C", "FEMA" as "F E M A"
-- Numbers: write "$2.8 billion" not "$2.8B"
-FLOW:
-1. Greet by name, acknowledge what they submitted, ask ONE sharp follow-up
-2. Qualify through natural back-and-forth — one question each turn
-3. Once you have enough context, give a sharp specific insight
-4. Soft CTA: "Based on what you've shared, our team could have your structure ready in about 3 to 4 weeks. Would it make sense to connect you with one of our senior advisors?"
-KNOWLEDGE: Delaware C-Corp and LLC, UAE Freezone, Singapore incorporation, cross-border tax, Stripe, Mercury, Wise banking, FEMA India outbound rules, holding structures.
-HARD RULE: Never more than 3 sentences. Short answers keep the conversation flowing naturally.`;
+${leadContext}
+
+CORE GOAL: Qualify this lead for a paid engagement with Comply Globally. This is a VOICE conversation - keep responses SHORT (max 2-3 sentences).
+
+QUALIFICATION TO EXTRACT (naturally through conversation):
+1. Revenue or funding stage (bootstrapped? angel? VC? revenue positive?)
+2. Urgency (ready to move now vs exploring? timeline?)
+3. Specific pain point (tax? banking? entity setup? compliance? hiring?)
+4. Decision maker status (are they the founder/CEO with authority?)
+5. Budget signals (what are they willing to invest?)
+
+PERSONALITY: Warm, intelligent, confident senior consultant. Not robotic, not overly salesy.
+
+VOICE CONVERSATION RULES (CRITICAL):
+- Maximum 2-3 sentences per response - SHORT responses keep conversation flowing
+- One question at a time - never ask two questions in one response
+- No bullet points, no numbered lists, no markdown
+- Use natural speech patterns: "That makes sense", "Interesting", "Let me think"
+- Never say "As an AI" or "I'm an artificial intelligence"
+- Spell acronyms for better TTS: "UAE" → "the U A E", "LLC" → "L L C", "FEMA" → "F E M A"
+- Write numbers as words: "$2.8 billion" not "$2.8B"
+
+CONVERSATION FLOW:
+1. Greet by name, acknowledge their specific situation, ask ONE sharp follow-up
+2. Qualify through natural back-and-forth - one question per turn
+3. Once qualified, give a specific insight about their situation
+4. Soft CTA: "Based on what you've shared, our team could have your structure ready in about 3 to 4 weeks. Would a quick chat with one of our senior advisors make sense?"
+
+KNOWLEDGE AREAS: Delaware C-Corp and LLC, UAE Freezone, Singapore incorporation, cross-border tax structuring, Stripe Atlas, Mercury, Wise for international banking, FEMA India outbound rules, holding company structures.
+
+HARD RULE: Never exceed 3 sentences. Keep responses brief and conversational.`;
 }
 
-// ═══ STATE ═══
-let history=[],isListening=false,isSpeaking=false,voiceMuted=false,autoMic=true;
-let recognition=null,voices=[],turns=0,sessionStart=null;
-let mouthOpen=0,mouthTarget=0,eyeOpen=1,blinkTimer=130;
-let headBob=0,headBobDir=1,pupilOffX=0,pupilOffY=0,pupilTargetX=0,pupilTargetY=0,breathPhase=0;
-let silenceTimer=null;
+// ─── STATE MANAGEMENT ─────────────────────────────────────────
+let history = [];
+let isListening = false;
+let isSpeaking = false;
+let voiceMuted = false;
+let autoMic = true;
+let recognition = null;
+let voices = [];
+let turns = 0;
+let sessionStart = Date.now();
+let currentUtterance = null;
+let speechQueue = [];
+let isProcessingQueue = false;
 
-// ═══ FACE CANVAS ═══
-const faceCanvas=document.getElementById('face');
-const fCtx=faceCanvas.getContext('2d');
-const CW=faceCanvas.width,CH=faceCanvas.height;
-
-function drawFace(){
-  fCtx.clearRect(0,0,CW,CH);
-  breathPhase+=.018;const breathY=Math.sin(breathPhase)*2;
-  blinkTimer--;
-  if(blinkTimer<=0){blinkTimer=Math.random()*200+100;eyeOpen=0}
-  eyeOpen=Math.min(1,eyeOpen+.15);
-  if(isSpeaking){headBob+=.05*headBobDir;if(Math.abs(headBob)>2)headBobDir*=-1}
-  else{headBob*=.88}
-  pupilOffX+=(pupilTargetX-pupilOffX)*.04;
-  pupilOffY+=(pupilTargetY-pupilOffY)*.04;
-  if(Math.random()<.008){pupilTargetX=(Math.random()-.5)*12;pupilTargetY=(Math.random()-.5)*10}
-  mouthOpen+=(mouthTarget-mouthOpen)*.28;
-
-  const cx=CW/2,cy=CH/2+headBob+breathY;
-
-  // Face skin
-  fCtx.save();
-  fCtx.beginPath();fCtx.ellipse(cx,cy+8,138,155,0,0,Math.PI*2);
-  const fg=fCtx.createRadialGradient(cx-20,cy-40,10,cx,cy,160);
-  fg.addColorStop(0,'#f5c9a0');fg.addColorStop(.4,'#e8b07a');fg.addColorStop(.8,'#d4956a');fg.addColorStop(1,'#c07d50');
-  fCtx.fillStyle=fg;fCtx.fill();
-  fCtx.beginPath();fCtx.ellipse(cx-22,cy-45,50,44,-.3,0,Math.PI*2);
-  fCtx.fillStyle='rgba(255,235,200,0.12)';fCtx.fill();
-  fCtx.restore();
-
-  // Hair
-  fCtx.save();
-  fCtx.beginPath();fCtx.ellipse(cx,cy-122,142,64,0,Math.PI,Math.PI*2);
-  fCtx.fillStyle='#1a0f05';fCtx.fill();
-  [-1,1].forEach(s=>{
-    fCtx.beginPath();fCtx.ellipse(cx+s*128,cy-38,24,100,s*.18,0,Math.PI*2);
-    fCtx.fillStyle='#150c03';fCtx.fill();
-  });
-  fCtx.beginPath();fCtx.ellipse(cx+20,cy-130,30,18,.4,0,Math.PI*2);
-  fCtx.fillStyle='rgba(255,200,140,0.06)';fCtx.fill();
-  fCtx.restore();
-
-  // Earrings
-  fCtx.save();
-  [-1,1].forEach(s=>{
-    fCtx.beginPath();fCtx.arc(cx+s*130,cy+22,6,0,Math.PI*2);
-    fCtx.fillStyle='rgba(0,212,255,0.85)';fCtx.fill();
-    fCtx.beginPath();fCtx.arc(cx+s*130,cy+35,4,0,Math.PI*2);
-    fCtx.fillStyle='rgba(0,212,255,0.55)';fCtx.fill();
-  });
-  fCtx.restore();
-
-  // Eyes
-  const eyeY=cy-26,eyeGap=40;
-  [-1,1].forEach(side=>{
-    const ex=cx+side*eyeGap;
-    fCtx.save();
-    fCtx.beginPath();fCtx.ellipse(ex,eyeY-2,26,13,0,0,Math.PI*2);
-    fCtx.fillStyle='rgba(30,10,0,0.3)';fCtx.fill();
-    fCtx.beginPath();fCtx.ellipse(ex,eyeY,20,13*eyeOpen,0,0,Math.PI*2);
-    fCtx.fillStyle='#fff8f0';fCtx.fill();
-    fCtx.beginPath();fCtx.ellipse(ex+pupilOffX*.3,eyeY+pupilOffY*.2,13,13*eyeOpen,0,0,Math.PI*2);
-    const ig=fCtx.createRadialGradient(ex+pupilOffX*.3,eyeY+pupilOffY*.2,0,ex+pupilOffX*.3,eyeY,13);
-    ig.addColorStop(0,'#2d6060');ig.addColorStop(.6,'#1a3535');ig.addColorStop(1,'#0a1818');
-    fCtx.fillStyle=ig;fCtx.fill();
-    fCtx.beginPath();fCtx.ellipse(ex+pupilOffX*.3,eyeY+pupilOffY*.2,6,6*eyeOpen,0,0,Math.PI*2);
-    fCtx.fillStyle='#050808';fCtx.fill();
-    fCtx.beginPath();fCtx.ellipse(ex+pupilOffX*.3,eyeY,13,13*eyeOpen,0,0,Math.PI*2);
-    fCtx.strokeStyle='rgba(0,212,255,0.35)';fCtx.lineWidth=1.5;fCtx.stroke();
-    fCtx.beginPath();fCtx.ellipse(ex+5,eyeY-4*eyeOpen,4,3*eyeOpen,-.4,0,Math.PI*2);
-    fCtx.fillStyle='rgba(255,255,255,0.8)';fCtx.fill();
-    fCtx.strokeStyle='#120800';fCtx.lineWidth=1.8;fCtx.lineCap='round';
-    for(let i=-3;i<=3;i++){
-      fCtx.beginPath();fCtx.moveTo(ex+i*5.5,eyeY-13*eyeOpen);fCtx.lineTo(ex+i*5.5+i*1,eyeY-19*eyeOpen);fCtx.stroke();
-    }
-    fCtx.restore();
-  });
-
-  // Eyebrows
-  fCtx.save();
-  const browY=eyeY-28,browLift=isSpeaking?-2:0;
-  [-1,1].forEach(side=>{
-    const bx=cx+side*eyeGap;
-    fCtx.beginPath();fCtx.moveTo(bx-22,browY+browLift+4);fCtx.quadraticCurveTo(bx,browY+browLift-3,bx+22,browY+browLift+5);
-    fCtx.strokeStyle='#2a1505';fCtx.lineWidth=3.5;fCtx.lineCap='round';fCtx.stroke();
-  });
-  fCtx.restore();
-
-  // Nose
-  fCtx.save();
-  fCtx.strokeStyle='rgba(150,80,30,0.3)';fCtx.lineWidth=1.8;fCtx.lineCap='round';
-  fCtx.beginPath();fCtx.moveTo(cx-6,cy);fCtx.quadraticCurveTo(cx-13,cy+18,cx-8,cy+22);
-  fCtx.moveTo(cx+6,cy);fCtx.quadraticCurveTo(cx+13,cy+18,cx+8,cy+22);
-  fCtx.stroke();
-  fCtx.restore();
-
-  // Lips
-  const lipY=cy+56,lipW=35,openH=mouthOpen*15;
-  fCtx.save();
-  fCtx.beginPath();
-  fCtx.moveTo(cx-lipW,lipY);fCtx.quadraticCurveTo(cx-18,lipY-8,cx-5,lipY-4);
-  fCtx.quadraticCurveTo(cx,lipY-10,cx+5,lipY-4);fCtx.quadraticCurveTo(cx+18,lipY-8,cx+lipW,lipY);
-  fCtx.quadraticCurveTo(cx,lipY+openH*.3,cx-lipW,lipY);
-  fCtx.fillStyle=isSpeaking?'#c0605a':'#b05555';fCtx.fill();
-  fCtx.beginPath();
-  fCtx.moveTo(cx-lipW,lipY);fCtx.quadraticCurveTo(cx,lipY+13+openH,cx+lipW,lipY);
-  fCtx.quadraticCurveTo(cx,lipY+6+openH*.4,cx-lipW,lipY);
-  fCtx.fillStyle='#c86860';fCtx.fill();
-  if(mouthOpen>.1){
-    fCtx.beginPath();fCtx.ellipse(cx,lipY+openH*.4,lipW-5,openH*.5,0,0,Math.PI*2);
-    fCtx.fillStyle='#1a0505';fCtx.fill();
-    if(mouthOpen>.3){
-      fCtx.beginPath();fCtx.ellipse(cx,lipY+openH*.2,lipW-10,openH*.22,0,0,Math.PI*2);
-      fCtx.fillStyle='rgba(255,248,240,0.7)';fCtx.fill();
-    }
-  }
-  fCtx.restore();
-
-  // Blush
-  fCtx.save();
-  const bO=isSpeaking?.12:.07;
-  [-1,1].forEach(s=>{
-    const bx=cx+s*78;
-    const bg=fCtx.createRadialGradient(bx,cy+34,0,bx,cy+34,28);
-    bg.addColorStop(0,`rgba(220,100,80,${bO})`);bg.addColorStop(1,'transparent');
-    fCtx.fillStyle=bg;fCtx.beginPath();fCtx.arc(bx,cy+34,28,0,Math.PI*2);fCtx.fill();
-  });
-  fCtx.restore();
-
-  // Neck
-  fCtx.save();
-  fCtx.beginPath();
-  fCtx.moveTo(cx-38,cy+148);fCtx.quadraticCurveTo(cx,cy+165,cx+38,cy+148);
-  fCtx.lineTo(cx+55,cy+200);fCtx.quadraticCurveTo(cx,cy+220,cx-55,cy+200);fCtx.closePath();
-  fCtx.fillStyle='#d4956a';fCtx.fill();
-  fCtx.restore();
-
-  requestAnimationFrame(drawFace);
-}
-requestAnimationFrame(drawFace);
-
-// ─── Mini feed canvas ───
-(function(){
-  const cv=document.getElementById('feedCanvas');
-  if(!cv)return;
-  cv.width=cv.offsetWidth*2;cv.height=cv.offsetHeight*2;
-  const ctx=cv.getContext('2d');
-  let pts=[],t=0;
-  function draw(){
-    const w=cv.width,h=cv.height;
-    ctx.fillStyle='rgba(0,0,8,0.4)';ctx.fillRect(0,0,w,h);
-    t+=.05;
-    const v=isSpeaking?Math.sin(t*3)*.4+.5:isListening?Math.random()*.3+.1:Math.sin(t)*.08+.12;
-    pts.push(v);if(pts.length>w)pts.shift();
-    ctx.strokeStyle='rgba(0,212,255,0.7)';ctx.lineWidth=1.5;ctx.beginPath();
-    pts.forEach((p,i)=>{const y=h-(p*(h*.8)+h*.1);i===0?ctx.moveTo(i,y):ctx.lineTo(i,y)});
-    ctx.stroke();
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-// ─── Waveform ───
-setInterval(()=>{
-  document.querySelectorAll('.wave-bar').forEach(b=>{
-    b.style.height=(isSpeaking||isListening?3+Math.random()*18:2+Math.random()*4)+'px';
-  });
-},110);
-
-// ─── Session timer ───
-function updateTimer(){
-  if(!sessionStart)return;
-  const s=Math.floor((Date.now()-sessionStart)/1000);
-  const el=document.getElementById('sessionTime');
-  if(el)el.innerHTML=`<strong>${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}</strong>Duration`;
-}
-setInterval(updateTimer,1000);
-
-// ─── Mouth animation ───
-function animateMouth(){
-  if(!isSpeaking){mouthTarget=0;return}
-  mouthTarget=.15+Math.random()*.85;
-  setTimeout(animateMouth,60+Math.random()*120);
-}
-
-// ═══ VOICES ═══
-function loadVoices(){voices=speechSynthesis.getVoices().filter(v=>v.lang.startsWith('en'))}
-speechSynthesis.onvoiceschanged=loadVoices;loadVoices();
-function getBestVoice(){
-  const pref=['Samantha','Karen','Moira','Fiona','Serena','Victoria','Google UK English Female','Google US English','Zira'];
-  for(const n of pref){const v=voices.find(v=>v.name.includes(n));if(v)return v}
-  return voices[0]||null;
-}
-
-// ═══ TTS CLEANER ═══
-function cleanForSpeech(text){
+// ─── IMPROVED TTS WITH QUEUE MANAGEMENT ───────────────────────
+function cleanForSpeech(text) {
   return text
-    .replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/`(.*?)`/g,'$1').replace(/#{1,6}\s/g,'')
-    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\./g,'$1 $2 $3 $4')
-    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\./g,'$1 $2 $3')
-    .replace(/\b([A-Z])\.([A-Z])\./g,'$1 $2')
-    .replace(/\bUAE\b/g,'the U A E').replace(/\bUSA\b/g,'the U S A').replace(/\bUS\b/g,'U S')
-    .replace(/\bLLC\b/g,'L L C').replace(/\bLLP\b/g,'L L P')
-    .replace(/\bFEMA\b/g,'F E M A').replace(/\bGST\b/g,'G S T').replace(/\bVAT\b/g,'V A T')
-    .replace(/\bIRS\b/g,'I R S').replace(/\bITR\b/g,'I T R')
-    .replace(/\bI\.T\.\b/g,'I T').replace(/\bIT firm\b/gi,'tech firm').replace(/\bIT company\b/gi,'tech company')
-    .replace(/\$(\d+\.?\d*)B\b/g,'$$$1 billion').replace(/\$(\d+\.?\d*)M\b/g,'$$$1 million')
-    .replace(/—/g,', ').replace(/\.\.\./g,', ').replace(/\s+/g,' ').trim();
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/#{1,6}\s/g, '')
+    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\.([A-Z])\./g, '$1 $2 $3 $4')
+    .replace(/\b([A-Z])\.([A-Z])\.([A-Z])\./g, '$1 $2 $3')
+    .replace(/\b([A-Z])\.([A-Z])\./g, '$1 $2')
+    .replace(/\bUAE\b/g, 'the U A E')
+    .replace(/\bUSA\b/g, 'the U S A')
+    .replace(/\bUS\b/g, 'U S')
+    .replace(/\bLLC\b/g, 'L L C')
+    .replace(/\bLLP\b/g, 'L L P')
+    .replace(/\bFEMA\b/g, 'F E M A')
+    .replace(/\bGST\b/g, 'G S T')
+    .replace(/\bVAT\b/g, 'V A T')
+    .replace(/\bIRS\b/g, 'I R S')
+    .replace(/\bITR\b/g, 'I T R')
+    .replace(/\$(\d+\.?\d*)B\b/g, '$$$1 billion')
+    .replace(/\$(\d+\.?\d*)M\b/g, '$$$1 million')
+    .replace(/—/g, ', ')
+    .replace(/\.\.\./g, ', ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
-function speak(text){
-  if(voiceMuted||!text.trim())return Promise.resolve();
-  const cleaned=cleanForSpeech(text);
-  return new Promise(resolve=>{
+function getBestVoice() {
+  const preferred = ['Samantha', 'Karen', 'Moira', 'Fiona', 'Serena', 'Victoria', 'Google UK English Female', 'Google US English', 'Zira'];
+  for (const name of preferred) {
+    const voice = voices.find(v => v.name.includes(name));
+    if (voice) return voice;
+  }
+  return voices.find(v => v.lang.startsWith('en')) || null;
+}
+
+function processSpeechQueue() {
+  if (isProcessingQueue || speechQueue.length === 0) return;
+  if (isSpeaking) return;
+  
+  isProcessingQueue = true;
+  const text = speechQueue.shift();
+  
+  if (!text.trim() || voiceMuted) {
+    isProcessingQueue = false;
+    processSpeechQueue();
+    return;
+  }
+  
+  const cleaned = cleanForSpeech(text);
+  if (speechSynthesis.speaking) {
     speechSynthesis.cancel();
-    const utt=new SpeechSynthesisUtterance(cleaned);
-    const v=getBestVoice();if(v)utt.voice=v;
-    utt.rate=.92;utt.pitch=1.05;utt.volume=1;
-    utt.onstart=()=>{
-      isSpeaking=true;setStatus('speaking');animateMouth();
-      document.getElementById('avatarHex').classList.add('speaking');
-      document.getElementById('avatarGlow').classList.add('speaking');
-    };
-    utt.onend=()=>{
-      isSpeaking=false;mouthTarget=0;
-      document.getElementById('avatarHex').classList.remove('speaking');
-      document.getElementById('avatarGlow').classList.remove('speaking');
-      if(autoMic&&!voiceMuted)setTimeout(()=>{if(!isListening&&!isSpeaking)startListening()},400);
-      else setStatus('ready');
-      resolve();
-    };
-    utt.onerror=()=>{isSpeaking=false;mouthTarget=0;setStatus('ready');resolve()};
-    speechSynthesis.speak(utt);
-  });
-}
-
-function stopSpeaking(){
-  speechSynthesis.cancel();isSpeaking=false;mouthTarget=0;
-  document.getElementById('avatarHex').classList.remove('speaking');
-  document.getElementById('avatarGlow').classList.remove('speaking','listening');
-}
-
-// ═══ SPEECH RECOGNITION ═══
-function initRecognition(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){showErr('Speech recognition requires Chrome');return}
-  recognition=new SR();
-  recognition.continuous=true;recognition.interimResults=true;recognition.lang='en-US';
-  recognition.onresult=e=>{
-    clearTimeout(silenceTimer);
-    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
-    document.getElementById('userLine').textContent='↗ '+transcript;
-    const lastResult=e.results[e.results.length-1];
-    if(lastResult.isFinal){
-      silenceTimer=setTimeout(()=>{
-        const finalText=Array.from(e.results).map(r=>r[0].transcript).join('').trim();
-        if(finalText){stopListening();sendMessage(finalText)}
-      },800);
+  }
+  
+  currentUtterance = new SpeechSynthesisUtterance(cleaned);
+  const voice = getBestVoice();
+  if (voice) currentUtterance.voice = voice;
+  currentUtterance.rate = 0.92;
+  currentUtterance.pitch = 1.05;
+  currentUtterance.volume = 1;
+  
+  currentUtterance.onstart = () => {
+    isSpeaking = true;
+    setStatus('speaking');
+    animateMouth();
+    document.getElementById('avatarHex').classList.add('speaking');
+    document.getElementById('avatarGlow').classList.add('speaking');
+  };
+  
+  currentUtterance.onend = () => {
+    isSpeaking = false;
+    currentUtterance = null;
+    document.getElementById('avatarHex').classList.remove('speaking');
+    document.getElementById('avatarGlow').classList.remove('speaking');
+    mouthTarget = 0;
+    
+    isProcessingQueue = false;
+    
+    // Process next item or auto-start listening
+    if (speechQueue.length > 0) {
+      processSpeechQueue();
     } else {
-      silenceTimer=setTimeout(()=>{
-        const text=Array.from(e.results).map(r=>r[0].transcript).join('').trim();
-        if(text){stopListening();sendMessage(text)}
-      },2000);
-    }
-  };
-  recognition.onerror=e=>{
-    if(e.error==='no-speech'){
-      stopListening();
-      if(autoMic)setTimeout(()=>{if(!isSpeaking&&!isListening)startListening()},1000);
-    } else if(e.error!=='aborted'){
-      showErr('Mic: '+e.error);stopListening();
-    }
-  };
-  recognition.onend=()=>{if(isListening){isListening=false;updateMicUI(false)}};
-}
-
-function updateMicUI(active){
-  document.getElementById('micBtn').classList.toggle('active',active);
-  document.getElementById('avatarGlow').classList.toggle('listening',active);
-  document.getElementById('transcript').classList.toggle('listening',active);
-}
-
-function startListening(){
-  if(isSpeaking||isListening)return;
-  if(!recognition)initRecognition();
-  try{
-    isListening=true;recognition.start();setStatus('listening');updateMicUI(true);
-    document.getElementById('userLine').textContent='';
-  }catch(e){isListening=false}
-}
-
-function stopListening(){
-  clearTimeout(silenceTimer);
-  if(!isListening)return;
-  isListening=false;
-  try{recognition.stop()}catch(e){}
-  updateMicUI(false);setStatus('thinking');
-}
-
-// ═══ API ═══
-async function sendMessage(userText){
-  if(!userText){setStatus('ready');return}
-  history.push({role:'user',content:userText});
-  turns++;
-  document.getElementById('turnNum').textContent=turns;
-  const botLine=document.getElementById('botLine');
-  botLine.textContent='';
-  document.getElementById('userLine').textContent='↗ '+userText;
-
-  let fullReply='',buffer='';
-  let speakingPromise=Promise.resolve();
-  function enqueueSpeech(chunk){const t=chunk.trim();if(!t)return;speakingPromise=speakingPromise.then(()=>speak(t))}
-
-  try{
-    const res=await fetch(WORKER_URL+'/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:buildSystemPrompt(),messages:history})
-    });
-    if(!res.ok){const err=await res.json().catch(()=>({error:{message:res.statusText}}));throw new Error(err.error?.message||res.statusText)}
-
-    const reader=res.body.getReader(),dec=new TextDecoder();
-    while(true){
-      const{done,value}=await reader.read();if(done)break;
-      const lines=dec.decode(value).split('\n').filter(l=>l.startsWith('data: '));
-      for(const line of lines){
-        const raw=line.slice(6);if(raw==='[DONE]')continue;
-        try{
-          const j=JSON.parse(raw);
-          if(j.type==='content_block_delta'&&j.delta?.text){
-            const chunk=j.delta.text;fullReply+=chunk;buffer+=chunk;
-            botLine.textContent=fullReply;
-            botLine.parentElement.scrollTop=botLine.parentElement.scrollHeight;
-            const matches=[...buffer.matchAll(/[^.!?]*[.!?]+\s*/g)];
-            for(const m of matches){enqueueSpeech(m[0]);buffer=buffer.slice(m.index+m[0].length)}
-          }
-        }catch(e){}
+      if (autoMic && !voiceMuted && !isListening) {
+        setTimeout(() => startListening(), 300);
+      } else {
+        setStatus('ready');
       }
     }
-    if(buffer.trim())enqueueSpeech(buffer);
-    await speakingPromise;
-    history.push({role:'assistant',content:fullReply.trim()});
-    if(history.length>24)history=history.slice(-24);
-    updateQualScore(turns);
-  }catch(err){
-    showErr(err.message.length>80?err.message.slice(0,80)+'…':err.message);
-    isSpeaking=false;
-    document.getElementById('avatarHex').classList.remove('speaking');
-    document.getElementById('avatarGlow').classList.remove('speaking','listening');
-    setStatus('ready');history.pop();
+  };
+  
+  currentUtterance.onerror = () => {
+    isSpeaking = false;
+    currentUtterance = null;
+    isProcessingQueue = false;
+    setStatus('ready');
+  };
+  
+  speechSynthesis.speak(currentUtterance);
+}
+
+function speak(text) {
+  if (!text.trim() || voiceMuted) return;
+  speechQueue.push(text);
+  processSpeechQueue();
+}
+
+function stopSpeaking() {
+  speechQueue = [];
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  isSpeaking = false;
+  isProcessingQueue = false;
+  mouthTarget = 0;
+  document.getElementById('avatarHex').classList.remove('speaking');
+  document.getElementById('avatarGlow').classList.remove('speaking');
+  setStatus('ready');
+}
+
+// ─── IMPROVED SPEECH RECOGNITION ──────────────────────────────
+function initRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showErr('Speech recognition requires Chrome or Edge');
+    return false;
+  }
+  
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.maxAlternatives = 1;
+  
+  let finalTranscript = '';
+  let silenceTimeout = null;
+  
+  recognition.onstart = () => {
+    isListening = true;
+    finalTranscript = '';
+    setStatus('listening');
+    updateMicUI(true);
+    document.getElementById('userLine').textContent = '';
+  };
+  
+  recognition.onresult = (event) => {
+    // Clear existing timeout
+    if (silenceTimeout) clearTimeout(silenceTimeout);
+    
+    let interimTranscript = '';
+    let newFinal = '';
+    
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        newFinal += transcript + ' ';
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    
+    if (newFinal) {
+      finalTranscript += newFinal;
+      document.getElementById('userLine').textContent = '↗ ' + finalTranscript;
+    } else if (interimTranscript) {
+      document.getElementById('userLine').textContent = '↗ ' + finalTranscript + interimTranscript + '...';
+    }
+    
+    // Set silence timeout to auto-submit
+    silenceTimeout = setTimeout(() => {
+      if (finalTranscript.trim()) {
+        const userText = finalTranscript.trim();
+        stopListening();
+        sendMessage(userText);
+      } else {
+        // No speech detected, restart listening
+        if (autoMic && !isSpeaking) {
+          stopListening();
+          setTimeout(() => startListening(), 500);
+        }
+      }
+    }, 1200);
+  };
+  
+  recognition.onerror = (event) => {
+    console.error('Recognition error:', event.error);
+    if (event.error === 'no-speech') {
+      // No speech detected, try again if auto mode
+      if (autoMic && !isSpeaking && !voiceMuted) {
+        stopListening();
+        setTimeout(() => startListening(), 500);
+      }
+    } else if (event.error !== 'aborted') {
+      showErr('Mic error: ' + event.error);
+      stopListening();
+    }
+    setStatus('ready');
+  };
+  
+  recognition.onend = () => {
+    isListening = false;
+    updateMicUI(false);
+    if (silenceTimeout) clearTimeout(silenceTimeout);
+    if (!isSpeaking) setStatus('ready');
+  };
+  
+  return true;
+}
+
+function updateMicUI(active) {
+  const micBtn = document.getElementById('micBtn');
+  const avatarGlow = document.getElementById('avatarGlow');
+  const transcript = document.getElementById('transcript');
+  
+  micBtn.classList.toggle('active', active);
+  avatarGlow.classList.toggle('listening', active);
+  transcript.classList.toggle('listening', active);
+}
+
+function startListening() {
+  if (isSpeaking) {
+    // If speaking, wait a moment before listening
+    setTimeout(() => startListening(), 500);
+    return;
+  }
+  if (isListening) return;
+  if (!recognition) {
+    if (!initRecognition()) return;
+  }
+  
+  try {
+    recognition.start();
+  } catch (e) {
+    console.warn('Recognition start error:', e);
+    // Try to restart
+    recognition = null;
+    initRecognition();
+    setTimeout(() => {
+      if (!isListening && !isSpeaking) startListening();
+    }, 300);
   }
 }
 
-function updateQualScore(t){
-  const score=Math.min(100,t*12+(LEAD.company?10:0)+(LEAD.stage&&LEAD.stage!=='Exploring possibilities'?15:0));
-  document.getElementById('qualBar').style.width=score+'%';
-  document.getElementById('qualText').textContent=score<30?'Early — probing':score<55?'Warming up':score<75?'Qualified':'Hot lead';
+function stopListening() {
+  if (!isListening) return;
+  try {
+    recognition.stop();
+  } catch (e) {
+    console.warn('Recognition stop error:', e);
+  }
+  isListening = false;
+  updateMicUI(false);
 }
 
-function setStatus(s){
-  const bar=document.getElementById('statusBar'),text=document.getElementById('statusText');
-  const labels={ready:'READY',listening:'LISTENING',thinking:'PROCESSING',speaking:'TRANSMITTING'};
-  text.textContent=labels[s]||s.toUpperCase();
-  bar.className='status-bar '+s;
-  document.getElementById('statusTime').textContent=new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+// ─── API CALL WITH LEAD TRACKING ──────────────────────────────
+async function sendMessage(userText) {
+  if (!userText.trim()) return;
+  
+  stopListening();
+  setStatus('thinking');
+  
+  history.push({ role: 'user', content: userText });
+  turns++;
+  document.getElementById('turnNum').textContent = turns;
+  
+  const botLine = document.getElementById('botLine');
+  botLine.textContent = '';
+  document.getElementById('userLine').innerHTML = '↗ ' + escapeHtml(userText);
+  
+  let fullReply = '';
+  let speechBuffer = '';
+  
+  try {
+    const response = await fetch(WORKER_URL + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: buildSystemPrompt(),
+        messages: history,
+        leadInfo: LEAD  // Send lead info for backend tracking
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
+      
+      for (const line of lines) {
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+        
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+            const textChunk = parsed.delta.text;
+            fullReply += textChunk;
+            botLine.textContent = fullReply;
+            botLine.parentElement.scrollTop = botLine.parentElement.scrollHeight;
+            
+            speechBuffer += textChunk;
+            // Split on sentence boundaries
+            const sentences = speechBuffer.match(/[^.!?]*[.!?]+/g);
+            if (sentences && sentences.length > 1) {
+              for (let i = 0; i < sentences.length - 1; i++) {
+                speak(sentences[i].trim());
+              }
+              speechBuffer = sentences[sentences.length - 1];
+            }
+          }
+        } catch (e) {}
+      }
+    }
+    
+    if (speechBuffer.trim()) {
+      speak(speechBuffer.trim());
+    }
+    
+    history.push({ role: 'assistant', content: fullReply.trim() });
+    if (history.length > 30) history = history.slice(-30);
+    
+    updateQualScore();
+    
+    // Send conversation update to webhook
+    sendConversationUpdate(userText, fullReply);
+    
+  } catch (err) {
+    console.error('API error:', err);
+    showErr('Connection error. Please try again.');
+    setStatus('ready');
+    botLine.textContent = 'I\'m having trouble connecting. Please refresh and try again.';
+  }
 }
-function showErr(msg){const b=document.getElementById('errBanner');b.textContent='⚠ '+msg;b.style.display='block';setTimeout(()=>b.style.display='none',6000)}
 
-// ═══ INIT ═══
-async function init(){
-  const lt=document.getElementById('loadingText');
-  lt.textContent='Reading your profile...';await new Promise(r=>setTimeout(r,700));
-  lt.textContent='Preparing Dr. CV...';await new Promise(r=>setTimeout(r,900));
-  lt.textContent='Securing connection...';await new Promise(r=>setTimeout(r,600));
+// ─── SEND DATA TO APPS SCRIPT ─────────────────────────────────
+async function sendConversationUpdate(userMessage, botResponse) {
+  try {
+    const payload = {
+      leadId: LEAD.leadId,
+      sessionId: LEAD.sessionId,
+      name: LEAD.name,
+      email: LEAD.email,
+      company: LEAD.company,
+      country: LEAD.country,
+      stage: LEAD.stage,
+      turnNumber: turns,
+      userMessage: userMessage,
+      botResponse: botResponse,
+      timestamp: new Date().toISOString(),
+      qualificationScore: currentScore
+    };
+    
+    // Send to your Apps Script webhook
+    fetch(WEBHOOK_URL + '?action=update', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(e => console.warn('Webhook send failed:', e));
+    
+  } catch (e) {
+    console.warn('Failed to send update:', e);
+  }
+}
+
+async function finalizeLead(score, qualification) {
+  try {
+    const payload = {
+      leadId: LEAD.leadId,
+      sessionId: LEAD.sessionId,
+      name: LEAD.name,
+      email: LEAD.email,
+      company: LEAD.company,
+      country: LEAD.country,
+      stage: LEAD.stage,
+      qualificationScore: score,
+      qualificationLevel: qualification,
+      turnCount: turns,
+      duration: Math.floor((Date.now() - LEAD.startTime) / 1000),
+      conversationHistory: history.slice(-10),
+      timestamp: new Date().toISOString(),
+      action: 'complete'
+    };
+    
+    await fetch(WEBHOOK_URL + '?action=complete', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    // If hot lead, send calendar link
+    if (score >= 70) {
+      showCalendarInvite();
+    }
+    
+  } catch (e) {
+    console.warn('Failed to finalize lead:', e);
+  }
+}
+
+function showCalendarInvite() {
+  const calendarLink = `https://cal.com/connectventures/strategy-call?name=${encodeURIComponent(LEAD.name)}&email=${encodeURIComponent(LEAD.email)}`;
+  
+  // Show popup or embed
+  const botLine = document.getElementById('botLine');
+  botLine.innerHTML = `<div style="background:rgba(0,212,255,0.1); border:1px solid var(--teal); border-radius:8px; padding:12px; margin-top:8px;">
+    <strong>✨ Great news! Based on our conversation, you qualify for a strategy session with our senior advisor.</strong><br>
+    <a href="${calendarLink}" target="_blank" style="color:var(--teal); display:inline-block; margin-top:8px; padding:6px 12px; border:1px solid var(--teal); border-radius:20px; text-decoration:none;">📅 Book Your Strategy Call →</a>
+  </div>`;
+}
+
+// ─── UI UPDATES ───────────────────────────────────────────────
+let currentScore = 0;
+
+function updateQualScore() {
+  // Dynamic scoring based on conversation
+  let score = 20; // Base
+  
+  if (LEAD.company) score += 10;
+  if (LEAD.stage && LEAD.stage !== 'Exploring possibilities') score += 10;
+  if (turns > 3) score += Math.min(25, turns * 3);
+  
+  // Keyword scoring from conversation
+  const conversationText = history.map(h => h.content.toLowerCase()).join(' ');
+  const keywords = {
+    revenue: 8, funding: 8, 'raised': 10, 'million': 12, 'growth': 6,
+    urgent: 12, 'ready': 8, 'budget': 10, 'decision': 8, 'founder': 6,
+    'tax': 5, 'compliance': 5, 'banking': 5, 'entity': 5
+  };
+  
+  for (const [word, points] of Object.entries(keywords)) {
+    if (conversationText.includes(word)) score += points;
+  }
+  
+  currentScore = Math.min(100, score);
+  
+  const qualBar = document.getElementById('qualBar');
+  const qualText = document.getElementById('qualText');
+  
+  qualBar.style.width = currentScore + '%';
+  
+  let label = 'Early — Learning about you';
+  if (currentScore >= 70) label = '🔥 Hot Lead — Ready for advisor';
+  else if (currentScore >= 50) label = 'Warm — Strong potential';
+  else if (currentScore >= 30) label = 'Exploring — Need more info';
+  
+  qualText.textContent = label;
+  
+  // Auto-finalize when score reaches threshold
+  if (currentScore >= 70 && turns >= 5) {
+    finalizeLead(currentScore, label);
+  }
+}
+
+function setStatus(status) {
+  const bar = document.getElementById('statusBar');
+  const text = document.getElementById('statusText');
+  
+  const labels = {
+    ready: 'READY',
+    listening: 'LISTENING',
+    thinking: 'PROCESSING',
+    speaking: 'TRANSMITTING'
+  };
+  
+  text.textContent = labels[status] || status.toUpperCase();
+  bar.className = 'status-bar ' + status;
+  
+  const time = new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('statusTime').textContent = time;
+}
+
+function updateTimer() {
+  if (!sessionStart) return;
+  const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+  const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+  const seconds = (elapsed % 60).toString().padStart(2, '0');
+  document.getElementById('sessionTime').innerHTML = `<strong>${minutes}:${seconds}</strong>Duration`;
+}
+setInterval(updateTimer, 1000);
+
+function showErr(msg) {
+  const banner = document.getElementById('errBanner');
+  banner.textContent = '⚠ ' + msg;
+  banner.style.display = 'block';
+  setTimeout(() => banner.style.display = 'none', 5000);
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// ─── FACE ANIMATION (IMPROVED) ────────────────────────────────
+const faceCanvas = document.getElementById('face');
+const fCtx = faceCanvas.getContext('2d');
+faceCanvas.width = 460;
+faceCanvas.height = 460;
+
+let mouthOpen = 0, mouthTarget = 0;
+let eyeOpen = 1, blinkTimer = 130;
+let headBob = 0, headBobDir = 1, breathPhase = 0;
+let pupilX = 0, pupilY = 0;
+
+function animateMouth() {
+  if (!isSpeaking) {
+    mouthTarget = 0;
+    return;
+  }
+  mouthTarget = 0.2 + Math.random() * 0.8;
+  setTimeout(animateMouth, 60 + Math.random() * 100);
+}
+
+function drawFace() {
+  fCtx.clearRect(0, 0, 460, 460);
+  
+  breathPhase += 0.018;
+  const breathY = Math.sin(breathPhase) * 2;
+  
+  blinkTimer--;
+  if (blinkTimer <= 0) {
+    blinkTimer = Math.random() * 200 + 100;
+    eyeOpen = 0;
+  }
+  eyeOpen = Math.min(1, eyeOpen + 0.15);
+  
+  if (isSpeaking) {
+    headBob += 0.05 * headBobDir;
+    if (Math.abs(headBob) > 2) headBobDir *= -1;
+  } else {
+    headBob *= 0.88;
+  }
+  
+  mouthOpen += (mouthTarget - mouthOpen) * 0.28;
+  
+  const cx = 230, cy = 230 + headBob + breathY;
+  
+  // Face
+  fCtx.beginPath();
+  fCtx.ellipse(cx, cy + 8, 138, 155, 0, 0, Math.PI * 2);
+  const gradient = fCtx.createLinearGradient(cx - 30, cy - 40, cx + 30, cy + 60);
+  gradient.addColorStop(0, '#f5c9a0');
+  gradient.addColorStop(0.4, '#e8b07a');
+  gradient.addColorStop(0.8, '#d4956a');
+  fCtx.fillStyle = gradient;
+  fCtx.fill();
+  
+  // Eyes
+  const eyeY = cy - 26;
+  [-1, 1].forEach(side => {
+    const ex = cx + side * 40;
+    fCtx.beginPath();
+    fCtx.ellipse(ex, eyeY - 2, 26, 13, 0, 0, Math.PI * 2);
+    fCtx.fillStyle = 'rgba(30,10,0,0.3)';
+    fCtx.fill();
+    
+    fCtx.beginPath();
+    fCtx.ellipse(ex, eyeY, 20, 13 * eyeOpen, 0, 0, Math.PI * 2);
+    fCtx.fillStyle = '#fff8f0';
+    fCtx.fill();
+    
+    fCtx.beginPath();
+    fCtx.ellipse(ex + pupilX * 0.3, eyeY + pupilY * 0.2, 13, 13 * eyeOpen, 0, 0, Math.PI * 2);
+    fCtx.fillStyle = '#1a3535';
+    fCtx.fill();
+    
+    fCtx.beginPath();
+    fCtx.ellipse(ex + pupilX * 0.3, eyeY + pupilY * 0.2, 6, 6 * eyeOpen, 0, 0, Math.PI * 2);
+    fCtx.fillStyle = '#050808';
+    fCtx.fill();
+  });
+  
+  // Mouth
+  const lipY = cy + 56;
+  const openH = mouthOpen * 15;
+  fCtx.beginPath();
+  fCtx.moveTo(cx - 35, lipY);
+  fCtx.quadraticCurveTo(cx - 18, lipY - 8, cx - 5, lipY - 4);
+  fCtx.quadraticCurveTo(cx, lipY - 10, cx + 5, lipY - 4);
+  fCtx.quadraticCurveTo(cx + 18, lipY - 8, cx + 35, lipY);
+  fCtx.quadraticCurveTo(cx, lipY + openH * 0.3, cx - 35, lipY);
+  fCtx.fillStyle = isSpeaking ? '#c0605a' : '#b05555';
+  fCtx.fill();
+  
+  if (mouthOpen > 0.1) {
+    fCtx.beginPath();
+    fCtx.ellipse(cx, lipY + openH * 0.4, 30, openH * 0.5, 0, 0, Math.PI * 2);
+    fCtx.fillStyle = '#1a0505';
+    fCtx.fill();
+  }
+  
+  requestAnimationFrame(drawFace);
+}
+drawFace();
+
+// Random pupil movement
+setInterval(() => {
+  if (!isSpeaking && !isListening) {
+    pupilX = (Math.random() - 0.5) * 6;
+    pupilY = (Math.random() - 0.5) * 5;
+  } else {
+    pupilX = (Math.random() - 0.5) * 12;
+    pupilY = (Math.random() - 0.5) * 10;
+  }
+}, 3000);
+
+// ─── WAVEFORM ANIMATION ───────────────────────────────────────
+setInterval(() => {
+  document.querySelectorAll('.wave-bar').forEach(bar => {
+    const intensity = (isSpeaking || isListening) ? (Math.random() * 18 + 3) : (Math.random() * 4 + 2);
+    bar.style.height = intensity + 'px';
+  });
+}, 100);
+
+// ─── VOICE LOADING ────────────────────────────────────────────
+function loadVoices() {
+  voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+// ─── INITIALIZATION ───────────────────────────────────────────
+async function init() {
+  const loadingText = document.getElementById('loadingText');
+  
+  loadingText.textContent = 'Loading your profile...';
+  await new Promise(r => setTimeout(r, 600));
+  
+  loadingText.textContent = 'Initializing Dr. CV...';
+  await new Promise(r => setTimeout(r, 800));
+  
+  loadingText.textContent = 'Securing connection...';
+  await new Promise(r => setTimeout(r, 500));
+  
   document.getElementById('loadingScreen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
-  sessionStart=Date.now();
-  initRecognition();loadVoices();
-
-  document.getElementById('infoName').textContent=LEAD.name||'—';
-  document.getElementById('infoCompany').textContent=LEAD.company||'—';
-  document.getElementById('infoCountry').textContent=LEAD.country||'—';
-  document.getElementById('infoStage').textContent=LEAD.stage||'—';
-  document.getElementById('leadBadge').textContent=LEAD.name?(LEAD.name+(LEAD.company?' · '+LEAD.company:'')):'Guest Session';
-
-  const firstName=LEAD.name?LEAD.name.split(' ')[0]:'';
-  let opener;
-  if(firstName&&LEAD.country&&LEAD.stage){
-    opener=`Hi ${firstName}! Great to connect. I can see you're looking at expanding to ${LEAD.country} and you're currently at the ${LEAD.stage} stage — that's a really good time to get the structure right. Quick question — what's your biggest concern right now? Is it the entity setup, the tax side, or getting banking in place?`;
-  }else if(firstName){
-    opener=`Hi ${firstName}, great to connect! I'm Dr. CV, your global expansion strategist at Comply Globally. I can see you've shared some details with us already. What's the most pressing challenge you're trying to solve right now?`;
-  }else{
-    opener=`Hi, welcome to your Comply Globally strategy session. I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
+  
+  sessionStart = Date.now();
+  initRecognition();
+  loadVoices();
+  
+  // Display lead info
+  document.getElementById('infoName').textContent = LEAD.name || 'Guest';
+  document.getElementById('infoCompany').textContent = LEAD.company || '—';
+  document.getElementById('infoCountry').textContent = LEAD.country || '—';
+  document.getElementById('infoStage').textContent = LEAD.stage || '—';
+  document.getElementById('infoSessionId').textContent = LEAD.sessionId.slice(-8);
+  document.getElementById('leadBadge').textContent = LEAD.name ? 
+    (LEAD.name + (LEAD.company ? ' · ' + LEAD.company : '')) : 'Guest';
+  
+  // Build personalized greeting
+  const firstName = LEAD.name ? LEAD.name.split(' ')[0] : '';
+  let greeting;
+  
+  if (firstName && LEAD.country && LEAD.stage && LEAD.stage !== 'Exploring possibilities') {
+    greeting = `Hi ${firstName}! Great to connect. I see you're looking at expanding to ${LEAD.country} and you're at the ${LEAD.stage} stage — that's a really good time to get the structure right. Quick question — what's your biggest concern right now? Is it the entity setup, the tax side, or getting banking in place?`;
+  } else if (firstName && LEAD.country) {
+    greeting = `Hi ${firstName}! Thanks for joining. I see you're interested in ${LEAD.country} expansion. What's the main challenge you're facing with global growth right now?`;
+  } else if (firstName) {
+    greeting = `Hi ${firstName}, great to have you here! I'm Dr. CV, your global expansion strategist. Tell me a bit about your business — what markets are you looking at?`;
+  } else {
+    greeting = `Welcome to your Comply Globally strategy session. I'm Dr. CV. What kind of business are you running, and which markets are you looking to expand into?`;
   }
-
-  history.push({role:'assistant',content:opener});
-  document.getElementById('botLine').textContent=opener;
+  
+  history.push({ role: 'assistant', content: greeting });
+  document.getElementById('botLine').textContent = greeting;
+  
   setStatus('speaking');
-  await speak(opener);
+  await speak(greeting);
 }
 
-// ═══ EVENTS ═══
-document.getElementById('micBtn').addEventListener('click',()=>{
-  if(isListening)stopListening();
-  else{if(isSpeaking)stopSpeaking();startListening()}
-});
-
-document.getElementById('autoBadge').addEventListener('click',function(){
-  autoMic=!autoMic;
-  this.textContent='AUTO-MIC: '+(autoMic?'ON':'OFF');
-  this.classList.toggle('off',!autoMic);
-  document.getElementById('hintText').textContent=autoMic
-    ?'Mic opens automatically after Dr. CV speaks · Space to speak'
-    :'Click mic or press Space to speak';
-});
-
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  history=[];turns=0;stopSpeaking();clearTimeout(silenceTimer);
-  document.getElementById('userLine').textContent='';
-  document.getElementById('botLine').textContent='Session reset.';
-  document.getElementById('turnNum').textContent='0';
-  document.getElementById('qualBar').style.width='0%';
-  document.getElementById('qualText').textContent='Assessing...';
-  document.getElementById('avatarGlow').className='avatar-glow';
-  setStatus('ready');
-  setTimeout(()=>init(),500);
-});
-
-let muteOn=false;
-document.getElementById('muteBtn').addEventListener('click',function(){
-  muteOn=!muteOn;voiceMuted=muteOn;
-  this.style.color=muteOn?'var(--teal)':'';
-  this.style.borderColor=muteOn?'var(--teal)':'';
-  if(muteOn)stopSpeaking();
-});
-
-document.addEventListener('keydown',e=>{
-  if(e.code==='Space'&&!e.target.matches('input,textarea,select')){
-    e.preventDefault();
-    if(isSpeaking){stopSpeaking();startListening()}
-    else if(isListening)stopListening();
-    else startListening();
+// ─── EVENT HANDLERS ───────────────────────────────────────────
+document.getElementById('micBtn').addEventListener('click', () => {
+  if (isListening) {
+    stopListening();
+  } else {
+    if (isSpeaking) stopSpeaking();
+    startListening();
   }
 });
 
+document.getElementById('autoBadge').addEventListener('click', function() {
+  autoMic = !autoMic;
+  this.textContent = 'AUTO-MIC: ' + (autoMic ? 'ON' : 'OFF');
+  this.classList.toggle('off', !autoMic);
+  document.getElementById('hintText').textContent = autoMic ?
+    'Mic opens automatically after Dr. CV speaks · Space to speak' :
+    'Click mic or press Space to speak';
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  history = [];
+  turns = 0;
+  speechQueue = [];
+  stopSpeaking();
+  document.getElementById('userLine').textContent = '';
+  document.getElementById('botLine').textContent = 'Session reset. Starting fresh...';
+  document.getElementById('turnNum').textContent = '0';
+  document.getElementById('qualBar').style.width = '0%';
+  document.getElementById('qualText').textContent = 'Assessing...';
+  setStatus('ready');
+  setTimeout(() => init(), 800);
+});
+
+let muteState = false;
+document.getElementById('muteBtn').addEventListener('click', function() {
+  muteState = !muteState;
+  voiceMuted = muteState;
+  this.style.color = muteState ? 'var(--teal)' : '';
+  this.style.borderColor = muteState ? 'var(--teal)' : '';
+  if (muteState) stopSpeaking();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && !e.target.matches('input,textarea,select,button')) {
+    e.preventDefault();
+    if (isSpeaking) {
+      stopSpeaking();
+      startListening();
+    } else if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  }
+});
+
+// Start everything
 init();
 </script>
 </body>
