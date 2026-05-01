@@ -275,8 +275,8 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
     <div class="end-icon">✦</div>
     <div class="end-title">Session Complete</div>
     <div class="end-sub">Thank you for speaking with Dr. CV</div>
-    <div class="end-msg">Our advisory team will review your conversation and reach out within one business day. You are also welcome to schedule a dedicated strategy call with one of our senior advisors at your convenience.</div>
-    <a href="#" class="end-cta" id="endCalBtn" target="_blank">Schedule a Strategy Call</a>
+    <div class="end-msg" id="endMsg">Our advisory team will review your conversation and reach out within one business day.</div>
+    <a href="#" class="end-cta" id="endCalBtn" target="_blank" style="display:none;">Schedule a Strategy Call →</a>
     <div class="end-rule-bottom"></div>
   </div>
 </div>
@@ -828,10 +828,26 @@ async function pushScoreToSheet(data){
 // ════════════════════════════════════════════════════════
 // END CARD
 // ════════════════════════════════════════════════════════
+const CAL_URL = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
+const SCORE_THRESHOLD = 60;
+
 function showEndCard(){
   stopSpeaking(); stopRecog();
-  const calUrl=`https://cal.com/connectventures/strategy-call?name=${encodeURIComponent(LEAD.name)}&email=${encodeURIComponent(LEAD.email)}`;
-  document.getElementById('endCalBtn').href=calUrl;
+  const btn = document.getElementById('endCalBtn');
+  const msg = document.getElementById('endMsg');
+  if(totalScore >= SCORE_THRESHOLD){
+    // Qualified — show booking link with pre-filled details
+    const calUrl = CAL_URL
+      + '?name=' + encodeURIComponent(LEAD.name)
+      + '&email=' + encodeURIComponent(LEAD.email);
+    btn.href = calUrl;
+    btn.style.display = 'block';
+    msg.textContent = "Great news — based on our conversation, you’re a strong fit. Book a call with our senior advisor below and we’ll pick up right where we left off.";
+  } else {
+    // Not yet qualified — no booking link, just a warm close
+    btn.style.display = 'none';
+    msg.textContent = "Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
+  }
   document.getElementById('endCard').classList.add('show');
 }
 
