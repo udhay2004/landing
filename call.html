@@ -9,16 +9,17 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --ink:#0a0a0e;
-  --deep:#06060a;
-  --card:#0f0f16;
-  --border:rgba(210,185,140,.1);
-  --gold:#c9a96e;
-  --gold2:#e8d5a3;
+  --ink:#04080f;
+  --deep:#030610;
+  --card:#080e1a;
+  --border:rgba(80,160,255,.1);
+  --blue:#3b82f6;
+  --blue2:#60a5fa;
+  --blue3:#93c5fd;
   --silver:#8a9bb5;
-  --text:#e8e2d4;
-  --muted:#5a5870;
-  --dim:#2a2840;
+  --text:#e4ecf8;
+  --muted:#4a5870;
+  --dim:#0e1a2e;
   --danger:#d4606a;
   --serif:'Cormorant Garamond',serif;
   --sans:'Montserrat',sans-serif;
@@ -32,16 +33,16 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--border);}
 .logo-wrap{display:flex;align-items:center;gap:14px;}
-.logo-mark{width:34px;height:34px;border:1px solid var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.logo-mark{width:34px;height:34px;border:1px solid var(--blue);border-radius:4px;display:flex;align-items:center;justify-content:center;}
 .logo-text{display:flex;flex-direction:column;gap:1px;}
-.logo-name{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:.08em;color:var(--gold);}
+.logo-name{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:.08em;color:var(--blue2);}
 .logo-sub{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
 .session-badge{display:flex;align-items:center;gap:10px;}
 .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .4s,box-shadow .4s;}
 .badge-dot.live  {background:#4a9;box-shadow:0 0 8px rgba(68,170,136,.6);animation:breathe 2.4s ease infinite;}
 .badge-dot.listen{background:var(--danger);box-shadow:0 0 8px rgba(212,96,106,.6);animation:breathe .9s ease infinite;}
-.badge-dot.think {background:var(--gold);box-shadow:0 0 8px rgba(201,169,110,.6);animation:breathe 1.2s ease infinite;}
-.badge-dot.talk  {background:var(--gold2);box-shadow:0 0 10px rgba(232,213,163,.5);animation:breathe .6s ease infinite;}
+.badge-dot.think {background:var(--blue);box-shadow:0 0 8px rgba(59,130,246,.6);animation:breathe 1.2s ease infinite;}
+.badge-dot.talk  {background:var(--blue2);box-shadow:0 0 10px rgba(96,165,250,.5);animation:breathe .6s ease infinite;}
 @keyframes breathe{0%,100%{opacity:1}50%{opacity:.3}}
 .badge-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
 .session-timer{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;min-width:40px;text-align:right;}
@@ -53,45 +54,45 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 /* Orbital rings */
 .orbital{position:relative;width:300px;height:300px;flex-shrink:0;}
 .orb-ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
-.orb-ring.r1{width:300px;height:300px;border:1px solid rgba(201,169,110,.07);animation:orbspin 55s linear infinite;}
-.orb-ring.r2{width:254px;height:254px;border:1px solid rgba(201,169,110,.11);animation:orbspin 38s linear infinite reverse;}
-.orb-ring.r3{width:208px;height:208px;border:1px solid rgba(138,155,181,.06);animation:orbspin 24s linear infinite;}
+.orb-ring.r1{width:300px;height:300px;border:1px solid rgba(59,130,246,.07);animation:orbspin 55s linear infinite;}
+.orb-ring.r2{width:254px;height:254px;border:1px solid rgba(59,130,246,.11);animation:orbspin 38s linear infinite reverse;}
+.orb-ring.r3{width:208px;height:208px;border:1px solid rgba(96,165,250,.06);animation:orbspin 24s linear infinite;}
 .orb-ring::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;top:50%;left:-2.5px;transform:translateY(-50%);}
-.orb-ring.r1::after{background:var(--gold);box-shadow:0 0 6px var(--gold);}
-.orb-ring.r2::after{background:var(--gold2);box-shadow:0 0 5px var(--gold2);}
+.orb-ring.r1::after{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.orb-ring.r2::after{background:var(--blue2);box-shadow:0 0 5px var(--blue2);}
 .orb-ring.r3::after{background:var(--silver);box-shadow:0 0 4px var(--silver);}
 @keyframes orbspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 
 /* Face */
 .face-wrap{position:absolute;width:172px;height:172px;top:50%;left:50%;transform:translate(-50%,-50%);}
 #waveCanvas{position:absolute;inset:0;border-radius:50%;}
-.face{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(145deg,#12121e,#0a0a14);border:1px solid rgba(201,169,110,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:inset 0 1px 0 rgba(201,169,110,.06),0 0 60px rgba(201,169,110,.04);}
-.face-initials{font-family:var(--serif);font-size:36px;font-weight:300;font-style:italic;color:var(--gold);line-height:1;}
-.face-rule{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.face{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(145deg,#08101e,#040c18);border:1px solid rgba(59,130,246,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:inset 0 1px 0 rgba(59,130,246,.06),0 0 60px rgba(59,130,246,.06);}
+.face-initials{font-family:var(--serif);font-size:36px;font-weight:300;font-style:italic;color:var(--blue2);line-height:1;}
+.face-rule{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .face-title{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
 
 /* Identity */
 .identity{text-align:center;}
 .id-name{font-family:var(--serif);font-size:32px;font-weight:300;letter-spacing:.06em;color:var(--text);margin-bottom:8px;}
-.id-title{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
+.id-title{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--blue2);text-transform:uppercase;margin-bottom:4px;}
 .id-firm{font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
-.id-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto;}
+.id-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin:0 auto;}
 
-/* Session strip */
+/* Session strip — only name, market, duration */
 .session-info{display:flex;align-items:center;gap:28px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .si-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
 .si-value{color:var(--text);font-size:11px;}
 .si-sep{width:1px;height:28px;background:var(--border);}
 
 /* CONTROLS */
-.controls{display:flex;align-items:center;justify-content:center;gap:24px;border-top:1px solid var(--border);background:rgba(6,6,10,.95);backdrop-filter:blur(40px);position:relative;z-index:2;}
+.controls{display:flex;align-items:center;justify-content:center;gap:24px;border-top:1px solid var(--border);background:rgba(3,6,16,.95);backdrop-filter:blur(40px);position:relative;z-index:2;}
 .ctrl{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;outline:none;}
-.ctrl:hover{border-color:rgba(201,169,110,.4);color:var(--gold);transform:scale(1.06);}
+.ctrl:hover{border-color:rgba(59,130,246,.4);color:var(--blue2);transform:scale(1.06);}
 .ctrl.active{border-color:rgba(212,96,106,.4);color:var(--danger);}
 .mic-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
-.mic-pulse{position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(201,169,110,.15);pointer-events:none;}
-.mic-btn{width:62px;height:62px;border-radius:50%;border:1px solid rgba(201,169,110,.35);background:linear-gradient(145deg,rgba(201,169,110,.08),rgba(201,169,110,.03));color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;outline:none;transition:all .3s;position:relative;z-index:1;}
-.mic-btn:hover{border-color:rgba(201,169,110,.6);}
+.mic-pulse{position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(59,130,246,.15);pointer-events:none;}
+.mic-btn{width:62px;height:62px;border-radius:50%;border:1px solid rgba(59,130,246,.35);background:linear-gradient(145deg,rgba(59,130,246,.08),rgba(59,130,246,.03));color:var(--blue2);cursor:pointer;display:flex;align-items:center;justify-content:center;outline:none;transition:all .3s;position:relative;z-index:1;}
+.mic-btn:hover{border-color:rgba(59,130,246,.6);}
 .mic-btn.recording{border-color:rgba(212,96,106,.6);background:linear-gradient(145deg,rgba(212,96,106,.12),rgba(212,96,106,.04));color:var(--danger);}
 .mic-wrap.recording .mic-pulse{animation:mpulse 1.6s ease infinite;border-color:rgba(212,96,106,.35);}
 @keyframes mpulse{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:0}100%{transform:scale(1);opacity:.7}}
@@ -100,31 +101,31 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 /* OVERLAY */
 .overlay{position:fixed;inset:0;z-index:200;background:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .7s ease;}
 .overlay.gone{opacity:0;pointer-events:none;}
-.ov-wordmark{font-family:var(--serif);font-size:36px;font-weight:300;letter-spacing:.12em;color:var(--gold);}
-.ov-rule{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.ov-spinner{width:36px;height:36px;border:1px solid rgba(201,169,110,.15);border-top-color:var(--gold);border-radius:50%;animation:sp .9s linear infinite;}
+.ov-wordmark{font-family:var(--serif);font-size:36px;font-weight:300;letter-spacing:.12em;color:var(--blue2);}
+.ov-rule{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.ov-spinner{width:36px;height:36px;border:1px solid rgba(59,130,246,.15);border-top-color:var(--blue);border-radius:50%;animation:sp .9s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ov-msg{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
 
 /* ALREADY USED */
 .used-screen{position:fixed;inset:0;z-index:300;background:var(--deep);display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;}
 .used-screen.show{display:flex;}
-.used-icon{width:64px;height:64px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.used-icon{width:64px;height:64px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue2);}
 .used-title{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.06em;color:var(--text);}
 .used-sub{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;max-width:360px;line-height:1.9;}
-.used-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.used-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 
 /* END CARD */
-.end-card{position:fixed;inset:0;background:rgba(6,6,10,.96);backdrop-filter:blur(40px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;}
+.end-card{position:fixed;inset:0;background:rgba(3,6,16,.96);backdrop-filter:blur(40px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;}
 .end-card.show{opacity:1;pointer-events:all;}
 .end-inner{width:420px;text-align:center;}
-.end-rule-top{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:36px;}
+.end-rule-top{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin-bottom:36px;}
 .end-icon{font-size:28px;margin-bottom:16px;}
 .end-title{font-family:var(--serif);font-size:28px;font-weight:300;letter-spacing:.06em;margin-bottom:6px;}
 .end-sub{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:28px;}
-.end-msg{font-family:var(--sans);font-size:14px;line-height:1.75;color:rgba(232,226,212,.65);margin-bottom:32px;font-weight:300;}
-.end-cta{display:block;padding:16px 32px;border:1px solid rgba(201,169,110,.5);background:transparent;color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .25s;width:100%;}
-.end-cta:hover{background:rgba(201,169,110,.08);border-color:var(--gold);}
+.end-msg{font-family:var(--sans);font-size:14px;line-height:1.75;color:rgba(228,236,248,.65);margin-bottom:32px;font-weight:300;}
+.end-cta{display:block;padding:16px 32px;border:1px solid rgba(59,130,246,.5);background:transparent;color:var(--blue2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .25s;width:100%;}
+.end-cta:hover{background:rgba(59,130,246,.08);border-color:var(--blue);}
 .end-rule-bottom{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:28px;}
 
 /* TOAST */
@@ -168,7 +169,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
   <header class="topbar">
     <div class="logo-wrap">
       <div class="logo-mark">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1.5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5">
           <circle cx="12" cy="12" r="3"/>
           <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
         </svg>
@@ -208,6 +209,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
         <div class="id-divider"></div>
       </div>
 
+      <!-- Session info: only name + market. No exchanges counter. -->
       <div class="session-info">
         <div class="si-item">
           <span class="si-value" id="siName">—</span>
@@ -220,8 +222,8 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
         </div>
         <div class="si-sep"></div>
         <div class="si-item">
-          <span class="si-value" id="siExchanges">0</span>
-          <span>Exchanges</span>
+          <span class="si-value" id="siDuration">0:00</span>
+          <span>Duration</span>
         </div>
       </div>
     </div>
@@ -234,7 +236,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
       </svg>
     </button>
 
-    <div class="ctrl-label" id="ctrlHintL">Tap to speak</div>
+    <div class="ctrl-label" id="ctrlHintL">Initialising…</div>
 
     <div class="mic-wrap" id="micWrap">
       <button class="mic-btn" id="micBtn">
@@ -246,7 +248,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
       <div class="mic-pulse"></div>
     </div>
 
-    <div class="ctrl-label" id="ctrlHintR" style="text-align:left;">0 exchanges</div>
+    <div class="ctrl-label" id="ctrlHintR" style="text-align:left;">Tap to speak</div>
 
     <button class="ctrl" id="muteBtn" title="Mute AI voice">
       <svg id="muteIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -329,20 +331,24 @@ let voices        = [];
 let initDone      = false;
 let sessionClosed = false;
 
-// TTS ordered queue — array of complete sentence strings
+// TTS ordered queue
 let ttsQueue  = [];
 let ttsBusy   = false;
-let streamBuf = ''; // accumulates streaming tokens until a full sentence is complete
+let streamBuf = '';
 
 // Internal qualification scores — NEVER displayed in UI
 let scores = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
 let totalScore = 0;
 
-// Hard minimum turns before AI may close the session
-const MIN_TURNS = 7;
+// Hard minimum turns before AI may even consider closing
+// 12 turns = thorough qualification conversation (~10-15 min)
+const MIN_TURNS = 12;
+
+// Maximum session length in milliseconds (20 minutes hard cap)
+const MAX_SESSION_MS = 20 * 60 * 1000;
 
 // ════════════════════════════════════════════════════════
-// BACKGROUND — animated mesh
+// BACKGROUND — animated mesh (blue tint)
 // ════════════════════════════════════════════════════════
 (function(){
   const c = document.getElementById('bgCanvas');
@@ -362,16 +368,16 @@ const MIN_TURNS = 7;
   window.addEventListener('resize', resize); resize();
   function draw(){
     x.clearRect(0,0,W,H);
-    x.fillStyle='#06060a'; x.fillRect(0,0,W,H);
+    x.fillStyle='#030610'; x.fillRect(0,0,W,H);
     nodes.forEach(n=>{
       n.x+=n.vx; n.y+=n.vy;
       if(n.x<-n.r) n.x=W+n.r; if(n.x>W+n.r) n.x=-n.r;
       if(n.y<-n.r) n.y=H+n.r; if(n.y>H+n.r) n.y=-n.r;
       const g=x.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
-      g.addColorStop(0,'rgba(201,169,110,.025)'); g.addColorStop(1,'transparent');
+      g.addColorStop(0,'rgba(59,130,246,.028)'); g.addColorStop(1,'transparent');
       x.fillStyle=g; x.fillRect(0,0,W,H);
     });
-    x.strokeStyle='rgba(201,169,110,.022)'; x.lineWidth=1;
+    x.strokeStyle='rgba(59,130,246,.018)'; x.lineWidth=1;
     for(let gx=0;gx<W;gx+=80){x.beginPath();x.moveTo(gx,0);x.lineTo(gx,H);x.stroke();}
     for(let gy=0;gy<H;gy+=80){x.beginPath();x.moveTo(0,gy);x.lineTo(W,gy);x.stroke();}
     requestAnimationFrame(draw);
@@ -391,9 +397,9 @@ function drawWave(){
   wAmp+=(wTarget-wAmp)*.1;
   wPhase+=isSpeaking?.085:isListening?.052:.016;
   const g=wCtx.createLinearGradient(0,0,W,H);
-  if(isSpeaking){g.addColorStop(0,'rgba(201,169,110,.88)');g.addColorStop(1,'rgba(232,213,163,.88)');}
+  if(isSpeaking){g.addColorStop(0,'rgba(59,130,246,.90)');g.addColorStop(1,'rgba(96,165,250,.90)');}
   else if(isListening){g.addColorStop(0,'rgba(212,96,106,.78)');g.addColorStop(1,'rgba(220,130,100,.78)');}
-  else{g.addColorStop(0,'rgba(201,169,110,.13)');g.addColorStop(1,'rgba(138,155,181,.09)');}
+  else{g.addColorStop(0,'rgba(59,130,246,.13)');g.addColorStop(1,'rgba(96,165,250,.09)');}
   wCtx.beginPath();
   for(let i=0;i<=200;i++){
     const a=(i/200)*Math.PI*2-Math.PI/2;
@@ -423,17 +429,19 @@ function startTimer(){
   sessionStart=Date.now(); clearInterval(timerInterval);
   timerInterval=setInterval(()=>{
     const s=Math.floor((Date.now()-sessionStart)/1000);
-    document.getElementById('timer').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    const fmt=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    document.getElementById('timer').textContent=fmt;
+    document.getElementById('siDuration').textContent=fmt;
+
+    // Hard cap: 20 minutes max — gracefully close if still open
+    if(!sessionClosed && (Date.now()-sessionStart) >= MAX_SESSION_MS){
+      forceCloseSession();
+    }
   },1000);
 }
 function renderLeadUI(){
   document.getElementById('siName').textContent=(LEAD.name||'Guest').split(' ')[0];
   document.getElementById('siMarket').textContent=LEAD.country||'—';
-  document.getElementById('siExchanges').textContent='0';
-}
-function updateExchanges(){
-  document.getElementById('siExchanges').textContent=turns;
-  document.getElementById('ctrlHintR').textContent=turns+(turns===1?' exchange':' exchanges');
 }
 function showToast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
@@ -456,13 +464,6 @@ function getBestVoice(){
 
 // ════════════════════════════════════════════════════════
 // TTS — STRICTLY ORDERED, SENTENCE-BY-SENTENCE
-//
-// The core fix for out-of-order speech:
-//   - Stream tokens accumulate in streamBuf
-//   - We ONLY release a sentence to TTS when we see its closing punctuation
-//     followed by whitespace (or end of stream)
-//   - This means TTS always receives complete, ordered sentences
-//   - Never partial fragments that arrive "ahead" of their context
 // ════════════════════════════════════════════════════════
 function cleanForSpeech(t){
   return t
@@ -474,12 +475,7 @@ function cleanForSpeech(t){
     .replace(/\s+/g,' ').trim();
 }
 
-// Split on sentence boundary: [.!?] followed by space or end-of-string
-// Returns {sentences: string[], remainder: string}
 function splitAtSentenceBoundaries(buf){
-  // We look for patterns like "word." followed by space, or end
-  // Avoids splitting on abbreviations like "U.S.A." or "Dr." by requiring
-  // the char before the period to not be a single uppercase letter
   const re=/(.+?[.!?])(?=\s|$)/g;
   const found=[];
   let last=0, m;
@@ -507,9 +503,7 @@ async function speakOne(text){
     let settled=false;
     const done=()=>{if(!settled){settled=true;resolve();}};
     utt.onstart=()=>{isSpeaking=true;setStatus('speaking');setWave('speak');};
-    utt.onend=done;
     utt.onerror=(e)=>{if(!['interrupted','canceled'].includes(e.error))console.warn('TTS:',e.error);done();};
-    // Watchdog: ~80ms per char + 400ms overhead
     const wd=setTimeout(done,400+text.length*80);
     utt.onend=()=>{clearTimeout(wd);done();};
     try{speechSynthesis.speak(utt);}catch(e){done();}
@@ -522,7 +516,7 @@ async function drainTTS(){
   while(ttsQueue.length){
     const s=ttsQueue.shift();
     await speakOne(s);
-    if(ttsQueue.length) await delay(95); // natural inter-sentence breath
+    if(ttsQueue.length) await delay(95);
   }
   ttsBusy=false; isSpeaking=false; setWave('idle');
   if(recogEnabled&&!recogRunning&&!sessionClosed){setStatus('ready');await delay(200);startRecog();}
@@ -547,8 +541,8 @@ function initRecog(){
   try{if(recognition)recognition.abort();}catch(e){}
   recognition=new SR();
   recognition.lang='en-US';
-  recognition.continuous=false;      // false = more reliable
-  recognition.interimResults=false;  // false = clean final results only
+  recognition.continuous=false;
+  recognition.interimResults=false;
   recognition.maxAlternatives=1;
 
   recognition.onstart=()=>{
@@ -606,6 +600,13 @@ function handleUserSpeech(text){
 }
 
 // ════════════════════════════════════════════════════════
+// FAREWELL DETECTION — only close if user says goodbye
+// ════════════════════════════════════════════════════════
+function userSignedOff(text){
+  return /\b(thank you|thanks|goodbye|bye|that('s| is) all|no more questions|we('re| are) done|that covers|i('m| am) good|all good|cheers)\b/i.test(text);
+}
+
+// ════════════════════════════════════════════════════════
 // SYSTEM PROMPT
 // ════════════════════════════════════════════════════════
 function buildSystemPrompt(){
@@ -637,12 +638,15 @@ QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
   Exchange 4: Ask who else in their organisation is involved in making this decision.
   Exchange 5: Ask what success looks like for them 12 months from now.
   Exchange 6: Gently probe on budget readiness — "What kind of investment are you thinking for market entry?"
-  Exchange 7+: Dig deeper into any area that needs more clarity. Do not rush to close.
+  Exchange 7–10: Dig deeper into the most interesting or unclear areas. Probe for specifics.
+  Exchange 11+: Consolidate understanding. Only close once you genuinely have enough.
 
 CLOSING RULES — CRITICAL:
   - You are ABSOLUTELY FORBIDDEN from closing the session before exchange number ${MIN_TURNS}.
-  - Do NOT close because the client is brief — ask a follow-up or dig deeper instead.
+  - Do NOT close because the client is brief or quiet — ask a follow-up or dig deeper instead.
+  - Do NOT close just because there is a pause or silence — wait for the client to respond.
   - Only close when you have genuine, substantive answers on: pain point, timeline, decision makers, success definition, and budget signal.
+  - ONLY close if the client has explicitly said goodbye, thank you, or clearly signalled they are done — OR if the conversation has naturally covered all qualification areas in depth.
   - When you do close: thank them warmly, confirm that the advisory team will follow up personally, and wish them well. Keep it brief and genuine.
   - Never mention links, emails, or next steps beyond "our team will be in touch."
 
@@ -660,7 +664,6 @@ async function sendMessage(userText){
   setStatus('thinking');
   msgHistory.push({role:'user',content:userText});
   turns++;
-  updateExchanges();
   incrementalScore(userText);
   streamBuf='';
 
@@ -694,7 +697,6 @@ async function sendMessage(userText){
             const tok=parsed.delta.text;
             fullReply+=tok;
             streamBuf+=tok;
-            // Only enqueue complete sentences — never partial fragments
             const{sentences,remainder}=splitAtSentenceBoundaries(streamBuf);
             streamBuf=remainder;
             sentences.forEach(s=>{
@@ -705,16 +707,14 @@ async function sendMessage(userText){
       }
     }
 
-    // Stream ended — flush remaining buffer
-    // (last sentence may not have trailing whitespace)
+    // Flush remaining buffer
     const final=cleanForSpeech(streamBuf).trim();
     if(final&&!final.startsWith('SCORE_JSON')){
-      // It's a complete thought even without trailing space
       enqueueSentence(final);
     }
     streamBuf='';
 
-    // Extract score JSON — internal only, never displayed
+    // Extract score JSON
     const sm=fullReply.match(/SCORE_JSON:\s*(\{[\s\S]*?\})/);
     if(sm){
       try{
@@ -722,11 +722,10 @@ async function sendMessage(userText){
         applyScores(sd);
         pushScoreToSheet(sd);
         sessionClosed=true;
-        lockSession();  // prevent re-use
+        lockSession();
         recogEnabled=false;
         stopRecog();
-        // Wait for all TTS to finish, then show end card
-        const waitMs=Math.max(7000, ttsQueue.length*2500+4000);
+        const waitMs=Math.max(8000, ttsQueue.length*2500+5000);
         setTimeout(showEndCard, waitMs);
       }catch(e){console.warn('Score parse:',e);}
     }
@@ -743,6 +742,25 @@ async function sendMessage(userText){
     showToast('Connection issue — please try again.');
     setStatus('ready'); recogEnabled=true; schedRestart(900);
   }
+}
+
+// ════════════════════════════════════════════════════════
+// FORCE CLOSE — hard time-cap (20 min)
+// ════════════════════════════════════════════════════════
+function forceCloseSession(){
+  if(sessionClosed)return;
+  // Synthesise a polite close without API round-trip
+  const closeMsg = "We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
+  stopSpeaking();
+  enqueueSentence(closeMsg);
+  const sd={interest:scores.interest,engagement:scores.engagement,intent:scores.intent,readiness:scores.readiness,summary:'Session reached maximum duration.',level:totalScore>=70?'hot':totalScore>=40?'warm':'cold'};
+  applyScores(sd);
+  pushScoreToSheet(sd);
+  sessionClosed=true;
+  lockSession();
+  recogEnabled=false;
+  stopRecog();
+  setTimeout(showEndCard, 9000);
 }
 
 // ════════════════════════════════════════════════════════
@@ -797,7 +815,6 @@ async function pushScoreToSheet(data){
       body:new URLSearchParams({action:'complete',data:JSON.stringify(payload)})
     });
   }catch(e){
-    // GET fallback
     try{ await fetch(GAS_URL+'?'+new URLSearchParams({action:'complete',data:JSON.stringify(payload)}),{method:'GET',mode:'no-cors'}); }
     catch(e2){console.warn('Sheet score sync:',e2);}
   }
@@ -814,7 +831,7 @@ function showEndCard(){
 }
 
 // ════════════════════════════════════════════════════════
-// INIT
+// INIT — auto-initiate greeting, no click required
 // ════════════════════════════════════════════════════════
 async function init(){
   if(initDone||isLocked())return;
@@ -822,13 +839,12 @@ async function init(){
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
   scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
-  clearInterval(timerInterval); updateExchanges();
+  clearInterval(timerInterval);
 
   const overlay=document.getElementById('overlay');
   overlay.classList.remove('gone');
   document.getElementById('ovMsg').textContent='Loading voices';
 
-  // Wait for voices (Chrome loads async)
   let att=0;
   while(voices.length===0&&att<18){loadVoices();if(voices.length===0)await delay(220);att++;}
 
@@ -840,7 +856,7 @@ async function init(){
 
   renderLeadUI(); startTimer(); initRecog();
 
-  // Personalised greeting
+  // Build personalised greeting
   const first=(LEAD.name||'').split(' ')[0].trim();
   let greeting;
   if(first&&LEAD.country&&LEAD.company){
@@ -855,7 +871,7 @@ async function init(){
 
   msgHistory.push({role:'assistant',content:greeting});
 
-  // Chrome TTS warm-up: silent utterance unlocks audio engine
+  // Warm up Chrome's audio engine with a silent utterance
   await new Promise(resolve=>{
     const wu=new SpeechSynthesisUtterance('\u00A0');
     wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
@@ -863,10 +879,13 @@ async function init(){
   });
   await delay(180);
 
-  // Speak greeting as ordered complete sentences
+  // ── AUTO-INITIATE: speak greeting immediately ──
+  // Split into clean sentences so TTS is ordered and never cuts off
   const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
   gs.forEach(s=>enqueueSentence(s));
   if(gr.trim()) enqueueSentence(gr);
+
+  // Enable recognition AFTER greeting finishes (drainTTS handles this)
   recogEnabled=true;
 }
 
@@ -898,7 +917,7 @@ document.getElementById('muteBtn').addEventListener('click',function(){
 });
 
 // ════════════════════════════════════════════════════════
-// BOOT
+// BOOT — auto-start, no interaction needed
 // ════════════════════════════════════════════════════════
 speechSynthesis.onvoiceschanged=()=>{loadVoices();if(!initDone&&!isLocked())init();};
 setTimeout(()=>{if(!initDone&&!isLocked())init();},900);
