@@ -714,7 +714,13 @@ async function sendMessage(userText){
     }
     streamBuf='';
 
-    // Extract score JSON
+    // Build clean reply (strip SCORE_JSON so it's never stored or spoken)
+    const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
+    msgHistory.push({role:'assistant',content:cleanReply});
+    if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
+    pushTurnToSheet(userText,cleanReply);
+
+    // Extract score JSON — only present on the AI's closing response
     const sm=fullReply.match(/SCORE_JSON:\s*(\{[\s\S]*?\})/);
     if(sm){
       try{
@@ -725,17 +731,16 @@ async function sendMessage(userText){
         lockSession();
         recogEnabled=false;
         stopRecog();
-        const waitMs=Math.max(8000, ttsQueue.length*2500+5000);
-        setTimeout(showEndCard, waitMs);
-      }catch(e){console.warn('Score parse:',e);}
+        // Estimate TTS duration from closing text length (≈88ms/char at rate 0.88)
+        const estimatedSpeechMs=Math.max(7000, cleanReply.length*88+3000);
+        setTimeout(showEndCard, estimatedSpeechMs);
+      }catch(e){
+        console.warn('Score parse failed:',e);
+        recogEnabled=true; // don't leave mic dead if parse fails
+      }
+    } else {
+      recogEnabled=true;
     }
-
-    const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
-    msgHistory.push({role:'assistant',content:cleanReply});
-    if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
-
-    pushTurnToSheet(userText,cleanReply);
-    if(!sessionClosed) recogEnabled=true;
 
   }catch(err){
     console.error('API:',err);
@@ -831,11 +836,21 @@ function showEndCard(){
 }
 
 // ════════════════════════════════════════════════════════
+// SERVER PING — wake Render.com from cold sleep BEFORE
+// the session starts so the first real response is instant
+// ════════════════════════════════════════════════════════
+async function pingServer(){
+  try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }
+  catch(e){ /* ignore — just warming the server up */ }
+}
+
+// ════════════════════════════════════════════════════════
 // INIT — auto-initiate greeting, no click required
 // ════════════════════════════════════════════════════════
 async function init(){
   if(initDone||isLocked())return;
   initDone=true;
+  recogEnabled=false; // CRITICAL: keep false until greeting is fully spoken
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
   scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
@@ -845,11 +860,15 @@ async function init(){
   overlay.classList.remove('gone');
   document.getElementById('ovMsg').textContent='Loading voices';
 
+  // Ping server + load voices in parallel — this wakes Render from sleep
+  // so the user's first spoken response gets a fast reply
   let att=0;
+  const pingPromise=pingServer();
   while(voices.length===0&&att<18){loadVoices();if(voices.length===0)await delay(220);att++;}
 
-  document.getElementById('ovMsg').textContent='Preparing session';
-  await delay(500);
+  document.getElementById('ovMsg').textContent='Connecting to Dr. CV';
+  await pingPromise; // wait for server to wake before hiding overlay
+  await delay(300);
   document.getElementById('ovMsg').textContent='Ready';
   await delay(280);
   overlay.classList.add('gone');
@@ -871,7 +890,7 @@ async function init(){
 
   msgHistory.push({role:'assistant',content:greeting});
 
-  // Warm up Chrome's audio engine with a silent utterance
+  // Warm up Chrome's audio engine with a silent utterance first
   await new Promise(resolve=>{
     const wu=new SpeechSynthesisUtterance('\u00A0');
     wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
@@ -880,12 +899,15 @@ async function init(){
   await delay(180);
 
   // ── AUTO-INITIATE: speak greeting immediately ──
-  // Split into clean sentences so TTS is ordered and never cuts off
+  // recogEnabled stays FALSE here — drainTTS() will set status to 'ready'
+  // and call startRecog() only AFTER the last greeting sentence finishes.
+  // This is what makes Dr. CV speak first without the user doing anything.
   const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
   gs.forEach(s=>enqueueSentence(s));
   if(gr.trim()) enqueueSentence(gr);
 
-  // Enable recognition AFTER greeting finishes (drainTTS handles this)
+  // Set recogEnabled=true NOW so drainTTS's end-of-queue handler will
+  // activate the mic automatically once the greeting is fully spoken.
   recogEnabled=true;
 }
 
