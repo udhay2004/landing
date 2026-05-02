@@ -9,27 +9,15 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --ink:#04080f;
-  --deep:#030610;
-  --card:#080e1a;
-  --border:rgba(80,160,255,.1);
-  --blue:#3b82f6;
-  --blue2:#60a5fa;
-  --blue3:#93c5fd;
-  --silver:#8a9bb5;
-  --text:#e4ecf8;
-  --muted:#4a5870;
-  --dim:#0e1a2e;
-  --danger:#d4606a;
-  --serif:'Cormorant Garamond',serif;
-  --sans:'Montserrat',sans-serif;
-  --mono:'JetBrains Mono',monospace;
+  --ink:#04080f;--deep:#030610;--card:#080e1a;
+  --border:rgba(80,160,255,.1);--blue:#3b82f6;--blue2:#60a5fa;
+  --blue3:#93c5fd;--silver:#8a9bb5;--text:#e4ecf8;--muted:#4a5870;
+  --dim:#0e1a2e;--danger:#d4606a;
+  --serif:'Cormorant Garamond',serif;--sans:'Montserrat',sans-serif;--mono:'JetBrains Mono',monospace;
 }
 html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--sans);overflow:hidden;}
-
 #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .shell{position:relative;z-index:1;display:grid;grid-template-rows:64px 1fr 96px;height:100vh;max-width:1200px;margin:0 auto;}
-
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--border);}
 .logo-wrap{display:flex;align-items:center;gap:14px;}
 .logo-mark{width:34px;height:34px;border:1px solid var(--blue);border-radius:4px;display:flex;align-items:center;justify-content:center;}
@@ -38,17 +26,15 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .logo-sub{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
 .session-badge{display:flex;align-items:center;gap:10px;}
 .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .4s,box-shadow .4s;}
-.badge-dot.live  {background:#4a9;box-shadow:0 0 8px rgba(68,170,136,.6);animation:breathe 2.4s ease infinite;}
+.badge-dot.live{background:#4a9;box-shadow:0 0 8px rgba(68,170,136,.6);animation:breathe 2.4s ease infinite;}
 .badge-dot.listen{background:var(--danger);box-shadow:0 0 8px rgba(212,96,106,.6);animation:breathe .9s ease infinite;}
-.badge-dot.think {background:var(--blue);box-shadow:0 0 8px rgba(59,130,246,.6);animation:breathe 1.2s ease infinite;}
-.badge-dot.talk  {background:var(--blue2);box-shadow:0 0 10px rgba(96,165,250,.5);animation:breathe .6s ease infinite;}
+.badge-dot.think{background:var(--blue);box-shadow:0 0 8px rgba(59,130,246,.6);animation:breathe 1.2s ease infinite;}
+.badge-dot.talk{background:var(--blue2);box-shadow:0 0 10px rgba(96,165,250,.5);animation:breathe .6s ease infinite;}
 @keyframes breathe{0%,100%{opacity:1}50%{opacity:.3}}
 .badge-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
 .session-timer{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;min-width:40px;text-align:right;}
-
 .main{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .stage{display:flex;flex-direction:column;align-items:center;gap:40px;}
-
 .orbital{position:relative;width:300px;height:300px;flex-shrink:0;}
 .orb-ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
 .orb-ring.r1{width:300px;height:300px;border:1px solid rgba(59,130,246,.07);animation:orbspin 55s linear infinite;}
@@ -59,25 +45,21 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .orb-ring.r2::after{background:var(--blue2);box-shadow:0 0 5px var(--blue2);}
 .orb-ring.r3::after{background:var(--silver);box-shadow:0 0 4px var(--silver);}
 @keyframes orbspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-
 .face-wrap{position:absolute;width:172px;height:172px;top:50%;left:50%;transform:translate(-50%,-50%);}
 #waveCanvas{position:absolute;inset:0;border-radius:50%;}
 .face{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(145deg,#08101e,#040c18);border:1px solid rgba(59,130,246,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:inset 0 1px 0 rgba(59,130,246,.06),0 0 60px rgba(59,130,246,.06);}
 .face-initials{font-family:var(--serif);font-size:36px;font-weight:300;font-style:italic;color:var(--blue2);line-height:1;}
 .face-rule{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .face-title{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
-
 .identity{text-align:center;}
 .id-name{font-family:var(--serif);font-size:32px;font-weight:300;letter-spacing:.06em;color:var(--text);margin-bottom:8px;}
 .id-title{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--blue2);text-transform:uppercase;margin-bottom:4px;}
 .id-firm{font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
 .id-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin:0 auto;}
-
 .session-info{display:flex;align-items:center;gap:28px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .si-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
 .si-value{color:var(--text);font-size:11px;}
 .si-sep{width:1px;height:28px;background:var(--border);}
-
 .controls{display:flex;align-items:center;justify-content:center;gap:24px;border-top:1px solid var(--border);background:rgba(3,6,16,.95);backdrop-filter:blur(40px);position:relative;z-index:2;}
 .ctrl{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;outline:none;}
 .ctrl:hover{border-color:rgba(59,130,246,.4);color:var(--blue2);transform:scale(1.06);}
@@ -90,7 +72,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .mic-wrap.recording .mic-pulse{animation:mpulse 1.6s ease infinite;border-color:rgba(212,96,106,.35);}
 @keyframes mpulse{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:0}100%{transform:scale(1);opacity:.7}}
 .ctrl-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;text-align:center;min-width:56px;}
-
 .overlay{position:fixed;inset:0;z-index:200;background:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .7s ease;}
 .overlay.gone{opacity:0;pointer-events:none;}
 .ov-wordmark{font-family:var(--serif);font-size:36px;font-weight:300;letter-spacing:.12em;color:var(--blue2);}
@@ -98,14 +79,12 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .ov-spinner{width:36px;height:36px;border:1px solid rgba(59,130,246,.15);border-top-color:var(--blue);border-radius:50%;animation:sp .9s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ov-msg{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
-
 .used-screen{position:fixed;inset:0;z-index:300;background:var(--deep);display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;}
 .used-screen.show{display:flex;}
 .used-icon{width:64px;height:64px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue2);}
 .used-title{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.06em;color:var(--text);}
 .used-sub{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;max-width:360px;line-height:1.9;}
 .used-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
-
 .end-card{position:fixed;inset:0;background:rgba(3,6,16,.96);backdrop-filter:blur(40px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;}
 .end-card.show{opacity:1;pointer-events:all;}
 .end-inner{width:420px;text-align:center;}
@@ -117,14 +96,15 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .end-cta{display:block;padding:16px 32px;border:1px solid rgba(59,130,246,.5);background:transparent;color:var(--blue2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .25s;width:100%;}
 .end-cta:hover{background:rgba(59,130,246,.08);border-color:var(--blue);}
 .end-rule-bottom{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:28px;}
-
 .toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(212,96,106,.88);color:#fff;padding:10px 24px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;z-index:300;display:none;}
-
-/* sync indicator */
 .sync-dot{position:fixed;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:var(--muted);z-index:500;transition:background .3s,box-shadow .3s;}
 .sync-dot.syncing{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.6);animation:breathe .8s ease infinite;}
 .sync-dot.ok{background:#4a9;box-shadow:0 0 6px rgba(68,170,136,.5);}
 .sync-dot.err{background:var(--danger);box-shadow:0 0 6px rgba(212,96,106,.5);}
+
+/* Mic ready indicator — pulses gently when waiting for user */
+.mic-btn.ready-pulse{animation:readypulse 2s ease infinite;}
+@keyframes readypulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 10px rgba(59,130,246,0)}}
 
 @media(max-width:600px){
   .topbar{padding:0 20px;}
@@ -144,7 +124,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 <body>
 
 <canvas id="bgCanvas"></canvas>
-<div class="sync-dot" id="syncDot" title="Sheet sync status"></div>
+<div class="sync-dot" id="syncDot"></div>
 
 <div class="used-screen" id="usedScreen">
   <div class="used-icon">
@@ -183,9 +163,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
   <div class="main">
     <div class="stage">
       <div class="orbital">
-        <div class="orb-ring r1"></div>
-        <div class="orb-ring r2"></div>
-        <div class="orb-ring r3"></div>
+        <div class="orb-ring r1"></div><div class="orb-ring r2"></div><div class="orb-ring r3"></div>
         <div class="face-wrap">
           <canvas id="waveCanvas" width="172" height="172"></canvas>
           <div class="face">
@@ -195,29 +173,18 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
           </div>
         </div>
       </div>
-
       <div class="identity">
         <div class="id-name">Dr. CV</div>
         <div class="id-title">Global Expansion Strategist</div>
         <div class="id-firm">Comply Globally · Advisory Division</div>
         <div class="id-divider"></div>
       </div>
-
       <div class="session-info">
-        <div class="si-item">
-          <span class="si-value" id="siName">—</span>
-          <span>Client</span>
-        </div>
+        <div class="si-item"><span class="si-value" id="siName">—</span><span>Client</span></div>
         <div class="si-sep"></div>
-        <div class="si-item">
-          <span class="si-value" id="siMarket">—</span>
-          <span>Target Market</span>
-        </div>
+        <div class="si-item"><span class="si-value" id="siMarket">—</span><span>Target Market</span></div>
         <div class="si-sep"></div>
-        <div class="si-item">
-          <span class="si-value" id="siDuration">0:00</span>
-          <span>Duration</span>
-        </div>
+        <div class="si-item"><span class="si-value" id="siDuration">0:00</span><span>Duration</span></div>
       </div>
     </div>
   </div>
@@ -228,9 +195,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
       </svg>
     </button>
-
     <div class="ctrl-label" id="ctrlHintL">Initialising…</div>
-
     <div class="mic-wrap" id="micWrap">
       <button class="mic-btn" id="micBtn">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -240,9 +205,7 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
       </button>
       <div class="mic-pulse"></div>
     </div>
-
     <div class="ctrl-label" id="ctrlHintR" style="text-align:left;">Tap to speak</div>
-
     <button class="ctrl" id="muteBtn" title="Mute AI voice">
       <svg id="muteIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M11 5 6 9H2v6h4l5 4V5z"/>
@@ -275,12 +238,14 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 
 <script>
 // ══════════════════════════════════════════════════════════
-// CONFIG — replace with your actual values
+// CONFIG
 // ══════════════════════════════════════════════════════════
 const WORKER_URL = 'https://drcv.onrender.com';
-
-// ⚠️  PASTE YOUR DEPLOYED GAS URL HERE (the /exec URL, not /dev)
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxSWRzAVZR7lrJnyzt4JpFBSZF_CofA0PGZBeA1lYE2E4m2JU08iqaYRwXa2iwS7z3A8Q/exec';
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbxSWRzAVZR7lrJnyzt4JpFBSZF_CofA0PGZBeA1lYE2E4m2JU08iqaYRwXa2iwS7z3A8Q/exec';
+const CAL_URL    = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
+const SCORE_THRESHOLD = 60;
+const MIN_TURNS  = 12;
+const MAX_SESSION_MS = 20 * 60 * 1000;
 
 // ══════════════════════════════════════════════════════════
 // LEAD PARAMS
@@ -321,6 +286,7 @@ let silenceTimer  = null;
 let voices        = [];
 let initDone      = false;
 let sessionClosed = false;
+let greetingDone  = false;   // ← NEW: tracks if greeting TTS finished
 
 let ttsQueue  = [];
 let ttsBusy   = false;
@@ -329,86 +295,77 @@ let streamBuf = '';
 let scores = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
 let totalScore = 0;
 
-const MIN_TURNS = 12;
-const MAX_SESSION_MS = 20 * 60 * 1000;
-
 // ══════════════════════════════════════════════════════════
-// SYNC INDICATOR
+// SYNC DOT
 // ══════════════════════════════════════════════════════════
 const syncDot = document.getElementById('syncDot');
-function setSyncState(s) {
-  syncDot.className = 'sync-dot ' + s;
+function setSyncState(s){ syncDot.className = 'sync-dot ' + s; }
+
+// ══════════════════════════════════════════════════════════
+// GAS HELPERS
+// ══════════════════════════════════════════════════════════
+function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
+
+function gasGetFallback(action, payload) {
+  if(!hasGAS()) return;
+  const img = new Image();
+  img.src = GAS_URL + '?' + new URLSearchParams({ action, data: JSON.stringify(payload) });
+  img.onerror = ()=>{};
 }
 
-// ══════════════════════════════════════════════════════════
-// GAS SYNC — JSONP-based (bypasses CORS for no-cors mode)
-// Uses image trick + URL params for fire-and-forget writes
-// For reads (admin) we use a proper fetch from the admin page
-// ══════════════════════════════════════════════════════════
-
-// For write operations (update/complete) we use no-cors fetch.
-// GAS deployed as "Anyone, even anonymous" handles these.
-async function gasPost(action, payload) {
-  if (!GAS_URL || GAS_URL.includes('YOUR_DEPLOYMENT')) return;
+async function pushTurnToSheet(userMsg, botMsg){
+  if(!hasGAS()) return;
+  const payload = { leadId: LEAD.leadId, sessionId: LEAD.sessionId, turnNumber: turns, userMessage: userMsg, botResponse: botMsg };
   setSyncState('syncing');
   try {
-    // Encode payload as URL params — works with no-cors
-    const params = new URLSearchParams({
-      action,
-      data: JSON.stringify(payload)
+    await fetch(GAS_URL + '?action=update', {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ action:'update', data: JSON.stringify(payload) }).toString()
     });
-    await fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',          // GAS doesn't send CORS headers on doPost by default
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
-    });
-    setSyncState('ok');
-    setTimeout(() => setSyncState(''), 3000);
-  } catch(e) {
-    console.warn('GAS sync error:', e);
-    setSyncState('err');
-  }
+    setSyncState('ok'); setTimeout(()=>setSyncState(''), 2000);
+  } catch(e){ console.warn('Turn sync failed:', e); setSyncState('err'); }
 }
 
-// For the complete action we also try a GET fallback via JSONP
-// in case the POST is blocked by the browser
-function gasGetFallback(action, payload) {
-  if (!GAS_URL || GAS_URL.includes('YOUR_DEPLOYMENT')) return;
-  const params = new URLSearchParams({ action, data: JSON.stringify(payload) });
-  const url = GAS_URL + '?' + params.toString();
-  // Use an img element — truly fire-and-forget, no CORS issues
-  const img = new Image();
-  img.src = url;
-  img.onerror = () => {}; // expected — GAS returns JSON not an image
+async function pushScoreToSheet(data){
+  if(!hasGAS()) return;
+  const elapsed = Math.floor((Date.now()-sessionStart)/1000);
+  const payload = {
+    leadId: LEAD.leadId, sessionId: LEAD.sessionId,
+    name: LEAD.name, email: LEAD.email, company: LEAD.company, country: LEAD.country,
+    qualificationScore: totalScore, qualificationLevel: data.level||'',
+    duration: elapsed, turnCount: turns, summary: data.summary||'',
+    interest: data.interest||0, engagement: data.engagement||0,
+    intent: data.intent||0, readiness: data.readiness||0
+  };
+  setSyncState('syncing');
+  try {
+    await fetch(GAS_URL + '?action=complete', {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ action:'complete', data: JSON.stringify(payload) }).toString()
+    });
+    setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
+  } catch(e){ gasGetFallback('complete', payload); setSyncState('ok'); setTimeout(()=>setSyncState(''),3000); }
 }
 
 // ══════════════════════════════════════════════════════════
 // BACKGROUND
 // ══════════════════════════════════════════════════════════
 (function(){
-  const c = document.getElementById('bgCanvas');
-  const x = c.getContext('2d');
-  let W, H;
-  const nodes = [];
+  const c=document.getElementById('bgCanvas'), x=c.getContext('2d');
+  let W,H; const nodes=[];
   function resize(){
-    W = c.width = window.innerWidth;
-    H = c.height = window.innerHeight;
-    nodes.length = 0;
-    for(let i=0;i<5;i++) nodes.push({
-      x:Math.random()*W, y:Math.random()*H,
-      vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
-      r:180+Math.random()*220
-    });
+    W=c.width=window.innerWidth; H=c.height=window.innerHeight; nodes.length=0;
+    for(let i=0;i<5;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:180+Math.random()*220});
   }
-  window.addEventListener('resize', resize); resize();
+  window.addEventListener('resize',resize); resize();
   function draw(){
-    x.clearRect(0,0,W,H);
-    x.fillStyle='#030610'; x.fillRect(0,0,W,H);
+    x.clearRect(0,0,W,H); x.fillStyle='#030610'; x.fillRect(0,0,W,H);
     nodes.forEach(n=>{
       n.x+=n.vx; n.y+=n.vy;
-      if(n.x<-n.r) n.x=W+n.r; if(n.x>W+n.r) n.x=-n.r;
-      if(n.y<-n.r) n.y=H+n.r; if(n.y>H+n.r) n.y=-n.r;
+      if(n.x<-n.r)n.x=W+n.r; if(n.x>W+n.r)n.x=-n.r;
+      if(n.y<-n.r)n.y=H+n.r; if(n.y>H+n.r)n.y=-n.r;
       const g=x.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
       g.addColorStop(0,'rgba(59,130,246,.028)'); g.addColorStop(1,'transparent');
       x.fillStyle=g; x.fillRect(0,0,W,H);
@@ -422,15 +379,13 @@ function gasGetFallback(action, payload) {
 })();
 
 // ══════════════════════════════════════════════════════════
-// WAVE VISUALISER
+// WAVE
 // ══════════════════════════════════════════════════════════
-const wCvs = document.getElementById('waveCanvas');
-const wCtx = wCvs.getContext('2d');
-let wPhase=0, wAmp=0, wTarget=0;
+const wCvs=document.getElementById('waveCanvas'), wCtx=wCvs.getContext('2d');
+let wPhase=0,wAmp=0,wTarget=0;
 function drawWave(){
   const W=172,H=172,cx=86,cy=86,r=68;
-  wCtx.clearRect(0,0,W,H);
-  wAmp+=(wTarget-wAmp)*.1;
+  wCtx.clearRect(0,0,W,H); wAmp+=(wTarget-wAmp)*.1;
   wPhase+=isSpeaking?.085:isListening?.052:.016;
   const g=wCtx.createLinearGradient(0,0,W,H);
   if(isSpeaking){g.addColorStop(0,'rgba(59,130,246,.90)');g.addColorStop(1,'rgba(96,165,250,.90)');}
@@ -443,15 +398,14 @@ function drawWave(){
     const px=cx+Math.cos(a)*(r+n),py=cy+Math.sin(a)*(r+n);
     i===0?wCtx.moveTo(px,py):wCtx.lineTo(px,py);
   }
-  wCtx.closePath();
-  wCtx.strokeStyle=g; wCtx.lineWidth=isSpeaking?2:1.2; wCtx.stroke();
+  wCtx.closePath(); wCtx.strokeStyle=g; wCtx.lineWidth=isSpeaking?2:1.2; wCtx.stroke();
   requestAnimationFrame(drawWave);
 }
 drawWave();
 function setWave(s){wTarget=s==='speak'?13:s==='listen'?8:0;}
 
 // ══════════════════════════════════════════════════════════
-// STATUS / UI
+// STATUS
 // ══════════════════════════════════════════════════════════
 function setStatus(s){
   const dm={ready:'live',listening:'listen',thinking:'think',speaking:'talk'};
@@ -468,9 +422,7 @@ function startTimer(){
     const fmt=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
     document.getElementById('timer').textContent=fmt;
     document.getElementById('siDuration').textContent=fmt;
-    if(!sessionClosed && (Date.now()-sessionStart) >= MAX_SESSION_MS){
-      forceCloseSession();
-    }
+    if(!sessionClosed&&(Date.now()-sessionStart)>=MAX_SESSION_MS) forceCloseSession();
   },1000);
 }
 function renderLeadUI(){
@@ -497,7 +449,8 @@ function getBestVoice(){
 }
 
 // ══════════════════════════════════════════════════════════
-// TTS
+// TTS — KEY FIX: speakAll() returns a Promise that resolves
+// only after ALL sentences finish, so init() can await it
 // ══════════════════════════════════════════════════════════
 function cleanForSpeech(t){
   return t
@@ -511,24 +464,13 @@ function cleanForSpeech(t){
 
 function splitAtSentenceBoundaries(buf){
   const re=/(.+?[.!?])(?=\s|$)/g;
-  const found=[];
-  let last=0, m;
-  while((m=re.exec(buf))!==null){
-    found.push(m[1].trim());
-    last=m.index+m[0].length;
-  }
-  const remainder=buf.slice(last).trim();
-  return {sentences:found,remainder};
+  const found=[]; let last=0,m;
+  while((m=re.exec(buf))!==null){ found.push(m[1].trim()); last=m.index+m[0].length; }
+  return {sentences:found, remainder:buf.slice(last).trim()};
 }
 
-function enqueueSentence(text){
-  const clean=cleanForSpeech(text);
-  if(!clean||clean.length<2) return;
-  ttsQueue.push(clean);
-  if(!ttsBusy) drainTTS();
-}
-
-async function speakOne(text){
+// Speaks a single utterance, resolves when done
+function speakOne(text){
   return new Promise(resolve=>{
     if(!text||voiceMuted){resolve();return;}
     const utt=new SpeechSynthesisUtterance(text);
@@ -544,6 +486,24 @@ async function speakOne(text){
   });
 }
 
+// Speaks an array of sentences in sequence, resolves when ALL done
+async function speakAll(sentences){
+  for(const s of sentences){
+    if(sessionClosed) break;
+    await speakOne(s);
+    await delay(90);
+  }
+  isSpeaking=false; setWave('idle');
+}
+
+// Used during conversation (streaming — enqueue style)
+function enqueueSentence(text){
+  const clean=cleanForSpeech(text);
+  if(!clean||clean.length<2) return;
+  ttsQueue.push(clean);
+  if(!ttsBusy) drainTTS();
+}
+
 async function drainTTS(){
   if(ttsBusy)return;
   ttsBusy=true;
@@ -553,8 +513,14 @@ async function drainTTS(){
     if(ttsQueue.length) await delay(95);
   }
   ttsBusy=false; isSpeaking=false; setWave('idle');
-  if(recogEnabled&&!recogRunning&&!sessionClosed){setStatus('ready');await delay(200);startRecog();}
-  else if(!sessionClosed) setStatus('ready');
+  // Only start mic if greeting is fully done
+  if(greetingDone && recogEnabled && !recogRunning && !sessionClosed){
+    setStatus('ready');
+    await delay(300);
+    startRecog();
+  } else if(!sessionClosed){
+    setStatus('ready');
+  }
 }
 
 function stopSpeaking(){
@@ -582,6 +548,7 @@ function initRecog(){
     recogRunning=isListening=true; finalTranscript='';
     setStatus('listening'); setWave('listen');
     document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('micBtn').classList.remove('ready-pulse');
     document.getElementById('micWrap').classList.add('recording');
   };
   recognition.onresult=(e)=>{
@@ -610,12 +577,15 @@ function cleanupRecog(){
   recogRunning=isListening=false; setWave('idle'); clearTimeout(silenceTimer);
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micWrap').classList.remove('recording');
+  // Show ready-pulse when waiting for user
+  if(greetingDone&&!sessionClosed) document.getElementById('micBtn').classList.add('ready-pulse');
 }
 function schedRestart(ms=400){
-  setTimeout(()=>{if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed)startRecog();},ms);
+  setTimeout(()=>{if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone)startRecog();},ms);
 }
 function startRecog(){
-  if(isSpeaking||recogRunning||!recogEnabled||sessionClosed)return;
+  if(isSpeaking||recogRunning||!recogEnabled||sessionClosed||!greetingDone)return;
+  document.getElementById('micBtn').classList.remove('ready-pulse');
   if(!recognition){if(!initRecog())return;}
   try{recognition.start();}catch(e){
     console.warn('recog start:',e.message);
@@ -629,6 +599,7 @@ function stopRecog(){
 }
 function handleUserSpeech(text){
   if(!text.trim()||sessionClosed)return;
+  document.getElementById('micBtn').classList.remove('ready-pulse');
   sendMessage(text);
 }
 
@@ -691,7 +662,6 @@ async function sendMessage(userText){
   turns++;
   incrementalScore(userText);
   streamBuf='';
-
   let fullReply='';
 
   try{
@@ -705,13 +675,11 @@ async function sendMessage(userText){
     const reader=res.body.getReader();
     const decoder=new TextDecoder();
     let raw='';
-
     while(true){
       const{done,value}=await reader.read();
       if(done)break;
       raw+=decoder.decode(value,{stream:true});
-      const lines=raw.split('\n');
-      raw=lines.pop();
+      const lines=raw.split('\n'); raw=lines.pop();
       for(const line of lines){
         if(!line.startsWith('data: '))continue;
         const chunk=line.slice(6).trim();
@@ -720,52 +688,38 @@ async function sendMessage(userText){
           const parsed=JSON.parse(chunk);
           if(parsed.type==='content_block_delta'&&parsed.delta?.text){
             const tok=parsed.delta.text;
-            fullReply+=tok;
-            streamBuf+=tok;
+            fullReply+=tok; streamBuf+=tok;
             const{sentences,remainder}=splitAtSentenceBoundaries(streamBuf);
             streamBuf=remainder;
-            sentences.forEach(s=>{
-              if(!s.includes('SCORE_JSON')) enqueueSentence(s);
-            });
+            sentences.forEach(s=>{ if(!s.includes('SCORE_JSON')) enqueueSentence(s); });
           }
         }catch(e){}
       }
     }
 
     const final=cleanForSpeech(streamBuf).trim();
-    if(final&&!final.startsWith('SCORE_JSON')){
-      enqueueSentence(final);
-    }
+    if(final&&!final.startsWith('SCORE_JSON')) enqueueSentence(final);
     streamBuf='';
 
     const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
     msgHistory.push({role:'assistant',content:cleanReply});
     if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
 
-    // Push turn to sheet
     pushTurnToSheet(userText, cleanReply);
 
-    // Extract score JSON
     const sm=fullReply.match(/SCORE_JSON:\s*(\{[\s\S]*?\})/);
     if(sm){
       try{
         const sd=JSON.parse(sm[1]);
         applyScores(sd);
-        await pushScoreToSheet(sd);   // await so we know it fired before locking
-        sessionClosed=true;
-        lockSession();
-        recogEnabled=false;
-        stopRecog();
-        const estimatedSpeechMs=Math.max(7000, cleanReply.length*88+3000);
-        setTimeout(showEndCard, estimatedSpeechMs);
-      }catch(e){
-        console.warn('Score parse failed:',e);
-        recogEnabled=true;
-      }
+        await pushScoreToSheet(sd);
+        sessionClosed=true; lockSession();
+        recogEnabled=false; stopRecog();
+        setTimeout(showEndCard, Math.max(7000, cleanReply.length*88+3000));
+      }catch(e){ console.warn('Score parse failed:',e); recogEnabled=true; }
     } else {
       recogEnabled=true;
     }
-
   }catch(err){
     console.error('API:',err);
     showToast('Connection issue — please try again.');
@@ -778,17 +732,12 @@ async function sendMessage(userText){
 // ══════════════════════════════════════════════════════════
 async function forceCloseSession(){
   if(sessionClosed)return;
-  const closeMsg = "We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
-  stopSpeaking();
-  enqueueSentence(closeMsg);
+  const closeMsg="We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
+  stopSpeaking(); enqueueSentence(closeMsg);
   const sd={interest:scores.interest,engagement:scores.engagement,intent:scores.intent,readiness:scores.readiness,summary:'Session reached maximum duration.',level:totalScore>=70?'hot':totalScore>=40?'warm':'cold'};
-  applyScores(sd);
-  await pushScoreToSheet(sd);
-  sessionClosed=true;
-  lockSession();
-  recogEnabled=false;
-  stopRecog();
-  setTimeout(showEndCard, 9000);
+  applyScores(sd); await pushScoreToSheet(sd);
+  sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
+  setTimeout(showEndCard,9000);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -809,120 +758,38 @@ function applyScores(data){
 }
 
 // ══════════════════════════════════════════════════════════
-// SHEET SYNC — FIXED
-// The key insight: GAS doPost with no-cors works for writes.
-// But the action param must be passed as a URL query param,
-// not in the body, so GAS's e.parameter.action can read it.
-// ══════════════════════════════════════════════════════════
-function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
-
-async function pushTurnToSheet(userMsg, botMsg){
-  if(!hasGAS()) return;
-  const payload = {
-    leadId:    LEAD.leadId,
-    sessionId: LEAD.sessionId,
-    turnNumber: turns,
-    userMessage: userMsg,
-    botResponse: botMsg
-  };
-  // Pass action as URL param so GAS e.parameter.action works
-  const url = GAS_URL + '?action=update';
-  setSyncState('syncing');
-  try {
-    await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ action: 'update', data: JSON.stringify(payload) }).toString()
-    });
-    setSyncState('ok');
-    setTimeout(() => setSyncState(''), 2000);
-  } catch(e) {
-    console.warn('Turn sync failed:', e);
-    setSyncState('err');
-  }
-}
-
-async function pushScoreToSheet(data){
-  if(!hasGAS()) return;
-  const elapsed = Math.floor((Date.now()-sessionStart)/1000);
-  const payload = {
-    leadId:             LEAD.leadId,
-    sessionId:          LEAD.sessionId,
-    name:               LEAD.name,
-    email:              LEAD.email,
-    company:            LEAD.company,
-    country:            LEAD.country,
-    qualificationScore: totalScore,
-    qualificationLevel: data.level || '',
-    duration:           elapsed,
-    turnCount:          turns,
-    summary:            data.summary || '',
-    interest:           data.interest  || 0,
-    engagement:         data.engagement|| 0,
-    intent:             data.intent    || 0,
-    readiness:          data.readiness || 0
-  };
-
-  setSyncState('syncing');
-
-  // Primary: POST with action in URL param
-  try {
-    await fetch(GAS_URL + '?action=complete', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) }).toString()
-    });
-    setSyncState('ok');
-    setTimeout(() => setSyncState(''), 3000);
-  } catch(e) {
-    // Fallback: GET via image (truly CORS-free, fire-and-forget)
-    console.warn('POST sync failed, trying GET fallback:', e);
-    gasGetFallback('complete', payload);
-    setSyncState('ok');
-    setTimeout(() => setSyncState(''), 3000);
-  }
-}
-
-// ══════════════════════════════════════════════════════════
 // END CARD
 // ══════════════════════════════════════════════════════════
-const CAL_URL = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
-const SCORE_THRESHOLD = 60;
-
 function showEndCard(){
   stopSpeaking(); stopRecog();
-  const btn = document.getElementById('endCalBtn');
-  const msg = document.getElementById('endMsg');
-  if(totalScore >= SCORE_THRESHOLD){
-    const calUrl = CAL_URL
-      + '?name=' + encodeURIComponent(LEAD.name)
-      + '&email=' + encodeURIComponent(LEAD.email);
-    btn.href = calUrl;
-    btn.style.display = 'block';
-    msg.textContent = "Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
+  const btn=document.getElementById('endCalBtn'), msg=document.getElementById('endMsg');
+  if(totalScore>=SCORE_THRESHOLD){
+    btn.href=CAL_URL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email);
+    btn.style.display='block';
+    msg.textContent="Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
   } else {
-    btn.style.display = 'none';
-    msg.textContent = "Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
+    btn.style.display='none';
+    msg.textContent="Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
   }
   document.getElementById('endCard').classList.add('show');
 }
 
 // ══════════════════════════════════════════════════════════
-// SERVER PING
+// PING
 // ══════════════════════════════════════════════════════════
 async function pingServer(){
-  try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }
-  catch(e){}
+  try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }catch(e){}
 }
 
 // ══════════════════════════════════════════════════════════
-// INIT
+// INIT — THE KEY FIX
+// Sequence: load voices → ping server → hide overlay →
+// speak greeting (await full completion) → THEN enable mic
 // ══════════════════════════════════════════════════════════
 async function init(){
   if(initDone||isLocked())return;
   initDone=true;
+  greetingDone=false;
   recogEnabled=false;
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
@@ -931,47 +798,60 @@ async function init(){
 
   const overlay=document.getElementById('overlay');
   overlay.classList.remove('gone');
-  document.getElementById('ovMsg').textContent='Loading voices';
+  document.getElementById('ovMsg').textContent='Loading voices…';
+  document.getElementById('micBtn').classList.remove('ready-pulse');
 
+  // Load voices (retry loop)
   let att=0;
   const pingPromise=pingServer();
-  while(voices.length===0&&att<18){loadVoices();if(voices.length===0)await delay(220);att++;}
+  while(voices.length===0&&att<20){ loadVoices(); if(voices.length===0) await delay(200); att++; }
 
-  document.getElementById('ovMsg').textContent='Connecting to Dr. CV';
+  document.getElementById('ovMsg').textContent='Connecting to Dr. CV…';
   await pingPromise;
-  await delay(300);
+  await delay(200);
   document.getElementById('ovMsg').textContent='Ready';
-  await delay(280);
+  await delay(300);
   overlay.classList.add('gone');
 
   renderLeadUI(); startTimer(); initRecog();
 
+  // Build greeting
   const first=(LEAD.name||'').split(' ')[0].trim();
   let greeting;
   if(first&&LEAD.country&&LEAD.company){
     greeting=`Good to have you here, ${first}. I've reviewed your intake form and I understand ${LEAD.company} is looking to establish a presence in ${LEAD.country}. To make sure we cover the ground that matters most to you — what would you say is the single biggest challenge standing in the way of that expansion right now?`;
   }else if(first&&LEAD.country){
-    greeting=`Thank you for joining today, ${first}. I can see you're looking at ${LEAD.country} as your target market — a market we know well. To give you the most relevant guidance, what's the biggest challenge you're currently facing with that expansion?`;
+    greeting=`Thank you for joining today, ${first}. I can see you're looking at ${LEAD.country} as your target market — a market we know well. What's the biggest challenge you're currently facing with that expansion?`;
   }else if(first){
-    greeting=`Thank you for joining today, ${first}. I'm looking forward to learning about your expansion plans. Could you start by telling me which market you're targeting, and what's the primary challenge that's been on your mind as you think about entering it?`;
+    greeting=`Thank you for joining today, ${first}. I'm looking forward to learning about your expansion plans. Which market are you targeting, and what's the primary challenge on your mind as you think about entering it?`;
   }else{
     greeting=`Thank you for joining today. I'm looking forward to learning about your expansion plans. Could you start by telling me which market you're targeting, and what you see as the biggest challenge in getting there?`;
   }
 
   msgHistory.push({role:'assistant',content:greeting});
 
+  // Unlock browser TTS with a silent utterance first (required on some browsers)
   await new Promise(resolve=>{
     const wu=new SpeechSynthesisUtterance('\u00A0');
     wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
-    speechSynthesis.speak(wu); setTimeout(resolve,900);
+    speechSynthesis.speak(wu); setTimeout(resolve,600);
   });
-  await delay(180);
+  await delay(150);
 
+  // ── SPEAK THE FULL GREETING AND WAIT FOR IT TO FINISH ──
+  setStatus('speaking');
   const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
-  gs.forEach(s=>enqueueSentence(s));
-  if(gr.trim()) enqueueSentence(gr);
+  const allSentences=[...gs];
+  if(gr.trim()) allSentences.push(gr);
+  await speakAll(allSentences.map(cleanForSpeech).filter(Boolean));
 
+  // ── ONLY NOW enable the mic ──
+  greetingDone=true;
   recogEnabled=true;
+  setStatus('ready');
+  document.getElementById('micBtn').classList.add('ready-pulse');
+  await delay(400);
+  startRecog();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -979,6 +859,7 @@ async function init(){
 // ══════════════════════════════════════════════════════════
 document.getElementById('micBtn').addEventListener('click',()=>{
   if(sessionClosed)return;
+  if(!greetingDone)return; // don't allow mic during greeting
   if(isSpeaking){stopSpeaking();recogEnabled=true;schedRestart(350);return;}
   if(isListening) stopRecog();
   else{recogEnabled=true;startRecog();}
@@ -987,7 +868,7 @@ document.getElementById('micBtn').addEventListener('click',()=>{
 document.getElementById('resetBtn').addEventListener('click',()=>{
   if(isLocked())return;
   document.getElementById('endCard').classList.remove('show');
-  stopSpeaking(); stopRecog(); initDone=false;
+  stopSpeaking(); stopRecog(); initDone=false; greetingDone=false;
   setTimeout(()=>init(),300);
 });
 
@@ -998,14 +879,14 @@ document.getElementById('muteBtn').addEventListener('click',function(){
   document.getElementById('muteIcon').innerHTML=aiMuted
     ?`<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
     :`<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-  if(aiMuted){stopSpeaking();setStatus('ready');}
+  if(aiMuted){stopSpeaking();if(greetingDone){setStatus('ready');recogEnabled=true;schedRestart(300);}}
 });
 
 // ══════════════════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════════════════
-speechSynthesis.onvoiceschanged=()=>{loadVoices();if(!initDone&&!isLocked())init();};
-setTimeout(()=>{if(!initDone&&!isLocked())init();},900);
+speechSynthesis.onvoiceschanged=()=>{ loadVoices(); if(!initDone&&!isLocked()) init(); };
+setTimeout(()=>{ if(!initDone&&!isLocked()) init(); }, 800);
 </script>
 </body>
 </html>
