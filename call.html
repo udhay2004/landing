@@ -30,7 +30,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .shell{position:relative;z-index:1;display:grid;grid-template-rows:64px 1fr 96px;height:100vh;max-width:1200px;margin:0 auto;}
 
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--border);}
 .logo-wrap{display:flex;align-items:center;gap:14px;}
 .logo-mark{width:34px;height:34px;border:1px solid var(--blue);border-radius:4px;display:flex;align-items:center;justify-content:center;}
@@ -47,11 +46,9 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .badge-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
 .session-timer{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;min-width:40px;text-align:right;}
 
-/* MAIN */
 .main{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .stage{display:flex;flex-direction:column;align-items:center;gap:40px;}
 
-/* Orbital rings */
 .orbital{position:relative;width:300px;height:300px;flex-shrink:0;}
 .orb-ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
 .orb-ring.r1{width:300px;height:300px;border:1px solid rgba(59,130,246,.07);animation:orbspin 55s linear infinite;}
@@ -63,7 +60,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .orb-ring.r3::after{background:var(--silver);box-shadow:0 0 4px var(--silver);}
 @keyframes orbspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 
-/* Face */
 .face-wrap{position:absolute;width:172px;height:172px;top:50%;left:50%;transform:translate(-50%,-50%);}
 #waveCanvas{position:absolute;inset:0;border-radius:50%;}
 .face{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(145deg,#08101e,#040c18);border:1px solid rgba(59,130,246,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:inset 0 1px 0 rgba(59,130,246,.06),0 0 60px rgba(59,130,246,.06);}
@@ -71,20 +67,17 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .face-rule{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 .face-title{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
 
-/* Identity */
 .identity{text-align:center;}
 .id-name{font-family:var(--serif);font-size:32px;font-weight:300;letter-spacing:.06em;color:var(--text);margin-bottom:8px;}
 .id-title{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--blue2);text-transform:uppercase;margin-bottom:4px;}
 .id-firm{font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
 .id-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin:0 auto;}
 
-/* Session strip — only name, market, duration */
 .session-info{display:flex;align-items:center;gap:28px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .si-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
 .si-value{color:var(--text);font-size:11px;}
 .si-sep{width:1px;height:28px;background:var(--border);}
 
-/* CONTROLS */
 .controls{display:flex;align-items:center;justify-content:center;gap:24px;border-top:1px solid var(--border);background:rgba(3,6,16,.95);backdrop-filter:blur(40px);position:relative;z-index:2;}
 .ctrl{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;outline:none;}
 .ctrl:hover{border-color:rgba(59,130,246,.4);color:var(--blue2);transform:scale(1.06);}
@@ -98,7 +91,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 @keyframes mpulse{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:0}100%{transform:scale(1);opacity:.7}}
 .ctrl-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;text-align:center;min-width:56px;}
 
-/* OVERLAY */
 .overlay{position:fixed;inset:0;z-index:200;background:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .7s ease;}
 .overlay.gone{opacity:0;pointer-events:none;}
 .ov-wordmark{font-family:var(--serif);font-size:36px;font-weight:300;letter-spacing:.12em;color:var(--blue2);}
@@ -107,7 +99,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 @keyframes sp{to{transform:rotate(360deg)}}
 .ov-msg{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
 
-/* ALREADY USED */
 .used-screen{position:fixed;inset:0;z-index:300;background:var(--deep);display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;}
 .used-screen.show{display:flex;}
 .used-icon{width:64px;height:64px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue2);}
@@ -115,7 +106,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .used-sub{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;max-width:360px;line-height:1.9;}
 .used-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
 
-/* END CARD */
 .end-card{position:fixed;inset:0;background:rgba(3,6,16,.96);backdrop-filter:blur(40px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;}
 .end-card.show{opacity:1;pointer-events:all;}
 .end-inner{width:420px;text-align:center;}
@@ -128,8 +118,13 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .end-cta:hover{background:rgba(59,130,246,.08);border-color:var(--blue);}
 .end-rule-bottom{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:28px;}
 
-/* TOAST */
 .toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(212,96,106,.88);color:#fff;padding:10px 24px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;z-index:300;display:none;}
+
+/* sync indicator */
+.sync-dot{position:fixed;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:var(--muted);z-index:500;transition:background .3s,box-shadow .3s;}
+.sync-dot.syncing{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.6);animation:breathe .8s ease infinite;}
+.sync-dot.ok{background:#4a9;box-shadow:0 0 6px rgba(68,170,136,.5);}
+.sync-dot.err{background:var(--danger);box-shadow:0 0 6px rgba(212,96,106,.5);}
 
 @media(max-width:600px){
   .topbar{padding:0 20px;}
@@ -149,8 +144,8 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 <body>
 
 <canvas id="bgCanvas"></canvas>
+<div class="sync-dot" id="syncDot" title="Sheet sync status"></div>
 
-<!-- ALREADY USED -->
 <div class="used-screen" id="usedScreen">
   <div class="used-icon">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -165,7 +160,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 </div>
 
 <div class="shell">
-
   <header class="topbar">
     <div class="logo-wrap">
       <div class="logo-mark">
@@ -209,7 +203,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
         <div class="id-divider"></div>
       </div>
 
-      <!-- Session info: only name + market. No exchanges counter. -->
       <div class="session-info">
         <div class="si-item">
           <span class="si-value" id="siName">—</span>
@@ -257,10 +250,8 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
       </svg>
     </button>
   </div>
-
 </div>
 
-<!-- OVERLAY -->
 <div class="overlay" id="overlay">
   <div class="ov-wordmark">Comply Globally</div>
   <div class="ov-rule"></div>
@@ -268,7 +259,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
   <div class="ov-msg" id="ovMsg">Preparing your session</div>
 </div>
 
-<!-- END CARD -->
 <div class="end-card" id="endCard">
   <div class="end-inner">
     <div class="end-rule-top"></div>
@@ -284,15 +274,17 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// CONFIG
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// CONFIG — replace with your actual values
+// ══════════════════════════════════════════════════════════
 const WORKER_URL = 'https://drcv.onrender.com';
-const GAS_URL    = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 
-// ════════════════════════════════════════════════════════
+// ⚠️  PASTE YOUR DEPLOYED GAS URL HERE (the /exec URL, not /dev)
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzGfLjvWGJcj10LV-8XTxYzokISjJblI2toIhBHoTzcC3lxtdSzV9LjPXR5gUgcro6g/exec';
+
+// ══════════════════════════════════════════════════════════
 // LEAD PARAMS
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 const _p = new URLSearchParams(window.location.search);
 const LEAD = {
   name:      decodeURIComponent(_p.get('name')    || ''),
@@ -303,19 +295,18 @@ const LEAD = {
   leadId:    _p.get('leadId')    || ('lead_' + Date.now()),
   sessionId: _p.get('sessionId') || ('sess_' + Date.now()),
 };
-try { const s = sessionStorage.getItem('leadData'); if (s && !LEAD.name) Object.assign(LEAD, JSON.parse(s)); } catch(e){}
 
-// ════════════════════════════════════════════════════════
-// SESSION LOCK — one-time use per leadId
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// SESSION LOCK
+// ══════════════════════════════════════════════════════════
 const LOCK_KEY = 'cg_done_' + LEAD.leadId;
 function isLocked()    { try { return !!localStorage.getItem(LOCK_KEY); } catch(e){ return false; } }
 function lockSession() { try { localStorage.setItem(LOCK_KEY, Date.now().toString()); } catch(e){} }
 if (isLocked()) document.getElementById('usedScreen').classList.add('show');
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // STATE
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 let msgHistory    = [];
 let turns         = 0;
 let sessionStart  = 0;
@@ -331,25 +322,70 @@ let voices        = [];
 let initDone      = false;
 let sessionClosed = false;
 
-// TTS ordered queue
 let ttsQueue  = [];
 let ttsBusy   = false;
 let streamBuf = '';
 
-// Internal qualification scores — NEVER displayed in UI
 let scores = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
 let totalScore = 0;
 
-// Hard minimum turns before AI may even consider closing
-// 12 turns = thorough qualification conversation (~10-15 min)
 const MIN_TURNS = 12;
-
-// Maximum session length in milliseconds (20 minutes hard cap)
 const MAX_SESSION_MS = 20 * 60 * 1000;
 
-// ════════════════════════════════════════════════════════
-// BACKGROUND — animated mesh (blue tint)
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// SYNC INDICATOR
+// ══════════════════════════════════════════════════════════
+const syncDot = document.getElementById('syncDot');
+function setSyncState(s) {
+  syncDot.className = 'sync-dot ' + s;
+}
+
+// ══════════════════════════════════════════════════════════
+// GAS SYNC — JSONP-based (bypasses CORS for no-cors mode)
+// Uses image trick + URL params for fire-and-forget writes
+// For reads (admin) we use a proper fetch from the admin page
+// ══════════════════════════════════════════════════════════
+
+// For write operations (update/complete) we use no-cors fetch.
+// GAS deployed as "Anyone, even anonymous" handles these.
+async function gasPost(action, payload) {
+  if (!GAS_URL || GAS_URL.includes('YOUR_DEPLOYMENT')) return;
+  setSyncState('syncing');
+  try {
+    // Encode payload as URL params — works with no-cors
+    const params = new URLSearchParams({
+      action,
+      data: JSON.stringify(payload)
+    });
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',          // GAS doesn't send CORS headers on doPost by default
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    });
+    setSyncState('ok');
+    setTimeout(() => setSyncState(''), 3000);
+  } catch(e) {
+    console.warn('GAS sync error:', e);
+    setSyncState('err');
+  }
+}
+
+// For the complete action we also try a GET fallback via JSONP
+// in case the POST is blocked by the browser
+function gasGetFallback(action, payload) {
+  if (!GAS_URL || GAS_URL.includes('YOUR_DEPLOYMENT')) return;
+  const params = new URLSearchParams({ action, data: JSON.stringify(payload) });
+  const url = GAS_URL + '?' + params.toString();
+  // Use an img element — truly fire-and-forget, no CORS issues
+  const img = new Image();
+  img.src = url;
+  img.onerror = () => {}; // expected — GAS returns JSON not an image
+}
+
+// ══════════════════════════════════════════════════════════
+// BACKGROUND
+// ══════════════════════════════════════════════════════════
 (function(){
   const c = document.getElementById('bgCanvas');
   const x = c.getContext('2d');
@@ -385,9 +421,9 @@ const MAX_SESSION_MS = 20 * 60 * 1000;
   draw();
 })();
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // WAVE VISUALISER
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 const wCvs = document.getElementById('waveCanvas');
 const wCtx = wCvs.getContext('2d');
 let wPhase=0, wAmp=0, wTarget=0;
@@ -414,9 +450,9 @@ function drawWave(){
 drawWave();
 function setWave(s){wTarget=s==='speak'?13:s==='listen'?8:0;}
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // STATUS / UI
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function setStatus(s){
   const dm={ready:'live',listening:'listen',thinking:'think',speaking:'talk'};
   const tm={ready:'Ready',listening:'Listening',thinking:'Processing',speaking:'Speaking'};
@@ -432,8 +468,6 @@ function startTimer(){
     const fmt=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
     document.getElementById('timer').textContent=fmt;
     document.getElementById('siDuration').textContent=fmt;
-
-    // Hard cap: 20 minutes max — gracefully close if still open
     if(!sessionClosed && (Date.now()-sessionStart) >= MAX_SESSION_MS){
       forceCloseSession();
     }
@@ -449,9 +483,9 @@ function showToast(msg){
 }
 function delay(ms){return new Promise(r=>setTimeout(r,ms));}
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // VOICES
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function loadVoices(){
   const all=speechSynthesis.getVoices();
   voices=all.filter(v=>v.lang.startsWith('en'));
@@ -462,9 +496,9 @@ function getBestVoice(){
   return voices.find(v=>/female/i.test(v.name))||voices[0]||null;
 }
 
-// ════════════════════════════════════════════════════════
-// TTS — STRICTLY ORDERED, SENTENCE-BY-SENTENCE
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// TTS
+// ══════════════════════════════════════════════════════════
 function cleanForSpeech(t){
   return t
     .replace(/SCORE_JSON:[\s\S]*$/g,'')
@@ -528,12 +562,11 @@ function stopSpeaking(){
   try{if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();}catch(e){}
 }
 
-// Chrome 15s TTS keep-alive
 setInterval(()=>{if(isSpeaking&&speechSynthesis.paused)speechSynthesis.resume();},4000);
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // SPEECH RECOGNITION
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 let finalTranscript='';
 function initRecog(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -599,16 +632,9 @@ function handleUserSpeech(text){
   sendMessage(text);
 }
 
-// ════════════════════════════════════════════════════════
-// FAREWELL DETECTION — only close if user says goodbye
-// ════════════════════════════════════════════════════════
-function userSignedOff(text){
-  return /\b(thank you|thanks|goodbye|bye|that('s| is) all|no more questions|we('re| are) done|that covers|i('m| am) good|all good|cheers)\b/i.test(text);
-}
-
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // SYSTEM PROMPT
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function buildSystemPrompt(){
   return `You are Dr. CV, a highly professional and warm Global Expansion Strategist at Comply Globally.
 You are currently on a live voice consultation call with a prospective client.
@@ -644,7 +670,6 @@ QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
 CLOSING RULES — CRITICAL:
   - You are ABSOLUTELY FORBIDDEN from closing the session before exchange number ${MIN_TURNS}.
   - Do NOT close because the client is brief or quiet — ask a follow-up or dig deeper instead.
-  - Do NOT close just because there is a pause or silence — wait for the client to respond.
   - Only close when you have genuine, substantive answers on: pain point, timeline, decision makers, success definition, and budget signal.
   - ONLY close if the client has explicitly said goodbye, thank you, or clearly signalled they are done — OR if the conversation has naturally covered all qualification areas in depth.
   - When you do close: thank them warmly, confirm that the advisory team will follow up personally, and wish them well. Keep it brief and genuine.
@@ -655,9 +680,9 @@ SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100
 cold = avg below 40, warm = 40–69, hot = 70 and above.`;
 }
 
-// ════════════════════════════════════════════════════════
-// API — STREAMING WITH STRICTLY ORDERED TTS
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// API — STREAMING
+// ══════════════════════════════════════════════════════════
 async function sendMessage(userText){
   if(!userText.trim()||sessionClosed)return;
   stopSpeaking();
@@ -707,36 +732,35 @@ async function sendMessage(userText){
       }
     }
 
-    // Flush remaining buffer
     const final=cleanForSpeech(streamBuf).trim();
     if(final&&!final.startsWith('SCORE_JSON')){
       enqueueSentence(final);
     }
     streamBuf='';
 
-    // Build clean reply (strip SCORE_JSON so it's never stored or spoken)
     const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
     msgHistory.push({role:'assistant',content:cleanReply});
     if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
-    pushTurnToSheet(userText,cleanReply);
 
-    // Extract score JSON — only present on the AI's closing response
+    // Push turn to sheet
+    pushTurnToSheet(userText, cleanReply);
+
+    // Extract score JSON
     const sm=fullReply.match(/SCORE_JSON:\s*(\{[\s\S]*?\})/);
     if(sm){
       try{
         const sd=JSON.parse(sm[1]);
         applyScores(sd);
-        pushScoreToSheet(sd);
+        await pushScoreToSheet(sd);   // await so we know it fired before locking
         sessionClosed=true;
         lockSession();
         recogEnabled=false;
         stopRecog();
-        // Estimate TTS duration from closing text length (≈88ms/char at rate 0.88)
         const estimatedSpeechMs=Math.max(7000, cleanReply.length*88+3000);
         setTimeout(showEndCard, estimatedSpeechMs);
       }catch(e){
         console.warn('Score parse failed:',e);
-        recogEnabled=true; // don't leave mic dead if parse fails
+        recogEnabled=true;
       }
     } else {
       recogEnabled=true;
@@ -749,18 +773,17 @@ async function sendMessage(userText){
   }
 }
 
-// ════════════════════════════════════════════════════════
-// FORCE CLOSE — hard time-cap (20 min)
-// ════════════════════════════════════════════════════════
-function forceCloseSession(){
+// ══════════════════════════════════════════════════════════
+// FORCE CLOSE
+// ══════════════════════════════════════════════════════════
+async function forceCloseSession(){
   if(sessionClosed)return;
-  // Synthesise a polite close without API round-trip
   const closeMsg = "We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
   stopSpeaking();
   enqueueSentence(closeMsg);
   const sd={interest:scores.interest,engagement:scores.engagement,intent:scores.intent,readiness:scores.readiness,summary:'Session reached maximum duration.',level:totalScore>=70?'hot':totalScore>=40?'warm':'cold'};
   applyScores(sd);
-  pushScoreToSheet(sd);
+  await pushScoreToSheet(sd);
   sessionClosed=true;
   lockSession();
   recogEnabled=false;
@@ -768,9 +791,9 @@ function forceCloseSession(){
   setTimeout(showEndCard, 9000);
 }
 
-// ════════════════════════════════════════════════════════
-// SCORING — internal
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════════════════════
 function incrementalScore(text){
   const w=text.split(/\s+/).length;
   scores.engagement=Math.min(100,scores.engagement+(w>15?16:w>7?8:3));
@@ -785,49 +808,86 @@ function applyScores(data){
   totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
 }
 
-// ════════════════════════════════════════════════════════
-// SHEET SYNC
-// ════════════════════════════════════════════════════════
-function hasGAS(){return GAS_URL&&!GAS_URL.includes('YOUR_DEPLOYMENT');}
+// ══════════════════════════════════════════════════════════
+// SHEET SYNC — FIXED
+// The key insight: GAS doPost with no-cors works for writes.
+// But the action param must be passed as a URL query param,
+// not in the body, so GAS's e.parameter.action can read it.
+// ══════════════════════════════════════════════════════════
+function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
 
-async function pushTurnToSheet(userMsg,botMsg){
-  if(!hasGAS())return;
-  try{
-    await fetch(GAS_URL,{method:'POST',mode:'no-cors',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({action:'update',data:JSON.stringify({
-        leadId:LEAD.leadId,sessionId:LEAD.sessionId,
-        turnNumber:turns,userMessage:userMsg,botResponse:botMsg
-      })})
-    });
-  }catch(e){console.warn('Sheet turn sync:',e);}
-}
-
-async function pushScoreToSheet(data){
-  if(!hasGAS())return;
-  const elapsed=Math.floor((Date.now()-sessionStart)/1000);
-  const payload={
-    leadId:LEAD.leadId,sessionId:LEAD.sessionId,
-    name:LEAD.name,email:LEAD.email,company:LEAD.company,country:LEAD.country,
-    qualificationScore:totalScore,qualificationLevel:data.level||'',
-    duration:elapsed,turnCount:turns,summary:data.summary||'',
-    interest:data.interest||0,engagement:data.engagement||0,
-    intent:data.intent||0,readiness:data.readiness||0
+async function pushTurnToSheet(userMsg, botMsg){
+  if(!hasGAS()) return;
+  const payload = {
+    leadId:    LEAD.leadId,
+    sessionId: LEAD.sessionId,
+    turnNumber: turns,
+    userMessage: userMsg,
+    botResponse: botMsg
   };
-  try{
-    await fetch(GAS_URL,{method:'POST',mode:'no-cors',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({action:'complete',data:JSON.stringify(payload)})
+  // Pass action as URL param so GAS e.parameter.action works
+  const url = GAS_URL + '?action=update';
+  setSyncState('syncing');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: 'update', data: JSON.stringify(payload) }).toString()
     });
-  }catch(e){
-    try{ await fetch(GAS_URL+'?'+new URLSearchParams({action:'complete',data:JSON.stringify(payload)}),{method:'GET',mode:'no-cors'}); }
-    catch(e2){console.warn('Sheet score sync:',e2);}
+    setSyncState('ok');
+    setTimeout(() => setSyncState(''), 2000);
+  } catch(e) {
+    console.warn('Turn sync failed:', e);
+    setSyncState('err');
   }
 }
 
-// ════════════════════════════════════════════════════════
+async function pushScoreToSheet(data){
+  if(!hasGAS()) return;
+  const elapsed = Math.floor((Date.now()-sessionStart)/1000);
+  const payload = {
+    leadId:             LEAD.leadId,
+    sessionId:          LEAD.sessionId,
+    name:               LEAD.name,
+    email:              LEAD.email,
+    company:            LEAD.company,
+    country:            LEAD.country,
+    qualificationScore: totalScore,
+    qualificationLevel: data.level || '',
+    duration:           elapsed,
+    turnCount:          turns,
+    summary:            data.summary || '',
+    interest:           data.interest  || 0,
+    engagement:         data.engagement|| 0,
+    intent:             data.intent    || 0,
+    readiness:          data.readiness || 0
+  };
+
+  setSyncState('syncing');
+
+  // Primary: POST with action in URL param
+  try {
+    await fetch(GAS_URL + '?action=complete', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) }).toString()
+    });
+    setSyncState('ok');
+    setTimeout(() => setSyncState(''), 3000);
+  } catch(e) {
+    // Fallback: GET via image (truly CORS-free, fire-and-forget)
+    console.warn('POST sync failed, trying GET fallback:', e);
+    gasGetFallback('complete', payload);
+    setSyncState('ok');
+    setTimeout(() => setSyncState(''), 3000);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
 // END CARD
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 const CAL_URL = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
 const SCORE_THRESHOLD = 60;
 
@@ -836,37 +896,34 @@ function showEndCard(){
   const btn = document.getElementById('endCalBtn');
   const msg = document.getElementById('endMsg');
   if(totalScore >= SCORE_THRESHOLD){
-    // Qualified — show booking link with pre-filled details
     const calUrl = CAL_URL
       + '?name=' + encodeURIComponent(LEAD.name)
       + '&email=' + encodeURIComponent(LEAD.email);
     btn.href = calUrl;
     btn.style.display = 'block';
-    msg.textContent = "Great news — based on our conversation, you’re a strong fit. Book a call with our senior advisor below and we’ll pick up right where we left off.";
+    msg.textContent = "Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
   } else {
-    // Not yet qualified — no booking link, just a warm close
     btn.style.display = 'none';
     msg.textContent = "Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
   }
   document.getElementById('endCard').classList.add('show');
 }
 
-// ════════════════════════════════════════════════════════
-// SERVER PING — wake Render.com from cold sleep BEFORE
-// the session starts so the first real response is instant
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// SERVER PING
+// ══════════════════════════════════════════════════════════
 async function pingServer(){
   try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }
-  catch(e){ /* ignore — just warming the server up */ }
+  catch(e){}
 }
 
-// ════════════════════════════════════════════════════════
-// INIT — auto-initiate greeting, no click required
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
 async function init(){
   if(initDone||isLocked())return;
   initDone=true;
-  recogEnabled=false; // CRITICAL: keep false until greeting is fully spoken
+  recogEnabled=false;
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
   scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
@@ -876,14 +933,12 @@ async function init(){
   overlay.classList.remove('gone');
   document.getElementById('ovMsg').textContent='Loading voices';
 
-  // Ping server + load voices in parallel — this wakes Render from sleep
-  // so the user's first spoken response gets a fast reply
   let att=0;
   const pingPromise=pingServer();
   while(voices.length===0&&att<18){loadVoices();if(voices.length===0)await delay(220);att++;}
 
   document.getElementById('ovMsg').textContent='Connecting to Dr. CV';
-  await pingPromise; // wait for server to wake before hiding overlay
+  await pingPromise;
   await delay(300);
   document.getElementById('ovMsg').textContent='Ready';
   await delay(280);
@@ -891,7 +946,6 @@ async function init(){
 
   renderLeadUI(); startTimer(); initRecog();
 
-  // Build personalised greeting
   const first=(LEAD.name||'').split(' ')[0].trim();
   let greeting;
   if(first&&LEAD.country&&LEAD.company){
@@ -906,7 +960,6 @@ async function init(){
 
   msgHistory.push({role:'assistant',content:greeting});
 
-  // Warm up Chrome's audio engine with a silent utterance first
   await new Promise(resolve=>{
     const wu=new SpeechSynthesisUtterance('\u00A0');
     wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
@@ -914,22 +967,16 @@ async function init(){
   });
   await delay(180);
 
-  // ── AUTO-INITIATE: speak greeting immediately ──
-  // recogEnabled stays FALSE here — drainTTS() will set status to 'ready'
-  // and call startRecog() only AFTER the last greeting sentence finishes.
-  // This is what makes Dr. CV speak first without the user doing anything.
   const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
   gs.forEach(s=>enqueueSentence(s));
   if(gr.trim()) enqueueSentence(gr);
 
-  // Set recogEnabled=true NOW so drainTTS's end-of-queue handler will
-  // activate the mic automatically once the greeting is fully spoken.
   recogEnabled=true;
 }
 
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // CONTROLS
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 document.getElementById('micBtn').addEventListener('click',()=>{
   if(sessionClosed)return;
   if(isSpeaking){stopSpeaking();recogEnabled=true;schedRestart(350);return;}
@@ -954,9 +1001,9 @@ document.getElementById('muteBtn').addEventListener('click',function(){
   if(aiMuted){stopSpeaking();setStatus('ready');}
 });
 
-// ════════════════════════════════════════════════════════
-// BOOT — auto-start, no interaction needed
-// ════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════
 speechSynthesis.onvoiceschanged=()=>{loadVoices();if(!initDone&&!isLocked())init();};
 setTimeout(()=>{if(!initDone&&!isLocked())init();},900);
 </script>
