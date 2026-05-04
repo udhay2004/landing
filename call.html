@@ -697,15 +697,24 @@ CLOSING RULES — READ CAREFULLY:
 SCORE OUTPUT — THIS IS MANDATORY:
   After your closing words, output EXACTLY this on a new line (never spoken aloud, never skipped):
 
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"2-sentence professional summary of this specific person's situation and fit","level":"cold|warm|hot"}
+SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"FULL PARAGRAPH — see rules below","level":"cold|warm|hot"}
 
-  Scoring criteria:
-  - interest (0-100):    How much enthusiasm and curiosity they showed. Vague or disinterested = low. Specific questions and excitement = high.
-  - engagement (0-100):  How much they elaborated. One-word answers = 10-20. Full, detailed responses = 70-100.
-  - intent (0-100):      How concrete and actionable their plans are. "Just exploring" = 10-20. Specific timeline + named budget = 80-100.
-  - readiness (0-100):   How close to a buying decision they are right now. No budget / no timeline = 10. Ready to start = 80-100.
-  - level: "hot" if average score ≥ 70, "warm" if 40-69, "cold" if below 40.
-  - summary: Write about THIS specific client — their company, their market, their stated goal, and their main blocker.
+  Scoring criteria — be precise, not generous:
+  - interest (0-100):   Enthusiasm and curiosity shown. Passive or one-word responses = 10–25. Asked follow-up questions, expressed excitement = 70–100.
+  - engagement (0-100): How much they elaborated unprompted. Needed constant prompting with little depth = 10–30. Volunteered detail, told stories, gave specifics = 70–100.
+  - intent (0-100):     Concreteness of their plan. "Just researching" with no timeline = 10–20. Named a specific quarter, has internal sign-off, knows the structure they want = 80–100.
+  - readiness (0-100):  How close to a buying decision. No budget discussed, no urgency = 10–20. Budget approved, decision-maker on the call, ready to start this quarter = 80–100.
+  - level: "hot" if average ≥ 70, "warm" if 40–69, "cold" if below 40.
+
+  SUMMARY RULES — this is the most important field. A human advisor will read this to decide whether to follow up personally. Write a rich, specific paragraph (4–6 sentences) covering ALL of the following:
+    1. Who they are: name, company, role/context if mentioned.
+    2. What they want: their exact expansion goal — which market, what kind of presence (entity, distribution, hiring, licensing, etc.).
+    3. Their timeline: when they want to be operational, and whether this is self-imposed or driven by an external event.
+    4. Their biggest blocker: what is standing in the way right now — compliance complexity, finding local partners, internal approvals, capital, uncertainty about structure.
+    5. Decision-making: who else is involved, whether budget has been approved or is still being justified.
+    6. Your honest assessment: are they a strong fit for Comply Globally's services? What specific service would help them most? Flag any red flags (too early stage, no budget, unclear goals) or green flags (urgency, named budget, senior decision-maker involved).
+  
+  Do NOT write a generic summary. Every sentence must reference something specific that was actually said in this conversation. If a field was not discussed, say so clearly ("Timeline was not discussed — follow up needed").
 
   IMPORTANT: The SCORE_JSON must appear on its own line, immediately after your closing message, every single time you close. Do not skip it. Do not add commentary after it.`;
 }
@@ -1002,10 +1011,49 @@ document.getElementById('muteBtn').addEventListener('click', function(){
 });
 
 // ══════════════════════════════════════════════════════════
-// BOOT
+// BOOT — auto-start on page load
+// Browsers need a user gesture before TTS works on mobile/Safari.
+// We test silently first; if blocked, show a one-tap splash.
+// On desktop Chrome it fires immediately with no tap required.
 // ══════════════════════════════════════════════════════════
-speechSynthesis.onvoiceschanged = ()=>{ loadVoices(); if(!initDone && !isLocked()) init(); };
-setTimeout(()=>{ if(!initDone && !isLocked()) init(); }, 800);
+speechSynthesis.onvoiceschanged = ()=>{ loadVoices(); };
+
+async function attemptAutoStart(){
+  if(isLocked()) return;
+  loadVoices();
+  let gestureNeeded = false;
+  try {
+    await new Promise((resolve, reject) => {
+      const test = new SpeechSynthesisUtterance('\u00A0');
+      test.volume = 0;
+      test.onend   = resolve;
+      test.onerror = (e) => { if(e.error==='not-allowed') reject(new Error('gesture')); else resolve(); };
+      speechSynthesis.speak(test);
+      setTimeout(()=>{ speechSynthesis.cancel(); resolve(); }, 1200);
+    });
+  } catch(e) { gestureNeeded = true; }
+
+  if(gestureNeeded) showStartSplash();
+  else init();
+}
+
+function showStartSplash(){
+  const splash = document.createElement('div');
+  splash.id = 'startSplash';
+  splash.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(3,6,16,.92);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;cursor:pointer;';
+  splash.innerHTML = `
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:.08em;color:#60a5fa">Comply Globally</div>
+    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#3b82f6,transparent)"></div>
+    <div style="width:72px;height:72px;border-radius:50%;border:1px solid rgba(59,130,246,.5);background:linear-gradient(145deg,rgba(59,130,246,.1),rgba(59,130,246,.04));display:flex;align-items:center;justify-content:center;color:#60a5fa;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:#4a5870;text-transform:uppercase">Tap to begin your session</div>
+  `;
+  splash.addEventListener('click', ()=>{ splash.remove(); init(); }, { once: true });
+  document.body.appendChild(splash);
+}
+
+setTimeout(attemptAutoStart, 400);
 </script>
 </body>
 </html>
