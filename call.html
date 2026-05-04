@@ -101,8 +101,6 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 .sync-dot.syncing{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.6);animation:breathe .8s ease infinite;}
 .sync-dot.ok{background:#4a9;box-shadow:0 0 6px rgba(68,170,136,.5);}
 .sync-dot.err{background:var(--danger);box-shadow:0 0 6px rgba(212,96,106,.5);}
-
-/* Mic ready indicator — pulses gently when waiting for user */
 .mic-btn.ready-pulse{animation:readypulse 2s ease infinite;}
 @keyframes readypulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 10px rgba(59,130,246,0)}}
 
@@ -240,12 +238,12 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
 // ══════════════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════════════
-const WORKER_URL = 'https://drcv.onrender.com';
-const GAS_URL    = 'https://script.google.com/macros/s/AKfycbxDegHmpRqbFxD1o9kWM5MYcT6i1D6j_U7JidUCo99jaXnsavKMOrWKE-2UMgihbTw9aA/exec';
-const CAL_URL    = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
+const WORKER_URL      = 'https://drcv.onrender.com';
+const GAS_URL         = 'https://script.google.com/macros/s/AKfycbxDegHmpRqbFxD1o9kWM5MYcT6i1D6j_U7JidUCo99jaXnsavKMOrWKE-2UMgihbTw9aA/exec';
+const CAL_URL         = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
 const SCORE_THRESHOLD = 60;
-const MIN_TURNS  = 12;
-const MAX_SESSION_MS = 20 * 60 * 1000;
+const MIN_TURNS       = 12;
+const MAX_SESSION_MS  = 20 * 60 * 1000;
 
 // ══════════════════════════════════════════════════════════
 // LEAD PARAMS
@@ -286,13 +284,13 @@ let silenceTimer  = null;
 let voices        = [];
 let initDone      = false;
 let sessionClosed = false;
-let greetingDone  = false;   // ← NEW: tracks if greeting TTS finished
+let greetingDone  = false;
 
 let ttsQueue  = [];
 let ttsBusy   = false;
 let streamBuf = '';
 
-let scores = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
+let scores    = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
 let totalScore = 0;
 
 // ══════════════════════════════════════════════════════════
@@ -306,47 +304,98 @@ function setSyncState(s){ syncDot.className = 'sync-dot ' + s; }
 // ══════════════════════════════════════════════════════════
 function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
 
-function gasGetFallback(action, payload) {
-  if(!hasGAS()) return;
-  const img = new Image();
-  img.src = GAS_URL + '?' + new URLSearchParams({ action, data: JSON.stringify(payload) });
-  img.onerror = ()=>{};
-}
-
 async function pushTurnToSheet(userMsg, botMsg){
   if(!hasGAS()) return;
-  const payload = { leadId: LEAD.leadId, sessionId: LEAD.sessionId, turnNumber: turns, userMessage: userMsg, botResponse: botMsg };
+  const payload = {
+    leadId: LEAD.leadId, sessionId: LEAD.sessionId,
+    turnNumber: turns, userMessage: userMsg, botResponse: botMsg
+  };
   setSyncState('syncing');
   try {
     await fetch(GAS_URL + '?action=update', {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({ action:'update', data: JSON.stringify(payload) }).toString()
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: 'update', data: JSON.stringify(payload) }).toString()
     });
     setSyncState('ok'); setTimeout(()=>setSyncState(''), 2000);
-  } catch(e){ console.warn('Turn sync failed:', e); setSyncState('err'); }
+  } catch(e) {
+    console.warn('Turn sync failed:', e); setSyncState('err');
+  }
 }
 
 async function pushScoreToSheet(data){
   if(!hasGAS()) return;
-  const elapsed = Math.floor((Date.now()-sessionStart)/1000);
+  const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
   const payload = {
-    leadId: LEAD.leadId, sessionId: LEAD.sessionId,
-    name: LEAD.name, email: LEAD.email, company: LEAD.company, country: LEAD.country,
-    qualificationScore: totalScore, qualificationLevel: data.level||'',
-    duration: elapsed, turnCount: turns, summary: data.summary||'',
-    interest: data.interest||0, engagement: data.engagement||0,
-    intent: data.intent||0, readiness: data.readiness||0
+    leadId:             LEAD.leadId,
+    sessionId:          LEAD.sessionId,
+    name:               LEAD.name,
+    email:              LEAD.email,
+    company:            LEAD.company,
+    country:            LEAD.country,
+    qualificationScore: totalScore,
+    qualificationLevel: data.level  || '',
+    duration:           elapsed,
+    turnCount:          turns,
+    summary:            data.summary || '',
+    interest:           data.interest    || 0,
+    engagement:         data.engagement  || 0,
+    intent:             data.intent      || 0,
+    readiness:          data.readiness   || 0,
   };
   setSyncState('syncing');
   try {
     await fetch(GAS_URL + '?action=complete', {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({ action:'complete', data: JSON.stringify(payload) }).toString()
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) }).toString()
     });
     setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
-  } catch(e){ gasGetFallback('complete', payload); setSyncState('ok'); setTimeout(()=>setSyncState(''),3000); }
+    console.log('Score pushed successfully:', payload);
+  } catch(e) {
+    // Fallback: GET-based ping (bypasses CORS restrictions on some networks)
+    const img = new Image();
+    img.src = GAS_URL + '?' + new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) });
+    setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// SCORE JSON PARSING — robust brace-matching approach
+// Handles whitespace, newlines, and formatting variations
+// ══════════════════════════════════════════════════════════
+function extractScoreJSON(text) {
+  const marker = 'SCORE_JSON:';
+  const idx    = text.indexOf(marker);
+  if (idx === -1) return null;
+
+  let remainder = text.slice(idx + marker.length).trim();
+  const start   = remainder.indexOf('{');
+  if (start === -1) return null;
+
+  remainder = remainder.slice(start);
+
+  // Walk through characters counting brace depth
+  let depth = 0;
+  let end   = -1;
+  for (let i = 0; i < remainder.length; i++) {
+    if (remainder[i] === '{')      depth++;
+    else if (remainder[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+  }
+
+  if (end === -1) {
+    // JSON was truncated — try to close it ourselves
+    console.warn('SCORE_JSON appears truncated, attempting repair');
+    remainder = remainder + '"}';
+    try { return JSON.parse(remainder); } catch(e) { return null; }
+  }
+
+  try {
+    return JSON.parse(remainder.slice(0, end + 1));
+  } catch(e) {
+    console.warn('SCORE_JSON parse error:', e, remainder.slice(0, end + 1));
+    return null;
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -379,10 +428,10 @@ async function pushScoreToSheet(data){
 })();
 
 // ══════════════════════════════════════════════════════════
-// WAVE
+// WAVE VISUALISER
 // ══════════════════════════════════════════════════════════
 const wCvs=document.getElementById('waveCanvas'), wCtx=wCvs.getContext('2d');
-let wPhase=0,wAmp=0,wTarget=0;
+let wPhase=0, wAmp=0, wTarget=0;
 function drawWave(){
   const W=172,H=172,cx=86,cy=86,r=68;
   wCtx.clearRect(0,0,W,H); wAmp+=(wTarget-wAmp)*.1;
@@ -402,7 +451,7 @@ function drawWave(){
   requestAnimationFrame(drawWave);
 }
 drawWave();
-function setWave(s){wTarget=s==='speak'?13:s==='listen'?8:0;}
+function setWave(s){ wTarget=s==='speak'?13:s==='listen'?8:0; }
 
 // ══════════════════════════════════════════════════════════
 // STATUS
@@ -433,7 +482,7 @@ function showToast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
   setTimeout(()=>t.style.display='none',4000);
 }
-function delay(ms){return new Promise(r=>setTimeout(r,ms));}
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 // ══════════════════════════════════════════════════════════
 // VOICES
@@ -443,14 +492,17 @@ function loadVoices(){
   voices=all.filter(v=>v.lang.startsWith('en'));
 }
 function getBestVoice(){
-  const prefs=['Google UK English Female','Microsoft Aria Online (Natural)','Microsoft Aria','Samantha','Karen','Moira','Victoria','Google US English Female','Nicky'];
+  const prefs=[
+    'Google UK English Female','Microsoft Aria Online (Natural)',
+    'Microsoft Aria','Samantha','Karen','Moira','Victoria',
+    'Google US English Female','Nicky'
+  ];
   for(const n of prefs){ const v=voices.find(v=>v.name.includes(n)); if(v) return v; }
   return voices.find(v=>/female/i.test(v.name))||voices[0]||null;
 }
 
 // ══════════════════════════════════════════════════════════
-// TTS — KEY FIX: speakAll() returns a Promise that resolves
-// only after ALL sentences finish, so init() can await it
+// TTS
 // ══════════════════════════════════════════════════════════
 function cleanForSpeech(t){
   return t
@@ -466,27 +518,25 @@ function splitAtSentenceBoundaries(buf){
   const re=/(.+?[.!?])(?=\s|$)/g;
   const found=[]; let last=0,m;
   while((m=re.exec(buf))!==null){ found.push(m[1].trim()); last=m.index+m[0].length; }
-  return {sentences:found, remainder:buf.slice(last).trim()};
+  return { sentences: found, remainder: buf.slice(last).trim() };
 }
 
-// Speaks a single utterance, resolves when done
 function speakOne(text){
   return new Promise(resolve=>{
-    if(!text||voiceMuted){resolve();return;}
+    if(!text||voiceMuted){ resolve(); return; }
     const utt=new SpeechSynthesisUtterance(text);
     const v=getBestVoice(); if(v) utt.voice=v;
     utt.rate=0.88; utt.pitch=1.0; utt.volume=1.0;
     let settled=false;
-    const done=()=>{if(!settled){settled=true;resolve();}};
-    utt.onstart=()=>{isSpeaking=true;setStatus('speaking');setWave('speak');};
-    utt.onerror=(e)=>{if(!['interrupted','canceled'].includes(e.error))console.warn('TTS:',e.error);done();};
-    const wd=setTimeout(done,400+text.length*80);
-    utt.onend=()=>{clearTimeout(wd);done();};
-    try{speechSynthesis.speak(utt);}catch(e){done();}
+    const done=()=>{ if(!settled){ settled=true; resolve(); } };
+    utt.onstart=()=>{ isSpeaking=true; setStatus('speaking'); setWave('speak'); };
+    utt.onerror=(e)=>{ if(!['interrupted','canceled'].includes(e.error)) console.warn('TTS:',e.error); done(); };
+    const wd=setTimeout(done, 400+text.length*80);
+    utt.onend=()=>{ clearTimeout(wd); done(); };
+    try{ speechSynthesis.speak(utt); }catch(e){ done(); }
   });
 }
 
-// Speaks an array of sentences in sequence, resolves when ALL done
 async function speakAll(sentences){
   for(const s of sentences){
     if(sessionClosed) break;
@@ -496,7 +546,6 @@ async function speakAll(sentences){
   isSpeaking=false; setWave('idle');
 }
 
-// Used during conversation (streaming — enqueue style)
 function enqueueSentence(text){
   const clean=cleanForSpeech(text);
   if(!clean||clean.length<2) return;
@@ -505,7 +554,7 @@ function enqueueSentence(text){
 }
 
 async function drainTTS(){
-  if(ttsBusy)return;
+  if(ttsBusy) return;
   ttsBusy=true;
   while(ttsQueue.length){
     const s=ttsQueue.shift();
@@ -513,7 +562,6 @@ async function drainTTS(){
     if(ttsQueue.length) await delay(95);
   }
   ttsBusy=false; isSpeaking=false; setWave('idle');
-  // Only start mic if greeting is fully done
   if(greetingDone && recogEnabled && !recogRunning && !sessionClosed){
     setStatus('ready');
     await delay(300);
@@ -525,10 +573,10 @@ async function drainTTS(){
 
 function stopSpeaking(){
   ttsQueue=[]; ttsBusy=false; isSpeaking=false; streamBuf=''; setWave('idle');
-  try{if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();}catch(e){}
+  try{ if(speechSynthesis.speaking||speechSynthesis.pending) speechSynthesis.cancel(); }catch(e){}
 }
 
-setInterval(()=>{if(isSpeaking&&speechSynthesis.paused)speechSynthesis.resume();},4000);
+setInterval(()=>{ if(isSpeaking&&speechSynthesis.paused) speechSynthesis.resume(); },4000);
 
 // ══════════════════════════════════════════════════════════
 // SPEECH RECOGNITION
@@ -536,8 +584,8 @@ setInterval(()=>{if(isSpeaking&&speechSynthesis.paused)speechSynthesis.resume();
 let finalTranscript='';
 function initRecog(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){showToast('Speech recognition requires Chrome or Edge');return false;}
-  try{if(recognition)recognition.abort();}catch(e){}
+  if(!SR){ showToast('Speech recognition requires Chrome or Edge'); return false; }
+  try{ if(recognition) recognition.abort(); }catch(e){}
   recognition=new SR();
   recognition.lang='en-US';
   recognition.continuous=false;
@@ -556,19 +604,19 @@ function initRecog(){
     let t='';
     for(let i=e.resultIndex;i<e.results.length;i++) if(e.results[i].isFinal) t+=e.results[i][0].transcript+' ';
     finalTranscript+=t;
-    if(finalTranscript.trim()) silenceTimer=setTimeout(()=>{if(recogRunning)try{recognition.stop();}catch(e){}},1800);
+    if(finalTranscript.trim()) silenceTimer=setTimeout(()=>{ if(recogRunning) try{ recognition.stop(); }catch(e){} },1800);
   };
   recognition.onerror=(e)=>{
     if(!['no-speech','aborted'].includes(e.error)) console.warn('STT:',e.error);
     cleanupRecog();
-    if(e.error==='no-speech'&&recogEnabled&&!isSpeaking) schedRestart(700);
-    else if(e.error!=='aborted'&&recogEnabled&&!isSpeaking) schedRestart(1200);
+    if(e.error==='no-speech'&&recogEnabled&&!isSpeaking)      schedRestart(700);
+    else if(e.error!=='aborted'&&recogEnabled&&!isSpeaking)   schedRestart(1200);
   };
-  recognition.onnomatch=()=>{cleanupRecog();schedRestart(500);};
+  recognition.onnomatch=()=>{ cleanupRecog(); schedRestart(500); };
   recognition.onend=()=>{
     cleanupRecog();
     const spoken=finalTranscript.trim();
-    if(spoken&&recogEnabled&&!sessionClosed){recogEnabled=false;handleUserSpeech(spoken);}
+    if(spoken&&recogEnabled&&!sessionClosed){ recogEnabled=false; handleUserSpeech(spoken); }
     else if(recogEnabled&&!isSpeaking&&!sessionClosed) schedRestart(400);
   };
   return true;
@@ -577,44 +625,43 @@ function cleanupRecog(){
   recogRunning=isListening=false; setWave('idle'); clearTimeout(silenceTimer);
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micWrap').classList.remove('recording');
-  // Show ready-pulse when waiting for user
   if(greetingDone&&!sessionClosed) document.getElementById('micBtn').classList.add('ready-pulse');
 }
 function schedRestart(ms=400){
-  setTimeout(()=>{if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone)startRecog();},ms);
+  setTimeout(()=>{ if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone) startRecog(); },ms);
 }
 function startRecog(){
-  if(isSpeaking||recogRunning||!recogEnabled||sessionClosed||!greetingDone)return;
+  if(isSpeaking||recogRunning||!recogEnabled||sessionClosed||!greetingDone) return;
   document.getElementById('micBtn').classList.remove('ready-pulse');
-  if(!recognition){if(!initRecog())return;}
-  try{recognition.start();}catch(e){
+  if(!recognition){ if(!initRecog()) return; }
+  try{ recognition.start(); }catch(e){
     console.warn('recog start:',e.message);
     recognition=null; if(initRecog()) schedRestart(400);
   }
 }
 function stopRecog(){
   recogEnabled=false; clearTimeout(silenceTimer);
-  if(recogRunning)try{recognition.stop();}catch(e){}
+  if(recogRunning) try{ recognition.stop(); }catch(e){}
   cleanupRecog();
 }
 function handleUserSpeech(text){
-  if(!text.trim()||sessionClosed)return;
+  if(!text.trim()||sessionClosed) return;
   document.getElementById('micBtn').classList.remove('ready-pulse');
   sendMessage(text);
 }
 
 // ══════════════════════════════════════════════════════════
-// SYSTEM PROMPT
+// SYSTEM PROMPT — improved closing + scoring instructions
 // ══════════════════════════════════════════════════════════
 function buildSystemPrompt(){
   return `You are Dr. CV, a highly professional and warm Global Expansion Strategist at Comply Globally.
 You are currently on a live voice consultation call with a prospective client.
 
 PRE-FILLED CLIENT CONTEXT (from their intake form):
-- Name: ${LEAD.name||'the client'}
-- Company: ${LEAD.company||'their company'}
-- Target Market: ${LEAD.country||'not yet specified'}
-- Expansion Stage: ${LEAD.stage||'exploring options'}
+- Name: ${LEAD.name || 'the client'}
+- Company: ${LEAD.company || 'their company'}
+- Target Market: ${LEAD.country || 'not yet specified'}
+- Expansion Stage: ${LEAD.stage || 'exploring options'}
 
 VOICE & TONE RULES — follow every one precisely:
 1. Respond in 1 to 3 natural, conversational sentences only. Never write paragraphs or long responses.
@@ -629,132 +676,205 @@ VOICE & TONE RULES — follow every one precisely:
 10. Mirror the client's level of engagement — match their depth and pace.
 
 QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
-  Exchange 1: Ask about their single biggest challenge with this expansion.
-  Exchange 2: Ask about their timeline — when they want to be operational.
-  Exchange 3: Ask whether this is their first expansion attempt or if they have tried before.
-  Exchange 4: Ask who else in their organisation is involved in making this decision.
-  Exchange 5: Ask what success looks like for them 12 months from now.
-  Exchange 6: Gently probe on budget readiness — "What kind of investment are you thinking for market entry?"
-  Exchange 7–10: Dig deeper into the most interesting or unclear areas. Probe for specifics.
-  Exchange 11+: Consolidate understanding. Only close once you genuinely have enough.
+  Exchange 1:  Ask about their single biggest challenge with this expansion.
+  Exchange 2:  Ask about their timeline — when they want to be operational.
+  Exchange 3:  Ask whether this is their first expansion attempt or if they have tried before.
+  Exchange 4:  Ask who else in their organisation is involved in making this decision.
+  Exchange 5:  Ask what success looks like for them 12 months from now.
+  Exchange 6:  Gently probe budget readiness — "What kind of investment are you thinking for market entry?"
+  Exchange 7–10: Dig deeper into the most interesting or unclear areas.
+  Exchange 11+: Consolidate understanding and move toward a natural close.
 
-CLOSING RULES — CRITICAL:
-  - You are ABSOLUTELY FORBIDDEN from closing the session before exchange number ${MIN_TURNS}.
-  - Do NOT close because the client is brief or quiet — ask a follow-up or dig deeper instead.
-  - Only close when you have genuine, substantive answers on: pain point, timeline, decision makers, success definition, and budget signal.
-  - ONLY close if the client has explicitly said goodbye, thank you, or clearly signalled they are done — OR if the conversation has naturally covered all qualification areas in depth.
-  - When you do close: thank them warmly, confirm that the advisory team will follow up personally, and wish them well. Keep it brief and genuine.
-  - Never mention links, emails, or next steps beyond "our team will be in touch."
+CLOSING RULES — READ CAREFULLY:
+  - You MUST NOT close the session before exchange number ${MIN_TURNS}.
+  - After exchange ${MIN_TURNS}, you MUST close as soon as you have gathered answers on:
+    pain point, timeline, decision-makers, budget signal, and success definition.
+  - Do NOT wait for the client to say goodbye. You initiate the close once you have enough.
+  - If the client gives short or vague answers, probe once more then proceed — do not wait indefinitely.
+  - Close warmly: thank them, confirm the advisory team will follow up personally, wish them well.
+  - Keep the closing to 2–3 sentences. Then output the SCORE_JSON on a new line.
 
-SCORING — append only after you have fully closed the session, on a new line, never spoken aloud:
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"2-sentence professional summary","level":"cold|warm|hot"}
-cold = avg below 40, warm = 40–69, hot = 70 and above.`;
+SCORE OUTPUT — THIS IS MANDATORY:
+  After your closing words, output EXACTLY this on a new line (never spoken aloud, never skipped):
+
+SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"2-sentence professional summary of this specific person's situation and fit","level":"cold|warm|hot"}
+
+  Scoring criteria:
+  - interest (0-100):    How much enthusiasm and curiosity they showed. Vague or disinterested = low. Specific questions and excitement = high.
+  - engagement (0-100):  How much they elaborated. One-word answers = 10-20. Full, detailed responses = 70-100.
+  - intent (0-100):      How concrete and actionable their plans are. "Just exploring" = 10-20. Specific timeline + named budget = 80-100.
+  - readiness (0-100):   How close to a buying decision they are right now. No budget / no timeline = 10. Ready to start = 80-100.
+  - level: "hot" if average score ≥ 70, "warm" if 40-69, "cold" if below 40.
+  - summary: Write about THIS specific client — their company, their market, their stated goal, and their main blocker.
+
+  IMPORTANT: The SCORE_JSON must appear on its own line, immediately after your closing message, every single time you close. Do not skip it. Do not add commentary after it.`;
 }
 
 // ══════════════════════════════════════════════════════════
 // API — STREAMING
 // ══════════════════════════════════════════════════════════
 async function sendMessage(userText){
-  if(!userText.trim()||sessionClosed)return;
+  if(!userText.trim()||sessionClosed) return;
   stopSpeaking();
   setStatus('thinking');
-  msgHistory.push({role:'user',content:userText});
+  msgHistory.push({ role: 'user', content: userText });
   turns++;
   incrementalScore(userText);
   streamBuf='';
   let fullReply='';
 
-  try{
-    const res=await fetch(WORKER_URL+'/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:buildSystemPrompt(),messages:msgHistory})
+  try {
+    const res = await fetch(WORKER_URL + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: buildSystemPrompt(), messages: msgHistory })
     });
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
 
-    const reader=res.body.getReader();
-    const decoder=new TextDecoder();
-    let raw='';
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let raw = '';
+
     while(true){
-      const{done,value}=await reader.read();
-      if(done)break;
-      raw+=decoder.decode(value,{stream:true});
-      const lines=raw.split('\n'); raw=lines.pop();
+      const { done, value } = await reader.read();
+      if(done) break;
+      raw += decoder.decode(value, { stream: true });
+      const lines = raw.split('\n'); raw = lines.pop();
       for(const line of lines){
-        if(!line.startsWith('data: '))continue;
-        const chunk=line.slice(6).trim();
-        if(chunk==='[DONE]')continue;
-        try{
-          const parsed=JSON.parse(chunk);
-          if(parsed.type==='content_block_delta'&&parsed.delta?.text){
-            const tok=parsed.delta.text;
-            fullReply+=tok; streamBuf+=tok;
-            const{sentences,remainder}=splitAtSentenceBoundaries(streamBuf);
-            streamBuf=remainder;
-            sentences.forEach(s=>{ if(!s.includes('SCORE_JSON')) enqueueSentence(s); });
+        if(!line.startsWith('data: ')) continue;
+        const chunk = line.slice(6).trim();
+        if(chunk === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(chunk);
+          if(parsed.type === 'content_block_delta' && parsed.delta?.text){
+            const tok = parsed.delta.text;
+            fullReply  += tok;
+            streamBuf  += tok;
+            // Only enqueue speech for text BEFORE the SCORE_JSON marker
+            if(!streamBuf.includes('SCORE_JSON:')){
+              const { sentences, remainder } = splitAtSentenceBoundaries(streamBuf);
+              streamBuf = remainder;
+              sentences.forEach(s => enqueueSentence(s));
+            }
           }
-        }catch(e){}
+        } catch(e){}
       }
     }
 
-    const final=cleanForSpeech(streamBuf).trim();
-    if(final&&!final.startsWith('SCORE_JSON')) enqueueSentence(final);
-    streamBuf='';
+    // Flush remaining buffer (excluding any SCORE_JSON portion)
+    const speakable = streamBuf.split('SCORE_JSON:')[0].trim();
+    if(speakable) enqueueSentence(speakable);
+    streamBuf = '';
 
-    const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
-    msgHistory.push({role:'assistant',content:cleanReply});
-    if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
+    // Clean reply stored in history (no SCORE_JSON)
+    const cleanReply = fullReply
+      .replace(/\nSCORE_JSON:[\s\S]*$/, '')
+      .replace(/SCORE_JSON:[\s\S]*$/,   '')
+      .trim();
+    msgHistory.push({ role: 'assistant', content: cleanReply });
+    if(msgHistory.length > 30) msgHistory = msgHistory.slice(-30);
 
+    // Save turn to sheet
     pushTurnToSheet(userText, cleanReply);
 
-    const sm=fullReply.match(/SCORE_JSON:\s*(\{[\s\S]*?\})/);
-    if(sm){
-      try{
-        const sd=JSON.parse(sm[1]);
-        applyScores(sd);
-        await pushScoreToSheet(sd);
-        sessionClosed=true; lockSession();
-        recogEnabled=false; stopRecog();
-        setTimeout(showEndCard, Math.max(7000, cleanReply.length*88+3000));
-      }catch(e){ console.warn('Score parse failed:',e); recogEnabled=true; }
+    // ── SCORE EXTRACTION ────────────────────────────────────
+    const scoreData = extractScoreJSON(fullReply);
+
+    if(scoreData){
+      console.log('Score extracted successfully:', scoreData);
+      applyScores(scoreData);
+      await pushScoreToSheet(scoreData);
+      sessionClosed = true;
+      lockSession();
+      recogEnabled  = false;
+      stopRecog();
+      // Give TTS time to finish the closing words before showing end card
+      const wordsInClose = cleanReply.split(' ').length;
+      const ttsDelay     = Math.max(6000, wordsInClose * 400);
+      setTimeout(showEndCard, ttsDelay);
+
+    } else if(fullReply.includes('SCORE_JSON:')){
+      // SCORE_JSON was present but failed to parse — use incremental scores as fallback
+      console.warn('SCORE_JSON present but could not be parsed. Using incremental scores.');
+      const fallback = buildFallbackScores('Score block was present but malformed.');
+      applyScores(fallback);
+      await pushScoreToSheet(fallback);
+      sessionClosed = true;
+      lockSession();
+      recogEnabled  = false;
+      stopRecog();
+      setTimeout(showEndCard, 6000);
+
     } else {
-      recogEnabled=true;
+      // Normal mid-session turn — re-enable mic
+      recogEnabled = true;
     }
-  }catch(err){
-    console.error('API:',err);
+
+  } catch(err){
+    console.error('API error:', err);
     showToast('Connection issue — please try again.');
-    setStatus('ready'); recogEnabled=true; schedRestart(900);
+    setStatus('ready');
+    recogEnabled = true;
+    schedRestart(900);
   }
 }
 
 // ══════════════════════════════════════════════════════════
-// FORCE CLOSE
+// FORCE CLOSE (max session time reached)
 // ══════════════════════════════════════════════════════════
 async function forceCloseSession(){
-  if(sessionClosed)return;
-  const closeMsg="We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
-  stopSpeaking(); enqueueSentence(closeMsg);
-  const sd={interest:scores.interest,engagement:scores.engagement,intent:scores.intent,readiness:scores.readiness,summary:'Session reached maximum duration.',level:totalScore>=70?'hot':totalScore>=40?'warm':'cold'};
-  applyScores(sd); await pushScoreToSheet(sd);
-  sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
-  setTimeout(showEndCard,9000);
+  if(sessionClosed) return;
+  console.log('Force closing. Scores at timeout:', scores, 'Total:', totalScore);
+
+  const closeMsg = "We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
+  stopSpeaking();
+  enqueueSentence(closeMsg);
+
+  const fallback = buildFallbackScores('Session reached maximum duration. Scores estimated from conversation signals.');
+  applyScores(fallback);
+  await pushScoreToSheet(fallback);
+
+  sessionClosed = true;
+  lockSession();
+  recogEnabled  = false;
+  stopRecog();
+  setTimeout(showEndCard, 9000);
 }
 
 // ══════════════════════════════════════════════════════════
-// SCORING
+// SCORING HELPERS
 // ══════════════════════════════════════════════════════════
 function incrementalScore(text){
-  const w=text.split(/\s+/).length;
-  scores.engagement=Math.min(100,scores.engagement+(w>15?16:w>7?8:3));
-  if(/interest|want|need|expand|market|grow|opportunit/i.test(text)) scores.interest=Math.min(100,scores.interest+12);
-  if(/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) scores.intent=Math.min(100,scores.intent+15);
-  if(/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) scores.readiness=Math.min(100,scores.readiness+18);
-  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
+  const w = text.split(/\s+/).length;
+  scores.engagement = Math.min(100, scores.engagement + (w > 15 ? 16 : w > 7 ? 8 : 3));
+  if(/interest|want|need|expand|market|grow|opportunit/i.test(text))          scores.interest   = Math.min(100, scores.interest   + 12);
+  if(/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) scores.intent = Math.min(100, scores.intent     + 15);
+  if(/now|asap|urgent|immediate|this year|next month|soon/i.test(text))        scores.readiness  = Math.min(100, scores.readiness  + 18);
+  totalScore = Math.round((scores.interest + scores.engagement + scores.intent + scores.readiness) / 4);
 }
+
 function applyScores(data){
-  scores.interest=data.interest||0; scores.engagement=data.engagement||0;
-  scores.intent=data.intent||0; scores.readiness=data.readiness||0;
-  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
+  scores.interest   = Number(data.interest)   || 0;
+  scores.engagement = Number(data.engagement) || 0;
+  scores.intent     = Number(data.intent)     || 0;
+  scores.readiness  = Number(data.readiness)  || 0;
+  totalScore = Math.round((scores.interest + scores.engagement + scores.intent + scores.readiness) / 4);
+}
+
+function buildFallbackScores(summaryNote){
+  // Use the incremental scores accumulated during the session
+  const level = totalScore >= 70 ? 'hot' : totalScore >= 40 ? 'warm' : 'cold';
+  const name  = LEAD.name    || 'The client';
+  const mkt   = LEAD.country || 'an unspecified market';
+  const co    = LEAD.company || 'their company';
+  return {
+    interest:   scores.interest,
+    engagement: scores.engagement,
+    intent:     scores.intent,
+    readiness:  scores.readiness,
+    summary:    `${name} from ${co} is exploring expansion into ${mkt}. ${summaryNote}`,
+    level:      level,
+  };
 }
 
 // ══════════════════════════════════════════════════════════
@@ -762,92 +882,91 @@ function applyScores(data){
 // ══════════════════════════════════════════════════════════
 function showEndCard(){
   stopSpeaking(); stopRecog();
-  const btn=document.getElementById('endCalBtn'), msg=document.getElementById('endMsg');
-  if(totalScore>=SCORE_THRESHOLD){
-    btn.href=CAL_URL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email);
-    btn.style.display='block';
-    msg.textContent="Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
+  const btn = document.getElementById('endCalBtn');
+  const msg = document.getElementById('endMsg');
+  if(totalScore >= SCORE_THRESHOLD){
+    btn.href         = CAL_URL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email);
+    btn.style.display = 'block';
+    msg.textContent  = "Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
   } else {
-    btn.style.display='none';
-    msg.textContent="Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
+    btn.style.display = 'none';
+    msg.textContent  = "Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
   }
   document.getElementById('endCard').classList.add('show');
 }
 
 // ══════════════════════════════════════════════════════════
-// PING
+// PING (wake Render from sleep)
 // ══════════════════════════════════════════════════════════
 async function pingServer(){
-  try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }catch(e){}
+  try{ await fetch(WORKER_URL + '/', { method: 'GET', signal: AbortSignal.timeout(12000) }); }catch(e){}
 }
 
 // ══════════════════════════════════════════════════════════
-// INIT — THE KEY FIX
-// Sequence: load voices → ping server → hide overlay →
-// speak greeting (await full completion) → THEN enable mic
+// INIT
 // ══════════════════════════════════════════════════════════
 async function init(){
-  if(initDone||isLocked())return;
-  initDone=true;
-  greetingDone=false;
-  recogEnabled=false;
+  if(initDone || isLocked()) return;
+  initDone     = true;
+  greetingDone = false;
+  recogEnabled = false;
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
   scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
   clearInterval(timerInterval);
 
-  const overlay=document.getElementById('overlay');
+  const overlay = document.getElementById('overlay');
   overlay.classList.remove('gone');
-  document.getElementById('ovMsg').textContent='Loading voices…';
+  document.getElementById('ovMsg').textContent = 'Loading voices…';
   document.getElementById('micBtn').classList.remove('ready-pulse');
 
   // Load voices (retry loop)
-  let att=0;
-  const pingPromise=pingServer();
-  while(voices.length===0&&att<20){ loadVoices(); if(voices.length===0) await delay(200); att++; }
+  let att = 0;
+  const pingPromise = pingServer();
+  while(voices.length === 0 && att < 20){ loadVoices(); if(voices.length === 0) await delay(200); att++; }
 
-  document.getElementById('ovMsg').textContent='Connecting to Dr. CV…';
+  document.getElementById('ovMsg').textContent = 'Connecting to Dr. CV…';
   await pingPromise;
   await delay(200);
-  document.getElementById('ovMsg').textContent='Ready';
+  document.getElementById('ovMsg').textContent = 'Ready';
   await delay(300);
   overlay.classList.add('gone');
 
   renderLeadUI(); startTimer(); initRecog();
 
-  // Build greeting
-  const first=(LEAD.name||'').split(' ')[0].trim();
+  // Build personalised greeting
+  const first = (LEAD.name || '').split(' ')[0].trim();
   let greeting;
-  if(first&&LEAD.country&&LEAD.company){
-    greeting=`Good to have you here, ${first}. I've reviewed your intake form and I understand ${LEAD.company} is looking to establish a presence in ${LEAD.country}. To make sure we cover the ground that matters most to you — what would you say is the single biggest challenge standing in the way of that expansion right now?`;
-  }else if(first&&LEAD.country){
-    greeting=`Thank you for joining today, ${first}. I can see you're looking at ${LEAD.country} as your target market — a market we know well. What's the biggest challenge you're currently facing with that expansion?`;
-  }else if(first){
-    greeting=`Thank you for joining today, ${first}. I'm looking forward to learning about your expansion plans. Which market are you targeting, and what's the primary challenge on your mind as you think about entering it?`;
-  }else{
-    greeting=`Thank you for joining today. I'm looking forward to learning about your expansion plans. Could you start by telling me which market you're targeting, and what you see as the biggest challenge in getting there?`;
+  if(first && LEAD.country && LEAD.company){
+    greeting = `Good to have you here, ${first}. I've reviewed your intake form and I understand ${LEAD.company} is looking to establish a presence in ${LEAD.country}. To make sure we cover the ground that matters most to you — what would you say is the single biggest challenge standing in the way of that expansion right now?`;
+  } else if(first && LEAD.country){
+    greeting = `Thank you for joining today, ${first}. I can see you're looking at ${LEAD.country} as your target market — a market we know well. What's the biggest challenge you're currently facing with that expansion?`;
+  } else if(first){
+    greeting = `Thank you for joining today, ${first}. I'm looking forward to learning about your expansion plans. Which market are you targeting, and what's the primary challenge on your mind as you think about entering it?`;
+  } else {
+    greeting = `Thank you for joining today. I'm looking forward to learning about your expansion plans. Could you start by telling me which market you're targeting, and what you see as the biggest challenge in getting there?`;
   }
 
-  msgHistory.push({role:'assistant',content:greeting});
+  msgHistory.push({ role: 'assistant', content: greeting });
 
-  // Unlock browser TTS with a silent utterance first (required on some browsers)
-  await new Promise(resolve=>{
-    const wu=new SpeechSynthesisUtterance('\u00A0');
-    wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
-    speechSynthesis.speak(wu); setTimeout(resolve,600);
+  // Unlock browser TTS (required on some browsers before first real utterance)
+  await new Promise(resolve => {
+    const wu = new SpeechSynthesisUtterance('\u00A0');
+    wu.volume = 0; wu.onend = resolve; wu.onerror = resolve;
+    speechSynthesis.speak(wu); setTimeout(resolve, 600);
   });
   await delay(150);
 
-  // ── SPEAK THE FULL GREETING AND WAIT FOR IT TO FINISH ──
+  // Speak the full greeting and wait for it to complete
   setStatus('speaking');
-  const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
-  const allSentences=[...gs];
+  const { sentences: gs, remainder: gr } = splitAtSentenceBoundaries(greeting);
+  const allSentences = [...gs];
   if(gr.trim()) allSentences.push(gr);
   await speakAll(allSentences.map(cleanForSpeech).filter(Boolean));
 
-  // ── ONLY NOW enable the mic ──
-  greetingDone=true;
-  recogEnabled=true;
+  // Only now enable the microphone
+  greetingDone = true;
+  recogEnabled = true;
   setStatus('ready');
   document.getElementById('micBtn').classList.add('ready-pulse');
   await delay(400);
@@ -857,36 +976,36 @@ async function init(){
 // ══════════════════════════════════════════════════════════
 // CONTROLS
 // ══════════════════════════════════════════════════════════
-document.getElementById('micBtn').addEventListener('click',()=>{
-  if(sessionClosed)return;
-  if(!greetingDone)return; // don't allow mic during greeting
-  if(isSpeaking){stopSpeaking();recogEnabled=true;schedRestart(350);return;}
+document.getElementById('micBtn').addEventListener('click', ()=>{
+  if(sessionClosed || !greetingDone) return;
+  if(isSpeaking){ stopSpeaking(); recogEnabled=true; schedRestart(350); return; }
   if(isListening) stopRecog();
-  else{recogEnabled=true;startRecog();}
+  else { recogEnabled=true; startRecog(); }
 });
 
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  if(isLocked())return;
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  if(isLocked()) return;
   document.getElementById('endCard').classList.remove('show');
-  stopSpeaking(); stopRecog(); initDone=false; greetingDone=false;
-  setTimeout(()=>init(),300);
+  stopSpeaking(); stopRecog();
+  initDone=false; greetingDone=false;
+  setTimeout(()=>init(), 300);
 });
 
-let aiMuted=false;
-document.getElementById('muteBtn').addEventListener('click',function(){
-  aiMuted=voiceMuted=!aiMuted;
-  this.classList.toggle('active',aiMuted);
-  document.getElementById('muteIcon').innerHTML=aiMuted
-    ?`<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-    :`<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-  if(aiMuted){stopSpeaking();if(greetingDone){setStatus('ready');recogEnabled=true;schedRestart(300);}}
+let aiMuted = false;
+document.getElementById('muteBtn').addEventListener('click', function(){
+  aiMuted = voiceMuted = !aiMuted;
+  this.classList.toggle('active', aiMuted);
+  document.getElementById('muteIcon').innerHTML = aiMuted
+    ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+    : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+  if(aiMuted){ stopSpeaking(); if(greetingDone){ setStatus('ready'); recogEnabled=true; schedRestart(300); } }
 });
 
 // ══════════════════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════════════════
-speechSynthesis.onvoiceschanged=()=>{ loadVoices(); if(!initDone&&!isLocked()) init(); };
-setTimeout(()=>{ if(!initDone&&!isLocked()) init(); }, 800);
+speechSynthesis.onvoiceschanged = ()=>{ loadVoices(); if(!initDone && !isLocked()) init(); };
+setTimeout(()=>{ if(!initDone && !isLocked()) init(); }, 800);
 </script>
 </body>
 </html>
