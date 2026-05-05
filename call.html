@@ -353,7 +353,6 @@ async function pushScoreToSheet(data){
     setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
     console.log('Score pushed successfully:', payload);
   } catch(e) {
-    // Fallback: GET-based ping (bypasses CORS restrictions on some networks)
     const img = new Image();
     img.src = GAS_URL + '?' + new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) });
     setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
@@ -362,7 +361,6 @@ async function pushScoreToSheet(data){
 
 // ══════════════════════════════════════════════════════════
 // SCORE JSON PARSING — robust brace-matching approach
-// Handles whitespace, newlines, and formatting variations
 // ══════════════════════════════════════════════════════════
 function extractScoreJSON(text) {
   const marker = 'SCORE_JSON:';
@@ -375,7 +373,6 @@ function extractScoreJSON(text) {
 
   remainder = remainder.slice(start);
 
-  // Walk through characters counting brace depth
   let depth = 0;
   let end   = -1;
   for (let i = 0; i < remainder.length; i++) {
@@ -384,7 +381,6 @@ function extractScoreJSON(text) {
   }
 
   if (end === -1) {
-    // JSON was truncated — try to close it ourselves
     console.warn('SCORE_JSON appears truncated, attempting repair');
     remainder = remainder + '"}';
     try { return JSON.parse(remainder); } catch(e) { return null; }
@@ -651,7 +647,219 @@ function handleUserSpeech(text){
 }
 
 // ══════════════════════════════════════════════════════════
-// SYSTEM PROMPT — improved closing + scoring instructions
+// KNOWLEDGE BASE — U.S. Entity & State Formation for Foreign Founders
+// This is embedded directly so Dr. CV can answer these questions
+// accurately without relying on general training data.
+// ══════════════════════════════════════════════════════════
+const KNOWLEDGE_BASE = `
+=== COMPLY GLOBALLY — INTERNAL KNOWLEDGE BASE ===
+You have deep, specific expertise in U.S. business formation for foreign nationals. Use this knowledge naturally in conversation when relevant. Do not recite it like a list — weave it into your advisory responses.
+
+--- ENTITY TYPES AVAILABLE TO FOREIGN FOUNDERS ---
+
+SINGLE-MEMBER LLC (SMLLC) — TOP RECOMMENDATION FOR MOST FOREIGN FOUNDERS
+- 100% foreign ownership allowed, no U.S. citizenship or residency required
+- Treated as a "disregarded entity" by the IRS — no corporate income tax at entity level
+- Must file Form 5472 + pro forma Form 1120 annually — $25,000 penalty per year if missed
+- No self-employment tax for foreign members (major advantage over domestic owners)
+- Full liability protection — separates personal assets from business debts
+- Can be formed 100% remotely online, no travel to the U.S. required
+- Best banking access — Mercury and Relay accept foreign-owned LLCs with just an EIN
+- Recommended states: Wyoming (best overall), New Mexico (cheapest), Florida (logistics), Delaware (VC only)
+- Annual cost in Wyoming: just $62/year flat fee
+
+MULTI-MEMBER LLC (MMLLC)
+- For 2+ founders/co-owners, all can be foreign nationals
+- Taxed as a partnership — files Form 1065 and issues K-1s to each member
+- Each foreign member may have separate U.S. tax obligations
+- More complex and costly than SMLLC but supports multiple founders
+- Flexible profit/loss allocation between members
+
+C-CORPORATION
+- Required if raising institutional venture capital (VCs will not fund LLCs)
+- Foreign nationals can own 100% of a C-Corp
+- Double taxation: 21% corporate tax + up to 30% withholding on dividends
+- QSBS exclusion (Section 1202): up to 100% of capital gains excluded at exit (up to $10M+) if held 5+ years
+- Can issue multiple share classes, stock options (ISO/NSO), complex cap tables
+- Best state: Delaware (non-negotiable for institutional VC)
+- Highest compliance burden: board meetings, minutes, annual 1120 filing
+
+S-CORPORATION — NOT AVAILABLE TO FOREIGN FOUNDERS
+- Requires ALL shareholders to be U.S. citizens or lawful permanent residents
+- Non-resident aliens are categorically ineligible — never attempt this structure
+
+SOLE PROPRIETORSHIP — NEVER RECOMMENDED
+- Zero liability protection — personal assets fully exposed
+- No reason to choose this over an SMLLC which costs only $50–$300 to form
+
+SERIES LLC
+- Available in Wyoming, Delaware, Nevada, Texas
+- One parent LLC with multiple "series" — each with separate assets and liability
+- Best for: running multiple e-commerce brands, holding multiple properties
+- IRS tax treatment not fully settled — requires experienced legal/tax advisor
+
+U.S. BRANCH OF FOREIGN COMPANY
+- No liability separation — parent company is fully liable for U.S. branch activities
+- Subject to 21% corporate tax on ECI plus 30% branch profits tax on remittances
+- Only makes sense for large established foreign companies testing the U.S. market
+
+--- STATE SELECTION GUIDE ---
+
+WYOMING — Best overall for most foreign founders
+- No state income tax (personal or corporate)
+- Annual fee: $62/year flat — one of the lowest in the U.S.
+- Member names NOT required in public filings — strong privacy
+- Strongest charging order protection (best asset protection laws)
+- Allows 100% foreign ownership with no U.S. partner required
+- No operating agreement requirements
+- Best for: solo founders, digital businesses, holding companies, privacy-focused founders
+
+DELAWARE — Only for VC-backed startups
+- Over 60% of Fortune 500 companies incorporated here
+- Most developed corporate case law — Court of Chancery since 1792
+- Required for Y Combinator, Andreessen Horowitz, Sequoia, and all major VCs
+- C-Corp franchise tax: $400 minimum, can balloon to $50,000–$200,000+ if shares not structured carefully
+- LLC annual fee: $300/year flat
+- Not recommended for non-VC founders — expensive and complex for no benefit
+
+NEW MEXICO — Cheapest option
+- No annual report requirement for LLCs — zero ongoing compliance cost
+- $50 LLC filing fee — lowest of any state
+- No franchise tax
+- Member names required in Articles of Organization (less privacy than Wyoming)
+- Best for: pure cost minimization, digital/service businesses, solopreneurs
+
+FLORIDA — Best for physical goods and logistics
+- No personal income tax
+- World-class seaports: Port of Miami, Port Everglades, Port Tampa Bay, JAXPORT
+- Ideal for Latin American, Caribbean, and European trade routes
+- No franchise tax for LLCs
+- Annual report fee: $138.75 for LLCs
+- Corporate tax: 5.5% (only if physical nexus in Florida)
+- Best for: e-commerce, import/export, Latin America-focused businesses
+
+TEXAS — Best for high-volume logistics and Gulf Coast operations
+- No personal income tax
+- Port of Houston: largest Gulf Coast port, #2 in U.S. for foreign waterborne commerce
+- Franchise tax (margin tax) applies on revenue — 0% under $2.47M/year
+- LLC filing fee: $300 (highest on this list)
+- Best for: high-revenue logistics businesses, Gulf Coast imports
+
+NEVADA
+- No corporate or personal income tax
+- Strong asset protection and charging order protection
+- Mandatory state business license: $200/year
+- Less favorable than Wyoming for pure holding companies
+- Gaming/sin industry association may affect brand perception
+
+SOUTH DAKOTA
+- No personal or corporate income tax
+- Simple, low-cost compliance: $50/year annual report
+- Financial services hub — Citibank and major banks chartered here
+- Best for: financial services businesses
+
+--- TAX RULES FOR FOREIGN-OWNED U.S. ENTITIES ---
+
+DISREGARDED ENTITY ADVANTAGE (SMLLC)
+- IRS ignores the LLC as a separate taxpayer
+- No U.S. corporate income tax at LLC level
+- Owner taxed only in their home country on profits (subject to treaty)
+- Still requires Form 5472 filing annually — $25,000 penalty if missed
+
+TWO TAX REGIMES FOR FOREIGN PERSONS:
+1. ECI (Effectively Connected Income): Active business income (services, product sales, consulting). Taxed at graduated U.S. rates 10–37%. Applies when business is "engaged in trade or business in the U.S."
+2. FDAP (Fixed/Determinable/Annual/Periodical): Passive income — dividends, interest, royalties, rents. Subject to 30% flat withholding tax. Reducible by tax treaty.
+3. Capital gains from stocks/securities: Generally 0% for non-U.S. residents (not real estate)
+4. FIRPTA (real estate sales): 15% withholding on gross sales price
+
+FORM 5472 — CRITICAL COMPLIANCE REQUIREMENT
+- Required for all foreign-owned single-member LLCs
+- Reports all transactions between owner and LLC (contributions, distributions, loans, service payments)
+- Due April 15 (September 15 with extension)
+- Penalty: $25,000 per form per year — IRS has actively enforced since 2017
+- This is a compliance requirement, NOT a tax itself
+
+TAX TREATY WITHHOLDING RATES ON DIVIDENDS (C-CORP):
+- UK: 15% general / 5% substantial holdings
+- Germany: 15% / 5%
+- Canada: 15% / 5%
+- Australia: 15% / 5%
+- India: 25% / 15%
+- China: 10% / 10%
+- UAE: No treaty — full 30% withholding
+- Brazil: No treaty — full 30% withholding
+- Singapore: No treaty — full 30% withholding
+- Nigeria: No treaty — full 30% withholding
+
+--- REMOTE FORMATION PROCESS (NO TRAVEL REQUIRED) ---
+
+Step 1: Choose entity type (SMLLC for most, C-Corp for VC)
+Step 2: Choose state (Wyoming recommended for most)
+Step 3: Hire registered agent in chosen state ($25–$200/year) — required if no physical U.S. address
+Step 4: File Articles of Organization online via state Secretary of State portal ($50–$300)
+Step 5: Draft Operating Agreement (e-signature acceptable — no notarization required for most states)
+Step 6: Obtain EIN from IRS — call +1 (267) 941-1099 (IRS International, Mon–Fri 6am–11pm ET). No SSN required. Get EIN same-day on the call.
+Step 7: File FinCEN BOI Report within 90 days of formation — free at boiefiling.fincen.gov
+Step 8: Open business bank account at Mercury (mercury.com) or Relay (relayfi.com) — EIN only, no SSN, fully online, $0 monthly fee
+Step 9: Set up payment processing (Stripe, PayPal Business, Shopify Payments — all accept foreign-owned U.S. entities)
+
+BANKING OPTIONS FOR FOREIGN FOUNDERS:
+- Mercury: Best overall — no SSN, no in-person, EIN only, $0 fee, fully online
+- Relay: No SSN, no in-person, multiple sub-accounts, $0–$30/month
+- Brex: No SSN, great for spend management
+- Wise Business: Best for multi-currency and international transfers
+- Chase/Bank of America: Require SSN and often in-person — not feasible remotely
+
+MONEY TRANSFER HOME:
+- Wise (formerly TransferWise): 0.4–1.5% fee, 1–2 days — best rates
+- Mercury ACH to Wise: Lowest overall cost
+- Wire transfer (SWIFT): $15–$45 flat — good for large amounts
+
+FINCEN BOI REPORTING (CORPORATE TRANSPARENCY ACT — MANDATORY):
+- Effective January 1, 2024 — applies to all U.S. entities regardless of state
+- Entities formed after Jan 1, 2024: must file within 90 days of formation
+- Must report all beneficial owners (25%+ ownership OR substantial control)
+- Foreign owners must provide: full legal name, date of birth, home country address, passport copy
+- If ownership changes: update within 30 days
+- Penalty: $591/day for willful non-compliance plus criminal liability
+- Filing is free at boiefiling.fincen.gov
+
+--- LIABILITY PROTECTION ---
+
+WHAT "LIMITED LIABILITY" MEANS:
+- Legal wall between personal assets and business obligations
+- If business is sued or can't pay debts, personal bank accounts, home, foreign assets generally protected
+- Not absolute — courts can "pierce the corporate veil"
+
+VEIL-PIERCING RISKS (especially relevant for remote founders):
+- Commingling funds: using LLC account for personal expenses
+- Undercapitalization: forming LLC with no capital but taking on obligations
+- No Operating Agreement
+- Treating company as indistinguishable from yourself (same accounts, same address)
+SOLUTION: Separate bank accounts (Mercury for business), signed Operating Agreement, document all capital contributions and distributions
+
+ASSET PROTECTION BY STATE:
+- Wyoming SMLLC: Excellent — charging order is exclusive remedy
+- Delaware SMLLC: Good — charging order available
+- C-Corporation (any state): Good, but requires board minutes/resolutions
+- Sole Proprietorship: None — personal assets fully exposed
+
+--- QUICK REFERENCE: RECOMMENDED ENTITY BY SITUATION ---
+- Solo founder, no VC plans → SMLLC, Wyoming
+- Two or more co-founders → MMLLC, Wyoming
+- Raising institutional VC → C-Corporation, Delaware
+- Absolute cost minimization → SMLLC, New Mexico
+- Multiple brands/product lines → Series LLC, Wyoming
+- Real estate investment → SMLLC (holding) Wyoming + state LLC per property
+- E-commerce shipping through Gulf/Caribbean ports → SMLLC, Florida
+- Financial services/banking-focused → SMLLC or C-Corp, South Dakota or Delaware
+- Maximum privacy and asset protection → SMLLC, Wyoming
+
+=== END OF KNOWLEDGE BASE ===
+`;
+
+// ══════════════════════════════════════════════════════════
+// SYSTEM PROMPT — with knowledge base injected
 // ══════════════════════════════════════════════════════════
 function buildSystemPrompt(){
   return `You are Dr. CV, a highly professional and warm Global Expansion Strategist at Comply Globally.
@@ -662,6 +870,8 @@ PRE-FILLED CLIENT CONTEXT (from their intake form):
 - Company: ${LEAD.company || 'their company'}
 - Target Market: ${LEAD.country || 'not yet specified'}
 - Expansion Stage: ${LEAD.stage || 'exploring options'}
+
+${KNOWLEDGE_BASE}
 
 VOICE & TONE RULES — follow every one precisely:
 1. Respond in 1 to 3 natural, conversational sentences only. Never write paragraphs or long responses.
@@ -674,6 +884,7 @@ VOICE & TONE RULES — follow every one precisely:
 8. If the client goes off-topic, acknowledge briefly and guide back naturally.
 9. Do not apologise excessively.
 10. Mirror the client's level of engagement — match their depth and pace.
+11. When asked about entity types, state selection, tax treatment, banking, or formation process — answer confidently and specifically from your knowledge base above. Do not deflect or say you are unsure.
 
 QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
   Exchange 1:  Ask about their single biggest challenge with this expansion.
@@ -682,7 +893,7 @@ QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
   Exchange 4:  Ask who else in their organisation is involved in making this decision.
   Exchange 5:  Ask what success looks like for them 12 months from now.
   Exchange 6:  Gently probe budget readiness — "What kind of investment are you thinking for market entry?"
-  Exchange 7–10: Dig deeper into the most interesting or unclear areas.
+  Exchange 7–10: Dig deeper into the most interesting or unclear areas. If the client asks about entity types, banking, tax, or state selection — answer their question directly and concisely using your knowledge base, then steer back to qualification.
   Exchange 11+: Consolidate understanding and move toward a natural close.
 
 CLOSING RULES — READ CAREFULLY:
@@ -759,7 +970,6 @@ async function sendMessage(userText){
             const tok = parsed.delta.text;
             fullReply  += tok;
             streamBuf  += tok;
-            // Only enqueue speech for text BEFORE the SCORE_JSON marker
             if(!streamBuf.includes('SCORE_JSON:')){
               const { sentences, remainder } = splitAtSentenceBoundaries(streamBuf);
               streamBuf = remainder;
@@ -770,12 +980,10 @@ async function sendMessage(userText){
       }
     }
 
-    // Flush remaining buffer (excluding any SCORE_JSON portion)
     const speakable = streamBuf.split('SCORE_JSON:')[0].trim();
     if(speakable) enqueueSentence(speakable);
     streamBuf = '';
 
-    // Clean reply stored in history (no SCORE_JSON)
     const cleanReply = fullReply
       .replace(/\nSCORE_JSON:[\s\S]*$/, '')
       .replace(/SCORE_JSON:[\s\S]*$/,   '')
@@ -783,10 +991,8 @@ async function sendMessage(userText){
     msgHistory.push({ role: 'assistant', content: cleanReply });
     if(msgHistory.length > 30) msgHistory = msgHistory.slice(-30);
 
-    // Save turn to sheet
     pushTurnToSheet(userText, cleanReply);
 
-    // ── SCORE EXTRACTION ────────────────────────────────────
     const scoreData = extractScoreJSON(fullReply);
 
     if(scoreData){
@@ -797,13 +1003,11 @@ async function sendMessage(userText){
       lockSession();
       recogEnabled  = false;
       stopRecog();
-      // Give TTS time to finish the closing words before showing end card
       const wordsInClose = cleanReply.split(' ').length;
       const ttsDelay     = Math.max(6000, wordsInClose * 400);
       setTimeout(showEndCard, ttsDelay);
 
     } else if(fullReply.includes('SCORE_JSON:')){
-      // SCORE_JSON was present but failed to parse — use incremental scores as fallback
       console.warn('SCORE_JSON present but could not be parsed. Using incremental scores.');
       const fallback = buildFallbackScores('Score block was present but malformed.');
       applyScores(fallback);
@@ -815,7 +1019,6 @@ async function sendMessage(userText){
       setTimeout(showEndCard, 6000);
 
     } else {
-      // Normal mid-session turn — re-enable mic
       recogEnabled = true;
     }
 
@@ -871,7 +1074,6 @@ function applyScores(data){
 }
 
 function buildFallbackScores(summaryNote){
-  // Use the incremental scores accumulated during the session
   const level = totalScore >= 70 ? 'hot' : totalScore >= 40 ? 'warm' : 'cold';
   const name  = LEAD.name    || 'The client';
   const mkt   = LEAD.country || 'an unspecified market';
@@ -929,7 +1131,6 @@ async function init(){
   document.getElementById('ovMsg').textContent = 'Loading voices…';
   document.getElementById('micBtn').classList.remove('ready-pulse');
 
-  // Load voices (retry loop)
   let att = 0;
   const pingPromise = pingServer();
   while(voices.length === 0 && att < 20){ loadVoices(); if(voices.length === 0) await delay(200); att++; }
@@ -943,7 +1144,6 @@ async function init(){
 
   renderLeadUI(); startTimer(); initRecog();
 
-  // Build personalised greeting
   const first = (LEAD.name || '').split(' ')[0].trim();
   let greeting;
   if(first && LEAD.country && LEAD.company){
@@ -958,7 +1158,6 @@ async function init(){
 
   msgHistory.push({ role: 'assistant', content: greeting });
 
-  // Unlock browser TTS (required on some browsers before first real utterance)
   await new Promise(resolve => {
     const wu = new SpeechSynthesisUtterance('\u00A0');
     wu.volume = 0; wu.onend = resolve; wu.onerror = resolve;
@@ -966,14 +1165,12 @@ async function init(){
   });
   await delay(150);
 
-  // Speak the full greeting and wait for it to complete
   setStatus('speaking');
   const { sentences: gs, remainder: gr } = splitAtSentenceBoundaries(greeting);
   const allSentences = [...gs];
   if(gr.trim()) allSentences.push(gr);
   await speakAll(allSentences.map(cleanForSpeech).filter(Boolean));
 
-  // Only now enable the microphone
   greetingDone = true;
   recogEnabled = true;
   setStatus('ready');
@@ -1011,10 +1208,7 @@ document.getElementById('muteBtn').addEventListener('click', function(){
 });
 
 // ══════════════════════════════════════════════════════════
-// BOOT — auto-start on page load
-// Browsers need a user gesture before TTS works on mobile/Safari.
-// We test silently first; if blocked, show a one-tap splash.
-// On desktop Chrome it fires immediately with no tap required.
+// BOOT
 // ══════════════════════════════════════════════════════════
 speechSynthesis.onvoiceschanged = ()=>{ loadVoices(); };
 
