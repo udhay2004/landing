@@ -3,208 +3,473 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Strategy Session — Comply Globally</title>
+<title>Dr. CV — Comply Globally</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --ink:#04080f;--deep:#030610;--card:#080e1a;
-  --border:rgba(80,160,255,.1);--blue:#3b82f6;--blue2:#60a5fa;
-  --blue3:#93c5fd;--silver:#8a9bb5;--text:#e4ecf8;--muted:#4a5870;
-  --dim:#0e1a2e;--danger:#d4606a;
-  --serif:'Cormorant Garamond',serif;--sans:'Montserrat',sans-serif;--mono:'JetBrains Mono',monospace;
+  --void:#02040a;
+  --surface:#060c18;
+  --panel:#080f1e;
+  --border:rgba(100,180,255,.08);
+  --border-bright:rgba(100,180,255,.18);
+  --gold:#c9a84c;
+  --gold2:#e8c97a;
+  --gold-dim:rgba(201,168,76,.12);
+  --blue:#4fa3f7;
+  --blue2:#7bbcff;
+  --blue-dim:rgba(79,163,247,.08);
+  --text:#dce8f8;
+  --text-dim:#6b82a0;
+  --text-faint:#2a3d58;
+  --danger:#e05c6b;
+  --serif:'Playfair Display',serif;
+  --sans:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+  --glow:0 0 80px rgba(79,163,247,.06);
 }
-html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--sans);overflow:hidden;}
-#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
-.shell{position:relative;z-index:1;display:grid;grid-template-rows:64px 1fr 96px;height:100vh;max-width:1200px;margin:0 auto;}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--border);}
-.logo-wrap{display:flex;align-items:center;gap:14px;}
-.logo-mark{width:34px;height:34px;border:1px solid var(--blue);border-radius:4px;display:flex;align-items:center;justify-content:center;}
-.logo-text{display:flex;flex-direction:column;gap:1px;}
-.logo-name{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:.08em;color:var(--blue2);}
-.logo-sub{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
-.session-badge{display:flex;align-items:center;gap:10px;}
-.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .4s,box-shadow .4s;}
-.badge-dot.live{background:#4a9;box-shadow:0 0 8px rgba(68,170,136,.6);animation:breathe 2.4s ease infinite;}
-.badge-dot.listen{background:var(--danger);box-shadow:0 0 8px rgba(212,96,106,.6);animation:breathe .9s ease infinite;}
-.badge-dot.think{background:var(--blue);box-shadow:0 0 8px rgba(59,130,246,.6);animation:breathe 1.2s ease infinite;}
-.badge-dot.talk{background:var(--blue2);box-shadow:0 0 10px rgba(96,165,250,.5);animation:breathe .6s ease infinite;}
-@keyframes breathe{0%,100%{opacity:1}50%{opacity:.3}}
-.badge-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
-.session-timer{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;min-width:40px;text-align:right;}
-.main{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.stage{display:flex;flex-direction:column;align-items:center;gap:40px;}
-.orbital{position:relative;width:300px;height:300px;flex-shrink:0;}
-.orb-ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
-.orb-ring.r1{width:300px;height:300px;border:1px solid rgba(59,130,246,.07);animation:orbspin 55s linear infinite;}
-.orb-ring.r2{width:254px;height:254px;border:1px solid rgba(59,130,246,.11);animation:orbspin 38s linear infinite reverse;}
-.orb-ring.r3{width:208px;height:208px;border:1px solid rgba(96,165,250,.06);animation:orbspin 24s linear infinite;}
-.orb-ring::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;top:50%;left:-2.5px;transform:translateY(-50%);}
-.orb-ring.r1::after{background:var(--blue);box-shadow:0 0 6px var(--blue);}
-.orb-ring.r2::after{background:var(--blue2);box-shadow:0 0 5px var(--blue2);}
-.orb-ring.r3::after{background:var(--silver);box-shadow:0 0 4px var(--silver);}
-@keyframes orbspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.face-wrap{position:absolute;width:172px;height:172px;top:50%;left:50%;transform:translate(-50%,-50%);}
-#waveCanvas{position:absolute;inset:0;border-radius:50%;}
-.face{position:absolute;inset:12px;border-radius:50%;background:linear-gradient(145deg,#08101e,#040c18);border:1px solid rgba(59,130,246,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:inset 0 1px 0 rgba(59,130,246,.06),0 0 60px rgba(59,130,246,.06);}
-.face-initials{font-family:var(--serif);font-size:36px;font-weight:300;font-style:italic;color:var(--blue2);line-height:1;}
-.face-rule{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
-.face-title{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
-.identity{text-align:center;}
-.id-name{font-family:var(--serif);font-size:32px;font-weight:300;letter-spacing:.06em;color:var(--text);margin-bottom:8px;}
-.id-title{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--blue2);text-transform:uppercase;margin-bottom:4px;}
-.id-firm{font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;}
-.id-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin:0 auto;}
-.session-info{display:flex;align-items:center;gap:28px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.si-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
-.si-value{color:var(--text);font-size:11px;}
-.si-sep{width:1px;height:28px;background:var(--border);}
-.controls{display:flex;align-items:center;justify-content:center;gap:24px;border-top:1px solid var(--border);background:rgba(3,6,16,.95);backdrop-filter:blur(40px);position:relative;z-index:2;}
-.ctrl{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;outline:none;}
-.ctrl:hover{border-color:rgba(59,130,246,.4);color:var(--blue2);transform:scale(1.06);}
-.ctrl.active{border-color:rgba(212,96,106,.4);color:var(--danger);}
-.mic-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
-.mic-pulse{position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(59,130,246,.15);pointer-events:none;}
-.mic-btn{width:62px;height:62px;border-radius:50%;border:1px solid rgba(59,130,246,.35);background:linear-gradient(145deg,rgba(59,130,246,.08),rgba(59,130,246,.03));color:var(--blue2);cursor:pointer;display:flex;align-items:center;justify-content:center;outline:none;transition:all .3s;position:relative;z-index:1;}
-.mic-btn:hover{border-color:rgba(59,130,246,.6);}
-.mic-btn.recording{border-color:rgba(212,96,106,.6);background:linear-gradient(145deg,rgba(212,96,106,.12),rgba(212,96,106,.04));color:var(--danger);}
-.mic-wrap.recording .mic-pulse{animation:mpulse 1.6s ease infinite;border-color:rgba(212,96,106,.35);}
-@keyframes mpulse{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:0}100%{transform:scale(1);opacity:.7}}
-.ctrl-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;text-align:center;min-width:56px;}
-.overlay{position:fixed;inset:0;z-index:200;background:var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .7s ease;}
-.overlay.gone{opacity:0;pointer-events:none;}
-.ov-wordmark{font-family:var(--serif);font-size:36px;font-weight:300;letter-spacing:.12em;color:var(--blue2);}
-.ov-rule{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
-.ov-spinner{width:36px;height:36px;border:1px solid rgba(59,130,246,.15);border-top-color:var(--blue);border-radius:50%;animation:sp .9s linear infinite;}
-@keyframes sp{to{transform:rotate(360deg)}}
-.ov-msg{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
-.used-screen{position:fixed;inset:0;z-index:300;background:var(--deep);display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;}
-.used-screen.show{display:flex;}
-.used-icon{width:64px;height:64px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--blue2);}
-.used-title{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.06em;color:var(--text);}
-.used-sub{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;max-width:360px;line-height:1.9;}
-.used-rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);}
-.end-card{position:fixed;inset:0;background:rgba(3,6,16,.96);backdrop-filter:blur(40px);z-index:150;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;}
-.end-card.show{opacity:1;pointer-events:all;}
-.end-inner{width:420px;text-align:center;}
-.end-rule-top{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);margin-bottom:36px;}
-.end-icon{font-size:28px;margin-bottom:16px;}
-.end-title{font-family:var(--serif);font-size:28px;font-weight:300;letter-spacing:.06em;margin-bottom:6px;}
-.end-sub{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:28px;}
-.end-msg{font-family:var(--sans);font-size:14px;line-height:1.75;color:rgba(228,236,248,.65);margin-bottom:32px;font-weight:300;}
-.end-cta{display:block;padding:16px 32px;border:1px solid rgba(59,130,246,.5);background:transparent;color:var(--blue2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .25s;width:100%;}
-.end-cta:hover{background:rgba(59,130,246,.08);border-color:var(--blue);}
-.end-rule-bottom{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:28px;}
-.toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(212,96,106,.88);color:#fff;padding:10px 24px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;z-index:300;display:none;}
-.sync-dot{position:fixed;top:16px;right:16px;width:6px;height:6px;border-radius:50%;background:var(--muted);z-index:500;transition:background .3s,box-shadow .3s;}
-.sync-dot.syncing{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.6);animation:breathe .8s ease infinite;}
-.sync-dot.ok{background:#4a9;box-shadow:0 0 6px rgba(68,170,136,.5);}
-.sync-dot.err{background:var(--danger);box-shadow:0 0 6px rgba(212,96,106,.5);}
-.mic-btn.ready-pulse{animation:readypulse 2s ease infinite;}
-@keyframes readypulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 10px rgba(59,130,246,0)}}
+html,body{height:100%;background:var(--void);color:var(--text);font-family:var(--sans);overflow:hidden;}
 
-@media(max-width:600px){
+/* ── AURORA BACKGROUND ── */
+#aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.aurora-blob{
+  position:absolute;border-radius:50%;filter:blur(120px);opacity:0;
+  animation:auroraFloat var(--dur,30s) var(--delay,0s) ease-in-out infinite alternate;
+}
+.ab1{width:900px;height:600px;background:radial-gradient(ellipse,rgba(30,80,180,.18),transparent 70%);top:-20%;left:-20%;--dur:28s;--delay:0s;}
+.ab2{width:700px;height:700px;background:radial-gradient(ellipse,rgba(15,40,120,.14),transparent 70%);bottom:-25%;right:-15%;--dur:36s;--delay:-8s;}
+.ab3{width:500px;height:400px;background:radial-gradient(ellipse,rgba(100,168,76,.07),transparent 70%);top:30%;left:40%;--dur:22s;--delay:-14s;}
+@keyframes auroraFloat{0%{opacity:.4;transform:translate(0,0) scale(1);}100%{opacity:.7;transform:translate(40px,-30px) scale(1.08);}}
+
+/* ── STAR FIELD ── */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── GRID OVERLAY ── */
+.grid-overlay{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(79,163,247,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(79,163,247,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%);
+}
+
+/* ── SHELL ── */
+.shell{position:relative;z-index:10;display:grid;grid-template-rows:70px 1fr 100px;height:100vh;max-width:1100px;margin:0 auto;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;padding:0 48px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(6,12,24,.9),rgba(6,12,24,.6));
+  backdrop-filter:blur(20px);
+}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand-gem{
+  width:32px;height:32px;border:1px solid rgba(201,168,76,.35);
+  background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.brand-gem::before{
+  content:'';position:absolute;inset:-1px;
+  background:linear-gradient(135deg,rgba(201,168,76,.3),transparent 50%,rgba(201,168,76,.15));
+  border-radius:inherit;
+}
+.brand-gem svg{position:relative;z-index:1;}
+.brand-name{font-family:var(--serif);font-size:14px;font-weight:500;letter-spacing:.12em;color:var(--gold2);}
+.brand-tag{font-family:var(--mono);font-size:7px;letter-spacing:.25em;color:var(--text-dim);text-transform:uppercase;margin-top:2px;}
+
+.status-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 16px;border:1px solid var(--border);
+  background:rgba(6,12,24,.6);backdrop-filter:blur(10px);
+}
+.status-orb{width:6px;height:6px;border-radius:50%;background:var(--text-faint);transition:all .4s;}
+.status-orb.s-ready{background:#4ab87a;box-shadow:0 0 8px rgba(74,184,122,.5);animation:heartbeat 2s ease infinite;}
+.status-orb.s-listen{background:var(--danger);box-shadow:0 0 10px rgba(224,92,107,.6);animation:heartbeat .9s ease infinite;}
+.status-orb.s-think{background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.5);animation:heartbeat 1.1s ease infinite;}
+.status-orb.s-talk{background:var(--blue2);box-shadow:0 0 12px rgba(123,188,255,.55);animation:heartbeat .7s ease infinite;}
+@keyframes heartbeat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
+.status-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--text-dim);text-transform:uppercase;min-width:70px;}
+.session-clock{font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:.08em;}
+
+/* ── MAIN STAGE ── */
+.main{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;gap:80px;}
+
+/* ── ORB SYSTEM ── */
+.orb-system{
+  position:relative;width:320px;height:320px;flex-shrink:0;
+  animation:systemBreath 8s ease-in-out infinite;
+}
+@keyframes systemBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+
+/* Outer decorative rings */
+.deco-ring{
+  position:absolute;border-radius:50%;top:50%;left:50%;
+  transform:translate(-50%,-50%);border:1px solid;pointer-events:none;
+}
+.dr1{width:320px;height:320px;border-color:rgba(79,163,247,.05);animation:spin 60s linear infinite;}
+.dr2{width:280px;height:280px;border-color:rgba(201,168,76,.06);animation:spin 45s linear infinite reverse;}
+.dr3{width:240px;height:240px;border-color:rgba(79,163,247,.04);animation:spin 32s linear infinite;}
+.dr4{width:200px;height:200px;border-color:rgba(201,168,76,.08);animation:spin 20s linear infinite reverse;}
+
+/* Dots on rings */
+.deco-ring::before,.deco-ring::after{
+  content:'';position:absolute;border-radius:50%;top:50%;
+  transform:translateY(-50%);
+}
+.dr1::before{width:4px;height:4px;left:-2px;background:var(--blue);box-shadow:0 0 8px var(--blue);}
+.dr1::after{width:3px;height:3px;right:-1.5px;top:calc(50% - 60%);background:var(--gold);box-shadow:0 0 6px var(--gold);}
+.dr2::before{width:3px;height:3px;left:-1.5px;background:var(--gold2);box-shadow:0 0 6px var(--gold2);}
+.dr3::before{width:2px;height:2px;left:-1px;background:rgba(79,163,247,.6);box-shadow:0 0 4px var(--blue);}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* Core orb */
+.orb-core{
+  position:absolute;width:168px;height:168px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#0d1f3c,#050d1a 60%,#030810);
+  border:1px solid rgba(79,163,247,.2);
+  box-shadow:
+    0 0 0 1px rgba(79,163,247,.05),
+    0 0 60px rgba(79,163,247,.08),
+    inset 0 1px 0 rgba(79,163,247,.08),
+    inset 0 -1px 0 rgba(0,0,0,.3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  z-index:5;
+}
+.orb-glow-ring{
+  position:absolute;width:168px;height:168px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;
+  box-shadow:0 0 0 0 rgba(79,163,247,.3);
+  transition:box-shadow .6s ease;
+  pointer-events:none;z-index:4;
+}
+.orb-glow-ring.speaking{box-shadow:0 0 40px 8px rgba(79,163,247,.2),0 0 80px 20px rgba(79,163,247,.08);}
+.orb-glow-ring.listening{box-shadow:0 0 40px 8px rgba(224,92,107,.2),0 0 80px 20px rgba(224,92,107,.08);}
+
+#waveCanvas{
+  position:absolute;width:168px;height:168px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:50%;z-index:6;pointer-events:none;
+}
+
+.orb-initials{font-family:var(--serif);font-size:40px;font-weight:400;font-style:italic;color:var(--blue2);line-height:1;}
+.orb-line{width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.orb-subtitle{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--text-dim);text-transform:uppercase;}
+
+/* ── IDENTITY PANEL ── */
+.identity{display:flex;flex-direction:column;gap:20px;}
+.id-eyebrow{font-family:var(--mono);font-size:8px;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;}
+.id-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--gold);opacity:.4;}
+.id-name{font-family:var(--serif);font-size:42px;font-weight:400;letter-spacing:.04em;line-height:.95;
+  background:linear-gradient(135deg,var(--text) 40%,var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.id-role{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--blue2);text-transform:uppercase;margin-top:4px;}
+.id-firm{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--text-dim);text-transform:uppercase;}
+.id-divider{width:100%;height:1px;background:linear-gradient(90deg,var(--border-bright),transparent);margin:4px 0;}
+.id-meta{display:flex;gap:28px;}
+.id-meta-item{display:flex;flex-direction:column;gap:5px;}
+.id-meta-label{font-family:var(--mono);font-size:7px;letter-spacing:.18em;color:var(--text-faint);text-transform:uppercase;}
+.id-meta-value{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--text);}
+
+/* ── TRANSCRIPT BUBBLE ── */
+.transcript-area{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  width:min(600px, calc(100vw - 48px));
+  min-height:48px;
+  background:rgba(6,12,24,.85);backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  padding:14px 20px;
+  font-family:var(--sans);font-size:13px;line-height:1.65;color:rgba(220,232,248,.7);
+  font-weight:300;
+  opacity:0;transform:translateX(-50%) translateY(8px);transition:opacity .4s,transform .4s;
+  pointer-events:none;text-align:center;
+}
+.transcript-area.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+.transcript-speaker{font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:6px;}
+.transcript-speaker.you{color:var(--gold);}
+.transcript-speaker.ai{color:var(--blue2);}
+
+/* ── CONTROLS ── */
+.controls{
+  display:flex;align-items:center;justify-content:center;gap:28px;
+  border-top:1px solid var(--border);
+  background:linear-gradient(0deg,rgba(2,4,10,.98),rgba(6,12,24,.9));
+  backdrop-filter:blur(40px);
+  position:relative;z-index:20;
+}
+
+.ctrl-btn{
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;outline:none;
+}
+.ctrl-btn:hover{border-color:var(--border-bright);color:var(--blue2);transform:scale(1.07);}
+.ctrl-btn.muted{border-color:rgba(224,92,107,.35);color:var(--danger);}
+
+.ctrl-hint{font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--text-faint);text-transform:uppercase;min-width:64px;text-align:center;}
+
+/* ── MIC BUTTON ── */
+.mic-outer{position:relative;display:flex;align-items:center;justify-content:center;}
+.mic-ring{
+  position:absolute;width:90px;height:90px;border-radius:50%;
+  border:1px solid rgba(79,163,247,.1);pointer-events:none;
+  transition:all .4s;
+}
+.mic-ring.listening{border-color:rgba(224,92,107,.3);animation:ringPulse 1.4s ease infinite;}
+@keyframes ringPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.mic-ring2{
+  position:absolute;width:76px;height:76px;border-radius:50%;
+  border:1px solid rgba(79,163,247,.06);pointer-events:none;
+  transition:all .4s;
+}
+.mic-ring2.listening{border-color:rgba(224,92,107,.2);animation:ringPulse 1.4s .3s ease infinite;}
+
+.mic-btn{
+  width:66px;height:66px;border-radius:50%;
+  border:1px solid rgba(79,163,247,.3);
+  background:linear-gradient(145deg,rgba(79,163,247,.1),rgba(79,163,247,.04));
+  color:var(--blue2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  outline:none;transition:all .35s;position:relative;z-index:2;
+}
+.mic-btn:hover{border-color:rgba(79,163,247,.55);box-shadow:0 0 20px rgba(79,163,247,.12);}
+.mic-btn.recording{
+  border-color:rgba(224,92,107,.5);
+  background:linear-gradient(145deg,rgba(224,92,107,.14),rgba(224,92,107,.05));
+  color:var(--danger);
+}
+.mic-btn.ready{animation:readyGlow 2.5s ease infinite;}
+@keyframes readyGlow{0%,100%{box-shadow:0 0 0 0 rgba(79,163,247,.35)}50%{box-shadow:0 0 0 12px rgba(79,163,247,0)}}
+
+/* ── OVERLAY ── */
+.overlay{
+  position:fixed;inset:0;z-index:500;
+  background:var(--void);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;
+  transition:opacity .9s ease, visibility .9s;
+}
+.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.ov-logo{font-family:var(--serif);font-size:34px;font-weight:400;letter-spacing:.1em;
+  background:linear-gradient(135deg,var(--gold2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ov-line{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.ov-spinner{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.15);border-top-color:var(--gold);
+  animation:spin2 1s linear infinite;
+}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.ov-msg{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--text-dim);text-transform:uppercase;}
+
+/* ── SPLASH ── */
+.splash{
+  position:fixed;inset:0;z-index:600;
+  background:radial-gradient(ellipse at center,#080f1e,var(--void));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  cursor:pointer;transition:opacity .6s;
+}
+.splash.hidden{opacity:0;pointer-events:none;}
+.splash-logo{font-family:var(--serif);font-size:32px;font-style:italic;
+  background:linear-gradient(135deg,var(--gold2) 30%,var(--blue2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.splash-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.splash-btn{
+  width:80px;height:80px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.4);
+  background:linear-gradient(145deg,rgba(201,168,76,.1),rgba(201,168,76,.03));
+  display:flex;align-items:center;justify-content:center;color:var(--gold2);
+  transition:all .3s;
+}
+.splash-btn:hover{border-color:var(--gold2);box-shadow:0 0 40px rgba(201,168,76,.15);}
+.splash-hint{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--text-faint);text-transform:uppercase;}
+
+/* ── END CARD ── */
+.end-card{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(2,4,10,.97);backdrop-filter:blur(40px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .7s;
+}
+.end-card.show{opacity:1;pointer-events:all;}
+.end-inner{width:440px;text-align:center;padding:0 20px;}
+.end-top-rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:40px;}
+.end-star{font-size:24px;color:var(--gold);margin-bottom:16px;animation:starPulse 3s ease infinite;}
+@keyframes starPulse{0%,100%{opacity:.6}50%{opacity:1}}
+.end-title{font-family:var(--serif);font-size:30px;font-weight:400;font-style:italic;color:var(--text);margin-bottom:6px;}
+.end-sub{font-family:var(--mono);font-size:8px;letter-spacing:.22em;color:var(--text-dim);text-transform:uppercase;margin-bottom:28px;}
+.end-msg{font-family:var(--sans);font-size:14px;line-height:1.8;color:rgba(220,232,248,.6);margin-bottom:32px;font-weight:300;}
+.end-cta{
+  display:block;padding:18px 32px;
+  border:1px solid rgba(201,168,76,.4);
+  background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.02));
+  color:var(--gold2);
+  font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;transition:all .25s;width:100%;
+}
+.end-cta:hover{background:linear-gradient(135deg,rgba(201,168,76,.14),rgba(201,168,76,.05));border-color:var(--gold2);}
+.end-bottom-rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:32px;}
+
+/* ── USED SCREEN ── */
+.used-screen{
+  position:fixed;inset:0;z-index:700;
+  background:var(--void);
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  text-align:center;padding:40px;
+}
+.used-screen.show{display:flex;}
+.used-title{font-family:var(--serif);font-size:28px;font-style:italic;color:var(--text);}
+.used-sub{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;line-height:2;max-width:360px;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:116px;left:50%;transform:translateX(-50%);
+  background:rgba(224,92,107,.9);color:#fff;
+  padding:10px 24px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+  z-index:800;display:none;text-transform:uppercase;
+}
+
+/* ── SYNC DOT ── */
+.sync-dot{position:fixed;top:18px;right:18px;width:5px;height:5px;border-radius:50%;background:transparent;z-index:900;}
+.sync-dot.syncing{background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.6);animation:heartbeat .8s ease infinite;}
+.sync-dot.ok{background:#4ab87a;box-shadow:0 0 6px rgba(74,184,122,.5);}
+.sync-dot.err{background:var(--danger);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .main{flex-direction:column;gap:24px;}
+  .identity{align-items:center;text-align:center;}
+  .id-eyebrow::before{display:none;}
+  .id-meta{justify-content:center;}
   .topbar{padding:0 20px;}
-  .session-info{gap:16px;}
-  .controls{gap:16px;}
-  .stage{gap:26px;}
-  .orbital{width:240px;height:240px;}
-  .orb-ring.r1{width:240px;height:240px;}
-  .orb-ring.r2{width:204px;height:204px;}
-  .orb-ring.r3{width:168px;height:168px;}
-  .face-wrap{width:136px;height:136px;}
-  .face-initials{font-size:28px;}
-  .id-name{font-size:26px;}
+  .id-name{font-size:32px;}
+  .orb-system{width:240px;height:240px;}
+  .dr1{width:240px;height:240px;} .dr2{width:210px;height:210px;}
+  .dr3{width:180px;height:180px;} .dr4{width:150px;height:150px;}
+  .orb-core{width:128px;height:128px;}
+  .orb-initials{font-size:30px;}
+  #waveCanvas{width:128px;height:128px;}
+  .orb-glow-ring{width:128px;height:128px;}
 }
 </style>
 </head>
 <body>
 
-<canvas id="bgCanvas"></canvas>
+<!-- BACKGROUNDS -->
+<div id="aurora">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
 <div class="sync-dot" id="syncDot"></div>
 
+<!-- USED SCREEN -->
 <div class="used-screen" id="usedScreen">
-  <div class="used-icon">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-    </svg>
-  </div>
-  <div class="used-rule"></div>
+  <div style="font-family:var(--serif);font-size:48px;color:var(--gold);font-style:italic;">✦</div>
+  <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
   <div class="used-title">Session Already Completed</div>
   <div class="used-sub">Your strategy session with Dr. CV has already taken place.<br>Our advisory team will be in touch with next steps shortly.</div>
-  <div class="used-rule"></div>
-  <div class="used-sub" style="font-size:9px;opacity:.45;margin-top:4px;">This is a single-use session link.</div>
+  <div style="font-family:var(--mono);font-size:8px;letter-spacing:.16em;color:var(--text-faint);text-transform:uppercase;margin-top:8px;">Single-use session link</div>
 </div>
 
+<!-- MAIN SHELL -->
 <div class="shell">
   <header class="topbar">
-    <div class="logo-wrap">
-      <div class="logo-mark">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+    <div class="brand">
+      <div class="brand-gem">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5">
+          <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+          <line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="8.5" x2="22" y2="8.5"/>
         </svg>
       </div>
-      <div class="logo-text">
-        <div class="logo-name">Comply Globally</div>
-        <div class="logo-sub">Global Expansion Advisory</div>
+      <div>
+        <div class="brand-name">Comply Globally</div>
+        <div class="brand-tag">Global Expansion Advisory</div>
       </div>
     </div>
-    <div class="session-badge">
-      <div class="badge-dot" id="statusDot"></div>
-      <span class="badge-label" id="statusText">Connecting</span>
+    <div class="status-pill">
+      <div class="status-orb" id="statusOrb"></div>
+      <span class="status-label" id="statusLabel">Connecting</span>
     </div>
-    <div class="session-timer" id="timer">0:00</div>
+    <div class="session-clock" id="timer">0:00</div>
   </header>
 
   <div class="main">
-    <div class="stage">
-      <div class="orbital">
-        <div class="orb-ring r1"></div><div class="orb-ring r2"></div><div class="orb-ring r3"></div>
-        <div class="face-wrap">
-          <canvas id="waveCanvas" width="172" height="172"></canvas>
-          <div class="face">
-            <div class="face-initials">CV</div>
-            <div class="face-rule"></div>
-            <div class="face-title">Dr. CV · AI Strategist</div>
-          </div>
+    <!-- ORB -->
+    <div class="orb-system">
+      <div class="deco-ring dr1"></div>
+      <div class="deco-ring dr2"></div>
+      <div class="deco-ring dr3"></div>
+      <div class="deco-ring dr4"></div>
+      <div class="orb-glow-ring" id="orbGlow"></div>
+      <canvas id="waveCanvas" width="168" height="168"></canvas>
+      <div class="orb-core">
+        <div class="orb-initials">CV</div>
+        <div class="orb-line"></div>
+        <div class="orb-subtitle">Dr. CV · AI Strategist</div>
+      </div>
+    </div>
+
+    <!-- IDENTITY -->
+    <div class="identity">
+      <div>
+        <div class="id-eyebrow">Strategy Session</div>
+        <div class="id-name">Dr. CV</div>
+        <div class="id-role">Global Expansion Strategist</div>
+        <div class="id-firm">Comply Globally · Advisory Division</div>
+      </div>
+      <div class="id-divider"></div>
+      <div class="id-meta">
+        <div class="id-meta-item">
+          <div class="id-meta-label">Client</div>
+          <div class="id-meta-value" id="metaName">—</div>
+        </div>
+        <div class="id-meta-item">
+          <div class="id-meta-label">Target Market</div>
+          <div class="id-meta-value" id="metaMarket">—</div>
+        </div>
+        <div class="id-meta-item">
+          <div class="id-meta-label">Duration</div>
+          <div class="id-meta-value" id="metaDuration">0:00</div>
         </div>
       </div>
-      <div class="identity">
-        <div class="id-name">Dr. CV</div>
-        <div class="id-title">Global Expansion Strategist</div>
-        <div class="id-firm">Comply Globally · Advisory Division</div>
-        <div class="id-divider"></div>
-      </div>
-      <div class="session-info">
-        <div class="si-item"><span class="si-value" id="siName">—</span><span>Client</span></div>
-        <div class="si-sep"></div>
-        <div class="si-item"><span class="si-value" id="siMarket">—</span><span>Target Market</span></div>
-        <div class="si-sep"></div>
-        <div class="si-item"><span class="si-value" id="siDuration">0:00</span><span>Duration</span></div>
-      </div>
+    </div>
+
+    <!-- TRANSCRIPT BUBBLE -->
+    <div class="transcript-area" id="transcript">
+      <div class="transcript-speaker ai" id="transcriptSpeaker">Dr. CV</div>
+      <div id="transcriptText"></div>
     </div>
   </div>
 
+  <!-- CONTROLS -->
   <div class="controls">
-    <button class="ctrl" id="resetBtn" title="Restart">
+    <button class="ctrl-btn" id="resetBtn" title="Restart session">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
       </svg>
     </button>
-    <div class="ctrl-label" id="ctrlHintL">Initialising…</div>
-    <div class="mic-wrap" id="micWrap">
+    <div class="ctrl-hint" id="hintLeft">Starting…</div>
+    <div class="mic-outer" id="micOuter">
+      <div class="mic-ring" id="micRing"></div>
+      <div class="mic-ring2" id="micRing2"></div>
       <button class="mic-btn" id="micBtn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <rect x="9" y="2" width="6" height="12" rx="3"/>
           <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
         </svg>
       </button>
-      <div class="mic-pulse"></div>
     </div>
-    <div class="ctrl-label" id="ctrlHintR" style="text-align:left;">Tap to speak</div>
-    <button class="ctrl" id="muteBtn" title="Mute AI voice">
+    <div class="ctrl-hint" id="hintRight" style="text-align:left;">Tap to speak</div>
+    <button class="ctrl-btn" id="muteBtn" title="Mute AI voice">
       <svg id="muteIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M11 5 6 9H2v6h4l5 4V5z"/>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
@@ -213,41 +478,55 @@ html,body{height:100%;background:var(--ink);color:var(--text);font-family:var(--
   </div>
 </div>
 
+<!-- LOADING OVERLAY -->
 <div class="overlay" id="overlay">
-  <div class="ov-wordmark">Comply Globally</div>
-  <div class="ov-rule"></div>
+  <div class="ov-logo">Comply Globally</div>
+  <div class="ov-line"></div>
   <div class="ov-spinner"></div>
   <div class="ov-msg" id="ovMsg">Preparing your session</div>
 </div>
 
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo">Comply Globally</div>
+  <div class="splash-line"></div>
+  <div class="splash-btn">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+  </div>
+  <div class="splash-hint">Tap to begin your session</div>
+</div>
+
+<!-- END CARD -->
 <div class="end-card" id="endCard">
   <div class="end-inner">
-    <div class="end-rule-top"></div>
-    <div class="end-icon">✦</div>
+    <div class="end-top-rule"></div>
+    <div class="end-star">✦</div>
     <div class="end-title">Session Complete</div>
     <div class="end-sub">Thank you for speaking with Dr. CV</div>
     <div class="end-msg" id="endMsg">Our advisory team will review your conversation and reach out within one business day.</div>
-    <a href="#" class="end-cta" id="endCalBtn" target="_blank" style="display:none;">Schedule a Strategy Call →</a>
-    <div class="end-rule-bottom"></div>
+    <a href="#" class="end-cta" id="endCalBtn" style="display:none;">Schedule a Strategy Call →</a>
+    <div class="end-bottom-rule"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // CONFIG
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 const WORKER_URL      = 'https://drcv.onrender.com';
 const GAS_URL         = 'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec';
 const CAL_URL         = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
 const SCORE_THRESHOLD = 60;
-const MIN_TURNS       = 12;
+const MIN_TURNS       = 10;
 const MAX_SESSION_MS  = 20 * 60 * 1000;
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // LEAD PARAMS
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 const _p = new URLSearchParams(window.location.search);
 const LEAD = {
   name:      decodeURIComponent(_p.get('name')    || ''),
@@ -259,17 +538,17 @@ const LEAD = {
   sessionId: _p.get('sessionId') || ('sess_' + Date.now()),
 };
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // SESSION LOCK
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 const LOCK_KEY = 'cg_done_' + LEAD.leadId;
 function isLocked()    { try { return !!localStorage.getItem(LOCK_KEY); } catch(e){ return false; } }
 function lockSession() { try { localStorage.setItem(LOCK_KEY, Date.now().toString()); } catch(e){} }
 if (isLocked()) document.getElementById('usedScreen').classList.add('show');
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 let msgHistory    = [];
 let turns         = 0;
 let sessionStart  = 0;
@@ -285,228 +564,192 @@ let voices        = [];
 let initDone      = false;
 let sessionClosed = false;
 let greetingDone  = false;
+let ttsQueue      = [];
+let ttsBusy       = false;
+let streamBuf     = '';
+let scores        = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
+let totalScore    = 0;
+let lastAIText    = '';
 
-let ttsQueue  = [];
-let ttsBusy   = false;
-let streamBuf = '';
-
-let scores    = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
-let totalScore = 0;
-
-// ══════════════════════════════════════════════════════════
-// SYNC DOT
-// ══════════════════════════════════════════════════════════
-const syncDot = document.getElementById('syncDot');
-function setSyncState(s){ syncDot.className = 'sync-dot ' + s; }
-
-// ══════════════════════════════════════════════════════════
-// GAS HELPERS
-// ══════════════════════════════════════════════════════════
-function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
-
-async function pushTurnToSheet(userMsg, botMsg){
-  if(!hasGAS()) return;
-  const payload = {
-    leadId: LEAD.leadId, sessionId: LEAD.sessionId,
-    turnNumber: turns, userMessage: userMsg, botResponse: botMsg
-  };
-  setSyncState('syncing');
-  try {
-    await fetch(GAS_URL + '?action=update', {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ action: 'update', data: JSON.stringify(payload) }).toString()
-    });
-    setSyncState('ok'); setTimeout(()=>setSyncState(''), 2000);
-  } catch(e) {
-    console.warn('Turn sync failed:', e); setSyncState('err');
-  }
-}
-
-async function pushScoreToSheet(data){
-  if(!hasGAS()) return;
-  const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
-  const payload = {
-    leadId:             LEAD.leadId,
-    sessionId:          LEAD.sessionId,
-    name:               LEAD.name,
-    email:              LEAD.email,
-    company:            LEAD.company,
-    country:            LEAD.country,
-    qualificationScore: totalScore,
-    qualificationLevel: data.level  || '',
-    duration:           elapsed,
-    turnCount:          turns,
-    summary:            data.summary || '',
-    interest:           data.interest    || 0,
-    engagement:         data.engagement  || 0,
-    intent:             data.intent      || 0,
-    readiness:          data.readiness   || 0,
-  };
-  setSyncState('syncing');
-  try {
-    await fetch(GAS_URL + '?action=complete', {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) }).toString()
-    });
-    setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
-    console.log('Score pushed successfully:', payload);
-  } catch(e) {
-    const img = new Image();
-    img.src = GAS_URL + '?' + new URLSearchParams({ action: 'complete', data: JSON.stringify(payload) });
-    setSyncState('ok'); setTimeout(()=>setSyncState(''), 3000);
-  }
-}
-
-// ══════════════════════════════════════════════════════════
-// SCORE JSON PARSING — robust brace-matching approach
-// ══════════════════════════════════════════════════════════
-function extractScoreJSON(text) {
-  const marker = 'SCORE_JSON:';
-  const idx    = text.indexOf(marker);
-  if (idx === -1) return null;
-
-  let remainder = text.slice(idx + marker.length).trim();
-  const start   = remainder.indexOf('{');
-  if (start === -1) return null;
-
-  remainder = remainder.slice(start);
-
-  let depth = 0;
-  let end   = -1;
-  for (let i = 0; i < remainder.length; i++) {
-    if (remainder[i] === '{')      depth++;
-    else if (remainder[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
-  }
-
-  if (end === -1) {
-    console.warn('SCORE_JSON appears truncated, attempting repair');
-    remainder = remainder + '"}';
-    try { return JSON.parse(remainder); } catch(e) { return null; }
-  }
-
-  try {
-    return JSON.parse(remainder.slice(0, end + 1));
-  } catch(e) {
-    console.warn('SCORE_JSON parse error:', e, remainder.slice(0, end + 1));
-    return null;
-  }
-}
-
-// ══════════════════════════════════════════════════════════
-// BACKGROUND
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// STARS BACKGROUND
+// ════════════════════════════════════════════════
 (function(){
-  const c=document.getElementById('bgCanvas'), x=c.getContext('2d');
-  let W,H; const nodes=[];
-  function resize(){
-    W=c.width=window.innerWidth; H=c.height=window.innerHeight; nodes.length=0;
-    for(let i=0;i<5;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:180+Math.random()*220});
+  const c = document.getElementById('stars');
+  const x = c.getContext('2d');
+  function resize(){ c.width=innerWidth; c.height=innerHeight; draw(); }
+  function draw(){
+    x.clearRect(0,0,c.width,c.height);
+    const count = Math.floor(c.width * c.height / 8000);
+    for(let i=0;i<count;i++){
+      const px=Math.random()*c.width, py=Math.random()*c.height;
+      const r=Math.random()*.8+.1, op=Math.random()*.4+.05;
+      x.beginPath(); x.arc(px,py,r,0,Math.PI*2);
+      x.fillStyle=`rgba(180,210,255,${op})`; x.fill();
+    }
   }
   window.addEventListener('resize',resize); resize();
-  function draw(){
-    x.clearRect(0,0,W,H); x.fillStyle='#030610'; x.fillRect(0,0,W,H);
-    nodes.forEach(n=>{
-      n.x+=n.vx; n.y+=n.vy;
-      if(n.x<-n.r)n.x=W+n.r; if(n.x>W+n.r)n.x=-n.r;
-      if(n.y<-n.r)n.y=H+n.r; if(n.y>H+n.r)n.y=-n.r;
-      const g=x.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
-      g.addColorStop(0,'rgba(59,130,246,.028)'); g.addColorStop(1,'transparent');
-      x.fillStyle=g; x.fillRect(0,0,W,H);
-    });
-    x.strokeStyle='rgba(59,130,246,.018)'; x.lineWidth=1;
-    for(let gx=0;gx<W;gx+=80){x.beginPath();x.moveTo(gx,0);x.lineTo(gx,H);x.stroke();}
-    for(let gy=0;gy<H;gy+=80){x.beginPath();x.moveTo(0,gy);x.lineTo(W,gy);x.stroke();}
-    requestAnimationFrame(draw);
-  }
-  draw();
 })();
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // WAVE VISUALISER
-// ══════════════════════════════════════════════════════════
-const wCvs=document.getElementById('waveCanvas'), wCtx=wCvs.getContext('2d');
+// ════════════════════════════════════════════════
+const wCvs = document.getElementById('waveCanvas');
+const wCtx = wCvs.getContext('2d');
 let wPhase=0, wAmp=0, wTarget=0;
 function drawWave(){
-  const W=172,H=172,cx=86,cy=86,r=68;
-  wCtx.clearRect(0,0,W,H); wAmp+=(wTarget-wAmp)*.1;
-  wPhase+=isSpeaking?.085:isListening?.052:.016;
-  const g=wCtx.createLinearGradient(0,0,W,H);
-  if(isSpeaking){g.addColorStop(0,'rgba(59,130,246,.90)');g.addColorStop(1,'rgba(96,165,250,.90)');}
-  else if(isListening){g.addColorStop(0,'rgba(212,96,106,.78)');g.addColorStop(1,'rgba(220,130,100,.78)');}
-  else{g.addColorStop(0,'rgba(59,130,246,.13)');g.addColorStop(1,'rgba(96,165,250,.09)');}
+  const W=168,H=168,cx=84,cy=84,r=66;
+  wCtx.clearRect(0,0,W,H);
+  wAmp += (wTarget - wAmp) * .08;
+  wPhase += isSpeaking ? .075 : isListening ? .048 : .014;
+  const g = wCtx.createLinearGradient(0,0,W,H);
+  if(isSpeaking){ g.addColorStop(0,'rgba(79,163,247,.85)'); g.addColorStop(1,'rgba(123,188,255,.75)'); }
+  else if(isListening){ g.addColorStop(0,'rgba(224,92,107,.75)'); g.addColorStop(1,'rgba(224,130,100,.65)'); }
+  else { g.addColorStop(0,'rgba(79,163,247,.12)'); g.addColorStop(1,'rgba(123,188,255,.07)'); }
   wCtx.beginPath();
-  for(let i=0;i<=200;i++){
-    const a=(i/200)*Math.PI*2-Math.PI/2;
-    const n=Math.sin(a*3+wPhase)*wAmp+Math.sin(a*5-wPhase*1.4)*wAmp*.4+Math.sin(a*7+wPhase*.9)*wAmp*.17;
-    const px=cx+Math.cos(a)*(r+n),py=cy+Math.sin(a)*(r+n);
-    i===0?wCtx.moveTo(px,py):wCtx.lineTo(px,py);
+  for(let i=0;i<=220;i++){
+    const a=(i/220)*Math.PI*2-Math.PI/2;
+    const n = Math.sin(a*3+wPhase)*wAmp + Math.sin(a*5-wPhase*1.3)*wAmp*.35 + Math.sin(a*8+wPhase*.8)*wAmp*.15;
+    const px=cx+Math.cos(a)*(r+n), py=cy+Math.sin(a)*(r+n);
+    i===0 ? wCtx.moveTo(px,py) : wCtx.lineTo(px,py);
   }
-  wCtx.closePath(); wCtx.strokeStyle=g; wCtx.lineWidth=isSpeaking?2:1.2; wCtx.stroke();
+  wCtx.closePath();
+  wCtx.strokeStyle=g; wCtx.lineWidth=isSpeaking?2.2:1.4; wCtx.stroke();
   requestAnimationFrame(drawWave);
 }
 drawWave();
-function setWave(s){ wTarget=s==='speak'?13:s==='listen'?8:0; }
-
-// ══════════════════════════════════════════════════════════
-// STATUS
-// ══════════════════════════════════════════════════════════
-function setStatus(s){
-  const dm={ready:'live',listening:'listen',thinking:'think',speaking:'talk'};
-  const tm={ready:'Ready',listening:'Listening',thinking:'Processing',speaking:'Speaking'};
-  const hm={ready:'Tap to speak',listening:'Listening…',thinking:'Please wait…',speaking:'Tap to interrupt'};
-  document.getElementById('statusDot').className='badge-dot '+(dm[s]||'live');
-  document.getElementById('statusText').textContent=tm[s]||s;
-  document.getElementById('ctrlHintL').textContent=hm[s]||'';
+function setWave(s){ wTarget=s==='speak'?14:s==='listen'?9:0; }
+function setOrbGlow(s){
+  const g=document.getElementById('orbGlow');
+  g.className='orb-glow-ring'+(s?' '+s:'');
 }
+
+// ════════════════════════════════════════════════
+// STATUS
+// ════════════════════════════════════════════════
+function setStatus(s){
+  const orb=document.getElementById('statusOrb');
+  const lbl=document.getElementById('statusLabel');
+  const lft=document.getElementById('hintLeft');
+  orb.className='status-orb';
+  const map={
+    idle:    {cls:'',       label:'Connecting',  hint:'Please wait'},
+    ready:   {cls:'s-ready',label:'Ready',       hint:'Tap to speak'},
+    listening:{cls:'s-listen',label:'Listening', hint:'Listening…'},
+    thinking:{cls:'s-think',label:'Processing',  hint:'Please wait…'},
+    speaking:{cls:'s-talk', label:'Speaking',    hint:'Tap to interrupt'},
+  };
+  const m=map[s]||map.idle;
+  orb.classList.add(m.cls);
+  lbl.textContent=m.label;
+  lft.textContent=m.hint;
+}
+
 function startTimer(){
   sessionStart=Date.now(); clearInterval(timerInterval);
   timerInterval=setInterval(()=>{
     const s=Math.floor((Date.now()-sessionStart)/1000);
     const fmt=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
     document.getElementById('timer').textContent=fmt;
-    document.getElementById('siDuration').textContent=fmt;
-    if(!sessionClosed&&(Date.now()-sessionStart)>=MAX_SESSION_MS) forceCloseSession();
+    document.getElementById('metaDuration').textContent=fmt;
+    if(!sessionClosed && (Date.now()-sessionStart)>=MAX_SESSION_MS) forceCloseSession();
   },1000);
 }
-function renderLeadUI(){
-  document.getElementById('siName').textContent=(LEAD.name||'Guest').split(' ')[0];
-  document.getElementById('siMarket').textContent=LEAD.country||'—';
+function renderUI(){
+  document.getElementById('metaName').textContent=(LEAD.name||'Guest').split(' ')[0];
+  document.getElementById('metaMarket').textContent=LEAD.country||'—';
 }
 function showToast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
-  setTimeout(()=>t.style.display='none',4000);
+  setTimeout(()=>t.style.display='none',4500);
 }
 function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-// ══════════════════════════════════════════════════════════
-// VOICES
-// ══════════════════════════════════════════════════════════
-function loadVoices(){
-  const all=speechSynthesis.getVoices();
-  voices=all.filter(v=>v.lang.startsWith('en'));
+// ════════════════════════════════════════════════
+// TRANSCRIPT BUBBLE
+// ════════════════════════════════════════════════
+let transcriptTimer;
+function showTranscript(speaker, text){
+  const el=document.getElementById('transcript');
+  const spEl=document.getElementById('transcriptSpeaker');
+  const txEl=document.getElementById('transcriptText');
+  spEl.textContent=speaker==='you'?'You':'Dr. CV';
+  spEl.className='transcript-speaker '+(speaker==='you'?'you':'ai');
+  txEl.textContent=text;
+  el.classList.add('visible');
+  clearTimeout(transcriptTimer);
+  transcriptTimer=setTimeout(()=>el.classList.remove('visible'),6000);
 }
+
+// ════════════════════════════════════════════════
+// SYNC
+// ════════════════════════════════════════════════
+const syncDot=document.getElementById('syncDot');
+function setSyncState(s){ syncDot.className='sync-dot '+(s||''); }
+function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
+
+async function pushTurnToSheet(userMsg,botMsg){
+  if(!hasGAS()) return;
+  const payload={ leadId:LEAD.leadId, sessionId:LEAD.sessionId, turnNumber:turns, userMessage:userMsg, botResponse:botMsg };
+  setSyncState('syncing');
+  try{
+    await fetch(GAS_URL+'?action=update',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({action:'update',data:JSON.stringify(payload)}).toString()});
+    setSyncState('ok'); setTimeout(()=>setSyncState(''),2000);
+  }catch(e){ console.warn('Turn sync:',e); setSyncState('err'); }
+}
+
+async function pushScoreToSheet(data){
+  if(!hasGAS()) return;
+  const elapsed=Math.floor((Date.now()-sessionStart)/1000);
+  const payload={ leadId:LEAD.leadId, sessionId:LEAD.sessionId, name:LEAD.name, email:LEAD.email, company:LEAD.company, country:LEAD.country, qualificationScore:totalScore, qualificationLevel:data.level||'', duration:elapsed, turnCount:turns, summary:data.summary||'', interest:data.interest||0, engagement:data.engagement||0, intent:data.intent||0, readiness:data.readiness||0 };
+  setSyncState('syncing');
+  try{
+    await fetch(GAS_URL+'?action=complete',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({action:'complete',data:JSON.stringify(payload)}).toString()});
+    setSyncState('ok'); setTimeout(()=>setSyncState(''),3000);
+  }catch(e){
+    const img=new Image(); img.src=GAS_URL+'?'+new URLSearchParams({action:'complete',data:JSON.stringify(payload)});
+    setSyncState('ok');
+  }
+}
+
+// ════════════════════════════════════════════════
+// SCORE JSON PARSING
+// ════════════════════════════════════════════════
+function extractScoreJSON(text){
+  const marker='SCORE_JSON:';
+  const idx=text.indexOf(marker);
+  if(idx===-1) return null;
+  let rem=text.slice(idx+marker.length).trim();
+  const start=rem.indexOf('{');
+  if(start===-1) return null;
+  rem=rem.slice(start);
+  let depth=0,end=-1;
+  for(let i=0;i<rem.length;i++){
+    if(rem[i]==='{') depth++;
+    else if(rem[i]==='}'){depth--;if(depth===0){end=i;break;}}
+  }
+  if(end===-1){ try{return JSON.parse(rem+'"}');}catch(e){return null;} }
+  try{return JSON.parse(rem.slice(0,end+1));}catch(e){return null;}
+}
+
+// ════════════════════════════════════════════════
+// VOICES & TTS
+// ════════════════════════════════════════════════
+function loadVoices(){ const all=speechSynthesis.getVoices(); voices=all.filter(v=>v.lang.startsWith('en')); }
 function getBestVoice(){
-  const prefs=[
-    'Google UK English Female','Microsoft Aria Online (Natural)',
-    'Microsoft Aria','Samantha','Karen','Moira','Victoria',
-    'Google US English Female','Nicky'
-  ];
+  const prefs=['Google UK English Female','Microsoft Aria Online (Natural)','Microsoft Aria','Samantha','Karen','Moira','Victoria','Google US English Female','Nicky'];
   for(const n of prefs){ const v=voices.find(v=>v.name.includes(n)); if(v) return v; }
   return voices.find(v=>/female/i.test(v.name))||voices[0]||null;
 }
 
-// ══════════════════════════════════════════════════════════
-// TTS
-// ══════════════════════════════════════════════════════════
 function cleanForSpeech(t){
   return t
     .replace(/SCORE_JSON:[\s\S]*$/g,'')
     .replace(/\*\*/g,'').replace(/\*/g,'').replace(/#/g,'')
-    .replace(/\bUAE\b/g,'the U.A.E.').replace(/\bUSA\b/g,'the U.S.A.')
-    .replace(/\bLLC\b/g,'L.L.C.').replace(/\bCEO\b/g,'C.E.O.')
+    .replace(/\bUAE\b/g,'the U.A.E.').replace(/\bUSA\b/g,'the U.S.A.').replace(/\bUS\b/g,'the U.S.')
+    .replace(/\bLLC\b/g,'L.L.C.').replace(/\bCEO\b/g,'C.E.O.').replace(/\bEIN\b/g,'E.I.N.')
     .replace(/\$(\d+)B\b/gi,'$$$1 billion').replace(/\$(\d+)M\b/gi,'$$$1 million')
+    .replace(/Form\s*(\d+)/gi,'the required form').replace(/\(Form\s*\d+\)/gi,'')
     .replace(/\s+/g,' ').trim();
 }
 
@@ -514,7 +757,7 @@ function splitAtSentenceBoundaries(buf){
   const re=/(.+?[.!?])(?=\s|$)/g;
   const found=[]; let last=0,m;
   while((m=re.exec(buf))!==null){ found.push(m[1].trim()); last=m.index+m[0].length; }
-  return { sentences: found, remainder: buf.slice(last).trim() };
+  return { sentences:found, remainder:buf.slice(last).trim() };
 }
 
 function speakOne(text){
@@ -522,10 +765,10 @@ function speakOne(text){
     if(!text||voiceMuted){ resolve(); return; }
     const utt=new SpeechSynthesisUtterance(text);
     const v=getBestVoice(); if(v) utt.voice=v;
-    utt.rate=0.88; utt.pitch=1.0; utt.volume=1.0;
+    utt.rate=0.9; utt.pitch=1.0; utt.volume=1.0;
     let settled=false;
     const done=()=>{ if(!settled){ settled=true; resolve(); } };
-    utt.onstart=()=>{ isSpeaking=true; setStatus('speaking'); setWave('speak'); };
+    utt.onstart=()=>{ isSpeaking=true; setStatus('speaking'); setWave('speak'); setOrbGlow('speaking'); };
     utt.onerror=(e)=>{ if(!['interrupted','canceled'].includes(e.error)) console.warn('TTS:',e.error); done(); };
     const wd=setTimeout(done, 400+text.length*80);
     utt.onend=()=>{ clearTimeout(wd); done(); };
@@ -533,80 +776,63 @@ function speakOne(text){
   });
 }
 
-async function speakAll(sentences){
-  for(const s of sentences){
-    if(sessionClosed) break;
-    await speakOne(s);
-    await delay(90);
-  }
-  isSpeaking=false; setWave('idle');
+async function drainTTS(){
+  if(ttsBusy) return; ttsBusy=true;
+  while(ttsQueue.length){ await speakOne(ttsQueue.shift()); if(ttsQueue.length) await delay(90); }
+  ttsBusy=false; isSpeaking=false; setWave('idle'); setOrbGlow('');
+  if(greetingDone && recogEnabled && !recogRunning && !sessionClosed){
+    setStatus('ready'); await delay(300); startRecog();
+  } else if(!sessionClosed){ setStatus('ready'); }
 }
 
 function enqueueSentence(text){
   const clean=cleanForSpeech(text);
   if(!clean||clean.length<2) return;
-  ttsQueue.push(clean);
-  if(!ttsBusy) drainTTS();
-}
-
-async function drainTTS(){
-  if(ttsBusy) return;
-  ttsBusy=true;
-  while(ttsQueue.length){
-    const s=ttsQueue.shift();
-    await speakOne(s);
-    if(ttsQueue.length) await delay(95);
-  }
-  ttsBusy=false; isSpeaking=false; setWave('idle');
-  if(greetingDone && recogEnabled && !recogRunning && !sessionClosed){
-    setStatus('ready');
-    await delay(300);
-    startRecog();
-  } else if(!sessionClosed){
-    setStatus('ready');
-  }
+  ttsQueue.push(clean); if(!ttsBusy) drainTTS();
 }
 
 function stopSpeaking(){
-  ttsQueue=[]; ttsBusy=false; isSpeaking=false; streamBuf=''; setWave('idle');
+  ttsQueue=[]; ttsBusy=false; isSpeaking=false; streamBuf=''; setWave('idle'); setOrbGlow('');
   try{ if(speechSynthesis.speaking||speechSynthesis.pending) speechSynthesis.cancel(); }catch(e){}
+}
+
+async function speakAll(sentences){
+  for(const s of sentences){ if(sessionClosed) break; await speakOne(s); await delay(90); }
+  isSpeaking=false; setWave('idle'); setOrbGlow('');
 }
 
 setInterval(()=>{ if(isSpeaking&&speechSynthesis.paused) speechSynthesis.resume(); },4000);
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // SPEECH RECOGNITION
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 let finalTranscript='';
 function initRecog(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){ showToast('Speech recognition requires Chrome or Edge'); return false; }
   try{ if(recognition) recognition.abort(); }catch(e){}
   recognition=new SR();
-  recognition.lang='en-US';
-  recognition.continuous=false;
-  recognition.interimResults=false;
-  recognition.maxAlternatives=1;
-
+  recognition.lang='en-US'; recognition.continuous=false; recognition.interimResults=false; recognition.maxAlternatives=1;
   recognition.onstart=()=>{
     recogRunning=isListening=true; finalTranscript='';
-    setStatus('listening'); setWave('listen');
+    setStatus('listening'); setWave('listen'); setOrbGlow('listening');
     document.getElementById('micBtn').classList.add('recording');
-    document.getElementById('micBtn').classList.remove('ready-pulse');
-    document.getElementById('micWrap').classList.add('recording');
+    document.getElementById('micBtn').classList.remove('ready');
+    document.getElementById('micRing').classList.add('listening');
+    document.getElementById('micRing2').classList.add('listening');
   };
   recognition.onresult=(e)=>{
     clearTimeout(silenceTimer);
     let t='';
     for(let i=e.resultIndex;i<e.results.length;i++) if(e.results[i].isFinal) t+=e.results[i][0].transcript+' ';
     finalTranscript+=t;
-    if(finalTranscript.trim()) silenceTimer=setTimeout(()=>{ if(recogRunning) try{ recognition.stop(); }catch(e){} },1800);
+    if(finalTranscript.trim()) silenceTimer=setTimeout(()=>{ if(recogRunning) try{ recognition.stop(); }catch(e){} },1900);
   };
   recognition.onerror=(e)=>{
     if(!['no-speech','aborted'].includes(e.error)) console.warn('STT:',e.error);
     cleanupRecog();
-    if(e.error==='no-speech'&&recogEnabled&&!isSpeaking)      schedRestart(700);
-    else if(e.error!=='aborted'&&recogEnabled&&!isSpeaking)   schedRestart(1200);
+    if(e.error==='no-speech'&&recogEnabled&&!isSpeaking) schedRestart(700);
+    else if(e.error!=='aborted'&&recogEnabled&&!isSpeaking) schedRestart(1200);
   };
   recognition.onnomatch=()=>{ cleanupRecog(); schedRestart(500); };
   recognition.onend=()=>{
@@ -618,22 +844,18 @@ function initRecog(){
   return true;
 }
 function cleanupRecog(){
-  recogRunning=isListening=false; setWave('idle'); clearTimeout(silenceTimer);
+  recogRunning=isListening=false; setWave('idle'); setOrbGlow(''); clearTimeout(silenceTimer);
   document.getElementById('micBtn').classList.remove('recording');
-  document.getElementById('micWrap').classList.remove('recording');
-  if(greetingDone&&!sessionClosed) document.getElementById('micBtn').classList.add('ready-pulse');
+  document.getElementById('micRing').classList.remove('listening');
+  document.getElementById('micRing2').classList.remove('listening');
+  if(greetingDone&&!sessionClosed) document.getElementById('micBtn').classList.add('ready');
 }
-function schedRestart(ms=400){
-  setTimeout(()=>{ if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone) startRecog(); },ms);
-}
+function schedRestart(ms=400){ setTimeout(()=>{ if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone) startRecog(); },ms); }
 function startRecog(){
   if(isSpeaking||recogRunning||!recogEnabled||sessionClosed||!greetingDone) return;
-  document.getElementById('micBtn').classList.remove('ready-pulse');
+  document.getElementById('micBtn').classList.remove('ready');
   if(!recognition){ if(!initRecog()) return; }
-  try{ recognition.start(); }catch(e){
-    console.warn('recog start:',e.message);
-    recognition=null; if(initRecog()) schedRestart(400);
-  }
+  try{ recognition.start(); }catch(e){ console.warn('recog start:',e.message); recognition=null; if(initRecog()) schedRestart(400); }
 }
 function stopRecog(){
   recogEnabled=false; clearTimeout(silenceTimer);
@@ -642,612 +864,369 @@ function stopRecog(){
 }
 function handleUserSpeech(text){
   if(!text.trim()||sessionClosed) return;
-  document.getElementById('micBtn').classList.remove('ready-pulse');
+  showTranscript('you', text);
+  document.getElementById('micBtn').classList.remove('ready');
   sendMessage(text);
 }
 
-// ══════════════════════════════════════════════════════════
-// KNOWLEDGE BASE — U.S. Entity & State Formation for Foreign Founders
-// This is embedded directly so Dr. CV can answer these questions
-// accurately without relying on general training data.
-// ══════════════════════════════════════════════════════════
-const KNOWLEDGE_BASE = `
-=== COMPLY GLOBALLY — INTERNAL KNOWLEDGE BASE ===
-You have deep, specific expertise in U.S. business formation for foreign nationals. Use this knowledge naturally in conversation when relevant. Do not recite it like a list — weave it into your advisory responses.
-
---- ENTITY TYPES AVAILABLE TO FOREIGN FOUNDERS ---
-
-SINGLE-MEMBER LLC (SMLLC) — TOP RECOMMENDATION FOR MOST FOREIGN FOUNDERS
-- 100% foreign ownership allowed, no U.S. citizenship or residency required
-- Treated as a "disregarded entity" by the IRS — no corporate income tax at entity level
-- Must file Form 5472 + pro forma Form 1120 annually — $25,000 penalty per year if missed
-- No self-employment tax for foreign members (major advantage over domestic owners)
-- Full liability protection — separates personal assets from business debts
-- Can be formed 100% remotely online, no travel to the U.S. required
-- Best banking access — Mercury and Relay accept foreign-owned LLCs with just an EIN
-- Recommended states: Wyoming (best overall), New Mexico (cheapest), Florida (logistics), Delaware (VC only)
-- Annual cost in Wyoming: just $62/year flat fee
-
-MULTI-MEMBER LLC (MMLLC)
-- For 2+ founders/co-owners, all can be foreign nationals
-- Taxed as a partnership — files Form 1065 and issues K-1s to each member
-- Each foreign member may have separate U.S. tax obligations
-- More complex and costly than SMLLC but supports multiple founders
-- Flexible profit/loss allocation between members
-
-C-CORPORATION
-- Required if raising institutional venture capital (VCs will not fund LLCs)
-- Foreign nationals can own 100% of a C-Corp
-- Double taxation: 21% corporate tax + up to 30% withholding on dividends
-- QSBS exclusion (Section 1202): up to 100% of capital gains excluded at exit (up to $10M+) if held 5+ years
-- Can issue multiple share classes, stock options (ISO/NSO), complex cap tables
-- Best state: Delaware (non-negotiable for institutional VC)
-- Highest compliance burden: board meetings, minutes, annual 1120 filing
-
-S-CORPORATION — NOT AVAILABLE TO FOREIGN FOUNDERS
-- Requires ALL shareholders to be U.S. citizens or lawful permanent residents
-- Non-resident aliens are categorically ineligible — never attempt this structure
-
-SOLE PROPRIETORSHIP — NEVER RECOMMENDED
-- Zero liability protection — personal assets fully exposed
-- No reason to choose this over an SMLLC which costs only $50–$300 to form
-
-SERIES LLC
-- Available in Wyoming, Delaware, Nevada, Texas
-- One parent LLC with multiple "series" — each with separate assets and liability
-- Best for: running multiple e-commerce brands, holding multiple properties
-- IRS tax treatment not fully settled — requires experienced legal/tax advisor
-
-U.S. BRANCH OF FOREIGN COMPANY
-- No liability separation — parent company is fully liable for U.S. branch activities
-- Subject to 21% corporate tax on ECI plus 30% branch profits tax on remittances
-- Only makes sense for large established foreign companies testing the U.S. market
-
---- STATE SELECTION GUIDE ---
-
-WYOMING — Best overall for most foreign founders
-- No state income tax (personal or corporate)
-- Annual fee: $62/year flat — one of the lowest in the U.S.
-- Member names NOT required in public filings — strong privacy
-- Strongest charging order protection (best asset protection laws)
-- Allows 100% foreign ownership with no U.S. partner required
-- No operating agreement requirements
-- Best for: solo founders, digital businesses, holding companies, privacy-focused founders
-
-DELAWARE — Only for VC-backed startups
-- Over 60% of Fortune 500 companies incorporated here
-- Most developed corporate case law — Court of Chancery since 1792
-- Required for Y Combinator, Andreessen Horowitz, Sequoia, and all major VCs
-- C-Corp franchise tax: $400 minimum, can balloon to $50,000–$200,000+ if shares not structured carefully
-- LLC annual fee: $300/year flat
-- Not recommended for non-VC founders — expensive and complex for no benefit
-
-NEW MEXICO — Cheapest option
-- No annual report requirement for LLCs — zero ongoing compliance cost
-- $50 LLC filing fee — lowest of any state
-- No franchise tax
-- Member names required in Articles of Organization (less privacy than Wyoming)
-- Best for: pure cost minimization, digital/service businesses, solopreneurs
-
-FLORIDA — Best for physical goods and logistics
-- No personal income tax
-- World-class seaports: Port of Miami, Port Everglades, Port Tampa Bay, JAXPORT
-- Ideal for Latin American, Caribbean, and European trade routes
-- No franchise tax for LLCs
-- Annual report fee: $138.75 for LLCs
-- Corporate tax: 5.5% (only if physical nexus in Florida)
-- Best for: e-commerce, import/export, Latin America-focused businesses
-
-TEXAS — Best for high-volume logistics and Gulf Coast operations
-- No personal income tax
-- Port of Houston: largest Gulf Coast port, #2 in U.S. for foreign waterborne commerce
-- Franchise tax (margin tax) applies on revenue — 0% under $2.47M/year
-- LLC filing fee: $300 (highest on this list)
-- Best for: high-revenue logistics businesses, Gulf Coast imports
-
-NEVADA
-- No corporate or personal income tax
-- Strong asset protection and charging order protection
-- Mandatory state business license: $200/year
-- Less favorable than Wyoming for pure holding companies
-- Gaming/sin industry association may affect brand perception
-
-SOUTH DAKOTA
-- No personal or corporate income tax
-- Simple, low-cost compliance: $50/year annual report
-- Financial services hub — Citibank and major banks chartered here
-- Best for: financial services businesses
-
---- TAX RULES FOR FOREIGN-OWNED U.S. ENTITIES ---
-
-DISREGARDED ENTITY ADVANTAGE (SMLLC)
-- IRS ignores the LLC as a separate taxpayer
-- No U.S. corporate income tax at LLC level
-- Owner taxed only in their home country on profits (subject to treaty)
-- Still requires Form 5472 filing annually — $25,000 penalty if missed
-
-TWO TAX REGIMES FOR FOREIGN PERSONS:
-1. ECI (Effectively Connected Income): Active business income (services, product sales, consulting). Taxed at graduated U.S. rates 10–37%. Applies when business is "engaged in trade or business in the U.S."
-2. FDAP (Fixed/Determinable/Annual/Periodical): Passive income — dividends, interest, royalties, rents. Subject to 30% flat withholding tax. Reducible by tax treaty.
-3. Capital gains from stocks/securities: Generally 0% for non-U.S. residents (not real estate)
-4. FIRPTA (real estate sales): 15% withholding on gross sales price
-
-FORM 5472 — CRITICAL COMPLIANCE REQUIREMENT
-- Required for all foreign-owned single-member LLCs
-- Reports all transactions between owner and LLC (contributions, distributions, loans, service payments)
-- Due April 15 (September 15 with extension)
-- Penalty: $25,000 per form per year — IRS has actively enforced since 2017
-- This is a compliance requirement, NOT a tax itself
-
-TAX TREATY WITHHOLDING RATES ON DIVIDENDS (C-CORP):
-- UK: 15% general / 5% substantial holdings
-- Germany: 15% / 5%
-- Canada: 15% / 5%
-- Australia: 15% / 5%
-- India: 25% / 15%
-- China: 10% / 10%
-- UAE: No treaty — full 30% withholding
-- Brazil: No treaty — full 30% withholding
-- Singapore: No treaty — full 30% withholding
-- Nigeria: No treaty — full 30% withholding
-
---- REMOTE FORMATION PROCESS (NO TRAVEL REQUIRED) ---
-
-Step 1: Choose entity type (SMLLC for most, C-Corp for VC)
-Step 2: Choose state (Wyoming recommended for most)
-Step 3: Hire registered agent in chosen state ($25–$200/year) — required if no physical U.S. address
-Step 4: File Articles of Organization online via state Secretary of State portal ($50–$300)
-Step 5: Draft Operating Agreement (e-signature acceptable — no notarization required for most states)
-Step 6: Obtain EIN from IRS — call +1 (267) 941-1099 (IRS International, Mon–Fri 6am–11pm ET). No SSN required. Get EIN same-day on the call.
-Step 7: File FinCEN BOI Report within 90 days of formation — free at boiefiling.fincen.gov
-Step 8: Open business bank account at Mercury (mercury.com) or Relay (relayfi.com) — EIN only, no SSN, fully online, $0 monthly fee
-Step 9: Set up payment processing (Stripe, PayPal Business, Shopify Payments — all accept foreign-owned U.S. entities)
-
-BANKING OPTIONS FOR FOREIGN FOUNDERS:
-- Mercury: Best overall — no SSN, no in-person, EIN only, $0 fee, fully online
-- Relay: No SSN, no in-person, multiple sub-accounts, $0–$30/month
-- Brex: No SSN, great for spend management
-- Wise Business: Best for multi-currency and international transfers
-- Chase/Bank of America: Require SSN and often in-person — not feasible remotely
-
-MONEY TRANSFER HOME:
-- Wise (formerly TransferWise): 0.4–1.5% fee, 1–2 days — best rates
-- Mercury ACH to Wise: Lowest overall cost
-- Wire transfer (SWIFT): $15–$45 flat — good for large amounts
-
-FINCEN BOI REPORTING (CORPORATE TRANSPARENCY ACT — MANDATORY):
-- Effective January 1, 2024 — applies to all U.S. entities regardless of state
-- Entities formed after Jan 1, 2024: must file within 90 days of formation
-- Must report all beneficial owners (25%+ ownership OR substantial control)
-- Foreign owners must provide: full legal name, date of birth, home country address, passport copy
-- If ownership changes: update within 30 days
-- Penalty: $591/day for willful non-compliance plus criminal liability
-- Filing is free at boiefiling.fincen.gov
-
---- LIABILITY PROTECTION ---
-
-WHAT "LIMITED LIABILITY" MEANS:
-- Legal wall between personal assets and business obligations
-- If business is sued or can't pay debts, personal bank accounts, home, foreign assets generally protected
-- Not absolute — courts can "pierce the corporate veil"
-
-VEIL-PIERCING RISKS (especially relevant for remote founders):
-- Commingling funds: using LLC account for personal expenses
-- Undercapitalization: forming LLC with no capital but taking on obligations
-- No Operating Agreement
-- Treating company as indistinguishable from yourself (same accounts, same address)
-SOLUTION: Separate bank accounts (Mercury for business), signed Operating Agreement, document all capital contributions and distributions
-
-ASSET PROTECTION BY STATE:
-- Wyoming SMLLC: Excellent — charging order is exclusive remedy
-- Delaware SMLLC: Good — charging order available
-- C-Corporation (any state): Good, but requires board minutes/resolutions
-- Sole Proprietorship: None — personal assets fully exposed
-
---- QUICK REFERENCE: RECOMMENDED ENTITY BY SITUATION ---
-- Solo founder, no VC plans → SMLLC, Wyoming
-- Two or more co-founders → MMLLC, Wyoming
-- Raising institutional VC → C-Corporation, Delaware
-- Absolute cost minimization → SMLLC, New Mexico
-- Multiple brands/product lines → Series LLC, Wyoming
-- Real estate investment → SMLLC (holding) Wyoming + state LLC per property
-- E-commerce shipping through Gulf/Caribbean ports → SMLLC, Florida
-- Financial services/banking-focused → SMLLC or C-Corp, South Dakota or Delaware
-- Maximum privacy and asset protection → SMLLC, Wyoming
-
-=== END OF KNOWLEDGE BASE ===
-`;
-
-// ══════════════════════════════════════════════════════════
-// SYSTEM PROMPT — with knowledge base injected
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// SYSTEM PROMPT — conversational, natural, no robotic structure
+// ════════════════════════════════════════════════
 function buildSystemPrompt(){
-  return `You are Dr. CV, a highly professional and warm Global Expansion Strategist at Comply Globally.
-You are currently on a live voice consultation call with a prospective client.
+  const firstName = (LEAD.name||'').split(' ')[0].trim() || 'the client';
+  return `You are Dr. CV, a warm, highly intelligent Global Expansion Strategist at Comply Globally.
 
-PRE-FILLED CLIENT CONTEXT (from their intake form):
-- Name: ${LEAD.name || 'the client'}
-- Company: ${LEAD.company || 'their company'}
-- Target Market: ${LEAD.country || 'not yet specified'}
-- Expansion Stage: ${LEAD.stage || 'exploring options'}
+You are having a LIVE VOICE conversation with a potential client. You are their trusted senior advisor — like a brilliant friend who happens to know everything about U.S. business setup, international tax, compliance, and global expansion.
 
-${KNOWLEDGE_BASE}
+CLIENT INFO (from their intake):
+- Name: ${LEAD.name || 'not provided'}
+- Company: ${LEAD.company || 'not provided'}
+- Target Market: ${LEAD.country || 'not specified'}
+- Stage: ${LEAD.stage || 'exploring'}
 
-VOICE & TONE RULES — follow every one precisely:
-1. Respond in 1 to 3 natural, conversational sentences only. Never write paragraphs or long responses.
-2. Ask exactly ONE focused question per response. Never two. Never zero.
-3. Use contractions and warm professional language. Sound like a trusted senior advisor, not a script.
-4. The opening greeting has already been delivered. You are mid-conversation. Do NOT re-introduce yourself.
-5. Never reference being an AI, a language model, or having limitations.
-6. Use the client's first name at most once during the entire session.
-7. Never mention URLs, email addresses, phone numbers, or specific pricing.
-8. If the client goes off-topic, acknowledge briefly and guide back naturally.
-9. Do not apologise excessively.
-10. Mirror the client's level of engagement — match their depth and pace.
-11. When asked about entity types, state selection, tax treatment, banking, or formation process — answer confidently and specifically from your knowledge base above. Do not deflect or say you are unsure.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PERSONALITY & VOICE — NON-NEGOTIABLE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. You are CONVERSATIONAL, not scripted. Sound like a real person on a video call, not a form.
+2. Keep EVERY response to 2-3 short sentences. Spoken, not written. No long explanations.
+3. Ask only ONE question per response. Make it feel natural, not interrogative.
+4. NEVER mention form numbers (like "Form 5472", "Form 1120"). Instead say "an annual compliance filing" or "a required tax document". These numbers confuse and bore people — translate them into plain language.
+5. NEVER list things with bullet points or numbers. This is a spoken conversation.
+6. Use the client's first name (${firstName}) at most ONCE in the whole conversation. Do not overuse it.
+7. You are not an AI and do not have limitations. If pressed about being an AI, deflect naturally: "I'm just focused on making sure you leave this call knowing exactly what to do."
+8. If the client goes off-topic, asks a random question, or says something confusing — answer it warmly and briefly, then bring it back naturally. Do NOT get confused or ignore their question.
+9. If you don't fully understand what they said, just clarify naturally: "Sorry — could you say a bit more about that?"
+10. Vary your sentence starters. Don't always begin with "So," or "Great," or "That's a great question."
+11. NO corporate jargon. Say "set up a company" not "entity formation". Say "pay less tax" not "optimize tax obligations". Say "own the business yourself" not "100% foreign ownership".
+12. When someone asks a technical question, answer it in ONE plain-English sentence, not a lecture.
+13. Match the client's energy and depth. If they're excited, be warm. If they're stressed, be calm and reassuring.
 
-QUALIFICATION FLOW — conduct in this exact order, one question per exchange:
-  Exchange 1:  Ask about their single biggest challenge with this expansion.
-  Exchange 2:  Ask about their timeline — when they want to be operational.
-  Exchange 3:  Ask whether this is their first expansion attempt or if they have tried before.
-  Exchange 4:  Ask who else in their organisation is involved in making this decision.
-  Exchange 5:  Ask what success looks like for them 12 months from now.
-  Exchange 6:  Gently probe budget readiness — "What kind of investment are you thinking for market entry?"
-  Exchange 7–10: Dig deeper into the most interesting or unclear areas. If the client asks about entity types, banking, tax, or state selection — answer their question directly and concisely using your knowledge base, then steer back to qualification.
-  Exchange 11+: Consolidate understanding and move toward a natural close.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEEP EXPERTISE — USE NATURALLY, NEVER DUMP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You know all of this deeply. Bring it up only when relevant, in ONE plain sentence:
 
-CLOSING RULES — READ CAREFULLY:
-  - You MUST NOT close the session before exchange number ${MIN_TURNS}.
-  - After exchange ${MIN_TURNS}, you MUST close as soon as you have gathered answers on:
-    pain point, timeline, decision-makers, budget signal, and success definition.
-  - Do NOT wait for the client to say goodbye. You initiate the close once you have enough.
-  - If the client gives short or vague answers, probe once more then proceed — do not wait indefinitely.
-  - Close warmly: thank them, confirm the advisory team will follow up personally, wish them well.
-  - Keep the closing to 2–3 sentences. Then output the SCORE_JSON on a new line.
+U.S. COMPANY TYPES (what to say, not technical names):
+- Most foreign founders → single-owner LLC (no U.S. tax at company level, just one annual compliance filing, full protection of personal assets, all done online, no need to travel)
+- Multiple co-founders → multi-member LLC (same benefits, slightly more paperwork)
+- Raising VC money → Delaware C-Corp (investors require it; more complex but necessary)
+- S-Corp → NEVER for foreign people (only available to U.S. citizens)
 
-SCORE OUTPUT — THIS IS MANDATORY:
-  After your closing words, output EXACTLY this on a new line (never spoken aloud, never skipped):
+STATE CHOICE (conversational):
+- Wyoming → Best for almost everyone: $62/year, private, zero income tax, strongest asset protection
+- New Mexico → Cheapest possible, about $50 to set up, nothing ongoing
+- Florida → Best if shipping physical goods through U.S. ports, especially to/from Latin America
+- Delaware → Only if doing VC fundraising
+- "What state should I use?" answer: Wyoming for most people, unless they're raising investment money
 
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"FULL PARAGRAPH — see rules below","level":"cold|warm|hot"}
+HOW IT ACTUALLY WORKS:
+- Whole process is 100% online, no visit to the U.S. required
+- Takes 1-3 days; get a bank account and start accepting payments within a week
+- Bank accounts: Mercury or Relay — both fully online, no U.S. social security number needed
+- Payments: Stripe, PayPal, Shopify — all work with a foreign-owned U.S. company
+- Get a tax ID (EIN) by calling the IRS international line — free, same day
 
-  Scoring criteria — be precise, not generous:
-  - interest (0-100):   Enthusiasm and curiosity shown. Passive or one-word responses = 10–25. Asked follow-up questions, expressed excitement = 70–100.
-  - engagement (0-100): How much they elaborated unprompted. Needed constant prompting with little depth = 10–30. Volunteered detail, told stories, gave specifics = 70–100.
-  - intent (0-100):     Concreteness of their plan. "Just researching" with no timeline = 10–20. Named a specific quarter, has internal sign-off, knows the structure they want = 80–100.
-  - readiness (0-100):  How close to a buying decision. No budget discussed, no urgency = 10–20. Budget approved, decision-maker on the call, ready to start this quarter = 80–100.
-  - level: "hot" if average ≥ 70, "warm" if 40–69, "cold" if below 40.
+TAX (plain English):
+- If you're not physically in the U.S. and just running an online business, you typically pay NO U.S. income tax on company profits — you pay tax at home instead
+- You do need to file a short annual report with the IRS (one document, not a tax payment — just reporting)
+- Miss the annual filing? The IRS charges a big penalty — so you set a reminder or hire someone for about $300/year to handle it
+- Dividends from a U.S. corporation: usually taxed 10-30% withheld, depends on your home country's treaty with the U.S.
+- UAE, Brazil, Singapore, Nigeria have no tax treaty, so full 30% withholding on dividends from corporations
+- Capital gains on stocks: generally zero for non-U.S. residents
 
-  SUMMARY RULES — this is the most important field. A human advisor will read this to decide whether to follow up personally. Write a rich, specific paragraph (4–6 sentences) covering ALL of the following:
-    1. Who they are: name, company, role/context if mentioned.
-    2. What they want: their exact expansion goal — which market, what kind of presence (entity, distribution, hiring, licensing, etc.).
-    3. Their timeline: when they want to be operational, and whether this is self-imposed or driven by an external event.
-    4. Their biggest blocker: what is standing in the way right now — compliance complexity, finding local partners, internal approvals, capital, uncertainty about structure.
-    5. Decision-making: who else is involved, whether budget has been approved or is still being justified.
-    6. Your honest assessment: are they a strong fit for Comply Globally's services? What specific service would help them most? Flag any red flags (too early stage, no budget, unclear goals) or green flags (urgency, named budget, senior decision-maker involved).
-  
-  Do NOT write a generic summary. Every sentence must reference something specific that was actually said in this conversation. If a field was not discussed, say so clearly ("Timeline was not discussed — follow up needed").
+COMPLIANCE / REPORTING:
+- There's a new federal rule (since 2024): all U.S. companies must report their owners once — free filing online, takes 15 minutes
+- Personal assets are protected as long as you keep business and personal money separate (different bank accounts, that's it)
 
-  IMPORTANT: The SCORE_JSON must appear on its own line, immediately after your closing message, every single time you close. Do not skip it. Do not add commentary after it.`;
+BANKING & MONEY:
+- Mercury or Relay: best options — open fully online, EIN only, no SSN, no visit needed
+- Sending money home: Wise is cheapest (under 1.5% fee), bank wire for large amounts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONVERSATION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are already mid-session. The opening greeting is done. Now you are exploring their situation.
+
+Your job is to understand (not in a rigid order — flow naturally with the conversation):
+- What's their biggest challenge or worry right now?
+- What's their timeline?
+- Have they tried this before?
+- Who else is involved in the decision?
+- What does success look like for them?
+- What kind of budget are they thinking?
+
+You do NOT follow a rigid script. If they volunteer information about one topic, acknowledge it and follow the natural thread. Circle back to anything you haven't covered yet, but only when it fits.
+
+If they ask a question about entity types, banking, tax, or process — answer it in ONE plain sentence, then steer the conversation forward naturally.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HANDLING TRICKY SITUATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- "Are you a real person?" → "I'm fully focused on your situation right now — let's not get distracted by that. What's the biggest thing on your mind?"
+- "This is complicated" → "Honestly, it's simpler than people think. The whole setup takes about a week online. The tricky part is just choosing the right structure for your situation — which is exactly what we're working through right now."
+- Random or off-topic question → Answer it briefly and warmly, then: "Coming back to your expansion — what were you saying about [topic]?"
+- They give a very short answer → Follow up once with a warm probe: "Can you tell me a bit more about that?"
+- Technical jargon from them → Match their sophistication and answer in kind, but still no bullet points.
+- They ask about competitors or other services → Acknowledge that there are options, then focus on what makes their specific situation unique.
+- Silence or confusion → "Take your time — there's no rush."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLOSING (after turn ${MIN_TURNS}, once you have enough context)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Close when you have meaningful answers on: their goal, timeline, decision-makers, budget signal, and biggest challenge.
+
+Do NOT wait for them to say goodbye. Initiate the close naturally once you have enough.
+Close in 2-3 warm, genuine sentences. Thank them specifically, not generically.
+Immediately after your closing words, output this on a new line (never spoken):
+
+SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"detailed paragraph — see below","level":"cold|warm|hot"}
+
+SCORING:
+- interest: passive/one-word responses = 10-30; asked follow-up questions, expressed enthusiasm = 70-100
+- engagement: needed constant prompting = 10-30; volunteered stories and specifics = 70-100
+- intent: "just looking" with no timeline = 10-25; named a specific quarter, knows what they want = 75-100
+- readiness: no budget or urgency = 10-25; budget approved, wants to start now = 75-100
+- level: hot if average ≥70, warm if 40-69, cold below 40
+
+SUMMARY (4-6 sentences, specific, for a human advisor to read):
+Cover: who they are, what they want, timeline, biggest blocker, who else is involved in the decision, and your honest assessment of whether they're a strong fit. Reference specific things they actually said. Flag red flags or green flags clearly.
+
+SCORE_JSON must appear on its own line immediately after your closing. Never skip it.`;
 }
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // API — STREAMING
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 async function sendMessage(userText){
   if(!userText.trim()||sessionClosed) return;
-  stopSpeaking();
-  setStatus('thinking');
-  msgHistory.push({ role: 'user', content: userText });
-  turns++;
-  incrementalScore(userText);
-  streamBuf='';
-  let fullReply='';
+  stopSpeaking(); setStatus('thinking');
+  msgHistory.push({ role:'user', content:userText });
+  turns++; incrementalScore(userText);
+  streamBuf=''; let fullReply='';
 
-  try {
-    const res = await fetch(WORKER_URL + '/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: buildSystemPrompt(), messages: msgHistory })
-    });
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    let raw = '';
-
+  try{
+    const res=await fetch(WORKER_URL+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:buildSystemPrompt(),messages:msgHistory})});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const reader=res.body.getReader(); const decoder=new TextDecoder(); let raw='';
     while(true){
-      const { done, value } = await reader.read();
-      if(done) break;
-      raw += decoder.decode(value, { stream: true });
-      const lines = raw.split('\n'); raw = lines.pop();
+      const{done,value}=await reader.read(); if(done) break;
+      raw+=decoder.decode(value,{stream:true});
+      const lines=raw.split('\n'); raw=lines.pop();
       for(const line of lines){
         if(!line.startsWith('data: ')) continue;
-        const chunk = line.slice(6).trim();
-        if(chunk === '[DONE]') continue;
-        try {
-          const parsed = JSON.parse(chunk);
-          if(parsed.type === 'content_block_delta' && parsed.delta?.text){
-            const tok = parsed.delta.text;
-            fullReply  += tok;
-            streamBuf  += tok;
+        const chunk=line.slice(6).trim(); if(chunk==='[DONE]') continue;
+        try{
+          const parsed=JSON.parse(chunk);
+          if(parsed.type==='content_block_delta'&&parsed.delta?.text){
+            const tok=parsed.delta.text; fullReply+=tok; streamBuf+=tok;
             if(!streamBuf.includes('SCORE_JSON:')){
-              const { sentences, remainder } = splitAtSentenceBoundaries(streamBuf);
-              streamBuf = remainder;
-              sentences.forEach(s => enqueueSentence(s));
+              const{sentences,remainder}=splitAtSentenceBoundaries(streamBuf);
+              streamBuf=remainder; sentences.forEach(s=>enqueueSentence(s));
             }
           }
-        } catch(e){}
+        }catch(e){}
       }
     }
-
-    const speakable = streamBuf.split('SCORE_JSON:')[0].trim();
+    const speakable=streamBuf.split('SCORE_JSON:')[0].trim();
     if(speakable) enqueueSentence(speakable);
-    streamBuf = '';
-
-    const cleanReply = fullReply
-      .replace(/\nSCORE_JSON:[\s\S]*$/, '')
-      .replace(/SCORE_JSON:[\s\S]*$/,   '')
-      .trim();
-    msgHistory.push({ role: 'assistant', content: cleanReply });
-    if(msgHistory.length > 30) msgHistory = msgHistory.slice(-30);
-
-    pushTurnToSheet(userText, cleanReply);
-
-    const scoreData = extractScoreJSON(fullReply);
-
+    streamBuf='';
+    const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
+    lastAIText=cleanReply;
+    showTranscript('ai', cleanReply.slice(0,160)+(cleanReply.length>160?'…':''));
+    msgHistory.push({ role:'assistant', content:cleanReply });
+    if(msgHistory.length>30) msgHistory=msgHistory.slice(-30);
+    pushTurnToSheet(userText,cleanReply);
+    const scoreData=extractScoreJSON(fullReply);
     if(scoreData){
-      console.log('Score extracted successfully:', scoreData);
-      applyScores(scoreData);
-      await pushScoreToSheet(scoreData);
-      sessionClosed = true;
-      lockSession();
-      recogEnabled  = false;
-      stopRecog();
-      const wordsInClose = cleanReply.split(' ').length;
-      const ttsDelay     = Math.max(6000, wordsInClose * 400);
-      setTimeout(showEndCard, ttsDelay);
-
+      applyScores(scoreData); await pushScoreToSheet(scoreData);
+      sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
+      const wordsInClose=cleanReply.split(' ').length;
+      setTimeout(showEndCard, Math.max(6000,wordsInClose*420));
     } else if(fullReply.includes('SCORE_JSON:')){
-      console.warn('SCORE_JSON present but could not be parsed. Using incremental scores.');
-      const fallback = buildFallbackScores('Score block was present but malformed.');
-      applyScores(fallback);
-      await pushScoreToSheet(fallback);
-      sessionClosed = true;
-      lockSession();
-      recogEnabled  = false;
-      stopRecog();
-      setTimeout(showEndCard, 6000);
-
-    } else {
-      recogEnabled = true;
-    }
-
-  } catch(err){
-    console.error('API error:', err);
+      console.warn('SCORE_JSON present but malformed — using incremental');
+      const fallback=buildFallbackScores('Score block present but malformed.');
+      applyScores(fallback); await pushScoreToSheet(fallback);
+      sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
+      setTimeout(showEndCard,6000);
+    } else { recogEnabled=true; }
+  }catch(err){
+    console.error('API error:',err);
     showToast('Connection issue — please try again.');
-    setStatus('ready');
-    recogEnabled = true;
-    schedRestart(900);
+    setStatus('ready'); recogEnabled=true; schedRestart(900);
   }
 }
 
-// ══════════════════════════════════════════════════════════
-// FORCE CLOSE (max session time reached)
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// FORCE CLOSE
+// ════════════════════════════════════════════════
 async function forceCloseSession(){
   if(sessionClosed) return;
-  console.log('Force closing. Scores at timeout:', scores, 'Total:', totalScore);
-
-  const closeMsg = "We've covered a lot of ground today — thank you so much for your time. Our advisory team will review everything and be in touch with you personally very soon.";
-  stopSpeaking();
-  enqueueSentence(closeMsg);
-
-  const fallback = buildFallbackScores('Session reached maximum duration. Scores estimated from conversation signals.');
-  applyScores(fallback);
-  await pushScoreToSheet(fallback);
-
-  sessionClosed = true;
-  lockSession();
-  recogEnabled  = false;
-  stopRecog();
-  setTimeout(showEndCard, 9000);
+  const closeMsg="We've covered a lot of ground today — I really appreciate your time. Our team will review everything and reach out to you personally very soon.";
+  stopSpeaking(); enqueueSentence(closeMsg);
+  const fallback=buildFallbackScores('Session reached max duration. Scores estimated from conversation.');
+  applyScores(fallback); await pushScoreToSheet(fallback);
+  sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
+  setTimeout(showEndCard,9000);
 }
 
-// ══════════════════════════════════════════════════════════
-// SCORING HELPERS
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// SCORING
+// ════════════════════════════════════════════════
 function incrementalScore(text){
-  const w = text.split(/\s+/).length;
-  scores.engagement = Math.min(100, scores.engagement + (w > 15 ? 16 : w > 7 ? 8 : 3));
-  if(/interest|want|need|expand|market|grow|opportunit/i.test(text))          scores.interest   = Math.min(100, scores.interest   + 12);
-  if(/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) scores.intent = Math.min(100, scores.intent     + 15);
-  if(/now|asap|urgent|immediate|this year|next month|soon/i.test(text))        scores.readiness  = Math.min(100, scores.readiness  + 18);
-  totalScore = Math.round((scores.interest + scores.engagement + scores.intent + scores.readiness) / 4);
+  const w=text.split(/\s+/).length;
+  scores.engagement=Math.min(100,scores.engagement+(w>15?16:w>7?8:3));
+  if(/interest|want|need|expand|market|grow|opportunit/i.test(text)) scores.interest=Math.min(100,scores.interest+12);
+  if(/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) scores.intent=Math.min(100,scores.intent+15);
+  if(/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) scores.readiness=Math.min(100,scores.readiness+18);
+  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
 }
-
 function applyScores(data){
-  scores.interest   = Number(data.interest)   || 0;
-  scores.engagement = Number(data.engagement) || 0;
-  scores.intent     = Number(data.intent)     || 0;
-  scores.readiness  = Number(data.readiness)  || 0;
-  totalScore = Math.round((scores.interest + scores.engagement + scores.intent + scores.readiness) / 4);
+  scores.interest=Number(data.interest)||0; scores.engagement=Number(data.engagement)||0;
+  scores.intent=Number(data.intent)||0; scores.readiness=Number(data.readiness)||0;
+  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
 }
-
 function buildFallbackScores(summaryNote){
-  const level = totalScore >= 70 ? 'hot' : totalScore >= 40 ? 'warm' : 'cold';
-  const name  = LEAD.name    || 'The client';
-  const mkt   = LEAD.country || 'an unspecified market';
-  const co    = LEAD.company || 'their company';
-  return {
-    interest:   scores.interest,
-    engagement: scores.engagement,
-    intent:     scores.intent,
-    readiness:  scores.readiness,
-    summary:    `${name} from ${co} is exploring expansion into ${mkt}. ${summaryNote}`,
-    level:      level,
-  };
+  const level=totalScore>=70?'hot':totalScore>=40?'warm':'cold';
+  return { interest:scores.interest, engagement:scores.engagement, intent:scores.intent, readiness:scores.readiness,
+    summary:`${LEAD.name||'The client'} from ${LEAD.company||'their company'} is exploring expansion into ${LEAD.country||'an unspecified market'}. ${summaryNote}`, level };
 }
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // END CARD
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function showEndCard(){
   stopSpeaking(); stopRecog();
-  const btn = document.getElementById('endCalBtn');
-  const msg = document.getElementById('endMsg');
-  if(totalScore >= SCORE_THRESHOLD){
-    btn.href         = CAL_URL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email);
-    btn.style.display = 'block';
-    msg.textContent  = "Great news — based on our conversation, you're a strong fit. Book a call with our senior advisor below and we'll pick up right where we left off.";
+  const btn=document.getElementById('endCalBtn');
+  const msg=document.getElementById('endMsg');
+  if(totalScore>=SCORE_THRESHOLD){
+    btn.href=CAL_URL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email);
+    btn.style.display='block';
+    msg.textContent="You're a strong fit for what we do. Book a call below and we'll pick up right where we left off — no need to repeat yourself.";
   } else {
-    btn.style.display = 'none';
-    msg.textContent  = "Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
+    btn.style.display='none';
+    msg.textContent="Thank you for your time today. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
   }
   document.getElementById('endCard').classList.add('show');
 }
 
-// ══════════════════════════════════════════════════════════
-// PING (wake Render from sleep)
-// ══════════════════════════════════════════════════════════
-async function pingServer(){
-  try{ await fetch(WORKER_URL + '/', { method: 'GET', signal: AbortSignal.timeout(12000) }); }catch(e){}
-}
+// ════════════════════════════════════════════════
+// PING
+// ════════════════════════════════════════════════
+async function pingServer(){ try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }catch(e){} }
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 async function init(){
-  if(initDone || isLocked()) return;
-  initDone     = true;
-  greetingDone = false;
-  recogEnabled = false;
+  if(initDone||isLocked()) return;
+  initDone=true; greetingDone=false; recogEnabled=false;
   stopSpeaking(); stopRecog();
   msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
   scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
   clearInterval(timerInterval);
 
-  const overlay = document.getElementById('overlay');
-  overlay.classList.remove('gone');
-  document.getElementById('ovMsg').textContent = 'Loading voices…';
-  document.getElementById('micBtn').classList.remove('ready-pulse');
+  const overlay=document.getElementById('overlay');
+  overlay.classList.remove('hidden');
+  document.getElementById('ovMsg').textContent='Loading voices…';
+  document.getElementById('micBtn').classList.remove('ready');
 
-  let att = 0;
-  const pingPromise = pingServer();
-  while(voices.length === 0 && att < 20){ loadVoices(); if(voices.length === 0) await delay(200); att++; }
+  let att=0;
+  const pingP=pingServer();
+  while(voices.length===0&&att<20){ loadVoices(); if(voices.length===0) await delay(200); att++; }
+  document.getElementById('ovMsg').textContent='Connecting to Dr. CV…';
+  await pingP; await delay(200);
+  document.getElementById('ovMsg').textContent='Ready';
+  await delay(300); overlay.classList.add('hidden');
 
-  document.getElementById('ovMsg').textContent = 'Connecting to Dr. CV…';
-  await pingPromise;
-  await delay(200);
-  document.getElementById('ovMsg').textContent = 'Ready';
-  await delay(300);
-  overlay.classList.add('gone');
+  renderUI(); startTimer(); initRecog();
 
-  renderLeadUI(); startTimer(); initRecog();
-
-  const first = (LEAD.name || '').split(' ')[0].trim();
+  const first=(LEAD.name||'').split(' ')[0].trim();
   let greeting;
-  if(first && LEAD.country && LEAD.company){
-    greeting = `Good to have you here, ${first}. I've reviewed your intake form and I understand ${LEAD.company} is looking to establish a presence in ${LEAD.country}. To make sure we cover the ground that matters most to you — what would you say is the single biggest challenge standing in the way of that expansion right now?`;
-  } else if(first && LEAD.country){
-    greeting = `Thank you for joining today, ${first}. I can see you're looking at ${LEAD.country} as your target market — a market we know well. What's the biggest challenge you're currently facing with that expansion?`;
+  if(first&&LEAD.country&&LEAD.company){
+    greeting=`Good to have you here, ${first}. I've had a look at what you shared beforehand — ${LEAD.company} looking to get into ${LEAD.country} is exactly the kind of thing we help with every day. To make sure we use our time well, what's the single biggest thing you're wrestling with as you think about this expansion?`;
+  } else if(first&&LEAD.country){
+    greeting=`Great to connect, ${first}. I can see you're looking at ${LEAD.country} — a market we know well. What's the biggest challenge on your mind as you think about getting in there?`;
   } else if(first){
-    greeting = `Thank you for joining today, ${first}. I'm looking forward to learning about your expansion plans. Which market are you targeting, and what's the primary challenge on your mind as you think about entering it?`;
+    greeting=`Great to connect, ${first}. Looking forward to hearing about what you're building. Which market are you looking at, and what's the biggest challenge you're trying to solve?`;
   } else {
-    greeting = `Thank you for joining today. I'm looking forward to learning about your expansion plans. Could you start by telling me which market you're targeting, and what you see as the biggest challenge in getting there?`;
+    greeting=`Great to have you here. Looking forward to hearing about what you're building. Which market are you focused on, and what's the biggest thing standing in your way right now?`;
   }
 
-  msgHistory.push({ role: 'assistant', content: greeting });
+  msgHistory.push({ role:'assistant', content:greeting });
 
-  await new Promise(resolve => {
-    const wu = new SpeechSynthesisUtterance('\u00A0');
-    wu.volume = 0; wu.onend = resolve; wu.onerror = resolve;
-    speechSynthesis.speak(wu); setTimeout(resolve, 600);
+  await new Promise(resolve=>{
+    const wu=new SpeechSynthesisUtterance('\u00A0');
+    wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
+    speechSynthesis.speak(wu); setTimeout(resolve,600);
   });
   await delay(150);
 
   setStatus('speaking');
-  const { sentences: gs, remainder: gr } = splitAtSentenceBoundaries(greeting);
-  const allSentences = [...gs];
-  if(gr.trim()) allSentences.push(gr);
-  await speakAll(allSentences.map(cleanForSpeech).filter(Boolean));
+  const{sentences:gs,remainder:gr}=splitAtSentenceBoundaries(greeting);
+  const allS=[...gs]; if(gr.trim()) allS.push(gr);
+  await speakAll(allS.map(cleanForSpeech).filter(Boolean));
 
-  greetingDone = true;
-  recogEnabled = true;
-  setStatus('ready');
-  document.getElementById('micBtn').classList.add('ready-pulse');
-  await delay(400);
-  startRecog();
+  greetingDone=true; recogEnabled=true; setStatus('ready');
+  document.getElementById('micBtn').classList.add('ready');
+  await delay(400); startRecog();
 }
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // CONTROLS
-// ══════════════════════════════════════════════════════════
-document.getElementById('micBtn').addEventListener('click', ()=>{
-  if(sessionClosed || !greetingDone) return;
+// ════════════════════════════════════════════════
+document.getElementById('micBtn').addEventListener('click',()=>{
+  if(sessionClosed||!greetingDone) return;
   if(isSpeaking){ stopSpeaking(); recogEnabled=true; schedRestart(350); return; }
   if(isListening) stopRecog();
   else { recogEnabled=true; startRecog(); }
 });
-
-document.getElementById('resetBtn').addEventListener('click', ()=>{
+document.getElementById('resetBtn').addEventListener('click',()=>{
   if(isLocked()) return;
   document.getElementById('endCard').classList.remove('show');
   stopSpeaking(); stopRecog();
   initDone=false; greetingDone=false;
-  setTimeout(()=>init(), 300);
+  setTimeout(()=>init(),300);
 });
-
-let aiMuted = false;
-document.getElementById('muteBtn').addEventListener('click', function(){
-  aiMuted = voiceMuted = !aiMuted;
-  this.classList.toggle('active', aiMuted);
-  document.getElementById('muteIcon').innerHTML = aiMuted
-    ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-    : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+let aiMuted=false;
+document.getElementById('muteBtn').addEventListener('click',function(){
+  aiMuted=voiceMuted=!aiMuted;
+  this.classList.toggle('muted',aiMuted);
+  document.getElementById('muteIcon').innerHTML=aiMuted
+    ?`<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+    :`<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
   if(aiMuted){ stopSpeaking(); if(greetingDone){ setStatus('ready'); recogEnabled=true; schedRestart(300); } }
 });
 
-// ══════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // BOOT
-// ══════════════════════════════════════════════════════════
-speechSynthesis.onvoiceschanged = ()=>{ loadVoices(); };
+// ════════════════════════════════════════════════
+speechSynthesis.onvoiceschanged=()=>loadVoices();
 
 async function attemptAutoStart(){
   if(isLocked()) return;
   loadVoices();
-  let gestureNeeded = false;
-  try {
-    await new Promise((resolve, reject) => {
-      const test = new SpeechSynthesisUtterance('\u00A0');
-      test.volume = 0;
-      test.onend   = resolve;
-      test.onerror = (e) => { if(e.error==='not-allowed') reject(new Error('gesture')); else resolve(); };
+  const splash=document.getElementById('splash');
+  let gestureNeeded=false;
+  try{
+    await new Promise((resolve,reject)=>{
+      const test=new SpeechSynthesisUtterance('\u00A0');
+      test.volume=0;
+      test.onend=resolve;
+      test.onerror=(e)=>{ if(e.error==='not-allowed') reject(new Error('gesture')); else resolve(); };
       speechSynthesis.speak(test);
-      setTimeout(()=>{ speechSynthesis.cancel(); resolve(); }, 1200);
+      setTimeout(()=>{ speechSynthesis.cancel(); resolve(); },1200);
     });
-  } catch(e) { gestureNeeded = true; }
+  }catch(e){ gestureNeeded=true; }
 
-  if(gestureNeeded) showStartSplash();
-  else init();
+  if(gestureNeeded){
+    splash.classList.remove('hidden');
+    splash.addEventListener('click',()=>{ splash.classList.add('hidden'); init(); },{once:true});
+  } else {
+    splash.classList.add('hidden');
+    init();
+  }
 }
-
-function showStartSplash(){
-  const splash = document.createElement('div');
-  splash.id = 'startSplash';
-  splash.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(3,6,16,.92);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;cursor:pointer;';
-  splash.innerHTML = `
-    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:.08em;color:#60a5fa">Comply Globally</div>
-    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#3b82f6,transparent)"></div>
-    <div style="width:72px;height:72px;border-radius:50%;border:1px solid rgba(59,130,246,.5);background:linear-gradient(145deg,rgba(59,130,246,.1),rgba(59,130,246,.04));display:flex;align-items:center;justify-content:center;color:#60a5fa;">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:#4a5870;text-transform:uppercase">Tap to begin your session</div>
-  `;
-  splash.addEventListener('click', ()=>{ splash.remove(); init(); }, { once: true });
-  document.body.appendChild(splash);
-}
-
-setTimeout(attemptAutoStart, 400);
+setTimeout(attemptAutoStart,400);
 </script>
 </body>
 </html>
