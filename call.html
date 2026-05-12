@@ -2,383 +2,732 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Dr. CV — Comply Globally</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+/* ════════════════════════════════════════════════════
+   DESIGN SYSTEM
+   Aesthetic: Organic holographic — soft luminescence,
+   warm whites, liquid glass, biomorphic motion.
+   NOT the cold blue-dark cliche. Something warm & alive.
+════════════════════════════════════════════════════ */
 :root{
-  --bg:#070b14;
-  --surface:#0c1220;
-  --card:#101828;
-  --card2:#141e2e;
-  --border:rgba(99,179,237,.08);
-  --border2:rgba(99,179,237,.18);
-  --accent:#00d4ff;
-  --accent2:#7c3aed;
-  --accent3:#f59e0b;
-  --text:#e2eeff;
-  --text2:#7a93b8;
-  --text3:#2d4060;
-  --danger:#f43f5e;
-  --success:#10b981;
-  --syne:'Syne',sans-serif;
-  --grotesk:'Space Grotesk',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--grotesk);overflow:hidden;}
+  /* Core palette — warm deep space */
+  --ink: #0a0b0f;
+  --ink1: #0e1018;
+  --ink2: #141720;
+  --ink3: #1c2133;
 
-/* ─── MESH BG ─── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 20%,rgba(0,212,255,.04) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 60% at 80% 80%,rgba(124,58,237,.05) 0%,transparent 60%),
-    radial-gradient(ellipse 40% 40% at 60% 10%,rgba(245,158,11,.03) 0%,transparent 50%);
+  /* Glass */
+  --glass: rgba(255,255,255,.04);
+  --glass2: rgba(255,255,255,.07);
+  --glass3: rgba(255,255,255,.11);
+
+  /* Borders */
+  --b0: rgba(255,255,255,.05);
+  --b1: rgba(255,255,255,.09);
+  --b2: rgba(255,255,255,.16);
+
+  /* Text */
+  --t0: #f0f2ff;
+  --t1: rgba(240,242,255,.6);
+  --t2: rgba(240,242,255,.28);
+  --t3: rgba(240,242,255,.1);
+
+  /* Accent system */
+  --a-cyan:  #00e5cc;
+  --a-warm:  #ff9f5a;
+  --a-rose:  #ff5f8d;
+  --a-violet:#9b7fff;
+  --a-gold:  #f5c842;
+
+  /* State colors */
+  --c-listen: #ff4d6d;
+  --c-think:  #f5c842;
+  --c-speak:  #00e5cc;
+  --c-idle:   rgba(255,255,255,.2);
+  --c-ready:  #6ee7b7;
+
+  /* Typography */
+  --serif: 'Instrument Serif', serif;
+  --sans:  'Outfit', sans-serif;
+  --mono:  'IBM Plex Mono', monospace;
+
+  /* Orb size */
+  --orb: 200px;
+  --orb-r: 100px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body{
+  height:100%; width:100%; overflow:hidden;
+  background: var(--ink);
+  font-family: var(--sans);
+  color: var(--t0);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+.bg-canvas{
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+}
+.bg-orb{
+  position:absolute; border-radius:50%;
+  filter: blur(100px); opacity: 0;
+  animation: bgDrift var(--d,40s) var(--delay,0s) ease-in-out infinite alternate;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.bg-orb.o1{
+  width:900px; height:700px;
+  background: radial-gradient(ellipse, rgba(0,229,204,.09) 0%, transparent 70%);
+  top:-25%; left:-20%; --d:35s; --delay:0s;
+}
+.bg-orb.o2{
+  width:700px; height:800px;
+  background: radial-gradient(ellipse, rgba(155,127,255,.08) 0%, transparent 70%);
+  bottom:-30%; right:-15%; --d:42s; --delay:-12s;
+}
+.bg-orb.o3{
+  width:500px; height:500px;
+  background: radial-gradient(ellipse, rgba(255,159,90,.06) 0%, transparent 70%);
+  top:40%; left:45%; --d:28s; --delay:-7s;
+}
+@keyframes bgDrift{
+  0%{ opacity:.5; transform:translate(0,0) scale(1); }
+  100%{ opacity:.85; transform:translate(30px,-25px) scale(1.06); }
+}
+
+/* Fine grid */
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,204,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,204,.012) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Grain overlay */
+.bg-grain{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── SHELL ── */
+.shell{
+  position:relative; z-index:10;
+  display:grid;
+  grid-template-rows: 62px 1fr 90px;
+  height:100vh; max-width:1120px; margin:0 auto;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px;
+  border-bottom:1px solid var(--b0);
+  background:rgba(10,11,15,.7);
+  backdrop-filter: blur(24px);
+}
+.brand{ display:flex; align-items:center; gap:14px; }
+.brand-mark{
+  width:32px; height:32px;
+  background: var(--glass2);
+  border:1px solid var(--b1);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+.brand-mark::before{
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(0,229,204,.15), transparent 60%);
+}
+.brand-mark svg{ position:relative; z-index:1; }
+.brand-text{}
+.brand-name{
+  font-family:var(--sans); font-size:13px; font-weight:600;
+  letter-spacing:.06em; color:var(--a-cyan);
+  text-transform:uppercase;
+}
+.brand-sub{
+  font-family:var(--mono); font-size:7px; letter-spacing:.18em;
+  color:var(--t2); margin-top:1px; text-transform:uppercase;
+}
+
+/* Status pill */
+.status-pill{
+  display:flex; align-items:center; gap:9px;
+  padding:5px 14px;
+  background:var(--glass);
+  border:1px solid var(--b0);
+}
+.s-dot{
+  width:6px; height:6px; border-radius:50%;
+  background:var(--c-idle);
+  transition: background .3s, box-shadow .3s;
+  flex-shrink:0;
+}
+.s-dot.d-ready { background:var(--c-ready); box-shadow:0 0 8px rgba(110,231,183,.5); animation:dot-beat 2s ease infinite; }
+.s-dot.d-listen{ background:var(--c-listen); box-shadow:0 0 10px rgba(255,77,109,.6); animation:dot-beat .75s ease infinite; }
+.s-dot.d-think { background:var(--c-think);  box-shadow:0 0 8px rgba(245,200,66,.5); animation:dot-beat 1s ease infinite; }
+.s-dot.d-speak { background:var(--c-speak);  box-shadow:0 0 10px rgba(0,229,204,.55); animation:dot-beat .6s ease infinite; }
+@keyframes dot-beat{
+  0%,100%{ transform:scale(1); opacity:1; }
+  50%{ transform:scale(1.45); opacity:.55; }
+}
+.s-label{
+  font-family:var(--mono); font-size:8px; letter-spacing:.16em;
+  color:var(--t1); text-transform:uppercase; min-width:68px;
+  transition:color .3s;
+}
+.session-time{
+  font-family:var(--mono); font-size:11px;
+  color:var(--t2); letter-spacing:.06em;
+}
+
+/* Memory indicator */
+.mem-pill{
+  display:none; align-items:center; gap:6px;
+  padding:4px 10px; background:rgba(0,229,204,.06);
+  border:1px solid rgba(0,229,204,.15);
+  font-family:var(--mono); font-size:7px; letter-spacing:.14em;
+  color:rgba(0,229,204,.6); text-transform:uppercase;
+}
+.mem-pill.show{ display:flex; }
+.mem-dot{ width:4px; height:4px; border-radius:50%; background:var(--a-cyan); animation:dot-beat 2s ease infinite; }
+
+/* ── MAIN STAGE ── */
+.stage{
+  display:flex; align-items:center; justify-content:center;
+  gap:80px; position:relative; overflow:hidden;
+}
+
+/* ── ORB SYSTEM ── */
+.orb-system{
+  position:relative;
+  width:var(--orb); height:var(--orb);
+  flex-shrink:0;
+}
+
+/* Animated field rings — react to state */
+.field-ring{
+  position:absolute; border-radius:50%; top:50%; left:50%;
+  transform:translate(-50%,-50%); border:1px solid;
+  pointer-events:none; transition: border-color .6s, opacity .6s;
+}
+.fr1{
+  width:calc(var(--orb) * 1.5); height:calc(var(--orb) * 1.5);
+  border-color:rgba(0,229,204,.04);
+  animation: orbSpin1 55s linear infinite;
+  opacity:.6;
+}
+.fr2{
+  width:calc(var(--orb) * 1.28); height:calc(var(--orb) * 1.28);
+  border-color:rgba(155,127,255,.05);
+  animation: orbSpin2 38s linear infinite reverse;
+  opacity:.7;
+}
+.fr3{
+  width:calc(var(--orb) * 1.08); height:calc(var(--orb) * 1.08);
+  border-color:rgba(0,229,204,.06);
+  animation: orbSpin1 22s linear infinite;
+  opacity:.8;
+}
+
+/* Particle dots on rings */
+.fr1::before, .fr1::after,
+.fr2::before, .fr2::after,
+.fr3::before {
+  content:''; position:absolute; border-radius:50%;
+  top:-2px; left:50%; transform:translateX(-50%);
+}
+.fr1::before{ width:5px; height:5px; background:var(--a-cyan); box-shadow:0 0 10px var(--a-cyan); }
+.fr1::after{ top:auto; bottom:-2px; width:3px; height:3px; background:var(--a-violet); box-shadow:0 0 7px var(--a-violet); }
+.fr2::before{ width:4px; height:4px; background:var(--a-warm); box-shadow:0 0 8px var(--a-warm); opacity:.7; }
+.fr2::after{ width:3px; height:3px; top:auto; bottom:-1.5px; background:var(--a-cyan); box-shadow:0 0 6px var(--a-cyan); opacity:.5; }
+.fr3::before{ width:3px; height:3px; background:var(--a-violet); box-shadow:0 0 6px var(--a-violet); opacity:.6; }
+
+@keyframes orbSpin1{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes orbSpin2{ to{ transform:translate(-50%,-50%) rotate(-360deg); } }
+
+/* Core sphere */
+.orb-core{
+  position:absolute;
+  width:var(--orb); height:var(--orb);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,
+    #131a2e 0%, #0a0d18 55%, #060810 100%);
+  border:1px solid rgba(0,229,204,.14);
+  box-shadow:
+    0 0 0 1px rgba(0,229,204,.04),
+    0 0 80px rgba(0,229,204,.06),
+    inset 0 1px 0 rgba(255,255,255,.06),
+    inset 0 -1px 0 rgba(0,0,0,.4);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:5px;
+  z-index:5; overflow:hidden;
+}
+
+/* Inner specular highlight */
+.orb-core::before{
+  content:'';
+  position:absolute; top:-30%; left:-20%;
+  width:60%; height:50%;
+  background:radial-gradient(ellipse, rgba(255,255,255,.04), transparent 70%);
+  border-radius:50%;
   pointer-events:none;
 }
 
-/* ─── GRID ─── */
-body::after{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,212,255,.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,212,255,.018) 1px,transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 100%);
-}
-
-/* ─── SHELL ─── */
-.shell{position:relative;z-index:10;display:grid;grid-template-rows:64px 1fr 88px;height:100vh;max-width:1080px;margin:0 auto;}
-
-/* ─── TOPBAR ─── */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;padding:0 40px;
-  border-bottom:1px solid var(--border);
-  background:rgba(7,11,20,.85);backdrop-filter:blur(24px);
-}
-.brand{display:flex;align-items:center;gap:12px;}
-.brand-icon{
-  width:34px;height:34px;border:1px solid rgba(0,212,255,.25);
-  background:linear-gradient(135deg,rgba(0,212,255,.08),transparent);
-  display:flex;align-items:center;justify-content:center;
-  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-}
-.brand-name{font-family:var(--syne);font-size:14px;font-weight:700;letter-spacing:.06em;color:var(--accent);}
-.brand-sub{font-family:var(--mono);font-size:7px;letter-spacing:.2em;color:var(--text2);margin-top:2px;text-transform:uppercase;}
-
-.status-row{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--border);background:rgba(12,18,32,.7);}
-.s-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);transition:all .3s;}
-.s-dot.ready{background:var(--success);box-shadow:0 0 8px rgba(16,185,129,.5);animation:pulse 2s infinite;}
-.s-dot.listen{background:var(--danger);box-shadow:0 0 10px rgba(244,63,94,.6);animation:pulse .8s infinite;}
-.s-dot.think{background:var(--accent3);box-shadow:0 0 8px rgba(245,158,11,.5);animation:pulse 1s infinite;}
-.s-dot.speak{background:var(--accent);box-shadow:0 0 10px rgba(0,212,255,.5);animation:pulse .6s infinite;}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
-.s-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--text2);text-transform:uppercase;min-width:72px;}
-.s-time{font-family:var(--mono);font-size:12px;color:var(--text2);}
-
-/* ─── MAIN ─── */
-.main{display:flex;align-items:center;justify-content:center;gap:72px;position:relative;overflow:hidden;}
-
-/* ─── ORB ─── */
-.orb-wrap{position:relative;width:280px;height:280px;flex-shrink:0;}
-.o-ring{
-  position:absolute;border-radius:50%;top:50%;left:50%;
-  transform:translate(-50%,-50%);border:1px solid;
-}
-.or1{width:280px;height:280px;border-color:rgba(0,212,255,.06);animation:spin 50s linear infinite;}
-.or2{width:240px;height:240px;border-color:rgba(124,58,237,.08);animation:spin 35s linear infinite reverse;}
-.or3{width:200px;height:200px;border-color:rgba(0,212,255,.05);animation:spin 25s linear infinite;}
-.or1::before{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);top:-3px;left:50%;transform:translateX(-50%);}
-.or2::before{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#a78bfa;box-shadow:0 0 8px #a78bfa;bottom:-2px;left:50%;transform:translateX(-50%);}
-@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-
-.orb-core{
-  position:absolute;width:156px;height:156px;top:50%;left:50%;transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:radial-gradient(circle at 38% 35%,#0f2040,#050c1a 65%,#020610);
-  border:1px solid rgba(0,212,255,.2);
-  box-shadow:0 0 0 1px rgba(0,212,255,.04),0 0 50px rgba(0,212,255,.06),inset 0 1px 0 rgba(0,212,255,.07);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;z-index:5;
-}
+/* Reactive glow layer — transitions with state */
 .orb-glow{
-  position:absolute;width:156px;height:156px;top:50%;left:50%;transform:translate(-50%,-50%);
-  border-radius:50%;pointer-events:none;z-index:4;transition:box-shadow .5s;
+  position:absolute;
+  width:var(--orb); height:var(--orb);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  border-radius:50%;
+  pointer-events:none; z-index:4;
+  transition: box-shadow .5s ease;
 }
-.orb-glow.speaking{box-shadow:0 0 50px 10px rgba(0,212,255,.18),0 0 100px 25px rgba(0,212,255,.07);}
-.orb-glow.listening{box-shadow:0 0 50px 10px rgba(244,63,94,.18),0 0 100px 25px rgba(244,63,94,.07);}
-#wc{position:absolute;width:156px;height:156px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:6;pointer-events:none;}
-.orb-init{font-family:var(--syne);font-size:36px;font-weight:800;color:var(--accent);letter-spacing:-.02em;}
-.orb-sep{width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--accent3),transparent);}
-.orb-tag{font-family:var(--mono);font-size:6px;letter-spacing:.22em;color:var(--text2);text-transform:uppercase;}
-
-/* ─── INFO PANEL ─── */
-.info{display:flex;flex-direction:column;gap:18px;min-width:280px;}
-.eyebrow{font-family:var(--mono);font-size:8px;letter-spacing:.24em;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--accent);opacity:.4;}
-.dname{font-family:var(--syne);font-size:38px;font-weight:800;letter-spacing:-.01em;line-height:.95;color:var(--text);}
-.drole{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-top:4px;}
-.dfirm{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--text2);text-transform:uppercase;}
-.divider{height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
-.meta-row{display:flex;gap:24px;}
-.meta-item{display:flex;flex-direction:column;gap:4px;}
-.meta-lbl{font-family:var(--mono);font-size:7px;letter-spacing:.16em;color:var(--text3);text-transform:uppercase;}
-.meta-val{font-family:var(--grotesk);font-size:13px;font-weight:500;color:var(--text);}
-
-/* ─── TRANSCRIPT ─── */
-.tx-area{
-  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-  width:min(580px,calc(100vw - 40px));
-  background:rgba(12,18,32,.9);backdrop-filter:blur(20px);
-  border:1px solid var(--border);padding:12px 18px;
-  opacity:0;transform:translateX(-50%) translateY(6px);transition:opacity .35s,transform .35s;
-  pointer-events:none;text-align:center;
+.orb-glow.g-speak{
+  box-shadow:
+    0 0 50px 12px rgba(0,229,204,.16),
+    0 0 120px 35px rgba(0,229,204,.06);
 }
-.tx-area.visible{opacity:1;transform:translateX(-50%) translateY(0);}
-.tx-who{font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;}
-.tx-who.you{color:var(--accent3);}
-.tx-who.ai{color:var(--accent);}
-.tx-text{font-family:var(--grotesk);font-size:12px;line-height:1.6;color:rgba(226,238,255,.65);font-weight:300;}
+.orb-glow.g-listen{
+  box-shadow:
+    0 0 50px 12px rgba(255,77,109,.16),
+    0 0 120px 35px rgba(255,77,109,.06);
+}
+.orb-glow.g-think{
+  box-shadow:
+    0 0 40px 8px rgba(245,200,66,.1),
+    0 0 90px 25px rgba(245,200,66,.04);
+}
 
-/* ─── CONTROLS ─── */
+/* Wave canvas sits over orb */
+#orbCanvas{
+  position:absolute;
+  width:var(--orb); height:var(--orb);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  border-radius:50%; z-index:6; pointer-events:none;
+}
+
+/* Orb identity */
+.orb-initials{
+  font-family:var(--serif); font-size:52px;
+  color:rgba(0,229,204,.9); line-height:1;
+  letter-spacing:-.02em; font-style:italic;
+  text-shadow:0 0 30px rgba(0,229,204,.3);
+  position:relative; z-index:1;
+}
+.orb-divider{
+  width:32px; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,229,204,.5), transparent);
+  position:relative; z-index:1;
+}
+.orb-label{
+  font-family:var(--mono); font-size:6.5px; letter-spacing:.24em;
+  color:var(--t2); text-transform:uppercase; position:relative; z-index:1;
+}
+
+/* ── IDENTITY PANEL ── */
+.identity{
+  display:flex; flex-direction:column; gap:22px; min-width:290px;
+}
+.id-badge{
+  font-family:var(--mono); font-size:7.5px; letter-spacing:.26em;
+  color:var(--a-cyan); text-transform:uppercase;
+  display:flex; align-items:center; gap:10px;
+}
+.id-badge::before{
+  content:''; display:block; width:22px; height:1px;
+  background:var(--a-cyan); opacity:.35;
+}
+.id-name{
+  font-family:var(--serif); font-size:46px; font-weight:400;
+  line-height:.92; letter-spacing:-.01em;
+  background:linear-gradient(140deg, var(--t0) 45%, rgba(0,229,204,.8));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.id-role{
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
+  color:rgba(0,229,204,.7); text-transform:uppercase; margin-top:5px;
+}
+.id-firm{
+  font-family:var(--mono); font-size:7.5px; letter-spacing:.14em;
+  color:var(--t2); text-transform:uppercase;
+}
+.id-rule{
+  height:1px;
+  background:linear-gradient(90deg, var(--b2), transparent);
+  margin:2px 0;
+}
+.id-stats{ display:flex; gap:30px; }
+.stat{ display:flex; flex-direction:column; gap:4px; }
+.stat-label{
+  font-family:var(--mono); font-size:6.5px; letter-spacing:.18em;
+  color:var(--t3); text-transform:uppercase;
+}
+.stat-value{
+  font-family:var(--sans); font-size:14px; font-weight:500;
+  color:var(--t0);
+}
+
+/* ── TRANSCRIPT ── */
+.tx-zone{
+  position:absolute; bottom:18px; left:50%;
+  transform:translateX(-50%) translateY(8px);
+  width:min(620px, calc(100vw - 48px));
+  padding:13px 20px;
+  background:rgba(14,16,24,.88);
+  backdrop-filter:blur(24px);
+  border:1px solid var(--b0);
+  opacity:0; pointer-events:none;
+  transition:opacity .35s, transform .35s;
+  text-align:center;
+}
+.tx-zone.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.tx-speaker{
+  font-family:var(--mono); font-size:7px; letter-spacing:.2em;
+  text-transform:uppercase; margin-bottom:5px;
+}
+.tx-speaker.sp-you{ color:rgba(245,200,66,.8); }
+.tx-speaker.sp-ai{ color:rgba(0,229,204,.7); }
+.tx-body{
+  font-family:var(--sans); font-size:13px; line-height:1.65;
+  color:rgba(240,242,255,.6); font-weight:300;
+}
+
+/* ── CONTROLS ── */
 .controls{
-  display:flex;align-items:center;justify-content:center;gap:24px;
-  border-top:1px solid var(--border);
-  background:rgba(7,11,20,.95);backdrop-filter:blur(30px);
-  position:relative;z-index:20;
+  display:flex; align-items:center; justify-content:center; gap:26px;
+  border-top:1px solid var(--b0);
+  background:linear-gradient(0deg, rgba(10,11,15,.99), rgba(10,11,15,.85));
+  backdrop-filter:blur(32px);
+  position:relative; z-index:20;
 }
-.ctl{
-  width:42px;height:42px;border-radius:50%;border:1px solid var(--border);
-  background:transparent;color:var(--text2);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;outline:none;
-}
-.ctl:hover{border-color:var(--border2);color:var(--accent);transform:scale(1.08);}
-.ctl.muted{border-color:rgba(244,63,94,.3);color:var(--danger);}
-.ctl-hint{font-family:var(--mono);font-size:7px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;min-width:60px;text-align:center;}
 
-.mic-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
-.mic-pulse{
-  position:absolute;width:84px;height:84px;border-radius:50%;
-  border:1px solid rgba(0,212,255,.08);pointer-events:none;transition:all .4s;
+.btn-ghost{
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid var(--b0); background:transparent;
+  color:var(--t2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .18s; outline:none;
 }
-.mic-pulse.l{border-color:rgba(244,63,94,.25);animation:rpulse 1.4s ease infinite;}
-.mic-pulse2{
-  position:absolute;width:70px;height:70px;border-radius:50%;
-  border:1px solid rgba(0,212,255,.05);pointer-events:none;transition:all .4s;
+.btn-ghost:hover{ border-color:var(--b2); color:var(--t0); transform:scale(1.08); }
+.btn-ghost.active{ border-color:rgba(255,77,109,.3); color:var(--c-listen); }
+
+.ctrl-hint{
+  font-family:var(--mono); font-size:7.5px; letter-spacing:.14em;
+  color:var(--t3); text-transform:uppercase; min-width:68px; text-align:center;
 }
-.mic-pulse2.l{border-color:rgba(244,63,94,.15);animation:rpulse 1.4s .3s ease infinite;}
-@keyframes rpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+
+/* Mic button */
+.mic-outer{ position:relative; display:flex; align-items:center; justify-content:center; }
+.mic-ring{
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(0,229,204,.08);
+  transition:all .4s; pointer-events:none;
+}
+.mic-ring.r1{ width:86px; height:86px; }
+.mic-ring.r2{ width:73px; height:73px; border-color:rgba(0,229,204,.05); }
+.mic-ring.r1.pulse{ border-color:rgba(255,77,109,.25); animation:ringPulse 1.3s ease infinite; }
+.mic-ring.r2.pulse{ border-color:rgba(255,77,109,.15); animation:ringPulse 1.3s .25s ease infinite; }
+@keyframes ringPulse{
+  0%{ transform:scale(1); opacity:.9; }
+  100%{ transform:scale(1.55); opacity:0; }
+}
 
 .mic-btn{
-  width:62px;height:62px;border-radius:50%;
-  border:1px solid rgba(0,212,255,.28);
-  background:linear-gradient(145deg,rgba(0,212,255,.08),rgba(0,212,255,.02));
-  color:var(--accent);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  outline:none;transition:all .3s;position:relative;z-index:2;
+  width:62px; height:62px; border-radius:50%;
+  border:1px solid rgba(0,229,204,.22);
+  background:linear-gradient(145deg, rgba(0,229,204,.07), rgba(0,229,204,.02));
+  color:var(--a-cyan); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .3s; outline:none; position:relative; z-index:2;
 }
-.mic-btn:hover{border-color:rgba(0,212,255,.5);box-shadow:0 0 20px rgba(0,212,255,.1);}
-.mic-btn.rec{
-  border-color:rgba(244,63,94,.45);
-  background:linear-gradient(145deg,rgba(244,63,94,.12),rgba(244,63,94,.04));
-  color:var(--danger);
+.mic-btn:hover{ border-color:rgba(0,229,204,.45); box-shadow:0 0 22px rgba(0,229,204,.1); }
+.mic-btn.m-rec{
+  border-color:rgba(255,77,109,.4);
+  background:linear-gradient(145deg, rgba(255,77,109,.1), rgba(255,77,109,.03));
+  color:var(--c-listen);
 }
-.mic-btn.rdy{animation:rglow 2.5s ease infinite;}
-@keyframes rglow{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.3)}50%{box-shadow:0 0 0 10px rgba(0,212,255,0)}}
+.mic-btn.m-ready{ animation:micGlow 2.5s ease infinite; }
+@keyframes micGlow{
+  0%,100%{ box-shadow:0 0 0 0 rgba(0,229,204,.3); }
+  50%{ box-shadow:0 0 0 11px rgba(0,229,204,0); }
+}
 
-/* ─── MEMORY BADGE ─── */
-.mem-badge{
-  position:fixed;top:72px;right:16px;z-index:50;
-  background:rgba(12,18,32,.9);border:1px solid var(--border);
-  padding:5px 10px;font-family:var(--mono);font-size:7px;letter-spacing:.14em;
-  color:var(--text2);text-transform:uppercase;display:none;
-  animation:fadeIn .4s ease;
+/* ── SCREENS ── */
+.screen{
+  position:fixed; inset:0; z-index:500;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:28px;
+  text-align:center;
+  transition:opacity .7s, visibility .7s;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.mem-badge.show{display:block;}
+.screen.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+.screen.gone{ display:none; }
 
-/* ─── OVERLAY ─── */
-.overlay{
-  position:fixed;inset:0;z-index:500;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  transition:opacity .8s,visibility .8s;
+/* Loading overlay */
+#scLoad{
+  background: var(--ink);
+  z-index:600;
 }
-.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-.ov-brand{font-family:var(--syne);font-size:30px;font-weight:800;color:var(--accent);letter-spacing:-.01em;}
-.ov-sep{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
-.ov-spin{width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,212,255,.15);border-top-color:var(--accent);animation:sp 1s linear infinite;}
-@keyframes sp{to{transform:rotate(360deg)}}
-.ov-msg{font-family:var(--mono);font-size:8px;letter-spacing:.22em;color:var(--text2);text-transform:uppercase;}
+.load-logo{
+  font-family:var(--serif); font-size:36px; font-style:italic;
+  color:var(--a-cyan); letter-spacing:.04em;
+}
+.load-sep{
+  width:80px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--a-cyan), transparent);
+}
+.load-spin{
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid rgba(0,229,204,.14);
+  border-top-color:var(--a-cyan);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.load-msg{
+  font-family:var(--mono); font-size:8px; letter-spacing:.22em;
+  color:var(--t2); text-transform:uppercase;
+}
 
-/* ─── SPLASH ─── */
-.splash{
-  position:fixed;inset:0;z-index:600;
-  background:radial-gradient(ellipse at center,#0c1220,var(--bg));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-  cursor:pointer;transition:opacity .5s;
+/* Splash */
+#scSplash{
+  background:radial-gradient(ellipse at center, var(--ink2), var(--ink));
+  z-index:700; cursor:pointer;
 }
-.splash.hidden{opacity:0;pointer-events:none;}
-.sp-logo{font-family:var(--syne);font-size:28px;font-weight:800;color:var(--accent);}
-.sp-sep{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
-.sp-btn{
-  width:76px;height:76px;border-radius:50%;
-  border:1px solid rgba(0,212,255,.35);
-  background:linear-gradient(145deg,rgba(0,212,255,.08),transparent);
-  display:flex;align-items:center;justify-content:center;color:var(--accent);transition:all .3s;
+.splash-logo{ font-family:var(--serif); font-size:30px; font-style:italic; color:var(--a-cyan); }
+.splash-play{
+  width:80px; height:80px; border-radius:50%;
+  border:1px solid rgba(0,229,204,.3);
+  background:linear-gradient(145deg, rgba(0,229,204,.07), transparent);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--a-cyan); transition:all .3s;
 }
-.sp-btn:hover{border-color:var(--accent);box-shadow:0 0 40px rgba(0,212,255,.12);}
-.sp-hint{font-family:var(--mono);font-size:8px;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;}
+.splash-play:hover{ border-color:var(--a-cyan); box-shadow:0 0 40px rgba(0,229,204,.12); }
+.splash-hint{
+  font-family:var(--mono); font-size:8px; letter-spacing:.22em;
+  color:var(--t3); text-transform:uppercase;
+}
 
-/* ─── END CARD ─── */
-.end-card{
-  position:fixed;inset:0;z-index:400;
-  background:rgba(7,11,20,.97);backdrop-filter:blur(40px);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .6s;
+/* End card */
+#scEnd{
+  background:rgba(10,11,15,.96);
+  backdrop-filter:blur(40px);
+  z-index:400;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .6s;
 }
-.end-card.show{opacity:1;pointer-events:all;}
-.end-inner{width:420px;text-align:center;padding:0 20px;}
-.end-rule{height:1px;background:linear-gradient(90deg,transparent,var(--accent3),transparent);margin-bottom:36px;}
-.end-icon{font-size:22px;color:var(--accent3);margin-bottom:14px;}
-.end-title{font-family:var(--syne);font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.end-sub{font-family:var(--mono);font-size:7px;letter-spacing:.2em;color:var(--text2);text-transform:uppercase;margin-bottom:24px;}
-.end-msg{font-family:var(--grotesk);font-size:13px;line-height:1.8;color:rgba(226,238,255,.55);margin-bottom:28px;font-weight:300;}
+#scEnd.show{ opacity:1; visibility:visible; pointer-events:all; }
+.end-inner{ width:440px; padding:0 20px; }
+.end-rule-t{
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--a-gold), transparent);
+  margin-bottom:36px;
+}
+.end-glyph{ font-size:26px; color:var(--a-gold); margin-bottom:16px; }
+.end-title{
+  font-family:var(--serif); font-size:32px; font-style:italic;
+  color:var(--t0); margin-bottom:5px;
+}
+.end-subtitle{
+  font-family:var(--mono); font-size:8px; letter-spacing:.2em;
+  color:var(--t2); text-transform:uppercase; margin-bottom:24px;
+}
+.end-body{
+  font-family:var(--sans); font-size:14px; line-height:1.8;
+  color:rgba(240,242,255,.5); margin-bottom:28px; font-weight:300;
+}
 .end-cta{
-  display:block;padding:16px 28px;
-  border:1px solid rgba(0,212,255,.35);
-  background:linear-gradient(135deg,rgba(0,212,255,.06),transparent);
-  color:var(--accent);font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;
-  text-decoration:none;cursor:pointer;transition:all .22s;width:100%;
+  display:block; width:100%; padding:17px 28px;
+  border:1px solid rgba(0,229,204,.28);
+  background:linear-gradient(135deg, rgba(0,229,204,.06), transparent);
+  color:var(--a-cyan);
+  font-family:var(--mono); font-size:8px; letter-spacing:.22em; text-transform:uppercase;
+  text-decoration:none; cursor:pointer; transition:all .22s;
 }
-.end-cta:hover{border-color:var(--accent);background:linear-gradient(135deg,rgba(0,212,255,.12),transparent);}
-.end-rule2{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin-top:28px;}
-
-/* ─── USED SCREEN ─── */
-.used-screen{
-  position:fixed;inset:0;z-index:700;background:var(--bg);
-  display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;
-  text-align:center;padding:40px;
+.end-cta:hover{ border-color:var(--a-cyan); background:linear-gradient(135deg, rgba(0,229,204,.11), transparent); }
+.end-rule-b{
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--b1), transparent);
+  margin-top:28px;
 }
-.used-screen.show{display:flex;}
-.used-title{font-family:var(--syne);font-size:26px;font-weight:700;color:var(--text);}
-.used-sub{font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:var(--text2);text-transform:uppercase;line-height:2;max-width:340px;}
 
-/* ─── TOAST ─── */
+/* Used screen */
+#scUsed{
+  background:var(--ink); z-index:800;
+  display:none;
+}
+#scUsed.show{ display:flex; }
+.used-glyph{ font-size:40px; color:var(--a-cyan); }
+.used-title{
+  font-family:var(--serif); font-size:28px; font-style:italic; color:var(--t0);
+}
+.used-body{
+  font-family:var(--mono); font-size:8px; letter-spacing:.18em;
+  color:var(--t2); text-transform:uppercase; line-height:2.2;
+  max-width:360px;
+}
+
+/* Toast */
 .toast{
-  position:fixed;bottom:108px;left:50%;transform:translateX(-50%);
-  background:rgba(244,63,94,.9);color:#fff;
-  padding:9px 22px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;
-  z-index:800;display:none;text-transform:uppercase;
+  position:fixed; bottom:106px; left:50%; transform:translateX(-50%);
+  background:rgba(255,77,109,.88); color:#fff;
+  padding:9px 22px; z-index:900; display:none;
+  font-family:var(--mono); font-size:8px; letter-spacing:.15em; text-transform:uppercase;
 }
-.sync-dot{position:fixed;top:18px;right:16px;width:5px;height:5px;border-radius:50%;background:transparent;z-index:900;}
-.sync-dot.syncing{background:var(--accent3);box-shadow:0 0 6px rgba(245,158,11,.6);animation:pulse .8s infinite;}
-.sync-dot.ok{background:var(--success);}
-.sync-dot.err{background:var(--danger);}
 
-/* ─── RESPONSIVE ─── */
-@media(max-width:680px){
-  .main{flex-direction:column;gap:20px;}
-  .info{align-items:center;text-align:center;}
-  .eyebrow::before{display:none;}
-  .meta-row{justify-content:center;}
-  .topbar{padding:0 16px;}
-  .dname{font-size:28px;}
-  .orb-wrap{width:200px;height:200px;}
-  .or1{width:200px;height:200px;}.or2{width:170px;height:170px;}.or3{width:140px;height:140px;}
-  .orb-core{width:112px;height:112px;} .orb-glow{width:112px;height:112px;}
-  .orb-init{font-size:28px;} #wc{width:112px;height:112px;}
+/* Sync */
+.sync{
+  position:fixed; top:14px; right:14px; z-index:900;
+  width:5px; height:5px; border-radius:50%; background:transparent;
+}
+.sync.sy-ing{ background:var(--a-gold); box-shadow:0 0 6px rgba(245,200,66,.6); animation:dot-beat .8s infinite; }
+.sync.sy-ok{ background:var(--c-ready); }
+.sync.sy-err{ background:var(--c-listen); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:720px){
+  .stage{ flex-direction:column; gap:18px; }
+  .identity{ align-items:center; text-align:center; }
+  .id-badge::before{ display:none; }
+  .id-stats{ justify-content:center; }
+  .topbar{ padding:0 18px; }
+  :root{ --orb:170px; --orb-r:85px; }
+  .id-name{ font-size:34px; }
+  .fr1{ width:270px; height:270px; }
+  .fr2{ width:230px; height:230px; }
+  .fr3{ width:190px; height:190px; }
 }
 </style>
 </head>
 <body>
 
-<div class="sync-dot" id="syncDot"></div>
-
-<!-- MEMORY BADGE -->
-<div class="mem-badge" id="memBadge">● Memory active</div>
+<!-- AMBIENT BG -->
+<div class="bg-canvas">
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="bg-orb o3"></div>
+</div>
+<div class="bg-grid"></div>
+<div class="bg-grain"></div>
+<div class="sync" id="sync"></div>
 
 <!-- USED SCREEN -->
-<div class="used-screen" id="usedScreen">
-  <div style="font-family:var(--syne);font-size:42px;font-weight:800;color:var(--accent);">◈</div>
-  <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);"></div>
+<div class="screen gone" id="scUsed">
+  <div class="used-glyph">◈</div>
+  <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--a-cyan),transparent)"></div>
   <div class="used-title">Session Already Completed</div>
-  <div class="used-sub">Your strategy session with Dr. CV has already taken place.<br>Our team will be in touch with next steps shortly.</div>
-  <div style="font-family:var(--mono);font-size:7px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-top:6px;">Single-use session link</div>
+  <div class="used-body">Your strategy session with Dr. CV has already taken place.<br>Our team will be in touch with next steps shortly.</div>
+  <div style="font-family:var(--mono);font-size:7px;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-top:8px">Single-use session link</div>
 </div>
 
 <!-- SHELL -->
 <div class="shell">
+
+  <!-- TOPBAR -->
   <header class="topbar">
     <div class="brand">
-      <div class="brand-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)">
-          <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+      <div class="brand-mark">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--a-cyan)">
+          <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/>
         </svg>
       </div>
-      <div>
+      <div class="brand-text">
         <div class="brand-name">Comply Globally</div>
         <div class="brand-sub">Global Expansion Advisory</div>
       </div>
     </div>
-    <div class="status-row">
-      <div class="s-dot" id="sDot"></div>
-      <span class="s-label" id="sLabel">Connecting</span>
+
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="mem-pill" id="memPill">
+        <div class="mem-dot"></div>
+        <span>Memory active</span>
+      </div>
+      <div class="status-pill">
+        <div class="s-dot" id="sDot"></div>
+        <span class="s-label" id="sLabel">Connecting</span>
+      </div>
     </div>
-    <div class="s-time" id="timer">0:00</div>
+
+    <div class="session-time" id="timer">0:00</div>
   </header>
 
-  <div class="main">
+  <!-- STAGE -->
+  <div class="stage">
+
     <!-- ORB -->
-    <div class="orb-wrap">
-      <div class="o-ring or1"></div>
-      <div class="o-ring or2"></div>
-      <div class="o-ring or3"></div>
+    <div class="orb-system">
+      <div class="field-ring fr1"></div>
+      <div class="field-ring fr2"></div>
+      <div class="field-ring fr3"></div>
       <div class="orb-glow" id="orbGlow"></div>
-      <canvas id="wc" width="156" height="156"></canvas>
+      <canvas id="orbCanvas"></canvas>
       <div class="orb-core">
-        <div class="orb-init">CV</div>
-        <div class="orb-sep"></div>
-        <div class="orb-tag">Dr. CV · Strategist</div>
+        <div class="orb-initials">CV</div>
+        <div class="orb-divider"></div>
+        <div class="orb-label">Dr. CV · Strategist</div>
       </div>
     </div>
 
-    <!-- INFO -->
-    <div class="info">
+    <!-- IDENTITY -->
+    <div class="identity">
       <div>
-        <div class="eyebrow">Strategy Session</div>
-        <div class="dname">Dr. CV</div>
-        <div class="drole">Global Expansion Strategist</div>
-        <div class="dfirm">Comply Globally · Advisory</div>
+        <div class="id-badge">Strategy Session</div>
+        <div class="id-name">Dr. CV</div>
+        <div class="id-role">Global Expansion Strategist</div>
+        <div class="id-firm">Comply Globally · Advisory Division</div>
       </div>
-      <div class="divider"></div>
-      <div class="meta-row">
-        <div class="meta-item"><div class="meta-lbl">Client</div><div class="meta-val" id="metaName">—</div></div>
-        <div class="meta-item"><div class="meta-lbl">Market</div><div class="meta-val" id="metaMarket">—</div></div>
-        <div class="meta-item"><div class="meta-lbl">Duration</div><div class="meta-val" id="metaDur">0:00</div></div>
+      <div class="id-rule"></div>
+      <div class="id-stats">
+        <div class="stat">
+          <div class="stat-label">Client</div>
+          <div class="stat-value" id="sClient">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Market</div>
+          <div class="stat-value" id="sMarket">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value" id="sDuration">0:00</div>
+        </div>
       </div>
     </div>
 
     <!-- TRANSCRIPT -->
-    <div class="tx-area" id="txArea">
-      <div class="tx-who ai" id="txWho">Dr. CV</div>
-      <div class="tx-text" id="txText"></div>
+    <div class="tx-zone" id="txZone">
+      <div class="tx-speaker" id="txSpeaker"></div>
+      <div class="tx-body" id="txBody"></div>
     </div>
-  </div>
+
+  </div><!-- /stage -->
 
   <!-- CONTROLS -->
   <div class="controls">
-    <button class="ctl" id="resetBtn" title="Restart">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+    <button class="btn-ghost" id="btnReset" title="Restart session">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+        <path d="M3 3v5h5"/>
       </svg>
     </button>
-    <div class="ctl-hint" id="hintL">Starting…</div>
 
-    <div class="mic-wrap">
-      <div class="mic-pulse" id="mp1"></div>
-      <div class="mic-pulse2" id="mp2"></div>
-      <button class="mic-btn" id="micBtn">
+    <div class="ctrl-hint" id="hintL">Starting…</div>
+
+    <div class="mic-outer">
+      <div class="mic-ring r1" id="ring1"></div>
+      <div class="mic-ring r2" id="ring2"></div>
+      <button class="mic-btn" id="btnMic">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
           <rect x="9" y="2" width="6" height="12" rx="3"/>
           <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
@@ -386,754 +735,1089 @@ body::after{
       </button>
     </div>
 
-    <div class="ctl-hint" id="hintR" style="text-align:left;">Tap to speak</div>
-    <button class="ctl" id="muteBtn" title="Mute AI voice">
-      <svg id="muteIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <div class="ctrl-hint" id="hintR">Tap to speak</div>
+
+    <button class="btn-ghost" id="btnMute" title="Mute/unmute AI voice">
+      <svg id="muteIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M11 5 6 9H2v6h4l5 4V5z"/>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
       </svg>
     </button>
   </div>
-</div>
 
-<!-- OVERLAY -->
-<div class="overlay" id="overlay">
-  <div class="ov-brand">Comply Globally</div>
-  <div class="ov-sep"></div>
-  <div class="ov-spin"></div>
-  <div class="ov-msg" id="ovMsg">Preparing your session</div>
+</div><!-- /shell -->
+
+<!-- LOADING OVERLAY -->
+<div class="screen" id="scLoad">
+  <div class="load-logo">Comply Globally</div>
+  <div class="load-sep"></div>
+  <div class="load-spin"></div>
+  <div class="load-msg" id="loadMsg">Preparing your session</div>
 </div>
 
 <!-- SPLASH -->
-<div class="splash" id="splash">
-  <div class="sp-logo">Comply Globally</div>
-  <div class="sp-sep"></div>
-  <div class="sp-btn">
+<div class="screen" id="scSplash">
+  <div class="splash-logo">Comply Globally</div>
+  <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--a-cyan),transparent)"></div>
+  <div class="splash-play" id="splashBtn">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <polygon points="5 3 19 12 5 21 5 3"/>
     </svg>
   </div>
-  <div class="sp-hint">Tap to begin your session</div>
+  <div class="splash-hint">Tap to begin your session</div>
 </div>
 
 <!-- END CARD -->
-<div class="end-card" id="endCard">
+<div class="screen" id="scEnd">
   <div class="end-inner">
-    <div class="end-rule"></div>
-    <div class="end-icon">◈</div>
+    <div class="end-rule-t"></div>
+    <div class="end-glyph">◈</div>
     <div class="end-title">Session Complete</div>
-    <div class="end-sub">Thank you for speaking with Dr. CV</div>
-    <div class="end-msg" id="endMsg">Our advisory team will review your conversation and reach out within one business day.</div>
-    <a href="#" class="end-cta" id="endCalBtn" style="display:none;">Schedule a Strategy Call →</a>
-    <div class="end-rule2"></div>
+    <div class="end-subtitle">Thank you for speaking with Dr. CV</div>
+    <div class="end-body" id="endBody"></div>
+    <a href="#" class="end-cta" id="endCTA" style="display:none">Schedule a Strategy Call →</a>
+    <div class="end-rule-b"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════
-const WORKER_URL      = 'https://drcv.onrender.com';
-const GAS_URL         = 'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec';
-const CAL_URL         = 'https://cal.com/udhay-marwah-wkeu9j/30mins';
-const SCORE_THRESHOLD = 60;
-const MIN_TURNS       = 8;
-const MAX_SESSION_MS  = 20 * 60 * 1000;
-
-// ══════════════════════════════════════════
-// LEAD PARAMS
-// ══════════════════════════════════════════
-const _p = new URLSearchParams(window.location.search);
-const LEAD = {
-  name:      decodeURIComponent(_p.get('name')    || ''),
-  email:     decodeURIComponent(_p.get('email')   || ''),
-  company:   decodeURIComponent(_p.get('company') || ''),
-  country:   decodeURIComponent(_p.get('country') || ''),
-  stage:     decodeURIComponent(_p.get('stage')   || ''),
-  leadId:    _p.get('leadId')    || ('lead_' + Date.now()),
-  sessionId: _p.get('sessionId') || ('sess_' + Date.now()),
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════════════════ */
+const CFG = {
+  WORKER:      'https://drcv.onrender.com',
+  GAS:         'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
+  CAL:         'https://cal.com/udhay-marwah-wkeu9j/30mins',
+  SCORE_MIN:   60,
+  MIN_TURNS:   8,
+  MAX_MS:      20 * 60 * 1000,
 };
 
-// ══════════════════════════════════════════
-// STORAGE — persistent session memory
-// ══════════════════════════════════════════
-const MEM_KEY = 'cg_mem_' + LEAD.leadId;
-let sessionMemory = [];
+/* ═══════════════════════════════════════════════════════════════
+   LEAD — URL params
+═══════════════════════════════════════════════════════════════ */
+const _q = new URLSearchParams(location.search);
+const LEAD = {
+  name:    decodeURIComponent(_q.get('name')    || ''),
+  email:   decodeURIComponent(_q.get('email')   || ''),
+  company: decodeURIComponent(_q.get('company') || ''),
+  country: decodeURIComponent(_q.get('country') || ''),
+  stage:   decodeURIComponent(_q.get('stage')   || ''),
+  id:      _q.get('leadId')    || ('l_' + Date.now()),
+  sid:     _q.get('sessionId') || ('s_' + Date.now()),
+};
+const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
-function loadMemory(){
-  try {
-    const raw = localStorage.getItem(MEM_KEY);
-    if(raw){ sessionMemory = JSON.parse(raw); document.getElementById('memBadge').classList.add('show'); }
-  } catch(e){ sessionMemory = []; }
-}
-function saveMemory(){
-  try {
-    const snapshot = sessionMemory.slice(-40);
-    localStorage.setItem(MEM_KEY, JSON.stringify(snapshot));
-  } catch(e){}
-}
-function clearMemory(){
-  try { localStorage.removeItem(MEM_KEY); } catch(e){}
-  sessionMemory = [];
-  document.getElementById('memBadge').classList.remove('show');
-}
+/* ═══════════════════════════════════════════════════════════════
+   STORAGE / MEMORY ENGINE
+   - persistent localStorage memory per lead
+   - rolling 40-turn window
+   - contextual summary extraction
+═══════════════════════════════════════════════════════════════ */
+const MEM = (() => {
+  const MK = 'cg_m_' + LEAD.id;
+  const LK = 'cg_lock_' + LEAD.id;
+  let _mem = [];
 
-// ══════════════════════════════════════════
-// SESSION LOCK
-// ══════════════════════════════════════════
-const LOCK_KEY = 'cg_done_' + LEAD.leadId;
-function isLocked()    { try { return !!localStorage.getItem(LOCK_KEY); } catch(e){ return false; } }
-function lockSession() { try { localStorage.setItem(LOCK_KEY, Date.now().toString()); } catch(e){} }
-if(isLocked()) document.getElementById('usedScreen').classList.add('show');
-
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
-let msgHistory = [], turns = 0, sessionStart = 0, timerInterval;
-let voiceMuted = false, isListening = false, isSpeaking = false;
-let recogEnabled = false, recogRunning = false, recognition = null;
-let silenceTimer = null, voices = [], initDone = false;
-let sessionClosed = false, greetingDone = false;
-let ttsQueue = [], ttsBusy = false, streamBuf = '';
-let scores = { interest:0, engagement:0, intent:0, readiness:0 };
-let totalScore = 0, lastAIText = '';
-
-// ══════════════════════════════════════════
-// WAVE VISUALISER
-// ══════════════════════════════════════════
-const wCvs = document.getElementById('wc');
-const wCtx = wCvs.getContext('2d');
-let wPhase=0, wAmp=0, wTarget=0;
-function drawWave(){
-  const W=156,H=156,cx=78,cy=78,r=60;
-  wCtx.clearRect(0,0,W,H);
-  wAmp += (wTarget - wAmp) * .08;
-  wPhase += isSpeaking ? .07 : isListening ? .045 : .012;
-  const g = wCtx.createLinearGradient(0,0,W,H);
-  if(isSpeaking){ g.addColorStop(0,'rgba(0,212,255,.82)'); g.addColorStop(1,'rgba(124,58,237,.75)'); }
-  else if(isListening){ g.addColorStop(0,'rgba(244,63,94,.72)'); g.addColorStop(1,'rgba(255,140,100,.65)'); }
-  else { g.addColorStop(0,'rgba(0,212,255,.1)'); g.addColorStop(1,'rgba(124,58,237,.06)'); }
-  wCtx.beginPath();
-  for(let i=0;i<=220;i++){
-    const a=(i/220)*Math.PI*2-Math.PI/2;
-    const n=Math.sin(a*3+wPhase)*wAmp+Math.sin(a*5-wPhase*1.3)*wAmp*.3+Math.sin(a*8+wPhase*.8)*wAmp*.12;
-    const px=cx+Math.cos(a)*(r+n), py=cy+Math.sin(a)*(r+n);
-    i===0 ? wCtx.moveTo(px,py) : wCtx.lineTo(px,py);
+  function load() {
+    try {
+      const raw = localStorage.getItem(MK);
+      if (raw) { _mem = JSON.parse(raw); }
+    } catch { _mem = []; }
+    return _mem;
   }
-  wCtx.closePath();
-  wCtx.strokeStyle=g; wCtx.lineWidth=isSpeaking?2.2:1.3; wCtx.stroke();
-  requestAnimationFrame(drawWave);
-}
-drawWave();
-function setWave(s){ wTarget = s==='speak'?13:s==='listen'?8:0; }
-function setOrbGlow(s){ document.getElementById('orbGlow').className='orb-glow'+(s?' '+s:''); }
-
-// ══════════════════════════════════════════
-// STATUS
-// ══════════════════════════════════════════
-function setStatus(s){
-  const dot=document.getElementById('sDot'), lbl=document.getElementById('sLabel'), lft=document.getElementById('hintL');
-  dot.className='s-dot';
-  const m={idle:{c:'',l:'Connecting',h:'Please wait'},ready:{c:'ready',l:'Ready',h:'Tap to speak'},
-    listening:{c:'listen',l:'Listening',h:'Listening…'},thinking:{c:'think',l:'Thinking',h:'Please wait…'},
-    speaking:{c:'speak',l:'Speaking',h:'Tap to interrupt'}};
-  const x=m[s]||m.idle; dot.classList.add(x.c); lbl.textContent=x.l; lft.textContent=x.h;
-}
-
-function startTimer(){
-  sessionStart=Date.now(); clearInterval(timerInterval);
-  timerInterval=setInterval(()=>{
-    const s=Math.floor((Date.now()-sessionStart)/1000);
-    const fmt=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-    document.getElementById('timer').textContent=fmt;
-    document.getElementById('metaDur').textContent=fmt;
-    if(!sessionClosed&&(Date.now()-sessionStart)>=MAX_SESSION_MS) forceCloseSession();
-  },1000);
-}
-function renderUI(){
-  document.getElementById('metaName').textContent=(LEAD.name||'Guest').split(' ')[0];
-  document.getElementById('metaMarket').textContent=LEAD.country||'—';
-}
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',4000); }
-function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-// ══════════════════════════════════════════
-// TRANSCRIPT
-// ══════════════════════════════════════════
-let txTimer;
-function showTranscript(speaker, text){
-  const el=document.getElementById('txArea');
-  const who=document.getElementById('txWho');
-  const tx=document.getElementById('txText');
-  who.textContent=speaker==='you'?'You':'Dr. CV';
-  who.className='tx-who '+(speaker==='you'?'you':'ai');
-  tx.textContent=text;
-  el.classList.add('visible');
-  clearTimeout(txTimer);
-  txTimer=setTimeout(()=>el.classList.remove('visible'),6500);
-}
-
-// ══════════════════════════════════════════
-// SYNC
-// ══════════════════════════════════════════
-const syncDot=document.getElementById('syncDot');
-function setSyncState(s){ syncDot.className='sync-dot '+(s||''); }
-function hasGAS(){ return GAS_URL && !GAS_URL.includes('YOUR_DEPLOYMENT'); }
-
-async function pushTurnToSheet(userMsg,botMsg){
-  if(!hasGAS()) return;
-  const payload={leadId:LEAD.leadId,sessionId:LEAD.sessionId,turnNumber:turns,userMessage:userMsg,botResponse:botMsg};
-  setSyncState('syncing');
-  try{
-    await fetch(GAS_URL+'?action=update',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({action:'update',data:JSON.stringify(payload)}).toString()});
-    setSyncState('ok'); setTimeout(()=>setSyncState(''),2000);
-  }catch(e){ setSyncState('err'); }
-}
-async function pushScoreToSheet(data){
-  if(!hasGAS()) return;
-  const elapsed=Math.floor((Date.now()-sessionStart)/1000);
-  const payload={leadId:LEAD.leadId,sessionId:LEAD.sessionId,name:LEAD.name,email:LEAD.email,company:LEAD.company,country:LEAD.country,qualificationScore:totalScore,qualificationLevel:data.level||'',duration:elapsed,turnCount:turns,summary:data.summary||'',interest:data.interest||0,engagement:data.engagement||0,intent:data.intent||0,readiness:data.readiness||0};
-  setSyncState('syncing');
-  try{
-    await fetch(GAS_URL+'?action=complete',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({action:'complete',data:JSON.stringify(payload)}).toString()});
-    setSyncState('ok'); setTimeout(()=>setSyncState(''),2500);
-  }catch(e){ const img=new Image(); img.src=GAS_URL+'?'+new URLSearchParams({action:'complete',data:JSON.stringify(payload)}); setSyncState('ok'); }
-}
-
-// ══════════════════════════════════════════
-// SCORE JSON PARSING
-// ══════════════════════════════════════════
-function extractScoreJSON(text){
-  const marker='SCORE_JSON:';
-  const idx=text.indexOf(marker); if(idx===-1) return null;
-  let rem=text.slice(idx+marker.length).trim();
-  const start=rem.indexOf('{'); if(start===-1) return null;
-  rem=rem.slice(start);
-  let depth=0,end=-1;
-  for(let i=0;i<rem.length;i++){ if(rem[i]==='{') depth++; else if(rem[i]==='}'){depth--;if(depth===0){end=i;break;}} }
-  if(end===-1){ try{return JSON.parse(rem+'"}');}catch(e){return null;} }
-  try{return JSON.parse(rem.slice(0,end+1));}catch(e){return null;}
-}
-
-// ══════════════════════════════════════════
-// VOICES — Indian English preferred
-// ══════════════════════════════════════════
-function loadVoices(){ const all=speechSynthesis.getVoices(); voices=all.filter(v=>v.lang.startsWith('en')); }
-
-function getBestVoice(){
-  // Priority: Indian English voices first, then other preferred voices
-  const indianPref = ['Google हिन्दी','Lekha','Rishi','Google Indian English','Microsoft Neerja Online','Microsoft Heera','Heera','Neerja','Veena'];
-  const globalPref = ['Google UK English Female','Microsoft Aria Online','Samantha','Karen','Moira','Victoria'];
-  for(const n of indianPref){ const v=voices.find(v=>v.name.includes(n)); if(v) return v; }
-  // Also check lang tag for Indian English
-  const indian = voices.find(v=>v.lang==='en-IN');
-  if(indian) return indian;
-  for(const n of globalPref){ const v=voices.find(v=>v.name.includes(n)); if(v) return v; }
-  return voices.find(v=>/female/i.test(v.name))||voices[0]||null;
-}
-
-// ══════════════════════════════════════════
-// NUMBER → SPEECH CONVERSION
-// Key fix: "Form 5472" → "Form fifty four seventy two"
-// "1124" → "one thousand one hundred twenty four"
-// "$10M" → "ten million dollars"
-// ══════════════════════════════════════════
-function numToWords(n){
-  if(n===0) return 'zero';
-  const ones=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
-  const tens=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
-  function below1000(num){
-    if(num===0) return '';
-    if(num<20) return ones[num];
-    if(num<100) return tens[Math.floor(num/10)]+(num%10?' '+ones[num%10]:'');
-    return ones[Math.floor(num/100)]+' hundred'+(num%100?' '+below1000(num%100):'');
+  function save() {
+    try { localStorage.setItem(MK, JSON.stringify(_mem.slice(-40))); } catch {}
   }
-  if(n<0) return 'negative '+numToWords(-n);
-  if(n<1000) return below1000(n);
-  if(n<1000000) return below1000(Math.floor(n/1000))+' thousand'+(n%1000?' '+below1000(n%1000):'');
-  if(n<1000000000) return below1000(Math.floor(n/1000000))+' million'+(n%1000000?' '+numToWords(n%1000000):'');
-  return below1000(Math.floor(n/1000000000))+' billion'+(n%1000000000?' '+numToWords(n%1000000000):'');
-}
-
-function cleanForSpeech(t){
-  if(!t) return '';
-  t = t.replace(/SCORE_JSON:[\s\S]*$/g,'');
-  // Bold/markdown removal
-  t = t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/#/g,'').replace(/`/g,'');
-  // Currency expansions
-  t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Bb]/g,(_,n)=>numToWords(parseFloat(n))+' billion dollars');
-  t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Mm]/g,(_,n)=>numToWords(parseFloat(n))+' million dollars');
-  t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Kk]/g,(_,n)=>numToWords(parseFloat(n))+' thousand dollars');
-  t = t.replace(/\$(\d+)/g,(_,n)=>numToWords(parseInt(n))+' dollars');
-  // Form numbers — speak as individual digit groups e.g. "Form 5472" → "Form fifty four seventy two"
-  t = t.replace(/\b(Form|form)\s+(\d{3,6})\b/g,(_, f, num)=>{
-    // split into pairs from right for natural speech
-    const s = num.padStart(num.length%2===0?num.length:num.length+1,'0');
-    const pairs = s.match(/.{1,2}/g)||[];
-    return f+' '+pairs.map(p=>numToWords(parseInt(p))).join(' ');
-  });
-  // Abbreviations
-  t = t.replace(/\bUAE\b/g,'the U.A.E.').replace(/\bUSA\b/g,'the U.S.A.').replace(/\bUS\b(?!\s*\$)/g,'the U.S.');
-  t = t.replace(/\bLLC\b/g,'L.L.C.').replace(/\bCEO\b/g,'C.E.O.').replace(/\bEIN\b/g,'E.I.N.').replace(/\bIRS\b/g,'I.R.S.');
-  t = t.replace(/\bVC\b/g,'venture capital').replace(/\bCorp\b/g,'Corporation');
-  // Standalone numbers in sentences — convert to words
-  t = t.replace(/\b(\d{4,})\b/g,(_,n)=>numToWords(parseInt(n)));
-  // Percentages
-  t = t.replace(/(\d+(?:\.\d+)?)\s*%/g,(_,n)=>numToWords(parseFloat(n))+' percent');
-  // Clean whitespace
-  t = t.replace(/\s+/g,' ').trim();
-  return t;
-}
-
-// ══════════════════════════════════════════
-// TTS — no pauses, fluid chunking
-// ══════════════════════════════════════════
-function splitSentences(buf){
-  // Split at sentence boundaries, keeping phrases short for fluid speech
-  const re=/(.+?[.!?])(?=\s+[A-Z]|\s*$)/g;
-  const found=[]; let last=0, m;
-  while((m=re.exec(buf))!==null){ found.push(m[1].trim()); last=m.index+m[0].length; }
-  return { sentences:found, remainder:buf.slice(last).trim() };
-}
-
-function speakOne(text){
-  return new Promise(resolve=>{
-    if(!text||voiceMuted){ resolve(); return; }
-    const utt=new SpeechSynthesisUtterance(text);
-    const v=getBestVoice(); if(v) utt.voice=v;
-    utt.rate=1.05; utt.pitch=1.0; utt.volume=1.0;  // slightly faster = more natural
-    let settled=false;
-    const done=()=>{ if(!settled){ settled=true; resolve(); } };
-    utt.onstart=()=>{ isSpeaking=true; setStatus('speaking'); setWave('speak'); setOrbGlow('speaking'); };
-    utt.onerror=(e)=>{ if(!['interrupted','canceled'].includes(e.error)) console.warn('TTS:',e.error); done(); };
-    const wd=setTimeout(done, 300+text.length*70);
-    utt.onend=()=>{ clearTimeout(wd); done(); };
-    try{ speechSynthesis.speak(utt); }catch(e){ done(); }
-  });
-}
-
-async function drainTTS(){
-  if(ttsBusy) return; ttsBusy=true;
-  while(ttsQueue.length){
-    await speakOne(ttsQueue.shift());
-    // Minimal gap between sentences — 40ms instead of 90ms to avoid pauses
-    if(ttsQueue.length) await delay(40);
+  function push(role, content) {
+    _mem.push({ role, content, ts: Date.now() });
+    save();
   }
-  ttsBusy=false; isSpeaking=false; setWave('idle'); setOrbGlow('');
-  if(greetingDone&&recogEnabled&&!recogRunning&&!sessionClosed){ setStatus('ready'); await delay(200); startRecog(); }
-  else if(!sessionClosed) setStatus('ready');
-}
+  function clear() {
+    try { localStorage.removeItem(MK); } catch {}
+    _mem = [];
+  }
+  function get() { return [..._mem]; }
+  function hasMemory() { return _mem.length > 0; }
+  function isLocked() { try { return !!localStorage.getItem(LK); } catch { return false; } }
+  function lock() { try { localStorage.setItem(LK, Date.now().toString()); } catch {} }
 
-function enqueueSentence(text){
-  const clean=cleanForSpeech(text);
-  if(!clean||clean.length<2) return;
-  ttsQueue.push(clean); if(!ttsBusy) drainTTS();
-}
+  // Build contextual summary for injection into system prompt
+  function getContextSummary() {
+    if (!_mem.length) return '';
+    const relevant = _mem.slice(-8).map(m => `${m.role === 'user' ? 'Client' : 'Dr.CV'}: ${m.content.slice(0, 120)}`).join('\n');
+    return relevant;
+  }
 
-function stopSpeaking(){
-  ttsQueue=[]; ttsBusy=false; isSpeaking=false; streamBuf=''; setWave('idle'); setOrbGlow('');
-  try{ if(speechSynthesis.speaking||speechSynthesis.pending) speechSynthesis.cancel(); }catch(e){}
-}
+  return { load, save, push, clear, get, hasMemory, isLocked, lock, getContextSummary };
+})();
 
-async function speakAll(sentences){
-  for(const s of sentences){ if(sessionClosed) break; await speakOne(s); if(sentences.length>1) await delay(40); }
-  isSpeaking=false; setWave('idle'); setOrbGlow('');
-}
+/* ═══════════════════════════════════════════════════════════════
+   CONVERSATION STATE MACHINE
+   States: idle | loading | greeting | ready | listening | thinking | speaking | closed
+═══════════════════════════════════════════════════════════════ */
+const STATE = (() => {
+  let _s = 'idle';
+  const handlers = {};
+  function on(state, fn) { handlers[state] = fn; }
+  function set(s) {
+    if (_s === s) return;
+    _s = s;
+    if (handlers[s]) handlers[s]();
+    UI.syncState(s);
+  }
+  function get() { return _s; }
+  function is(...states) { return states.includes(_s); }
+  return { on, set, get, is };
+})();
 
-// Resume if paused (browser bug)
-setInterval(()=>{ if(isSpeaking&&speechSynthesis.paused) speechSynthesis.resume(); },3000);
+/* ═══════════════════════════════════════════════════════════════
+   VOICE ENGINE — Indian English first
+   Handles: voice loading, TTS queue, sentence streaming,
+            interruption, resumption, gap elimination
+═══════════════════════════════════════════════════════════════ */
+const VOICE = (() => {
+  let voices = [];
+  let _muted = false;
+  let _queue = [];
+  let _busy = false;
+  let _current = null;
 
-// ══════════════════════════════════════════
-// SPEECH RECOGNITION
-// ══════════════════════════════════════════
-let finalTranscript='';
-function initRecog(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){ showToast('Speech recognition requires Chrome or Edge'); return false; }
-  try{ if(recognition) recognition.abort(); }catch(e){}
-  recognition=new SR();
-  recognition.lang='en-IN';  // Indian English recognition
-  recognition.continuous=false; recognition.interimResults=false; recognition.maxAlternatives=1;
-  recognition.onstart=()=>{
-    recogRunning=isListening=true; finalTranscript='';
-    setStatus('listening'); setWave('listen'); setOrbGlow('listening');
-    document.getElementById('micBtn').classList.add('rec','rdy'.replace('rdy',''));
-    document.getElementById('micBtn').classList.remove('rdy');
-    document.getElementById('mp1').classList.add('l');
-    document.getElementById('mp2').classList.add('l');
-  };
-  recognition.onresult=(e)=>{
-    clearTimeout(silenceTimer);
-    let t='';
-    for(let i=e.resultIndex;i<e.results.length;i++) if(e.results[i].isFinal) t+=e.results[i][0].transcript+' ';
-    finalTranscript+=t;
-    if(finalTranscript.trim()) silenceTimer=setTimeout(()=>{ if(recogRunning) try{ recognition.stop(); }catch(e){} },1800);
-  };
-  recognition.onerror=(e)=>{
-    if(!['no-speech','aborted'].includes(e.error)) console.warn('STT:',e.error);
-    cleanupRecog();
-    if(e.error==='no-speech'&&recogEnabled&&!isSpeaking) schedRestart(600);
-    else if(e.error!=='aborted'&&recogEnabled&&!isSpeaking) schedRestart(1000);
-  };
-  recognition.onnomatch=()=>{ cleanupRecog(); schedRestart(400); };
-  recognition.onend=()=>{
-    cleanupRecog();
-    const spoken=finalTranscript.trim();
-    if(spoken&&recogEnabled&&!sessionClosed){ recogEnabled=false; handleUserSpeech(spoken); }
-    else if(recogEnabled&&!isSpeaking&&!sessionClosed) schedRestart(350);
-  };
-  return true;
-}
+  /* Voice preference: Indian > British female > Global female */
+  const PREF = [
+    /* Indian EN */
+    'Lekha', 'Rishi', 'Neerja', 'Heera',
+    'Google हिन्दी',
+    'Microsoft Neerja', 'Microsoft Heera',
+    /* British EN */
+    'Google UK English Female',
+    'Microsoft Aria Online (Natural)', 'Microsoft Aria',
+    /* US female fallbacks */
+    'Samantha', 'Karen', 'Moira', 'Victoria',
+    'Google US English Female',
+  ];
 
-function cleanupRecog(){
-  recogRunning=isListening=false; setWave('idle'); setOrbGlow(''); clearTimeout(silenceTimer);
-  const mb=document.getElementById('micBtn');
-  mb.classList.remove('rec');
-  document.getElementById('mp1').classList.remove('l');
-  document.getElementById('mp2').classList.remove('l');
-  if(greetingDone&&!sessionClosed) mb.classList.add('rdy');
-}
-function schedRestart(ms=400){ setTimeout(()=>{ if(recogEnabled&&!isSpeaking&&!recogRunning&&!sessionClosed&&greetingDone) startRecog(); },ms); }
-function startRecog(){
-  if(isSpeaking||recogRunning||!recogEnabled||sessionClosed||!greetingDone) return;
-  document.getElementById('micBtn').classList.remove('rdy');
-  if(!recognition){ if(!initRecog()) return; }
-  try{ recognition.start(); }catch(e){ console.warn('recog start:',e.message); recognition=null; if(initRecog()) schedRestart(400); }
-}
-function stopRecog(){
-  recogEnabled=false; clearTimeout(silenceTimer);
-  if(recogRunning) try{ recognition.stop(); }catch(e){}
-  cleanupRecog();
-}
-function handleUserSpeech(text){
-  if(!text.trim()||sessionClosed) return;
-  showTranscript('you', text);
-  document.getElementById('micBtn').classList.remove('rdy');
-  sendMessage(text);
-}
+  function load() {
+    const all = speechSynthesis.getVoices();
+    voices = all.filter(v => v.lang.startsWith('en'));
+  }
 
-// ══════════════════════════════════════════
-// SYSTEM PROMPT
-// CRITICAL FIXES:
-// - Keep responses to MAX 2 sentences
-// - Ask only 1 question per turn
-// - No form numbers
-// - No lists
-// - Memory context injected
-// ══════════════════════════════════════════
-function buildSystemPrompt(){
-  const firstName=(LEAD.name||'').split(' ')[0].trim()||'the client';
-  const memContext = sessionMemory.length>0
-    ? `\n\nPREVIOUS CONVERSATION MEMORY (from earlier in this session):\n${sessionMemory.map(m=>`[${m.role}]: ${m.content}`).join('\n')}\n\nUse this memory to not repeat yourself and to follow up naturally.`
-    : '';
-  return `You are Dr. CV, a Global Expansion Strategist at Comply Globally. You are on a LIVE VOICE CALL.
-
-CLIENT: ${LEAD.name||'Guest'} | Company: ${LEAD.company||'?'} | Target: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}${memContext}
-
-━━━━━━━━━━━━━━━━━━━━━━
-CRITICAL VOICE RULES — NEVER BREAK THESE
-━━━━━━━━━━━━━━━━━━━━━━
-1. MAX 2 SHORT SENTENCES per response. That's it. No exceptions.
-2. ONE question per response — maximum.
-3. NEVER mention form numbers (no "Form 5472", no "1120-F", etc.). Say "the annual filing" or "a required report" instead.
-4. No bullet points, no numbered lists, no asterisks, no markdown.
-5. No long explanations. One idea per response, then ask something.
-6. Sound like a human on a call — casual, warm, confident.
-7. Use ${firstName}'s name at most ONCE in the entire conversation.
-8. If they ask a technical question: one plain sentence answer, then one question back.
-9. Never start two responses in a row with the same word.
-10. If they give a short answer, just ask one follow-up. Don't pad.
-
-RESPONSE LENGTH RULE: Count your sentences before responding. If you have more than 2 sentences before the question: CUT. The ideal response is 1 sentence + 1 question.
-
-EXAMPLES OF CORRECT RESPONSES:
-✓ "Wyoming's usually the best fit for most people — very low cost and zero income tax. What kind of revenue are you expecting in year one?"
-✓ "The whole setup is online, no need to travel to the US. Are you planning to take on any US-based investors down the line?"
-✓ "That actually makes sense for your situation. Who else is involved in making this decision on your side?"
-
-EXAMPLES OF WRONG RESPONSES:
-✗ "Great question! There are several important factors to consider when setting up a US entity. First, you need to think about your business structure. Second, you need to consider the tax implications. Third..." [TOO LONG, NO QUESTION ASKED, BULLETS]
-✗ "You should consider Form 5472 and Form 1120-F..." [FORM NUMBERS]
-✗ "So, So, So..." [REPETITIVE STARTERS]
-
-━━━━━━━━━━━━━━━━━━━━━━
-YOUR KNOWLEDGE (USE NATURALLY, ONE SENTENCE AT A TIME)
-━━━━━━━━━━━━━━━━━━━━━━
-- Wyoming LLC = best for most foreign founders (sixty-two dollars a year, private, zero income tax)
-- Delaware C-Corp = only if raising VC money
-- S-Corp = not available for non-US citizens
-- Full setup online, one to three days, bank account in a week
-- Banks: Mercury or Relay — no US social security number needed
-- No US income tax on online business profits if you're not physically in the US
-- One short annual report to file each year (not a tax bill, just paperwork)
-- New ownership reporting rule (since twenty twenty four): one free fifteen-minute online filing
-- Wise for sending money home (under one and a half percent fee)
-
-━━━━━━━━━━━━━━━━━━━━━━
-CONVERSATION GOAL
-━━━━━━━━━━━━━━━━━━━━━━
-Discover naturally (not in order): their biggest challenge, timeline, who else decides, budget signal, what success looks like.
-
-CLOSING: After turn ${MIN_TURNS} when you have enough context, close in 1-2 warm sentences. Then immediately output on a new line:
-
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"4-6 sentences about who they are, what they want, their timeline, biggest blocker, decision-makers, your honest assessment of fit — reference specific things they said","level":"cold|warm|hot"}
-
-Scoring: hot = average ≥70, warm = 40-69, cold <40. Never skip SCORE_JSON.`;
-}
-
-// ══════════════════════════════════════════
-// API — STREAMING
-// ══════════════════════════════════════════
-async function sendMessage(userText){
-  if(!userText.trim()||sessionClosed) return;
-  stopSpeaking(); setStatus('thinking');
-  msgHistory.push({role:'user',content:userText});
-  sessionMemory.push({role:'user',content:userText});
-  turns++; incrementalScore(userText);
-  streamBuf=''; let fullReply='';
-
-  try{
-    const res=await fetch(WORKER_URL+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:buildSystemPrompt(),messages:msgHistory})});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const reader=res.body.getReader(); const decoder=new TextDecoder(); let raw='';
-    while(true){
-      const{done,value}=await reader.read(); if(done) break;
-      raw+=decoder.decode(value,{stream:true});
-      const lines=raw.split('\n'); raw=lines.pop();
-      for(const line of lines){
-        if(!line.startsWith('data: ')) continue;
-        const chunk=line.slice(6).trim(); if(chunk==='[DONE]') continue;
-        try{
-          const parsed=JSON.parse(chunk);
-          if(parsed.type==='content_block_delta'&&parsed.delta?.text){
-            const tok=parsed.delta.text; fullReply+=tok; streamBuf+=tok;
-            if(!streamBuf.includes('SCORE_JSON:')){
-              const{sentences,remainder}=splitSentences(streamBuf);
-              streamBuf=remainder; sentences.forEach(s=>enqueueSentence(s));
-            }
-          }
-        }catch(e){}
-      }
+  function best() {
+    load();
+    // Check exact en-IN first
+    const indian = voices.find(v => v.lang === 'en-IN');
+    if (indian) return indian;
+    // Walk preference list
+    for (const n of PREF) {
+      const v = voices.find(v => v.name.includes(n));
+      if (v) return v;
     }
-    // Flush remainder (anything before SCORE_JSON)
-    const speakable=streamBuf.split('SCORE_JSON:')[0].trim();
-    if(speakable) enqueueSentence(speakable);
-    streamBuf='';
-
-    const cleanReply=fullReply.replace(/\nSCORE_JSON:[\s\S]*$/,'').replace(/SCORE_JSON:[\s\S]*$/,'').trim();
-    lastAIText=cleanReply;
-    showTranscript('ai', cleanReply.slice(0,160)+(cleanReply.length>160?'…':''));
-    msgHistory.push({role:'assistant',content:cleanReply});
-    // Rolling window — keep 24 messages max
-    if(msgHistory.length>24) msgHistory=msgHistory.slice(-24);
-    // Save to persistent memory
-    sessionMemory.push({role:'assistant',content:cleanReply});
-    saveMemory();
-
-    pushTurnToSheet(userText,cleanReply);
-    const scoreData=extractScoreJSON(fullReply);
-    if(scoreData){
-      applyScores(scoreData); await pushScoreToSheet(scoreData);
-      sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
-      const wc=cleanReply.split(' ').length;
-      setTimeout(showEndCard, Math.max(5500,wc*380));
-    } else if(fullReply.includes('SCORE_JSON:')){
-      const fb=buildFallbackScores('Score block present but malformed.');
-      applyScores(fb); await pushScoreToSheet(fb);
-      sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
-      setTimeout(showEndCard,5500);
-    } else { recogEnabled=true; }
-  }catch(err){
-    console.error('API error:',err);
-    showToast('Connection issue — please try again.');
-    setStatus('ready'); recogEnabled=true; schedRestart(800);
-  }
-}
-
-// ══════════════════════════════════════════
-// FORCE CLOSE
-// ══════════════════════════════════════════
-async function forceCloseSession(){
-  if(sessionClosed) return;
-  const msg="We've covered a lot of ground — really appreciate your time today. Our team will review this and reach out to you personally very soon.";
-  stopSpeaking(); enqueueSentence(msg);
-  const fb=buildFallbackScores('Session reached max duration.');
-  applyScores(fb); await pushScoreToSheet(fb);
-  sessionClosed=true; lockSession(); recogEnabled=false; stopRecog();
-  setTimeout(showEndCard,8000);
-}
-
-// ══════════════════════════════════════════
-// SCORING
-// ══════════════════════════════════════════
-function incrementalScore(text){
-  const w=text.split(/\s+/).length;
-  scores.engagement=Math.min(100,scores.engagement+(w>15?16:w>7?8:3));
-  if(/interest|want|need|expand|market|grow|opportunit/i.test(text)) scores.interest=Math.min(100,scores.interest+12);
-  if(/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) scores.intent=Math.min(100,scores.intent+15);
-  if(/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) scores.readiness=Math.min(100,scores.readiness+18);
-  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
-}
-function applyScores(data){
-  scores.interest=Number(data.interest)||0; scores.engagement=Number(data.engagement)||0;
-  scores.intent=Number(data.intent)||0; scores.readiness=Number(data.readiness)||0;
-  totalScore=Math.round((scores.interest+scores.engagement+scores.intent+scores.readiness)/4);
-}
-function buildFallbackScores(note){
-  const level=totalScore>=70?'hot':totalScore>=40?'warm':'cold';
-  return {interest:scores.interest,engagement:scores.engagement,intent:scores.intent,readiness:scores.readiness,summary:`${LEAD.name||'The client'} from ${LEAD.company||'their company'} is exploring expansion into ${LEAD.country||'an unspecified market'}. ${note}`,level};
-}
-
-// ══════════════════════════════════════════
-// END CARD
-// ══════════════════════════════════════════
-function showEndCard(){
-  stopSpeaking(); stopRecog();
-  const btn=document.getElementById('endCalBtn'), msg=document.getElementById('endMsg');
-  if(totalScore>=SCORE_THRESHOLD){
-    btn.href=CAL_URL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email);
-    btn.style.display='block';
-    msg.textContent="You're a strong fit for what we do. Book a call below and we'll pick up right where we left off.";
-  } else {
-    btn.style.display='none';
-    msg.textContent="Thank you for your time. Our advisory team will review your session and reach out personally within one business day with tailored next steps.";
-  }
-  document.getElementById('endCard').classList.add('show');
-}
-
-// ══════════════════════════════════════════
-// PING
-// ══════════════════════════════════════════
-async function pingServer(){ try{ await fetch(WORKER_URL+'/',{method:'GET',signal:AbortSignal.timeout(12000)}); }catch(e){} }
-
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-async function init(){
-  if(initDone||isLocked()) return;
-  initDone=true; greetingDone=false; recogEnabled=false;
-  stopSpeaking(); stopRecog();
-  msgHistory=[]; turns=0; sessionClosed=false; streamBuf=''; ttsQueue=[];
-  scores={interest:0,engagement:0,intent:0,readiness:0}; totalScore=0;
-  clearInterval(timerInterval);
-  loadMemory();
-
-  const overlay=document.getElementById('overlay');
-  overlay.classList.remove('hidden');
-  document.getElementById('ovMsg').textContent='Loading voices…';
-  document.getElementById('micBtn').classList.remove('rdy');
-
-  let att=0;
-  const pingP=pingServer();
-  while(voices.length===0&&att<20){ loadVoices(); if(voices.length===0) await delay(200); att++; }
-  document.getElementById('ovMsg').textContent='Connecting to Dr. CV…';
-  await pingP; await delay(200);
-  document.getElementById('ovMsg').textContent='Ready';
-  await delay(250); overlay.classList.add('hidden');
-
-  renderUI(); startTimer(); initRecog();
-
-  // Build greeting using any stored memory
-  const first=(LEAD.name||'').split(' ')[0].trim();
-  let greeting;
-  const hasMemory = sessionMemory.length > 0;
-
-  if(hasMemory){
-    // Returning user — reference memory
-    const lastUserMsg = sessionMemory.filter(m=>m.role==='user').slice(-1)[0]?.content||'';
-    greeting = `Good to have you back, ${first||'there'}. Last time we were talking about ${lastUserMsg.slice(0,60)}. Where do you want to pick up from?`;
-  } else if(first&&LEAD.country&&LEAD.company){
-    greeting=`Good to have you here, ${first}. I've had a look at what you shared — ${LEAD.company} looking to get into ${LEAD.country} is exactly what we help with. What's the single biggest challenge on your mind right now?`;
-  } else if(first&&LEAD.country){
-    greeting=`Great to connect, ${first}. I see you're looking at ${LEAD.country} — we know that market well. What's the main thing you're trying to figure out?`;
-  } else if(first){
-    greeting=`Great to connect, ${first}. Which market are you focused on, and what's the biggest thing standing in your way right now?`;
-  } else {
-    greeting=`Great to have you here. Which market are you looking at, and what's the main challenge you're trying to solve?`;
+    return voices.find(v => /female/i.test(v.name)) || voices[0] || null;
   }
 
-  // Add greeting to memory
-  msgHistory.push({role:'assistant',content:greeting});
-  sessionMemory.push({role:'assistant',content:greeting});
-  saveMemory();
+  function mute(v) {
+    _muted = v;
+    if (v) stopAll();
+  }
+  function isMuted() { return _muted; }
 
-  // Warm up TTS engine
-  await new Promise(resolve=>{
-    const wu=new SpeechSynthesisUtterance('\u00A0');
-    wu.volume=0; wu.onend=resolve; wu.onerror=resolve;
-    speechSynthesis.speak(wu); setTimeout(resolve,500);
-  });
-  await delay(100);
+  /* Cancel everything immediately */
+  function stopAll() {
+    _queue = [];
+    _busy = false;
+    _current = null;
+    try {
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        speechSynthesis.cancel();
+      }
+    } catch {}
+  }
 
-  setStatus('speaking');
-  const{sentences:gs,remainder:gr}=splitSentences(greeting);
-  const allS=[...gs]; if(gr.trim()) allS.push(gr);
-  await speakAll(allS.map(cleanForSpeech).filter(Boolean));
-
-  greetingDone=true; recogEnabled=true; setStatus('ready');
-  document.getElementById('micBtn').classList.add('rdy');
-  await delay(350); startRecog();
-}
-
-// ══════════════════════════════════════════
-// CONTROLS
-// ══════════════════════════════════════════
-document.getElementById('micBtn').addEventListener('click',()=>{
-  if(sessionClosed||!greetingDone) return;
-  if(isSpeaking){ stopSpeaking(); recogEnabled=true; schedRestart(300); return; }
-  if(isListening) stopRecog();
-  else { recogEnabled=true; startRecog(); }
-});
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  if(isLocked()) return;
-  document.getElementById('endCard').classList.remove('show');
-  stopSpeaking(); stopRecog();
-  clearMemory();  // Reset memory on manual restart
-  initDone=false; greetingDone=false;
-  setTimeout(()=>init(),250);
-});
-let aiMuted=false;
-document.getElementById('muteBtn').addEventListener('click',function(){
-  aiMuted=voiceMuted=!aiMuted;
-  this.classList.toggle('muted',aiMuted);
-  document.getElementById('muteIcon').innerHTML=aiMuted
-    ?`<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-    :`<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-  if(aiMuted){ stopSpeaking(); if(greetingDone){ setStatus('ready'); recogEnabled=true; schedRestart(250); } }
-});
-
-// ══════════════════════════════════════════
-// BOOT
-// ══════════════════════════════════════════
-speechSynthesis.onvoiceschanged=()=>loadVoices();
-
-async function attemptAutoStart(){
-  if(isLocked()) return;
-  loadVoices();
-  const splash=document.getElementById('splash');
-  let gestureNeeded=false;
-  try{
-    await new Promise((resolve,reject)=>{
-      const test=new SpeechSynthesisUtterance('\u00A0');
-      test.volume=0;
-      test.onend=resolve;
-      test.onerror=(e)=>{ if(e.error==='not-allowed') reject(new Error('gesture')); else resolve(); };
-      speechSynthesis.speak(test);
-      setTimeout(()=>{ speechSynthesis.cancel(); resolve(); },1100);
+  /* Speak a single cleaned chunk, returns Promise */
+  function _speakChunk(text) {
+    return new Promise(resolve => {
+      if (!text || _muted) { resolve(); return; }
+      const utt = new SpeechSynthesisUtterance(text);
+      const v = best();
+      if (v) utt.voice = v;
+      utt.rate  = 1.08;  // slightly brisk = natural
+      utt.pitch = 1.0;
+      utt.volume = 1.0;
+      let done = false;
+      const finish = () => { if (!done) { done = true; resolve(); } };
+      /* Watchdog: if browser fires no end event (Chrome bug) */
+      const wd = setTimeout(finish, 200 + text.length * 65);
+      utt.onend  = () => { clearTimeout(wd); finish(); };
+      utt.onerror = e => {
+        clearTimeout(wd);
+        if (!['interrupted', 'canceled'].includes(e?.error)) console.warn('TTS err:', e?.error);
+        finish();
+      };
+      utt.onstart = () => { STATE.set('speaking'); };
+      _current = utt;
+      try { speechSynthesis.speak(utt); } catch { finish(); }
     });
-  }catch(e){ gestureNeeded=true; }
-
-  if(gestureNeeded){
-    splash.classList.remove('hidden');
-    splash.addEventListener('click',()=>{ splash.classList.add('hidden'); init(); },{once:true});
-  } else {
-    splash.classList.add('hidden');
-    init();
   }
+
+  /* Drain queue — minimal gap between chunks for fluid speech */
+  async function _drain() {
+    if (_busy) return;
+    _busy = true;
+    while (_queue.length) {
+      const chunk = _queue.shift();
+      await _speakChunk(chunk);
+      /* 30ms micro-gap: removes hard cut between sentences but not noticeable as pause */
+      if (_queue.length) await _sleep(30);
+    }
+    _busy = false;
+    _current = null;
+    CONV.onSpeakDone();
+  }
+
+  /* Push cleaned text into TTS queue */
+  function enqueue(text) {
+    const c = SPEECH_CLEAN.clean(text);
+    if (!c || c.length < 2) return;
+    _queue.push(c);
+    if (!_busy) _drain();
+  }
+
+  /* Speak an array of sentences (for greeting / scripted lines) */
+  async function speakAll(sentences) {
+    stopAll();
+    for (const s of sentences) {
+      if (STATE.is('closed')) break;
+      await _speakChunk(SPEECH_CLEAN.clean(s));
+      if (sentences.length > 1) await _sleep(30);
+    }
+  }
+
+  /* Keep speech synthesis alive (browser pausing bug) */
+  setInterval(() => {
+    if (speechSynthesis.paused && speechSynthesis.speaking) speechSynthesis.resume();
+  }, 3000);
+
+  return { load, best, enqueue, speakAll, stopAll, mute, isMuted };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   SPEECH CLEAN — numbers, abbreviations, pronunciations
+   Converts text into natural speech-ready form before TTS
+═══════════════════════════════════════════════════════════════ */
+const SPEECH_CLEAN = (() => {
+
+  /* Convert integer to English words */
+  function numWords(n) {
+    if (n === 0) return 'zero';
+    if (n < 0) return 'negative ' + numWords(-n);
+    const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+      'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+      'seventeen', 'eighteen', 'nineteen'];
+    const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    function u(x) {
+      if (x === 0) return '';
+      if (x < 20) return ones[x];
+      if (x < 100) return tens[Math.floor(x / 10)] + (x % 10 ? ' ' + ones[x % 10] : '');
+      return ones[Math.floor(x / 100)] + ' hundred' + (x % 100 ? ' ' + u(x % 100) : '');
+    }
+    if (n < 1000) return u(n);
+    if (n < 1e6)  return u(Math.floor(n / 1000)) + ' thousand' + (n % 1000 ? ' ' + u(n % 1000) : '');
+    if (n < 1e9)  return u(Math.floor(n / 1e6)) + ' million' + (n % 1e6 ? ' ' + numWords(n % 1e6) : '');
+    return u(Math.floor(n / 1e9)) + ' billion' + (n % 1e9 ? ' ' + numWords(n % 1e9) : '');
+  }
+
+  /* Form number: "Form 5472" → "Form fifty four seventy two" (pair-read) */
+  function formNum(num) {
+    const s = String(num).padStart(num.length % 2 === 0 ? num.length : num.length + 1, '0');
+    const pairs = (s.match(/.{1,2}/g) || []);
+    return pairs.map(p => numWords(parseInt(p, 10))).join(' ');
+  }
+
+  function clean(t) {
+    if (!t) return '';
+    // Strip SCORE_JSON
+    t = t.replace(/SCORE_JSON:[\s\S]*$/g, '');
+    // Strip markdown
+    t = t.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#+/g, '').replace(/`/g, '');
+    // Strip URLs
+    t = t.replace(/https?:\/\/\S+/g, '');
+    // Currency — $10B / $10M / $10K / $500
+    t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Bb]/g, (_, n) => numWords(Math.round(parseFloat(n))) + ' billion dollars');
+    t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Mm]/g, (_, n) => numWords(Math.round(parseFloat(n))) + ' million dollars');
+    t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Kk]/g, (_, n) => numWords(Math.round(parseFloat(n))) + ' thousand dollars');
+    t = t.replace(/\$(\d+(?:\.\d+)?)/g,          (_, n) => numWords(Math.round(parseFloat(n))) + ' dollars');
+    // Form numbers
+    t = t.replace(/\b(form|Form)\s+(\d{3,6})\b/g, (_, f, n) => f + ' ' + formNum(n));
+    // Common abbreviations → spoken form
+    t = t.replace(/\bUAE\b/g, 'U. A. E.').replace(/\bUSA\b/g, 'U. S. A.').replace(/\bUS\b/g, 'the U. S.');
+    t = t.replace(/\bLLC\b/g, 'L. L. C.').replace(/\bCEO\b/g, 'C. E. O.').replace(/\bEIN\b/g, 'E. I. N.');
+    t = t.replace(/\bIRS\b/g, 'I. R. S.').replace(/\bVC\b/g, 'venture capital').replace(/\bSaaS\b/g, 'software as a service');
+    t = t.replace(/\bIPO\b/g, 'I. P. O.').replace(/\bB2B\b/g, 'B to B').replace(/\bB2C\b/g, 'B to C');
+    // Standalone 4+ digit numbers → words
+    t = t.replace(/\b(\d{4,})\b/g, (_, n) => numWords(parseInt(n, 10)));
+    // 3-digit numbers that look like important refs → words
+    t = t.replace(/\b([2-9]\d{2})\b/g, (_, n) => numWords(parseInt(n, 10)));
+    // Percentages
+    t = t.replace(/(\d+(?:\.\d+)?)\s*%/g, (_, n) => numWords(parseFloat(n)) + ' percent');
+    // Year ranges read naturally: 2024-2025 → twenty twenty four to twenty twenty five
+    t = t.replace(/\b(20\d\d)\b/g, (_, y) => {
+      const a = parseInt(y.slice(0,2)); const b = parseInt(y.slice(2));
+      return numWords(a) + ' ' + (b < 10 ? 'oh ' + numWords(b) : numWords(b));
+    });
+    // Clean up
+    t = t.replace(/\s+/g, ' ').trim();
+    return t;
+  }
+
+  return { clean, numWords };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   RECOGNIZER — Indian English (en-IN), clean lifecycle
+═══════════════════════════════════════════════════════════════ */
+const RECOG = (() => {
+  let _r = null;
+  let _active = false;
+  let _enabled = false;
+  let _finalTx = '';
+  let _silTimer = null;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function _build() {
+    if (!SR) { UI.toast('Speech recognition needs Chrome or Edge'); return false; }
+    try { if (_r) _r.abort(); } catch {}
+    _r = new SR();
+    _r.lang            = 'en-IN';
+    _r.continuous      = false;
+    _r.interimResults  = false;
+    _r.maxAlternatives = 1;
+
+    _r.onstart = () => {
+      _active = true; _finalTx = '';
+      STATE.set('listening');
+    };
+    _r.onresult = e => {
+      clearTimeout(_silTimer);
+      let t = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) t += e.results[i][0].transcript + ' ';
+      }
+      _finalTx += t;
+      if (_finalTx.trim()) {
+        _silTimer = setTimeout(() => { if (_active) try { _r.stop(); } catch {} }, 1700);
+      }
+    };
+    _r.onerror = e => {
+      _cleanup();
+      if (!['no-speech', 'aborted'].includes(e.error)) console.warn('STT:', e.error);
+      if (e.error === 'no-speech' && _enabled) _sched(600);
+      else if (e.error !== 'aborted' && _enabled) _sched(1000);
+    };
+    _r.onnomatch = () => { _cleanup(); _sched(400); };
+    _r.onend = () => {
+      _cleanup();
+      const spoken = _finalTx.trim();
+      if (spoken && _enabled && !STATE.is('closed')) {
+        _enabled = false;
+        CONV.handleUserSpeech(spoken);
+      } else if (_enabled && !STATE.is('speaking', 'closed')) {
+        _sched(350);
+      }
+    };
+    return true;
+  }
+
+  function _cleanup() {
+    _active = false;
+    clearTimeout(_silTimer);
+    UI.setMicListening(false);
+  }
+
+  function _sched(ms = 350) {
+    setTimeout(() => {
+      if (_enabled && !STATE.is('speaking', 'closed', 'thinking', 'loading', 'greeting'))
+        start();
+    }, ms);
+  }
+
+  function enable()  { _enabled = true; }
+  function disable() { _enabled = false; clearTimeout(_silTimer); if (_active) try { _r?.stop(); } catch {} _cleanup(); }
+
+  function start() {
+    if (_active || !_enabled || STATE.is('speaking','thinking','closed','loading','greeting')) return;
+    if (!_r && !_build()) return;
+    try {
+      _r.start();
+    } catch (e) {
+      console.warn('recog.start():', e.message);
+      _r = null;
+      if (_build()) _sched(400);
+    }
+  }
+
+  return { enable, disable, start, isActive: () => _active };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   WAVE VISUALISER — amplitude-reactive canvas orb animation
+═══════════════════════════════════════════════════════════════ */
+const WAVE = (() => {
+  const cvs = document.getElementById('orbCanvas');
+  const ctx = cvs.getContext('2d');
+  const S = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb')) || 200;
+  cvs.width = S; cvs.height = S;
+  const CX = S / 2, CY = S / 2, R = S * 0.43;
+  let phase = 0, amp = 0, target = 0;
+
+  function setTarget(t) { target = t; }
+
+  function _tick() {
+    ctx.clearRect(0, 0, S, S);
+    amp += (target - amp) * 0.07;
+    const st = STATE.get();
+    phase += st === 'speaking' ? 0.072
+           : st === 'listening' ? 0.045
+           : st === 'thinking' ? 0.025
+           : 0.01;
+
+    const g = ctx.createLinearGradient(0, 0, S, S);
+    if (st === 'speaking') {
+      g.addColorStop(0, 'rgba(0,229,204,.88)');
+      g.addColorStop(1, 'rgba(155,127,255,.78)');
+    } else if (st === 'listening') {
+      g.addColorStop(0, 'rgba(255,77,109,.78)');
+      g.addColorStop(1, 'rgba(255,140,90,.68)');
+    } else if (st === 'thinking') {
+      g.addColorStop(0, 'rgba(245,200,66,.55)');
+      g.addColorStop(1, 'rgba(245,200,66,.3)');
+    } else {
+      g.addColorStop(0, 'rgba(0,229,204,.08)');
+      g.addColorStop(1, 'rgba(155,127,255,.05)');
+    }
+
+    ctx.beginPath();
+    const pts = 260;
+    for (let i = 0; i <= pts; i++) {
+      const a = (i / pts) * Math.PI * 2 - Math.PI / 2;
+      const n = Math.sin(a * 3 + phase) * amp
+              + Math.sin(a * 5 - phase * 1.25) * amp * 0.32
+              + Math.sin(a * 9 + phase * 0.75) * amp * 0.14
+              + Math.sin(a * 13 - phase * 0.5) * amp * 0.06;
+      const r = R + n;
+      const x = CX + Math.cos(a) * r, y = CY + Math.sin(a) * r;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = g;
+    ctx.lineWidth = st === 'speaking' ? 2.4 : st === 'listening' ? 1.8 : 1.2;
+    ctx.stroke();
+
+    requestAnimationFrame(_tick);
+  }
+  _tick();
+
+  return { setTarget };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   UI — all DOM updates go through here
+═══════════════════════════════════════════════════════════════ */
+const UI = (() => {
+  const $  = id => document.getElementById(id);
+  const el = {
+    sDot:   $('sDot'),
+    sLabel: $('sLabel'),
+    hintL:  $('hintL'),
+    hintR:  $('hintR'),
+    timer:  $('timer'),
+    dur:    $('sDuration'),
+    client: $('sClient'),
+    market: $('sMarket'),
+    orbGlow: $('orbGlow'),
+    txZone: $('txZone'),
+    txSpk:  $('txSpeaker'),
+    txBody: $('txBody'),
+    micBtn: $('btnMic'),
+    ring1:  $('ring1'),
+    ring2:  $('ring2'),
+    toast:  $('toast'),
+    sync:   $('sync'),
+    memPill: $('memPill'),
+    load:   $('scLoad'),
+    splash: $('scSplash'),
+    end:    $('scEnd'),
+    used:   $('scUsed'),
+    loadMsg: $('loadMsg'),
+  };
+
+  const STATUS = {
+    idle:      { dot: '',        label: 'Connecting', hintL: 'Please wait',   wave: 0 },
+    loading:   { dot: '',        label: 'Loading',    hintL: 'Please wait',   wave: 0 },
+    greeting:  { dot: 'd-speak', label: 'Speaking',   hintL: 'Please wait…',  wave: 14 },
+    ready:     { dot: 'd-ready', label: 'Ready',      hintL: 'Tap to speak',  wave: 0 },
+    listening: { dot: 'd-listen',label: 'Listening',  hintL: 'Listening…',    wave: 9 },
+    thinking:  { dot: 'd-think', label: 'Thinking',   hintL: 'Please wait…',  wave: 4 },
+    speaking:  { dot: 'd-speak', label: 'Speaking',   hintL: 'Tap to interrupt', wave: 15 },
+    closed:    { dot: '',        label: 'Done',        hintL: 'Session ended', wave: 0 },
+  };
+
+  function syncState(s) {
+    const cfg = STATUS[s] || STATUS.idle;
+    el.sDot.className = 's-dot ' + cfg.dot;
+    el.sLabel.textContent = cfg.label;
+    el.hintL.textContent = cfg.hintL;
+    WAVE.setTarget(cfg.wave);
+    // Orb glow
+    el.orbGlow.className = 'orb-glow'
+      + (s === 'speaking' || s === 'greeting' ? ' g-speak'
+        : s === 'listening' ? ' g-listen'
+        : s === 'thinking' ? ' g-think'
+        : '');
+    // Mic button state
+    el.micBtn.classList.toggle('m-rec', s === 'listening');
+    el.ring1.classList.toggle('pulse', s === 'listening');
+    el.ring2.classList.toggle('pulse', s === 'listening');
+    el.micBtn.classList.toggle('m-ready', s === 'ready');
+  }
+
+  let _txTimer = null;
+  function showTranscript(speaker, text) {
+    el.txSpk.textContent = speaker === 'you' ? 'You' : 'Dr. CV';
+    el.txSpk.className = 'tx-speaker ' + (speaker === 'you' ? 'sp-you' : 'sp-ai');
+    el.txBody.textContent = text;
+    el.txZone.classList.add('show');
+    clearTimeout(_txTimer);
+    _txTimer = setTimeout(() => el.txZone.classList.remove('show'), 6500);
+  }
+
+  function setTimer(fmt) {
+    el.timer.textContent = fmt;
+    el.dur.textContent = fmt;
+  }
+  function renderLead() {
+    el.client.textContent = (LEAD.name || 'Guest').split(' ')[0];
+    el.market.textContent = LEAD.country || '—';
+  }
+  function showMemory(v) { el.memPill.classList.toggle('show', v); }
+  function setLoad(msg) { el.loadMsg.textContent = msg; }
+  function hideLoad() { el.load.classList.add('hidden'); }
+  function showSplash(onTap) {
+    el.splash.classList.remove('hidden');
+    el.splash.addEventListener('click', () => { el.splash.classList.add('hidden'); onTap(); }, { once: true });
+  }
+  function hideSplash() { el.splash.classList.add('hidden'); }
+  function showEnd(calUrl, highScore) {
+    const body = document.getElementById('endBody');
+    const cta  = document.getElementById('endCTA');
+    if (highScore && calUrl) {
+      body.textContent = "You're a strong fit for what we do. Book a call below — no need to repeat yourself, we'll pick up right here.";
+      cta.href = calUrl;
+      cta.style.display = 'block';
+    } else {
+      body.textContent = "Thank you for your time. Our advisory team will review your session and reach out personally within one business day.";
+      cta.style.display = 'none';
+    }
+    el.end.classList.add('show');
+  }
+  function showUsed() {
+    el.used.classList.remove('gone');
+    el.used.classList.add('show');
+  }
+
+  let _toastTimer = null;
+  function toast(msg) {
+    el.toast.textContent = msg;
+    el.toast.style.display = 'block';
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => el.toast.style.display = 'none', 4200);
+  }
+  function setSync(s) {
+    el.sync.className = 'sync ' + (s || '');
+    if (s === 'ok' || s === 'err') setTimeout(() => el.sync.className = 'sync', 2500);
+  }
+  function setMicListening(v) {
+    el.micBtn.classList.toggle('m-rec', v);
+    el.ring1.classList.toggle('pulse', v);
+    el.ring2.classList.toggle('pulse', v);
+  }
+
+  return {
+    syncState, showTranscript, setTimer, renderLead, showMemory,
+    setLoad, hideLoad, showSplash, hideSplash, showEnd, showUsed,
+    toast, setSync, setMicListening,
+  };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   SCORING ENGINE
+═══════════════════════════════════════════════════════════════ */
+const SCORE = (() => {
+  let s = { interest: 0, engagement: 0, intent: 0, readiness: 0 };
+  let total = 0;
+
+  function update(text) {
+    const w = text.split(/\s+/).length;
+    s.engagement = Math.min(100, s.engagement + (w > 15 ? 16 : w > 7 ? 8 : 3));
+    if (/interest|want|need|expand|market|grow|opportunit/i.test(text)) s.interest = Math.min(100, s.interest + 12);
+    if (/ready|plan|timeline|budget|invest|serious|commit|month|quarter/i.test(text)) s.intent = Math.min(100, s.intent + 15);
+    if (/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) s.readiness = Math.min(100, s.readiness + 18);
+    _recalc();
+  }
+  function apply(data) {
+    s.interest    = Number(data.interest)   || 0;
+    s.engagement  = Number(data.engagement) || 0;
+    s.intent      = Number(data.intent)     || 0;
+    s.readiness   = Number(data.readiness)  || 0;
+    _recalc();
+  }
+  function _recalc() {
+    total = Math.round((s.interest + s.engagement + s.intent + s.readiness) / 4);
+  }
+  function getTotal() { return total; }
+  function fallback(note) {
+    return {
+      interest: s.interest, engagement: s.engagement,
+      intent: s.intent, readiness: s.readiness,
+      summary: `${LEAD.name||'The client'} from ${LEAD.company||'their company'} exploring ${LEAD.country||'market expansion'}. ${note}`,
+      level: total >= 70 ? 'hot' : total >= 40 ? 'warm' : 'cold',
+    };
+  }
+  function extractFromText(text) {
+    const m = text.indexOf('SCORE_JSON:');
+    if (m === -1) return null;
+    let rem = text.slice(m + 'SCORE_JSON:'.length).trim();
+    const st = rem.indexOf('{');
+    if (st === -1) return null;
+    rem = rem.slice(st);
+    let depth = 0, end = -1;
+    for (let i = 0; i < rem.length; i++) {
+      if (rem[i] === '{') depth++;
+      else if (rem[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    if (end === -1) { try { return JSON.parse(rem + '"}'); } catch { return null; } }
+    try { return JSON.parse(rem.slice(0, end + 1)); } catch { return null; }
+  }
+  return { update, apply, getTotal, fallback, extractFromText };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   SYNC — push data to Google Sheet (fire-and-forget)
+═══════════════════════════════════════════════════════════════ */
+const SYNC = (() => {
+  function _post(action, data) {
+    if (!CFG.GAS || CFG.GAS.includes('YOUR_DEPLOYMENT')) return;
+    UI.setSync('sy-ing');
+    fetch(CFG.GAS + '?action=' + action, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action, data: JSON.stringify(data) }).toString(),
+    })
+      .then(() => UI.setSync('sy-ok'))
+      .catch(() => UI.setSync('sy-err'));
+  }
+  function turn(userMsg, botMsg, turnN) {
+    _post('update', { leadId: LEAD.id, sessionId: LEAD.sid, turnNumber: turnN, userMessage: userMsg, botResponse: botMsg });
+  }
+  function complete(scoreData, elapsed, turns) {
+    _post('complete', {
+      leadId: LEAD.id, sessionId: LEAD.sid,
+      name: LEAD.name, email: LEAD.email, company: LEAD.company, country: LEAD.country,
+      qualificationScore: SCORE.getTotal(), qualificationLevel: scoreData.level,
+      duration: elapsed, turnCount: turns,
+      summary: scoreData.summary,
+      interest: scoreData.interest, engagement: scoreData.engagement,
+      intent: scoreData.intent, readiness: scoreData.readiness,
+    });
+  }
+  return { turn, complete };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   SYSTEM PROMPT — the brain of Dr. CV
+   Core design principles:
+   - SHORT responses (max 2 sentences + 1 question)
+   - No form numbers
+   - Fillers used sparingly (not every turn)
+   - Context-aware memory injection
+   - Emotional calibration
+═══════════════════════════════════════════════════════════════ */
+function buildPrompt() {
+  const ctx = MEM.getContextSummary();
+  const memBlock = ctx
+    ? `\n\n── RECENT CONVERSATION ──\n${ctx}\n── END ──\n\nUse this to continue naturally. Do not repeat what was already said.`
+    : '';
+  return `You are Dr. CV — a seasoned Global Expansion Strategist at Comply Globally. You are on a live voice call with a potential client. You are warm, sharp, human, and concise.
+
+CLIENT: ${LEAD.name||'Guest'} | Company: ${LEAD.company||'?'} | Market: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}${memBlock}
+
+══ NON-NEGOTIABLE RESPONSE RULES ══
+1. MAX 2 SHORT SENTENCES before asking a question. Shorter is always better.
+2. ONE question per response. Always.
+3. NEVER cite form numbers (no "Form 5472", "1120-F", etc.). Say "the annual filing" or "a required report".
+4. ZERO markdown — no asterisks, bullets, headers, backticks.
+5. Sound human — casual, warm, direct. Like a smart person on a call.
+6. Vary how you start sentences every time. Never repeat openers.
+7. Occasionally use natural fillers: "Yeah,", "Hmm,", "Right,", "Got it." — but ONLY once every 3-4 turns, sparingly.
+8. If they give short answers, probe once briefly: "Tell me more?" or "What do you mean exactly?"
+9. Never sound scripted, never repeat yourself, never over-explain.
+10. Use ${FIRST||'their name'} at most ONCE total in the conversation.
+
+══ IDEAL RESPONSE PATTERNS ══
+GREAT: "That actually makes sense for your situation. What's the timeline looking like?"
+GREAT: "Got it. So you're thinking about Wyoming specifically — what's driving that?"
+GREAT: "Hmm, that changes things a bit. Have you had any legal advice on the structure yet?"
+BAD:   "Great question! There are several important things to consider..." [TOO LONG]
+BAD:   "You should file Form 5472 with the IRS..." [FORM NUMBER]
+BAD:   "So, great! That's wonderful!" [FAKE/SYCOPHANTIC]
+
+══ YOUR EXPERTISE (drop in naturally, one point at a time) ══
+- Wyoming LLC: best for most foreign founders — sixty-two dollars a year, private, zero income tax
+- Delaware C-Corp: only when raising VC money
+- S-Corp: unavailable to non-US citizens
+- Full process: online, one to three days, bank account in a week
+- Banking: Mercury or Relay — no US social security number needed
+- Tax: no US income tax on online profits if not physically based there
+- Annual filing: one short report per year (not a tax bill — just paperwork, about three hundred dollars with an accountant)
+- New since twenty twenty four: one free ownership report, fifteen minutes online
+- Money home: Wise is cheapest (under one and a half percent)
+
+══ CONVERSATION GOAL ══
+Naturally discover: biggest challenge, timeline, who else decides, budget signal, what success looks like.
+
+Don't rush. Don't interrogate. Follow the natural thread. Circle back when it fits.
+
+══ CLOSING (after turn ${CFG.MIN_TURNS}, once you have good context) ══
+Close in 1-2 warm genuine sentences when you have enough. Then on a NEW LINE output:
+
+SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"4-6 sentences: who they are, goal, timeline, biggest blocker, decision-makers, honest fit assessment referencing specific things they said","level":"cold|warm|hot"}
+
+hot = avg ≥70 | warm = 40-69 | cold <40. NEVER skip SCORE_JSON after closing.`;
 }
-setTimeout(attemptAutoStart,350);
+
+/* ═══════════════════════════════════════════════════════════════
+   CONVERSATION ORCHESTRATOR
+   Central hub that coordinates state, TTS, recognition, API
+═══════════════════════════════════════════════════════════════ */
+const CONV = (() => {
+  let _history = [];
+  let _turns = 0;
+  let _streamBuf = '';
+  let _sessionStart = 0;
+  let _timerInterval = null;
+  let _initialized = false;
+  let _forceClosing = false;
+
+  /* Called when TTS finishes speaking */
+  function onSpeakDone() {
+    if (STATE.is('closed')) return;
+    STATE.set('ready');
+    RECOG.enable();
+    setTimeout(() => RECOG.start(), 200);
+  }
+
+  /* User said something */
+  function handleUserSpeech(text) {
+    if (!text?.trim() || STATE.is('closed')) return;
+    UI.showTranscript('you', text);
+    _send(text);
+  }
+
+  /* Sentence splitter for streaming TTS — split at natural boundaries */
+  function _splitSentences(buf) {
+    const re = /(.+?[.!?])(?=\s+[A-Z"']|\s*$)/g;
+    const found = []; let last = 0; let m;
+    while ((m = re.exec(buf)) !== null) { found.push(m[1].trim()); last = m.index + m[0].length; }
+    return { sentences: found, remainder: buf.slice(last).trim() };
+  }
+
+  async function _send(userText) {
+    VOICE.stopAll();
+    STATE.set('thinking');
+    _history.push({ role: 'user', content: userText });
+    MEM.push('user', userText);
+    _turns++;
+    SCORE.update(userText);
+    _streamBuf = '';
+    let fullReply = '';
+
+    try {
+      const res = await fetch(CFG.WORKER + '/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: buildPrompt(), messages: _history }),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let raw = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        raw += dec.decode(value, { stream: true });
+        const lines = raw.split('\n');
+        raw = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const chunk = line.slice(6).trim();
+          if (chunk === '[DONE]') continue;
+          try {
+            const p = JSON.parse(chunk);
+            if (p.type === 'content_block_delta' && p.delta?.text) {
+              const tok = p.delta.text;
+              fullReply += tok;
+              _streamBuf += tok;
+              // Don't start speaking SCORE_JSON
+              if (!_streamBuf.includes('SCORE_JSON:')) {
+                const { sentences, remainder } = _splitSentences(_streamBuf);
+                _streamBuf = remainder;
+                sentences.forEach(s => VOICE.enqueue(s));
+              }
+            }
+          } catch {}
+        }
+      }
+
+      // Flush remainder before SCORE block
+      const preScore = _streamBuf.split('SCORE_JSON:')[0].trim();
+      if (preScore) VOICE.enqueue(preScore);
+      _streamBuf = '';
+
+      const cleanReply = fullReply.replace(/\nSCORE_JSON:[\s\S]*$/, '').replace(/SCORE_JSON:[\s\S]*$/, '').trim();
+      UI.showTranscript('ai', cleanReply.slice(0, 160) + (cleanReply.length > 160 ? '…' : ''));
+      _history.push({ role: 'assistant', content: cleanReply });
+      MEM.push('assistant', cleanReply);
+      // Rolling context window — keep 20 turns max
+      if (_history.length > 20) _history = _history.slice(-20);
+
+      SYNC.turn(userText, cleanReply, _turns);
+
+      const scoreData = SCORE.extractFromText(fullReply);
+      if (scoreData) {
+        SCORE.apply(scoreData);
+        const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
+        await SYNC.complete(scoreData, elapsed, _turns);
+        _close(cleanReply);
+      } else if (fullReply.includes('SCORE_JSON:')) {
+        const fb = SCORE.fallback('Score block malformed.');
+        SCORE.apply(fb);
+        const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
+        await SYNC.complete(fb, elapsed, _turns);
+        _close(cleanReply);
+      }
+      // If no SCORE_JSON, onSpeakDone() handles re-enabling recognition
+    } catch (err) {
+      console.error('API:', err);
+      UI.toast('Connection issue — please try again.');
+      STATE.set('ready');
+      RECOG.enable();
+      setTimeout(() => RECOG.start(), 800);
+    }
+  }
+
+  function _close(lastText) {
+    STATE.set('closed');
+    MEM.lock();
+    RECOG.disable();
+    const wordCount = lastText.split(' ').length;
+    const delay = Math.max(5500, wordCount * 360);
+    setTimeout(() => UI.showEnd(
+      CFG.CAL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email),
+      SCORE.getTotal() >= CFG.SCORE_MIN
+    ), delay);
+  }
+
+  function _startTimer() {
+    _sessionStart = Date.now();
+    clearInterval(_timerInterval);
+    _timerInterval = setInterval(() => {
+      const s = Math.floor((Date.now() - _sessionStart) / 1000);
+      const fmt = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+      UI.setTimer(fmt);
+      if (!STATE.is('closed') && (Date.now() - _sessionStart) >= CFG.MAX_MS) _forceClose();
+    }, 1000);
+  }
+
+  async function _forceClose() {
+    if (_forceClosing || STATE.is('closed')) return;
+    _forceClosing = true;
+    const msg = "We've covered a lot of ground — really appreciate your time. Our team will reach out to you personally very soon.";
+    VOICE.stopAll();
+    VOICE.enqueue(msg);
+    const fb = SCORE.fallback('Session reached max duration.');
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
+    SYNC.complete(fb, elapsed, _turns);
+    STATE.set('closed');
+    MEM.lock();
+    RECOG.disable();
+    setTimeout(() => UI.showEnd(null, false), 8500);
+  }
+
+  async function init() {
+    if (_initialized || MEM.isLocked()) return;
+    _initialized = true;
+    _forceClosing = false;
+    VOICE.stopAll();
+    RECOG.disable();
+    _history = []; _turns = 0; _streamBuf = '';
+    clearInterval(_timerInterval);
+    STATE.set('loading');
+
+    const mem = MEM.load();
+    UI.showMemory(MEM.hasMemory());
+    UI.renderLead();
+
+    // Load voices with timeout
+    let att = 0;
+    while (!VOICE.best() && att++ < 20) { VOICE.load(); await _sleep(200); }
+
+    UI.setLoad('Connecting to Dr. CV…');
+    try { await fetch(CFG.WORKER + '/', { signal: AbortSignal.timeout(12000) }); } catch {}
+    UI.setLoad('Ready');
+    await _sleep(250);
+    UI.hideLoad();
+    _startTimer();
+
+    // Build greeting
+    const greeting = _buildGreeting();
+    _history.push({ role: 'assistant', content: greeting });
+    MEM.push('assistant', greeting);
+
+    // Warm-up TTS (silent utterance to unlock audio context)
+    await new Promise(res => {
+      const wu = new SpeechSynthesisUtterance('\u00A0');
+      wu.volume = 0; wu.onend = res; wu.onerror = res;
+      speechSynthesis.speak(wu);
+      setTimeout(res, 500);
+    });
+    await _sleep(100);
+
+    STATE.set('greeting');
+    const { sentences: gs, remainder: gr } = _splitSentences(greeting);
+    const allS = [...gs]; if (gr.trim()) allS.push(gr);
+    await VOICE.speakAll(allS);
+
+    STATE.set('ready');
+    RECOG.enable();
+    await _sleep(350);
+    RECOG.start();
+  }
+
+  function _buildGreeting() {
+    // If memory exists, acknowledge it
+    if (MEM.hasMemory()) {
+      const lastUser = MEM.get().filter(m => m.role === 'user').slice(-1)[0]?.content || '';
+      const topic = lastUser.slice(0, 50);
+      return `Good to have you back${FIRST ? ', ' + FIRST : ''}. Last time we were looking at ${topic}. Want to pick up from there, or is there something new on your mind?`;
+    }
+    if (FIRST && LEAD.country && LEAD.company) {
+      return `Good to have you here, ${FIRST}. I had a look at what you shared — ${LEAD.company} looking to get into ${LEAD.country} is exactly the kind of thing we work on every day. What's the biggest challenge on your mind as you think about this?`;
+    }
+    if (FIRST && LEAD.country) {
+      return `Great to connect, ${FIRST}. ${LEAD.country} is a market we know well. What's the main thing you're trying to figure out?`;
+    }
+    if (FIRST) {
+      return `Great to connect, ${FIRST}. Which market are you focused on, and what's the biggest thing standing in your way right now?`;
+    }
+    return `Great to have you here. Which market are you looking at, and what's the main challenge you're trying to solve?`;
+  }
+
+  function reset() {
+    _initialized = false;
+    _forceClosing = false;
+    MEM.clear();
+    document.getElementById('scEnd').classList.remove('show');
+    VOICE.stopAll();
+    RECOG.disable();
+    setTimeout(() => init(), 250);
+  }
+
+  return { init, reset, onSpeakDone, handleUserSpeech };
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTROLS — event wiring
+═══════════════════════════════════════════════════════════════ */
+document.getElementById('btnMic').addEventListener('click', () => {
+  if (STATE.is('closed', 'loading', 'greeting')) return;
+  if (STATE.is('speaking', 'thinking')) {
+    // Interrupt — stop and start listening
+    VOICE.stopAll();
+    STATE.set('ready');
+    RECOG.enable();
+    setTimeout(() => RECOG.start(), 250);
+    return;
+  }
+  if (RECOG.isActive()) {
+    RECOG.disable();
+    STATE.set('ready');
+  } else {
+    RECOG.enable();
+    RECOG.start();
+  }
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  if (MEM.isLocked()) return;
+  CONV.reset();
+});
+
+let _aiMuted = false;
+document.getElementById('btnMute').addEventListener('click', function () {
+  _aiMuted = !_aiMuted;
+  VOICE.mute(_aiMuted);
+  this.classList.toggle('active', _aiMuted);
+  document.getElementById('muteIcon').innerHTML = _aiMuted
+    ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+    : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+  if (!_aiMuted && STATE.is('ready')) { RECOG.enable(); setTimeout(() => RECOG.start(), 250); }
+});
+
+// State listeners
+STATE.on('ready', () => {});
+STATE.on('closed', () => { RECOG.disable(); VOICE.stopAll(); });
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPER
+═══════════════════════════════════════════════════════════════ */
+function _sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════════════ */
+speechSynthesis.onvoiceschanged = () => VOICE.load();
+
+(async () => {
+  // Check if session already used
+  if (MEM.isLocked()) { UI.showUsed(); return; }
+
+  VOICE.load();
+
+  // Try auto-start; fall back to splash on gesture requirement
+  let needGesture = false;
+  try {
+    await new Promise((resolve, reject) => {
+      const t = new SpeechSynthesisUtterance('\u00A0');
+      t.volume = 0;
+      t.onend = resolve;
+      t.onerror = e => (e.error === 'not-allowed' ? reject(new Error('gesture')) : resolve());
+      speechSynthesis.speak(t);
+      setTimeout(() => { speechSynthesis.cancel(); resolve(); }, 1000);
+    });
+  } catch { needGesture = true; }
+
+  if (needGesture) {
+    document.getElementById('scLoad').classList.add('hidden');
+    UI.showSplash(() => CONV.init());
+  } else {
+    document.getElementById('scSplash').classList.add('hidden');
+    await _sleep(350);
+    CONV.init();
+  }
+})();
 </script>
 </body>
 </html>
