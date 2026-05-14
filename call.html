@@ -5,208 +5,196 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Dr. CV — Comply Globally</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════
-   DESIGN SYSTEM v2 — VOID INTELLIGENCE
-   Aesthetic: Deep cosmic warmth. Not cold blue-dark.
-   Rich obsidian, breathing orbs, organic motion.
-══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM — NEURAL WARMTH v3
+   Aesthetic: Obsidian intelligence. Not cold.
+   Warm cosmic dark. Amber-jade spectrum.
+   Inspired by: ElevenLabs × Linear × sci-fi HUD
+══════════════════════════════════════════ */
 :root {
-  --void: #07080d;
-  --void1: #0c0e16;
-  --void2: #11141f;
-  --void3: #171b28;
+  /* Void palette */
+  --void:  #080a10;
+  --void1: #0d1018;
+  --void2: #121520;
+  --void3: #181c28;
   --void4: #1e2335;
 
-  --glass:  rgba(255,255,255,.03);
-  --glass2: rgba(255,255,255,.055);
-  --glass3: rgba(255,255,255,.09);
+  /* Glass */
+  --gl1: rgba(255,255,255,.028);
+  --gl2: rgba(255,255,255,.052);
+  --gl3: rgba(255,255,255,.085);
 
-  --rim:  rgba(255,255,255,.04);
-  --rim2: rgba(255,255,255,.08);
-  --rim3: rgba(255,255,255,.14);
+  /* Rims */
+  --r1: rgba(255,255,255,.038);
+  --r2: rgba(255,255,255,.072);
+  --r3: rgba(255,255,255,.12);
 
-  --snow: #eef0ff;
-  --snow1: rgba(238,240,255,.55);
-  --snow2: rgba(238,240,255,.22);
-  --snow3: rgba(238,240,255,.08);
+  /* Snow */
+  --sn:  #ecefff;
+  --sn1: rgba(236,239,255,.58);
+  --sn2: rgba(236,239,255,.24);
+  --sn3: rgba(236,239,255,.10);
 
-  /* Signature accents — warm holographic */
-  --jade:    #00d4b4;
-  --jade2:   #00a88e;
-  --aurora:  #7c6cff;
-  --flame:   #ff7846;
-  --blush:   #ff4f7b;
-  --gold:    #f0b840;
-  --ice:     #a8c8ff;
+  /* Brand spectrum */
+  --jade:   #00cba8;
+  --jade2:  #009e83;
+  --aurora: #7b6dff;
+  --flame:  #ff7540;
+  --blush:  #ff4d7a;
+  --gold:   #f0b53e;
+  --ice:    #a0c8ff;
+  --mint:   #3dffc3;
 
-  /* State colors */
-  --col-idle:    rgba(255,255,255,.15);
-  --col-ready:   #5de8c0;
-  --col-listen:  #ff4f7b;
-  --col-think:   #f0b840;
-  --col-speak:   #00d4b4;
+  /* State */
+  --st-idle:    rgba(255,255,255,.12);
+  --st-ready:   #3dffc3;
+  --st-listen:  #ff4d7a;
+  --st-think:   #f0b53e;
+  --st-speak:   #00cba8;
 
+  /* Type */
   --sans:  'Syne', sans-serif;
-  --serif: 'Instrument Serif', serif;
+  --serif: 'Cormorant Garamond', serif;
   --mono:  'JetBrains Mono', monospace;
 
-  --orb: 220px;
-  --r-orb: 110px;
+  /* Sizing */
+  --orb: 230px;
 
   /* Easing */
-  --ease-out-expo: cubic-bezier(.19,1,.22,1);
-  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --expo:   cubic-bezier(.19,1,.22,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
 html, body {
   height:100%; width:100%; overflow:hidden;
   background: var(--void);
   font-family: var(--sans);
-  color: var(--snow);
+  color: var(--sn);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── AMBIENT FIELD ── */
+/* ─── AMBIENT FIELD ─── */
 .field {
-  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none; overflow:hidden;
 }
-.field-blob {
+.blob {
   position:absolute; border-radius:50%;
-  filter: blur(120px);
-  will-change: transform, opacity;
+  filter: blur(130px);
+  will-change: transform;
 }
-.fb1 {
-  width:700px; height:600px;
-  background: radial-gradient(ellipse, rgba(0,212,180,.07) 0%, transparent 68%);
-  top:-10%; left:-10%;
-  animation: blobDrift 45s ease-in-out infinite alternate;
+.b1 {
+  width:800px; height:650px;
+  background: radial-gradient(ellipse, rgba(0,203,168,.065) 0%, transparent 65%);
+  top:-15%; left:-12%;
+  animation: drift1 50s ease-in-out infinite alternate;
 }
-.fb2 {
-  width:600px; height:700px;
-  background: radial-gradient(ellipse, rgba(124,108,255,.065) 0%, transparent 65%);
-  bottom:-20%; right:-10%;
-  animation: blobDrift 52s 8s ease-in-out infinite alternate-reverse;
+.b2 {
+  width:650px; height:750px;
+  background: radial-gradient(ellipse, rgba(123,109,255,.058) 0%, transparent 62%);
+  bottom:-22%; right:-14%;
+  animation: drift2 58s 6s ease-in-out infinite alternate;
 }
-.fb3 {
-  width:400px; height:400px;
-  background: radial-gradient(ellipse, rgba(255,120,70,.045) 0%, transparent 60%);
-  top:50%; left:55%;
-  animation: blobDrift2 30s 4s ease-in-out infinite alternate;
+.b3 {
+  width:450px; height:450px;
+  background: radial-gradient(ellipse, rgba(255,117,64,.038) 0%, transparent 58%);
+  top:45%; left:48%;
+  animation: drift3 32s 3s ease-in-out infinite alternate;
 }
-@keyframes blobDrift {
-  0%   { transform:translate(0,0) scale(1); opacity:.6; }
-  100% { transform:translate(40px,-30px) scale(1.08); opacity:.9; }
+.b4 {
+  width:350px; height:350px;
+  background: radial-gradient(ellipse, rgba(240,181,62,.030) 0%, transparent 60%);
+  top:15%; right:20%;
+  animation: drift1 42s 12s ease-in-out infinite alternate-reverse;
 }
-@keyframes blobDrift2 {
-  0%   { transform:translate(0,0) scale(1); opacity:.4; }
-  100% { transform:translate(-25px,20px) scale(1.12); opacity:.7; }
-}
+@keyframes drift1 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(35px,-28px) scale(1.07)} }
+@keyframes drift2 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-30px,22px) scale(1.1)} }
+@keyframes drift3 { 0%{transform:translate(0,0) scale(.95)} 100%{transform:translate(-18px,15px) scale(1.1)} }
 
-.field-grid {
+/* Subtle grid */
+.grid {
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background-image:
-    linear-gradient(rgba(0,212,180,.008) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,180,.008) 1px, transparent 1px);
-  background-size:80px 80px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    linear-gradient(rgba(0,203,168,.006) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,203,168,.006) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 15%, transparent 100%);
 }
 
-/* ── TOPBAR ── */
+/* ─── TOPBAR ─── */
 .bar {
-  position:fixed; top:0; left:0; right:0; z-index:100; height:58px;
+  position:fixed; top:0; left:0; right:0; z-index:100; height:56px;
   display:flex; align-items:center; justify-content:space-between;
-  padding:0 36px;
-  background: rgba(7,8,13,.75);
-  border-bottom:1px solid var(--rim);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  padding: 0 32px;
+  background: rgba(8,10,16,.82);
+  border-bottom: 1px solid var(--r1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }
 
-.logo {
-  display:flex; align-items:center; gap:12px;
-}
-.logo-hex {
-  width:30px; height:30px;
-  clip-path: polygon(50% 0,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
-  background: linear-gradient(135deg, rgba(0,212,180,.15), rgba(124,108,255,.1));
-  border:1px solid rgba(0,212,180,.15);
+.logo { display:flex; align-items:center; gap:11px; }
+.logo-mark {
+  width:28px; height:28px;
+  clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  background: linear-gradient(145deg, rgba(0,203,168,.18), rgba(123,109,255,.1));
+  border:1px solid rgba(0,203,168,.18);
   display:flex; align-items:center; justify-content:center;
-  position:relative;
 }
-.logo-hex::after {
-  content:''; position:absolute; inset:1px;
-  clip-path: inherit;
-  background: linear-gradient(135deg, rgba(0,212,180,.06), transparent);
-}
-.logo-hex svg { position:relative; z-index:1; }
-.logo-text {}
-.logo-name {
-  font-family:var(--sans); font-size:12px; font-weight:700;
-  letter-spacing:.12em; color:var(--jade); text-transform:uppercase;
-}
-.logo-sub {
-  font-family:var(--mono); font-size:7px; letter-spacing:.2em;
-  color:var(--snow2); text-transform:uppercase;
-}
+.logo-mark svg { color:var(--jade); }
+.logo-name { font-family:var(--sans); font-size:11.5px; font-weight:700; letter-spacing:.13em; color:var(--jade); text-transform:uppercase; }
+.logo-sub  { font-family:var(--mono); font-size:6.5px; letter-spacing:.22em; color:var(--sn2); text-transform:uppercase; }
 
-.bar-center {
-  display:flex; align-items:center; gap:8px;
+/* Status pill */
+.pill {
+  display:flex; align-items:center; gap:9px;
+  padding: 5px 14px;
+  background: var(--gl1);
+  border: 1px solid var(--r1);
+  border-radius: 100px;
+  transition: border-color .4s, background .4s;
 }
-.status-badge {
-  display:flex; align-items:center; gap:8px;
-  padding:5px 12px;
-  background:var(--glass);
-  border:1px solid var(--rim);
-  border-radius:100px;
-}
-.s-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--col-idle);
-  transition:background .4s, box-shadow .4s;
-}
-.s-dot.ready  { background:var(--col-ready);  box-shadow:0 0 10px rgba(93,232,192,.5); animation:beat 2.2s ease infinite; }
-.s-dot.listen { background:var(--col-listen); box-shadow:0 0 10px rgba(255,79,123,.6); animation:beat .8s ease infinite; }
-.s-dot.think  { background:var(--col-think);  box-shadow:0 0 8px rgba(240,184,64,.5);  animation:beat 1.1s ease infinite; }
-.s-dot.speak  { background:var(--col-speak);  box-shadow:0 0 10px rgba(0,212,180,.55); animation:beat .65s ease infinite; }
-@keyframes beat { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.5);opacity:.5} }
+.pill.st-listen { border-color: rgba(255,77,122,.25); background:rgba(255,77,122,.04); }
+.pill.st-speak  { border-color: rgba(0,203,168,.25);  background:rgba(0,203,168,.04); }
+.pill.st-think  { border-color: rgba(240,181,62,.22);  background:rgba(240,181,62,.04); }
+.pill.st-ready  { border-color: rgba(61,255,195,.2);   background:transparent; }
 
-.s-label {
-  font-family:var(--mono); font-size:8px; letter-spacing:.18em;
-  color:var(--snow1); text-transform:uppercase;
-  min-width:60px; transition:color .3s;
+.pill-dot {
+  width:5px; height:5px; border-radius:50%;
+  background: var(--st-idle);
+  transition: background .4s, box-shadow .4s;
 }
+.pill-dot.ready  { background:var(--st-ready);  box-shadow:0 0 9px rgba(61,255,195,.55); animation:pulse 2.4s ease infinite; }
+.pill-dot.listen { background:var(--st-listen); box-shadow:0 0 9px rgba(255,77,122,.6);  animation:pulse .85s ease infinite; }
+.pill-dot.think  { background:var(--st-think);  box-shadow:0 0 7px rgba(240,181,62,.5);  animation:pulse 1.2s ease infinite; }
+.pill-dot.speak  { background:var(--st-speak);  box-shadow:0 0 9px rgba(0,203,168,.55);  animation:pulse .7s ease infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.6);opacity:.42} }
 
-.bar-right {
-  display:flex; align-items:center; gap:14px;
-}
-.timer-display {
-  font-family:var(--mono); font-size:12px;
-  color:var(--snow2); letter-spacing:.06em;
-}
+.pill-label { font-family:var(--mono); font-size:7.5px; letter-spacing:.2em; color:var(--sn1); text-transform:uppercase; min-width:58px; }
+
+.bar-r { display:flex; align-items:center; gap:16px; }
+.timer { font-family:var(--mono); font-size:11.5px; color:var(--sn2); letter-spacing:.06em; }
 .mem-tag {
-  display:none; align-items:center; gap:5px;
-  padding:4px 9px; border-radius:100px;
-  background:rgba(0,212,180,.06);
-  border:1px solid rgba(0,212,180,.13);
-  font-family:var(--mono); font-size:7px; letter-spacing:.14em;
-  color:rgba(0,212,180,.6); text-transform:uppercase;
+  display:none; align-items:center; gap:6px; padding:4px 10px;
+  border-radius:100px; background:rgba(0,203,168,.05);
+  border:1px solid rgba(0,203,168,.14);
+  font-family:var(--mono); font-size:6.5px; letter-spacing:.16em;
+  color:rgba(0,203,168,.65); text-transform:uppercase;
 }
 .mem-tag.on { display:flex; }
-.mem-tag-dot { width:3px; height:3px; border-radius:50%; background:var(--jade); animation:beat 2s ease infinite; }
+.mem-dot { width:3px; height:3px; border-radius:50%; background:var(--jade); animation:pulse 2s ease infinite; }
 
-/* ── MAIN ── */
+/* ─── MAIN STAGE ─── */
 .stage {
-  position:fixed; inset:0; top:58px; bottom:80px;
+  position:fixed; inset:0; top:56px; bottom:84px;
   display:flex; align-items:center; justify-content:center;
-  gap:72px; padding:0 48px;
-  z-index:10;
+  gap:80px; padding:0 52px; z-index:10;
 }
 
-/* ── ORB ── */
+/* ─── ORB SYSTEM ─── */
 .orb-wrap {
   position:relative; flex-shrink:0;
   width:var(--orb); height:var(--orb);
@@ -214,81 +202,74 @@ html, body {
 
 /* Orbital rings */
 .ring {
-  position:absolute; border-radius:50%;
-  top:50%; left:50%;
+  position:absolute; top:50%; left:50%;
   transform:translate(-50%,-50%);
-  border:1px solid transparent;
+  border-radius:50%; border:1px solid transparent;
   pointer-events:none;
 }
-.ring1 {
-  width:calc(var(--orb)*1.6); height:calc(var(--orb)*1.6);
-  border-color:rgba(0,212,180,.035);
-  animation:spin 65s linear infinite;
+.r1 {
+  width:calc(var(--orb)*1.68); height:calc(var(--orb)*1.68);
+  border-color:rgba(0,203,168,.03);
+  animation:spin 70s linear infinite;
 }
-.ring2 {
-  width:calc(var(--orb)*1.33); height:calc(var(--orb)*1.33);
-  border-color:rgba(124,108,255,.04);
-  animation:spin 43s linear infinite reverse;
+.r2 {
+  width:calc(var(--orb)*1.38); height:calc(var(--orb)*1.38);
+  border-color:rgba(123,109,255,.04);
+  animation:spin 46s linear infinite reverse;
 }
-.ring3 {
-  width:calc(var(--orb)*1.1); height:calc(var(--orb)*1.1);
-  border-color:rgba(0,212,180,.05);
-  animation:spin 27s linear infinite;
+.r3 {
+  width:calc(var(--orb)*1.12); height:calc(var(--orb)*1.12);
+  border-color:rgba(0,203,168,.055);
+  animation:spin 28s linear infinite;
 }
 @keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
 
-/* Particle on each ring */
+/* Particles on rings */
 .ring::before {
   content:''; position:absolute; border-radius:50%;
-  width:5px; height:5px;
-  top:-2.5px; left:50%; transform:translateX(-50%);
-  background:var(--jade);
-  box-shadow:0 0 8px var(--jade);
+  width:5px; height:5px; top:-2.5px; left:50%;
+  transform:translateX(-50%);
+  background:var(--jade); box-shadow:0 0 10px var(--jade);
 }
-.ring2::before { background:var(--aurora); box-shadow:0 0 6px var(--aurora); width:4px; height:4px; }
-.ring3::before { background:var(--flame); box-shadow:0 0 5px var(--flame); width:3px; height:3px; opacity:.6; }
+.r2::before { background:var(--aurora); box-shadow:0 0 7px var(--aurora); width:4px; height:4px; }
+.r3::before { background:var(--flame); box-shadow:0 0 6px var(--flame); width:3px; height:3px; opacity:.7; }
 
-/* Ambient glow disk behind orb */
+/* Halo glow */
 .orb-halo {
   position:absolute;
   width:var(--orb); height:var(--orb);
   top:50%; left:50%; transform:translate(-50%,-50%);
-  border-radius:50%;
-  transition:box-shadow .7s var(--ease-out-expo);
-  pointer-events:none; z-index:2;
+  border-radius:50%; pointer-events:none; z-index:2;
+  transition: box-shadow .8s var(--expo);
 }
-.orb-halo.h-speak { box-shadow:0 0 70px 25px rgba(0,212,180,.14), 0 0 160px 60px rgba(0,212,180,.05); }
-.orb-halo.h-listen { box-shadow:0 0 70px 25px rgba(255,79,123,.14), 0 0 160px 60px rgba(255,79,123,.05); }
-.orb-halo.h-think  { box-shadow:0 0 55px 18px rgba(240,184,64,.10), 0 0 120px 40px rgba(240,184,64,.04); }
+.orb-halo.h-speak  { box-shadow:0 0 80px 28px rgba(0,203,168,.13), 0 0 180px 65px rgba(0,203,168,.045); }
+.orb-halo.h-listen { box-shadow:0 0 80px 28px rgba(255,77,122,.13), 0 0 180px 65px rgba(255,77,122,.045); }
+.orb-halo.h-think  { box-shadow:0 0 60px 20px rgba(240,181,62,.09), 0 0 130px 45px rgba(240,181,62,.035); }
 
-/* Core sphere */
+/* Core */
 .orb-core {
   position:absolute;
   width:var(--orb); height:var(--orb);
   top:50%; left:50%; transform:translate(-50%,-50%);
-  border-radius:50%;
+  border-radius:50%; z-index:5; overflow:hidden;
   background:
-    radial-gradient(circle at 36% 30%,
-      rgba(255,255,255,.025) 0%,
-      transparent 50%),
-    radial-gradient(circle at 60% 65%,
-      rgba(0,212,180,.03) 0%,
-      transparent 45%),
-    radial-gradient(circle at 50% 50%,
-      #131624 0%,
-      #0c0e19 60%,
-      #07080d 100%);
-  border:1px solid rgba(0,212,180,.12);
+    radial-gradient(circle at 34% 28%, rgba(255,255,255,.022) 0%, transparent 48%),
+    radial-gradient(circle at 58% 66%, rgba(0,203,168,.028) 0%, transparent 42%),
+    radial-gradient(circle at 50% 50%, #141826 0%, #0d1018 62%, #080a10 100%);
+  border:1px solid rgba(0,203,168,.1);
   box-shadow:
-    0 0 0 1px rgba(0,212,180,.03),
-    inset 0 1px 0 rgba(255,255,255,.05),
+    0 0 0 1px rgba(0,203,168,.025),
+    inset 0 1px 0 rgba(255,255,255,.045),
     inset 0 -1px 0 rgba(0,0,0,.5);
   display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:6px;
-  z-index:5; overflow:hidden;
+  align-items:center; justify-content:center; gap:7px;
+  transition: border-color .6s;
 }
+.orb-core.st-listen { border-color: rgba(255,77,122,.22); }
+.orb-core.st-speak  { border-color: rgba(0,203,168,.22);  }
+.orb-core.st-think  { border-color: rgba(240,181,62,.2);  }
 
-/* Wave canvas overlay */
+/* Wave canvas */
 #waveCanvas {
   position:absolute;
   width:var(--orb); height:var(--orb);
@@ -296,295 +277,263 @@ html, body {
   border-radius:50%; z-index:6; pointer-events:none;
 }
 
-.orb-initials {
-  font-family:var(--serif); font-style:italic;
-  font-size:58px; line-height:1;
-  letter-spacing:-.02em;
-  color:rgba(0,212,180,.92);
-  text-shadow:0 0 40px rgba(0,212,180,.25);
-  position:relative; z-index:1;
-  user-select:none;
+.orb-glyph {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:62px; line-height:1; letter-spacing:-.02em;
+  color:rgba(0,203,168,.9);
+  text-shadow:0 0 44px rgba(0,203,168,.22);
+  position:relative; z-index:1; user-select:none;
 }
 .orb-line {
-  width:28px; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(0,212,180,.5), transparent);
+  width:26px; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(0,203,168,.5), transparent);
   position:relative; z-index:1;
 }
 .orb-sub {
-  font-family:var(--mono); font-size:6.5px; letter-spacing:.26em;
-  color:var(--snow2); text-transform:uppercase;
+  font-family:var(--mono); font-size:6px; letter-spacing:.28em;
+  color:var(--sn2); text-transform:uppercase;
   position:relative; z-index:1; user-select:none;
 }
 
-/* ── PANEL ── */
+/* ─── INFO PANEL ─── */
 .panel {
-  display:flex; flex-direction:column; gap:20px;
-  min-width:280px; max-width:360px;
+  display:flex; flex-direction:column; gap:22px;
+  min-width:280px; max-width:350px;
 }
-.panel-tag {
-  font-family:var(--mono); font-size:7px; letter-spacing:.28em;
+.ptag {
+  font-family:var(--mono); font-size:6.5px; letter-spacing:.3em;
   color:var(--jade); text-transform:uppercase;
-  display:flex; align-items:center; gap:8px;
+  display:flex; align-items:center; gap:9px;
 }
-.panel-tag::before {
-  content:''; width:18px; height:1px;
-  background:var(--jade); opacity:.4;
-}
-.panel-name {
-  font-family:var(--serif); font-size:50px; font-weight:400;
-  line-height:.9; letter-spacing:-.01em;
-  background:linear-gradient(145deg, var(--snow) 40%, rgba(0,212,180,.75));
+.ptag::before { content:''; width:16px; height:1px; background:var(--jade); opacity:.38; }
+.pname {
+  font-family:var(--serif); font-size:52px; font-weight:300; line-height:.88;
+  letter-spacing:-.01em;
+  background:linear-gradient(148deg, var(--sn) 38%, rgba(0,203,168,.7));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
 }
-.panel-role {
-  font-family:var(--mono); font-size:8.5px; letter-spacing:.2em;
-  color:rgba(0,212,180,.7); text-transform:uppercase; margin-top:4px;
-}
-.panel-firm {
-  font-family:var(--mono); font-size:7px; letter-spacing:.14em;
-  color:var(--snow2); text-transform:uppercase;
-}
-.panel-rule {
-  height:1px;
-  background:linear-gradient(90deg, var(--rim3), transparent);
-}
-.panel-stats { display:flex; gap:28px; }
-.stat {}
-.stat-key {
-  font-family:var(--mono); font-size:6.5px; letter-spacing:.18em;
-  color:var(--snow3); text-transform:uppercase; margin-bottom:4px;
-}
-.stat-val {
-  font-family:var(--sans); font-size:14px; font-weight:500;
-  color:var(--snow);
-}
+.prole { font-family:var(--mono); font-size:8px; letter-spacing:.22em; color:rgba(0,203,168,.72); text-transform:uppercase; margin-top:5px; }
+.pfirm { font-family:var(--mono); font-size:6.5px; letter-spacing:.16em; color:var(--sn2); text-transform:uppercase; }
+.prule { height:1px; background:linear-gradient(90deg, var(--r3), transparent); }
+.pstats { display:flex; gap:30px; }
+.sk { font-family:var(--mono); font-size:6px; letter-spacing:.2em; color:var(--sn3); text-transform:uppercase; margin-bottom:5px; }
+.sv { font-family:var(--sans); font-size:14px; font-weight:500; color:var(--sn); }
 
-/* ── TRANSCRIPT BUBBLE ── */
-.tx-bubble {
-  position:fixed; bottom:96px; left:50%; transform:translateX(-50%) translateY(16px);
-  width:min(600px, calc(100vw - 32px));
-  padding:12px 18px;
-  background:rgba(11,13,22,.92);
-  border:1px solid var(--rim2);
-  border-radius:12px;
-  backdrop-filter:blur(24px);
+/* ─── TRANSCRIPT ─── */
+.tx {
+  position:fixed; bottom:100px; left:50%;
+  transform:translateX(-50%) translateY(14px);
+  width:min(580px, calc(100vw - 28px));
+  padding:13px 20px;
+  background:rgba(10,12,20,.94);
+  border:1px solid var(--r2);
+  border-radius:14px;
+  backdrop-filter:blur(28px);
   opacity:0; pointer-events:none;
-  transition:opacity .3s, transform .35s var(--ease-out-expo);
+  transition:opacity .32s, transform .36s var(--expo);
   text-align:center; z-index:50;
 }
-.tx-bubble.open {
-  opacity:1; transform:translateX(-50%) translateY(0);
-}
+.tx.open { opacity:1; transform:translateX(-50%) translateY(0); }
 .tx-who {
-  font-family:var(--mono); font-size:7px; letter-spacing:.2em;
-  text-transform:uppercase; margin-bottom:5px;
+  font-family:var(--mono); font-size:6.5px; letter-spacing:.22em;
+  text-transform:uppercase; margin-bottom:6px;
 }
-.tx-who.you { color:rgba(240,184,64,.8); }
-.tx-who.ai  { color:rgba(0,212,180,.7); }
-.tx-text {
-  font-family:var(--sans); font-size:13.5px; line-height:1.7;
-  color:var(--snow1); font-weight:400;
+.tx-who.you { color:rgba(240,181,62,.85); }
+.tx-who.ai  { color:rgba(0,203,168,.75); }
+.tx-text { font-family:var(--sans); font-size:13.5px; line-height:1.72; color:var(--sn1); font-weight:400; }
+
+/* ─── CONTROLS ─── */
+.ctrl {
+  position:fixed; bottom:0; left:0; right:0; height:84px; z-index:100;
+  display:flex; align-items:center; justify-content:center; gap:28px;
+  background:linear-gradient(0deg, rgba(8,10,16,1) 0%, rgba(8,10,16,.88) 100%);
+  border-top:1px solid var(--r1);
+  backdrop-filter:blur(28px);
 }
 
-/* ── CONTROLS ── */
-.ctrl-bar {
-  position:fixed; bottom:0; left:0; right:0; height:80px; z-index:100;
-  display:flex; align-items:center; justify-content:center; gap:24px;
-  background:linear-gradient(0deg, rgba(7,8,13,1) 0%, rgba(7,8,13,.9) 100%);
-  border-top:1px solid var(--rim);
-  backdrop-filter:blur(24px);
-}
-
-.btn-icon {
-  width:40px; height:40px; border-radius:50%;
-  border:1px solid var(--rim2); background:transparent;
-  color:var(--snow2); cursor:pointer;
+.ibtn {
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid var(--r2); background:transparent;
+  color:var(--sn2); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  transition:all .2s; outline:none;
+  transition:all .22s; outline:none;
 }
-.btn-icon:hover { border-color:var(--rim3); color:var(--snow); transform:scale(1.1); }
-.btn-icon.on { border-color:rgba(255,79,123,.3); color:var(--blush); }
+.ibtn:hover { border-color:var(--r3); color:var(--sn); transform:scale(1.1); }
+.ibtn.on { border-color:rgba(255,77,122,.35); color:var(--blush); }
 
-.ctrl-hint {
-  font-family:var(--mono); font-size:7.5px; letter-spacing:.14em;
-  color:var(--snow3); text-transform:uppercase; min-width:72px; text-align:center;
-}
+.chint { font-family:var(--mono); font-size:7px; letter-spacing:.16em; color:var(--sn3); text-transform:uppercase; min-width:72px; text-align:center; }
 
-/* MIC ASSEMBLY */
+/* ─── MIC ASSEMBLY ─── */
 .mic-rig { position:relative; display:flex; align-items:center; justify-content:center; }
-.pulse-ring {
+
+.pr {
   position:absolute; border-radius:50%;
   border:1px solid transparent; pointer-events:none;
-  transition:border-color .4s;
 }
-.pr1 { width:90px; height:90px; }
-.pr2 { width:74px; height:74px; }
-.pr1.listening { border-color:rgba(255,79,123,.2); animation:ripple 1.4s ease infinite; }
-.pr2.listening { border-color:rgba(255,79,123,.12); animation:ripple 1.4s .28s ease infinite; }
-@keyframes ripple {
-  0%  { transform:scale(1); opacity:.9; }
-  100%{ transform:scale(1.6); opacity:0; }
-}
+.pr1 { width:92px; height:92px; }
+.pr2 { width:76px; height:76px; }
+.pr1.listening { border-color:rgba(255,77,122,.22); animation:ripple 1.5s ease infinite; }
+.pr2.listening { border-color:rgba(255,77,122,.14); animation:ripple 1.5s .3s ease infinite; }
+@keyframes ripple { 0%{transform:scale(1);opacity:.9} 100%{transform:scale(1.65);opacity:0} }
 
-/* PAUSE DETECTION RING — New! */
-.pr3 {
-  width:62px; height:62px;
-  border:1.5px solid transparent;
-  position:absolute; border-radius:50%; pointer-events:none;
-  transition:border-color .2s, stroke-dashoffset .1s;
-}
-.pr3.counting {
-  border-color:rgba(240,184,64,.6);
-  animation:none;
-}
-/* SVG pause arc overlay */
+/* Pause arc */
 #pauseArc {
-  position:absolute;
-  width:70px; height:70px;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity .2s;
+  position:absolute; width:72px; height:72px;
+  pointer-events:none; opacity:0; transition:opacity .22s;
 }
 #pauseArc.show { opacity:1; }
 
+/* Pause bar */
+.pbar {
+  position:fixed; bottom:84px; left:50%; transform:translateX(-50%);
+  height:1.5px; background:var(--gold); border-radius:2px;
+  width:0; opacity:0; z-index:60; transition:opacity .2s;
+}
+.pbar.show { opacity:1; }
+
 .mic-btn {
-  width:60px; height:60px; border-radius:50%;
-  border:1px solid rgba(0,212,180,.22);
-  background:linear-gradient(145deg, rgba(0,212,180,.07), rgba(0,212,180,.02));
+  width:62px; height:62px; border-radius:50%;
+  border:1px solid rgba(0,203,168,.22);
+  background:linear-gradient(145deg, rgba(0,203,168,.07), rgba(0,203,168,.02));
   color:var(--jade); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .3s; outline:none; position:relative; z-index:2;
 }
-.mic-btn:hover { border-color:rgba(0,212,180,.4); box-shadow:0 0 24px rgba(0,212,180,.1); }
+.mic-btn:hover { border-color:rgba(0,203,168,.42); box-shadow:0 0 26px rgba(0,203,168,.1); }
 .mic-btn.listening {
-  border-color:rgba(255,79,123,.4);
-  background:linear-gradient(145deg, rgba(255,79,123,.09), rgba(255,79,123,.02));
+  border-color:rgba(255,77,122,.42);
+  background:linear-gradient(145deg, rgba(255,77,122,.09), rgba(255,77,122,.02));
   color:var(--blush);
 }
-.mic-btn.ready { animation:micPulse 2.8s ease infinite; }
-@keyframes micPulse {
-  0%,100%{ box-shadow:0 0 0 0 rgba(0,212,180,.3); }
-  50%    { box-shadow:0 0 0 12px rgba(0,212,180,0); }
-}
+.mic-btn.ready { animation:micpulse 2.8s ease infinite; }
+@keyframes micpulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,203,168,.3)} 50%{box-shadow:0 0 0 14px rgba(0,203,168,0)} }
 
-/* ── SCREENS ── */
+/* ─── SCREENS ─── */
 .screen {
   position:fixed; inset:0; z-index:800;
   display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:28px;
+  align-items:center; justify-content:center; gap:26px;
   text-align:center;
   transition:opacity .6s, visibility .6s;
 }
 .screen.off  { opacity:0; visibility:hidden; pointer-events:none; }
 .screen.gone { display:none; }
 
+/* Loading */
 #sLoad { background:var(--void); z-index:900; }
-.load-logo { font-family:var(--serif); font-size:34px; font-style:italic; color:var(--jade); }
-.load-sep  { width:72px; height:1px; background:linear-gradient(90deg,transparent,var(--jade),transparent); }
+.load-logo { font-family:var(--serif); font-style:italic; font-size:32px; color:var(--jade); }
+.load-sep  { width:66px; height:1px; background:linear-gradient(90deg,transparent,var(--jade),transparent); }
 .load-spin {
-  width:34px; height:34px; border-radius:50%;
-  border:1px solid rgba(0,212,180,.12);
-  border-top-color:var(--jade);
-  animation:spinAnim 1s linear infinite;
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid rgba(0,203,168,.12); border-top-color:var(--jade);
+  animation:spinA 1s linear infinite;
 }
-@keyframes spinAnim { to { transform:rotate(360deg); } }
-.load-msg { font-family:var(--mono); font-size:8px; letter-spacing:.22em; color:var(--snow2); text-transform:uppercase; }
+@keyframes spinA { to { transform:rotate(360deg); } }
+.load-msg { font-family:var(--mono); font-size:7.5px; letter-spacing:.24em; color:var(--sn2); text-transform:uppercase; }
 
-#sSplash {
-  background:radial-gradient(ellipse at center, var(--void2), var(--void));
-  z-index:1000; cursor:pointer;
-}
-.splash-logo { font-family:var(--serif); font-size:28px; font-style:italic; color:var(--jade); }
-.splash-play {
-  width:78px; height:78px; border-radius:50%;
-  border:1px solid rgba(0,212,180,.28);
-  background:linear-gradient(145deg, rgba(0,212,180,.06), transparent);
+/* Splash */
+#sSplash { background:radial-gradient(ellipse at center, var(--void2), var(--void)); z-index:1000; cursor:pointer; }
+.sp-logo { font-family:var(--serif); font-size:26px; font-style:italic; color:var(--jade); }
+.sp-play {
+  width:76px; height:76px; border-radius:50%;
+  border:1px solid rgba(0,203,168,.28);
+  background:linear-gradient(145deg, rgba(0,203,168,.06), transparent);
   display:flex; align-items:center; justify-content:center;
   color:var(--jade); transition:all .3s;
 }
-.splash-play:hover { border-color:var(--jade); box-shadow:0 0 40px rgba(0,212,180,.12); }
-.splash-hint { font-family:var(--mono); font-size:8px; letter-spacing:.22em; color:var(--snow3); text-transform:uppercase; }
+.sp-play:hover { border-color:var(--jade); box-shadow:0 0 44px rgba(0,203,168,.12); }
+.sp-hint { font-family:var(--mono); font-size:7.5px; letter-spacing:.24em; color:var(--sn3); text-transform:uppercase; }
 
-#sEnd {
-  background:rgba(7,8,13,.96); backdrop-filter:blur(40px); z-index:600;
-  opacity:0; visibility:hidden; pointer-events:none; transition:opacity .6s;
-}
+/* End */
+#sEnd { background:rgba(8,10,16,.96); backdrop-filter:blur(44px); z-index:600; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .6s; }
 #sEnd.open { opacity:1; visibility:visible; pointer-events:all; }
 .end-wrap { width:440px; max-width:90vw; padding:0 20px; }
-.end-gold-line { height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin-bottom:32px; }
-.end-icon { font-size:24px; color:var(--gold); margin-bottom:14px; }
-.end-title { font-family:var(--serif); font-size:30px; font-style:italic; color:var(--snow); margin-bottom:4px; }
-.end-sub { font-family:var(--mono); font-size:7.5px; letter-spacing:.2em; color:var(--snow2); text-transform:uppercase; margin-bottom:22px; }
-.end-body { font-family:var(--sans); font-size:14px; line-height:1.8; color:var(--snow1); margin-bottom:24px; font-weight:400; }
+.end-gl { height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin-bottom:30px; }
+.end-icon { font-size:22px; color:var(--gold); margin-bottom:14px; }
+.end-title { font-family:var(--serif); font-size:30px; font-style:italic; color:var(--sn); margin-bottom:4px; }
+.end-sub { font-family:var(--mono); font-size:7px; letter-spacing:.22em; color:var(--sn2); text-transform:uppercase; margin-bottom:22px; }
+.end-body { font-family:var(--sans); font-size:13.5px; line-height:1.82; color:var(--sn1); margin-bottom:26px; }
 .end-cta {
   display:block; width:100%; padding:16px 24px;
-  border:1px solid rgba(0,212,180,.26);
-  background:linear-gradient(135deg, rgba(0,212,180,.06), transparent);
+  border:1px solid rgba(0,203,168,.26);
+  background:linear-gradient(135deg, rgba(0,203,168,.06), transparent);
   color:var(--jade);
-  font-family:var(--mono); font-size:7.5px; letter-spacing:.22em; text-transform:uppercase;
-  text-decoration:none; cursor:pointer; transition:all .2s; border-radius:4px;
+  font-family:var(--mono); font-size:7.5px; letter-spacing:.24em; text-transform:uppercase;
+  text-decoration:none; cursor:pointer; transition:all .22s; border-radius:4px;
 }
-.end-cta:hover { border-color:var(--jade); background:linear-gradient(135deg, rgba(0,212,180,.1), transparent); }
+.end-cta:hover { border-color:var(--jade); background:rgba(0,203,168,.1); }
 
+/* Used */
 #sUsed { background:var(--void); z-index:1000; display:none; }
 #sUsed.on { display:flex; }
-.used-title { font-family:var(--serif); font-size:26px; font-style:italic; color:var(--snow); }
-.used-body { font-family:var(--mono); font-size:8px; letter-spacing:.16em; color:var(--snow2); text-transform:uppercase; line-height:2.2; max-width:340px; }
+.used-title { font-family:var(--serif); font-size:24px; font-style:italic; color:var(--sn); }
+.used-body { font-family:var(--mono); font-size:7.5px; letter-spacing:.18em; color:var(--sn2); text-transform:uppercase; line-height:2.4; max-width:340px; }
 
-/* TOAST */
+/* Toast */
 .toast {
-  position:fixed; bottom:100px; left:50%; transform:translateX(-50%);
-  background:rgba(255,79,123,.9); color:#fff;
-  padding:8px 20px; z-index:999; display:none;
-  font-family:var(--mono); font-size:8px; letter-spacing:.14em; text-transform:uppercase;
+  position:fixed; bottom:104px; left:50%; transform:translateX(-50%);
+  background:rgba(255,77,122,.9); color:#fff;
+  padding:8px 22px; z-index:999; display:none;
+  font-family:var(--mono); font-size:7.5px; letter-spacing:.16em; text-transform:uppercase;
   border-radius:100px;
 }
 
-/* SYNC INDICATOR */
-.sync-dot {
-  position:fixed; top:12px; right:12px; z-index:999;
-  width:5px; height:5px; border-radius:50%; background:transparent;
+/* Sync dot */
+.sync {
+  position:fixed; top:10px; right:10px; z-index:999;
+  width:4px; height:4px; border-radius:50%; background:transparent;
 }
-.sync-dot.ing { background:var(--gold); box-shadow:0 0 6px rgba(240,184,64,.6); animation:beat .8s infinite; }
-.sync-dot.ok  { background:var(--col-ready); }
-.sync-dot.err { background:var(--col-listen); }
+.sync.ing { background:var(--gold); box-shadow:0 0 5px rgba(240,181,62,.7); animation:pulse .8s infinite; }
+.sync.ok  { background:var(--st-ready); }
+.sync.err { background:var(--st-listen); }
 
-/* PAUSE INDICATOR BAR */
-.pause-bar {
-  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
-  height:2px; background:var(--gold); border-radius:2px;
-  width:0; transition:width .1s linear;
-  opacity:0; z-index:60;
-}
-.pause-bar.show { opacity:1; }
-
-/* ── RESPONSIVE ── */
-@media (max-width:740px) {
-  .stage { flex-direction:column; gap:14px; padding:0 18px; }
+/* ─── RESPONSIVE ─── */
+@media (max-width:760px) {
+  .stage { flex-direction:column; gap:10px; padding:0 20px; }
   .panel { align-items:center; text-align:center; min-width:unset; }
-  .panel-tag::before { display:none; }
-  .panel-stats { justify-content:center; }
+  .ptag::before { display:none; }
+  .pstats { justify-content:center; }
   .bar { padding:0 16px; }
-  :root { --orb:165px; }
-  .panel-name { font-size:38px; }
+  :root { --orb:170px; }
+  .pname { font-size:40px; }
 }
+
+/* ─── TTS STATE LOCK INDICATOR ─── */
+/* Subtle overlay on orb when locked */
+.orb-lock {
+  position:absolute;
+  width:var(--orb); height:var(--orb);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  border-radius:50%; z-index:7; pointer-events:none;
+  border:2px solid transparent;
+  transition:border-color .4s;
+}
+.orb-lock.speaking { border-color:rgba(0,203,168,.18); }
+
+/* Interrupt flash */
+@keyframes interruptFlash {
+  0%  { background:rgba(255,77,122,.08); }
+  100%{ background:transparent; }
+}
+.orb-core.interrupted { animation:interruptFlash .4s ease; }
 </style>
 </head>
 <body>
 
 <!-- AMBIENT -->
 <div class="field">
-  <div class="field-blob fb1"></div>
-  <div class="field-blob fb2"></div>
-  <div class="field-blob fb3"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
 </div>
-<div class="field-grid"></div>
-<div class="sync-dot" id="syncDot"></div>
+<div class="grid"></div>
+<div class="sync" id="syncDot"></div>
 
-<!-- USED SCREEN -->
+<!-- USED -->
 <div class="screen gone" id="sUsed">
   <div>◈</div>
-  <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
+  <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
   <div class="used-title">Session Already Completed</div>
   <div class="used-body">Your strategy session with Dr. CV has concluded.<br>Our team will be in touch with next steps soon.</div>
 </div>
@@ -592,104 +541,87 @@ html, body {
 <!-- TOPBAR -->
 <header class="bar">
   <div class="logo">
-    <div class="logo-hex">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--jade)">
+    <div class="logo-mark">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/>
       </svg>
     </div>
-    <div class="logo-text">
+    <div>
       <div class="logo-name">Comply Globally</div>
       <div class="logo-sub">Global Expansion Advisory</div>
     </div>
   </div>
 
-  <div class="bar-center">
-    <div class="status-badge">
-      <div class="s-dot" id="sDot"></div>
-      <span class="s-label" id="sLabel">Connecting</span>
-    </div>
+  <div class="pill" id="pill">
+    <div class="pill-dot" id="pdot"></div>
+    <span class="pill-label" id="plabel">Connecting</span>
   </div>
 
-  <div class="bar-right">
-    <div class="mem-tag" id="memTag">
-      <div class="mem-tag-dot"></div>
-      <span>Memory</span>
-    </div>
-    <div class="timer-display" id="timerEl">0:00</div>
+  <div class="bar-r">
+    <div class="mem-tag" id="memTag"><div class="mem-dot"></div><span>Memory</span></div>
+    <div class="timer" id="timerEl">0:00</div>
   </div>
 </header>
 
 <!-- STAGE -->
 <div class="stage">
-  <!-- ORB -->
   <div class="orb-wrap">
-    <div class="ring ring1"></div>
-    <div class="ring ring2"></div>
-    <div class="ring ring3"></div>
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
     <div class="orb-halo" id="orbHalo"></div>
+    <div class="orb-lock" id="orbLock"></div>
     <canvas id="waveCanvas"></canvas>
-    <div class="orb-core">
-      <div class="orb-initials">CV</div>
+    <div class="orb-core" id="orbCore">
+      <div class="orb-glyph">CV</div>
       <div class="orb-line"></div>
       <div class="orb-sub">Dr. CV · Strategist</div>
     </div>
   </div>
 
-  <!-- PANEL -->
   <div class="panel">
     <div>
-      <div class="panel-tag">Strategy Session</div>
-      <div class="panel-name">Dr. CV</div>
-      <div class="panel-role">Global Expansion Strategist</div>
-      <div class="panel-firm">Comply Globally · Advisory Division</div>
+      <div class="ptag">Strategy Session</div>
+      <div class="pname">Dr. CV</div>
+      <div class="prole">Global Expansion Strategist</div>
+      <div class="pfirm">Comply Globally · Advisory Division</div>
     </div>
-    <div class="panel-rule"></div>
-    <div class="panel-stats">
-      <div class="stat">
-        <div class="stat-key">Client</div>
-        <div class="stat-val" id="statClient">—</div>
-      </div>
-      <div class="stat">
-        <div class="stat-key">Market</div>
-        <div class="stat-val" id="statMarket">—</div>
-      </div>
-      <div class="stat">
-        <div class="stat-key">Duration</div>
-        <div class="stat-val" id="statDur">0:00</div>
-      </div>
+    <div class="prule"></div>
+    <div class="pstats">
+      <div><div class="sk">Client</div><div class="sv" id="stClient">—</div></div>
+      <div><div class="sk">Market</div><div class="sv" id="stMarket">—</div></div>
+      <div><div class="sk">Duration</div><div class="sv" id="stDur">0:00</div></div>
     </div>
   </div>
 </div>
 
 <!-- TRANSCRIPT -->
-<div class="tx-bubble" id="txBubble">
+<div class="tx" id="txBubble">
   <div class="tx-who" id="txWho"></div>
   <div class="tx-text" id="txText"></div>
 </div>
 
-<!-- PAUSE PROGRESS BAR -->
-<div class="pause-bar" id="pauseBar"></div>
+<!-- PAUSE BAR -->
+<div class="pbar" id="pbar"></div>
 
 <!-- CONTROLS -->
-<div class="ctrl-bar">
-  <button class="btn-icon" id="btnReset" title="Restart">
+<div class="ctrl">
+  <button class="ibtn" id="btnReset" title="Restart">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
     </svg>
   </button>
 
-  <div class="ctrl-hint" id="hintL">Starting…</div>
+  <div class="chint" id="hintL">Starting…</div>
 
   <div class="mic-rig">
-    <div class="pulse-ring pr1" id="pr1"></div>
-    <div class="pulse-ring pr2" id="pr2"></div>
-    <!-- Pause-detection arc SVG -->
-    <svg id="pauseArc" viewBox="0 0 70 70">
-      <circle id="pauseCircle" cx="35" cy="35" r="29"
-        fill="none" stroke="rgba(240,184,64,.7)" stroke-width="2"
-        stroke-dasharray="182.2" stroke-dashoffset="182.2"
-        stroke-linecap="round"
-        transform="rotate(-90 35 35)"/>
+    <div class="pr pr1" id="pr1"></div>
+    <div class="pr pr2" id="pr2"></div>
+    <svg id="pauseArc" viewBox="0 0 72 72">
+      <circle id="pauseCircle" cx="36" cy="36" r="30"
+        fill="none" stroke="rgba(240,181,62,.72)" stroke-width="1.8"
+        stroke-dasharray="188.5" stroke-dashoffset="188.5"
+        stroke-linecap="round" transform="rotate(-90 36 36)"/>
     </svg>
     <button class="mic-btn" id="btnMic">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -699,9 +631,9 @@ html, body {
     </button>
   </div>
 
-  <div class="ctrl-hint" id="hintR">Tap to speak</div>
+  <div class="chint" id="hintR">Tap to speak</div>
 
-  <button class="btn-icon" id="btnMute" title="Mute AI voice">
+  <button class="ibtn" id="btnMute">
     <svg id="muteIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M11 5 6 9H2v6h4l5 4V5z"/>
       <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
@@ -719,20 +651,20 @@ html, body {
 
 <!-- SPLASH -->
 <div class="screen" id="sSplash">
-  <div class="splash-logo">Comply Globally</div>
-  <div style="width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
-  <div class="splash-play" id="splashBtn">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+  <div class="sp-logo">Comply Globally</div>
+  <div style="width:48px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
+  <div class="sp-play" id="spBtn">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <polygon points="5 3 19 12 5 21 5 3"/>
     </svg>
   </div>
-  <div class="splash-hint">Tap to begin your session</div>
+  <div class="sp-hint">Tap to begin your session</div>
 </div>
 
 <!-- END -->
 <div class="screen" id="sEnd">
   <div class="end-wrap">
-    <div class="end-gold-line"></div>
+    <div class="end-gl"></div>
     <div class="end-icon">◈</div>
     <div class="end-title">Session Complete</div>
     <div class="end-sub">Thank you for speaking with Dr. CV</div>
@@ -744,30 +676,31 @@ html, body {
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    CONFIG
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const CFG = {
-  WORKER:   'https://drcv.onrender.com',
-  GAS:      'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
-  CAL:      'https://cal.com/udhay-marwah-wkeu9j/30mins',
-  SCORE_MIN: 60,
-  MIN_TURNS: 8,
-  MAX_MS:    20 * 60 * 1000,
+  WORKER:          'https://drcv.onrender.com',
+  GAS:             'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
+  CAL:             'https://cal.com/udhay-marwah-wkeu9j/30mins',
+  SCORE_MIN:       60,
+  MIN_TURNS:       8,
+  MAX_MS:          20 * 60 * 1000,
 
-  // ── PAUSE DETECTION ──────────────────────────────────────
-  // How long (ms) the user must be silent AFTER speaking
-  // before we treat it as "done speaking" and submit.
-  // Critical fix: prevents cutting off slow/thoughtful speakers.
-  PAUSE_COMMIT_MS: 2200,   // wait this long before sending
-  PAUSE_WARN_MS:   1200,   // show visual countdown after this
-  // How long to wait before auto-re-enabling mic after AI speaks
-  POST_SPEAK_DELAY: 280,
+  // ── SPEECH TIMING ──────────────────────────────────
+  // These three values control the "feels alive" quality:
+  PAUSE_COMMIT_MS: 2000,    // silence before submitting user speech
+  PAUSE_WARN_MS:   1100,    // when to show visual countdown
+  POST_SPEAK_GAP:  320,     // ms after TTS ends before mic re-opens
+
+  // Safety margin: wait this long after TTS *should* be done
+  // before unlocking mic, to prevent echo (extra buffer)
+  TTS_GUARD_MS:    180,
 };
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    URL PARAMS / LEAD
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const _q = new URLSearchParams(location.search);
 const LEAD = {
   name:    decodeURIComponent(_q.get('name')    || ''),
@@ -780,43 +713,53 @@ const LEAD = {
 };
 const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════════ */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function splitSentences(text) {
+  const re = /(.+?[.!?])(?=\s+[A-Z"'\u201C]|\s*$)/g;
+  const found = [];
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    found.push(m[1].trim());
+    last = m.index + m[0].length;
+  }
+  return { sentences: found, rest: text.slice(last).trim() };
+}
+
+/* ═══════════════════════════════════════════════════════
    MEMORY ENGINE
-   Per-lead localStorage, 40-turn rolling window
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const MEM = (() => {
   const MK = 'cg_m_' + LEAD.id;
   const LK = 'cg_lock_' + LEAD.id;
   let _m = [];
 
-  function load() {
-    try { const r = localStorage.getItem(MK); if (r) _m = JSON.parse(r); } catch { _m = []; }
-    return _m;
-  }
-  function save() {
-    try { localStorage.setItem(MK, JSON.stringify(_m.slice(-40))); } catch {}
-  }
+  function load()  { try { const r = localStorage.getItem(MK); if (r) _m = JSON.parse(r); } catch { _m = []; } return _m; }
+  function save()  { try { localStorage.setItem(MK, JSON.stringify(_m.slice(-40))); } catch {} }
   function push(role, content) { _m.push({ role, content, ts: Date.now() }); save(); }
   function clear() { try { localStorage.removeItem(MK); } catch {} _m = []; }
-  function get() { return [..._m]; }
-  function has() { return _m.length > 0; }
+  function get()   { return [..._m]; }
+  function has()   { return _m.length > 0; }
   function isLocked() { try { return !!localStorage.getItem(LK); } catch { return false; } }
-  function lock() { try { localStorage.setItem(LK, Date.now().toString()); } catch {} }
+  function lock()  { try { localStorage.setItem(LK, Date.now().toString()); } catch {} }
 
   function ctxSummary() {
     if (!_m.length) return '';
-    return _m.slice(-6)
-      .map(m => `${m.role === 'user' ? 'Client' : 'Dr.CV'}: ${m.content.slice(0, 100)}`)
+    return _m.slice(-8)
+      .map(m => `${m.role === 'user' ? 'Client' : 'Dr.CV'}: ${m.content.slice(0, 120)}`)
       .join('\n');
   }
 
   return { load, save, push, clear, get, has, isLocked, lock, ctxSummary };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    STATE MACHINE
-   idle | loading | greeting | ready | listening | thinking | speaking | closed
-═══════════════════════════════════════════════════════════ */
+   States: idle | loading | greeting | ready | listening | thinking | speaking | closed
+═══════════════════════════════════════════════════════ */
 const S = (() => {
   let _s = 'idle';
   const _h = {};
@@ -832,82 +775,113 @@ const S = (() => {
   return { on, set, get, is };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    SPEECH CLEANER — TTS normalizer
    Converts written text to natural spoken form
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const CLEAN = (() => {
+  const ones  = ['','one','two','three','four','five','six','seven','eight','nine',
+                  'ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const tens_ = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+
+  function under100(n) {
+    if (n < 20) return ones[n];
+    return tens_[~~(n/10)] + (n%10 ? ' '+ones[n%10] : '');
+  }
+  function under1k(n) {
+    if (n < 100) return under100(n);
+    return ones[~~(n/100)] + ' hundred' + (n%100 ? ' ' + under100(n%100) : '');
+  }
   function numW(n) {
     if (n < 0) return 'negative ' + numW(-n);
     if (n === 0) return 'zero';
-    const ones = ['','one','two','three','four','five','six','seven','eight','nine',
-      'ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
-    const tens = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
-    function u(x) {
-      if (x < 20) return ones[x];
-      if (x < 100) return tens[~~(x/10)] + (x%10 ? ' '+ones[x%10] : '');
-      return ones[~~(x/100)] + ' hundred' + (x%100 ? ' '+u(x%100) : '');
-    }
-    if (n < 1000) return u(n);
-    if (n < 1e6)  return u(~~(n/1000)) + ' thousand' + (n%1000 ? ' '+u(n%1000) : '');
-    if (n < 1e9)  return u(~~(n/1e6)) + ' million' + (n%1e6 ? ' '+numW(n%1e6) : '');
-    return u(~~(n/1e9)) + ' billion' + (n%1e9 ? ' '+numW(n%1e9) : '');
+    if (n < 1000) return under1k(n);
+    if (n < 1e6)  return under1k(~~(n/1000)) + ' thousand' + (n%1000 ? ' '+under1k(n%1000) : '');
+    if (n < 1e9)  return under1k(~~(n/1e6)) + ' million' + (n%1e6 ? ' '+numW(n%1e6) : '');
+    return under1k(~~(n/1e9)) + ' billion' + (n%1e9 ? ' '+numW(n%1e9) : '');
   }
+
+  const ABBR = {
+    'UAE':'U. A. E.','USA':'U. S. A.','LLC':'L. L. C.','CEO':'C. E. O.',
+    'EIN':'E. I. N.','IRS':'I. R. S.','IPO':'I. P. O.','SaaS':'software as a service',
+    'VC':'venture capital','B2B':'B to B','B2C':'B to C','US':'the U. S.',
+    'Ltd':'Limited','Inc':'Incorporated','Corp':'Corporation',
+  };
 
   function run(t) {
     if (!t) return '';
-    // Strip score block
     t = t.replace(/SCORE_JSON:[\s\S]*$/g, '');
-    // Strip markdown
     t = t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/#+\s/g,'').replace(/`/g,'');
-    // Strip URLs
     t = t.replace(/https?:\/\/\S+/g,'');
-    // Currency
+    // Currency with scale
     t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Bb]/g,(_,n)=>numW(Math.round(parseFloat(n)))+' billion dollars');
     t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Mm]/g,(_,n)=>numW(Math.round(parseFloat(n)))+' million dollars');
     t = t.replace(/\$(\d+(?:\.\d+)?)\s*[Kk]/g,(_,n)=>numW(Math.round(parseFloat(n)))+' thousand dollars');
     t = t.replace(/\$(\d+(?:\.\d+)?)/g,(_,n)=>numW(Math.round(parseFloat(n)))+' dollars');
     // Abbreviations
-    const AB = {
-      'UAE':'U. A. E.','USA':'U. S. A.','LLC':'L. L. C.','CEO':'C. E. O.',
-      'EIN':'E. I. N.','IRS':'I. R. S.','IPO':'I. P. O.',
-      'SaaS':'software as a service','VC':'venture capital',
-      'B2B':'B to B','B2C':'B to C','US':'the U. S.',
-    };
-    for (const [k,v] of Object.entries(AB)) t = t.replace(new RegExp('\\b'+k+'\\b','g'),v);
+    for (const [k,v] of Object.entries(ABBR)) t = t.replace(new RegExp('\\b'+k+'\\b','g'),v);
     // Percentages
     t = t.replace(/(\d+(?:\.\d+)?)\s*%/g,(_,n)=>numW(parseFloat(n))+' percent');
-    // Years 2020–2029
+    // Years 2020-2029
     t = t.replace(/\b(20([2-9]\d))\b/g,(_,y,yy)=>'twenty '+numW(parseInt(yy,10)));
     // Large numbers
     t = t.replace(/\b(\d{4,})\b/g,(_,n)=>numW(parseInt(n,10)));
-    // 3-digit numbers
+    // 3-digit
     t = t.replace(/\b([2-9]\d{2})\b/g,(_,n)=>numW(parseInt(n,10)));
-    // Form numbers — replace with generic descriptions
+    // Form numbers
     t = t.replace(/\bform\s+\d[\d\-A-Z]+/gi,'the required filing');
-    t = t.replace(/\s+/g,' ').trim();
-    return t;
+    return t.replace(/\s+/g,' ').trim();
   }
 
-  return { run, numW };
+  return { run };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
+   TTS LOCK
+   ─────────────────────────────────────────────────────
+   THE CORE FIX: Prevents mic from opening until TTS is
+   provably complete. Uses multiple guarantee layers:
+   1. onend event from SpeechSynthesisUtterance
+   2. Watchdog timeout per utterance (char-length based)
+   3. Hard post-TTS delay before mic unlock (CFG.TTS_GUARD_MS)
+   4. SpeechSynthesis.speaking polling as secondary check
+   5. Mic remains forcibly disabled during all TTS playback
+═══════════════════════════════════════════════════════ */
+const TTSLOCK = (() => {
+  let _locked = false;
+  let _listeners = [];
+
+  function lock()   { _locked = true;  _notify(); }
+  function unlock() { _locked = false; _notify(); }
+  function isLocked() { return _locked; }
+  function onUnlock(fn) { _listeners.push(fn); }
+  function _notify() { if (!_locked) { _listeners.forEach(fn => fn()); _listeners = []; } }
+
+  return { lock, unlock, isLocked, onUnlock };
+})();
+
+/* ═══════════════════════════════════════════════════════
    VOICE ENGINE
-   Manages TTS queue, sentence streaming, interruption
-═══════════════════════════════════════════════════════════ */
+   ─────────────────────────────────────────────────────
+   Streaming-aware TTS queue with echo prevention.
+   Key guarantees:
+   - TTSLOCK.lock() before first utterance
+   - TTSLOCK.unlock() only after drain() fully resolves
+     AND post-speak guard delay passes
+   - stopAll() clears queue atomically
+═══════════════════════════════════════════════════════ */
 const VOICE = (() => {
   let _voices = [];
-  let _muted = false;
-  let _q = [];
-  let _busy = false;
-  let _cur = null;
+  let _muted  = false;
+  let _queue  = [];
+  let _busy   = false;
+  let _cur    = null;
+  let _stopReq = false;
 
   const PREF = [
-    'Lekha','Rishi','Neerja','Heera','Microsoft Neerja','Microsoft Heera',
-    'Google UK English Female',
-    'Microsoft Aria Online (Natural)','Microsoft Aria',
-    'Samantha','Karen','Moira','Victoria',
+    'Lekha','Rishi','Neerja','Heera','Microsoft Neerja Online (Natural)',
+    'Microsoft Neerja','Microsoft Heera','Google UK English Female',
+    'Microsoft Aria Online (Natural)','Microsoft Aria','Samantha','Karen',
   ];
 
   function loadVoices() {
@@ -926,165 +900,196 @@ const VOICE = (() => {
     return _voices.find(v => /female/i.test(v.name)) || _voices[0] || null;
   }
 
-  function mute(v) { _muted = v; if (v) stopAll(); }
-  function isMuted() { return _muted; }
+  function mute(v)    { _muted = v; if (v) stopAll(); }
+  function isMuted()  { return _muted; }
 
   function stopAll() {
-    _q = []; _busy = false; _cur = null;
-    try { if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel(); } catch {}
+    _stopReq = true;
+    _queue = []; _busy = false; _cur = null;
+    try {
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        speechSynthesis.cancel();
+      }
+    } catch {}
+    // Don't unlock here — caller handles state
   }
 
   function _speakOne(text) {
     return new Promise(res => {
-      if (!text || _muted) { res(); return; }
-      const u = new SpeechSynthesisUtterance(text);
-      const v = bestVoice();
+      if (!text || _muted || _stopReq) { res(); return; }
+      const u  = new SpeechSynthesisUtterance(text);
+      const v  = bestVoice();
       if (v) u.voice = v;
-      u.rate  = 1.08;
-      u.pitch = 1.0;
+      u.rate   = 1.06;
+      u.pitch  = 1.0;
       u.volume = 1.0;
       let done = false;
-      const fin = () => { if (!done) { done = true; res(); } };
-      const wd = setTimeout(fin, 180 + text.length * 60);
-      u.onend  = () => { clearTimeout(wd); fin(); };
+      // Watchdog: chars * ~55ms + base 250ms overhead
+      const wdMs = 260 + text.length * 56;
+      const wd = setTimeout(() => { if (!done) { done = true; res(); } }, wdMs);
+      const fin = () => { if (!done) { done = true; clearTimeout(wd); res(); } };
+      u.onend   = fin;
       u.onerror = e => {
         clearTimeout(wd);
-        if (!['interrupted','canceled'].includes(e?.error)) console.warn('TTS:', e?.error);
+        if (!['interrupted','canceled'].includes(e?.error)) console.warn('TTS err:', e?.error);
         fin();
       };
-      u.onstart = () => S.set('speaking');
+      u.onstart = () => {
+        if (!_stopReq) S.set('speaking');
+      };
       _cur = u;
-      try { speechSynthesis.speak(u); } catch { fin(); }
+      try { speechSynthesis.speak(u); }
+      catch (e) { console.warn('synth.speak:', e); fin(); }
     });
   }
 
+  // Drain queue and manage TTS lock lifecycle
   async function _drain() {
     if (_busy) return;
     _busy = true;
-    while (_q.length) {
-      const chunk = _q.shift();
+    _stopReq = false;
+    TTSLOCK.lock();
+
+    while (_queue.length && !_stopReq) {
+      const chunk = _queue.shift();
       await _speakOne(chunk);
-      if (_q.length) await sleep(20); // minimal gap
+      if (_queue.length && !_stopReq) await sleep(18);
     }
-    _busy = false; _cur = null;
-    CONV.onSpeakDone();
+
+    _busy = false;
+    _cur  = null;
+
+    if (!_stopReq) {
+      // Guard delay — extra buffer so OS audio pipeline fully clears
+      await sleep(CFG.TTS_GUARD_MS);
+      TTSLOCK.unlock();
+      CONV.onSpeakDone();
+    } else {
+      TTSLOCK.unlock();
+    }
   }
 
   function enqueue(text) {
     const c = CLEAN.run(text);
     if (!c || c.length < 2) return;
-    _q.push(c);
+    _queue.push(c);
     if (!_busy) _drain();
   }
 
+  // For greeting — sequential, awaitable
   async function speakSeq(sentences) {
     stopAll();
+    await sleep(30);
+    _stopReq = false;
+    TTSLOCK.lock();
     for (const s of sentences) {
-      if (S.is('closed')) break;
+      if (S.is('closed') || _stopReq) break;
       await _speakOne(CLEAN.run(s));
-      if (sentences.length > 1) await sleep(20);
+      if (sentences.length > 1 && !_stopReq) await sleep(18);
     }
+    await sleep(CFG.TTS_GUARD_MS);
+    TTSLOCK.unlock();
   }
 
-  // Keep synth alive (Chrome bug: pauses after ~15s)
+  // Chrome bug: synth pauses after ~15s
   setInterval(() => {
-    if (speechSynthesis.paused && speechSynthesis.speaking) speechSynthesis.resume();
-  }, 4000);
+    try {
+      if (speechSynthesis.paused && speechSynthesis.speaking) speechSynthesis.resume();
+    } catch {}
+  }, 4500);
 
   return { loadVoices, bestVoice, enqueue, speakSeq, stopAll, mute, isMuted };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    PAUSE-AWARE RECOGNIZER
-   KEY FIX: Instead of submitting on first silence,
-   we show a visual countdown bar and only commit
-   after PAUSE_COMMIT_MS. User can keep speaking
-   and it resets. This prevents cutting off slow speakers.
-═══════════════════════════════════════════════════════════ */
+   ─────────────────────────────────────────────────────
+   Architecture: continuous recognition + manual commit.
+   The browser's silence detection is intentionally
+   NOT used for submission. Instead:
+   1. We accumulate transcript continuously
+   2. After PAUSE_COMMIT_MS of no new speech → commit
+   3. Visual countdown shows user we're waiting
+   4. Any new speech resets the countdown
+
+   Critical: recognition is hard-disabled while TTS plays.
+   TTSLOCK acts as a gate — mic cannot start while locked.
+═══════════════════════════════════════════════════════ */
 const RECOG = (() => {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let _r = null;
-  let _active = false;
-  let _enabled = false;
-  let _accum = '';        // accumulated transcript this session
-  let _interim = '';      // latest interim text
-  let _commitTimer = null;
-  let _warnTimer = null;
-  let _lastSpeechAt = 0;
+  let _r        = null;
+  let _active   = false;
+  let _enabled  = false;
+  let _accum    = '';
+  let _interim  = '';
+  let _commitT  = null;
+  let _warnT    = null;
 
   function _build() {
     if (!SR) { UI.toast('Speech needs Chrome or Edge'); return false; }
     try { if (_r) _r.abort(); } catch {}
+
     _r = new SR();
-    _r.lang = 'en-IN';
-    _r.continuous = true;         // KEEP running; we manage commit ourselves
-    _r.interimResults = true;     // track interim so we see user speaking
+    _r.lang            = 'en-IN';
+    _r.continuous      = true;
+    _r.interimResults  = true;
     _r.maxAlternatives = 1;
 
     _r.onstart = () => {
       _active = true;
       _accum = ''; _interim = '';
-      _lastSpeechAt = Date.now();
       S.set('listening');
-      PAUSE.reset();
+      PVIS.reset();
     };
 
     _r.onresult = e => {
       let fin = '', int = '';
       for (let i = e.resultIndex; i < e.results.length; i++) {
         if (e.results[i].isFinal) fin += e.results[i][0].transcript + ' ';
-        else int += e.results[i][0].transcript;
+        else                       int += e.results[i][0].transcript;
       }
-      _accum += fin;
+      _accum  += fin;
       _interim = int;
-      if (fin || int) {
-        _lastSpeechAt = Date.now();
-        PAUSE.reset();       // reset countdown whenever speech comes in
-        _schedCommit();      // (re)start commit timer from scratch
-      }
+      if (fin || int) _schedCommit();
     };
 
     _r.onerror = e => {
-      PAUSE.reset();
       _cleanup();
-      if (!['no-speech','aborted'].includes(e.error)) console.warn('STT:', e.error);
-      if (e.error === 'no-speech' && _enabled) _sched(500);
-      else if (e.error !== 'aborted' && _enabled) _sched(900);
+      const err = e.error;
+      if (!['no-speech','aborted'].includes(err)) console.warn('STT:', err);
+      if (err === 'no-speech' && _enabled && !TTSLOCK.isLocked()) _schedStart(450);
+      else if (err !== 'aborted' && _enabled && !TTSLOCK.isLocked()) _schedStart(900);
     };
 
     _r.onend = () => {
-      // continuous mode: engine stopped, restart if still listening
-      // (can happen due to silence timeout in browser)
-      _cleanup();
-      if (_accum.trim() && _enabled && !S.is('closed')) {
-        // We got something — but wait, we handle commit in _schedCommit
-        // If we got here without committing, commit now
-        if (!_commitTimer) _doCommit();
-      } else if (_enabled && !S.is('speaking','closed','thinking','loading','greeting')) {
-        _sched(350);
+      _active = false;
+      // If we accumulated something and no commit is pending, do it now
+      const had = (_accum + _interim).trim();
+      if (had && _enabled && !_commitT && !S.is('closed','thinking','speaking','loading','greeting')) {
+        _doCommit();
+      } else if (_enabled && !TTSLOCK.isLocked() &&
+                 !S.is('speaking','thinking','closed','loading','greeting')) {
+        _schedStart(300);
       }
     };
 
     return true;
   }
 
-  // Start the commit countdown — resets on every new speech event
   function _schedCommit() {
-    clearTimeout(_commitTimer);
-    clearTimeout(_warnTimer);
-    // After PAUSE_WARN_MS, start showing the progress bar
-    _warnTimer = setTimeout(() => PAUSE.start(), CFG.PAUSE_WARN_MS);
-    // After PAUSE_COMMIT_MS, commit
-    _commitTimer = setTimeout(_doCommit, CFG.PAUSE_COMMIT_MS);
+    clearTimeout(_commitT);
+    clearTimeout(_warnT);
+    _warnT   = setTimeout(() => PVIS.start(), CFG.PAUSE_WARN_MS);
+    _commitT = setTimeout(_doCommit, CFG.PAUSE_COMMIT_MS);
   }
 
   function _doCommit() {
-    clearTimeout(_commitTimer); clearTimeout(_warnTimer);
-    _commitTimer = null; _warnTimer = null;
-    PAUSE.reset();
+    clearTimeout(_commitT); clearTimeout(_warnT);
+    _commitT = null; _warnT = null;
+    PVIS.reset();
     const spoken = (_accum + ' ' + _interim).trim();
     _accum = ''; _interim = '';
-    if (_r) { try { _r.stop(); } catch {} }
+    if (_active && _r) { try { _r.stop(); } catch {} }
     if (spoken && _enabled && !S.is('closed')) {
       _enabled = false;
       CONV.handleUserSpeech(spoken);
@@ -1093,82 +1098,98 @@ const RECOG = (() => {
 
   function _cleanup() {
     _active = false;
-    clearTimeout(_commitTimer); clearTimeout(_warnTimer);
-    _commitTimer = null; _warnTimer = null;
-    PAUSE.reset();
+    clearTimeout(_commitT); clearTimeout(_warnT);
+    _commitT = null; _warnT = null;
+    PVIS.reset();
   }
 
-  function _sched(ms) {
+  function _schedStart(ms) {
     setTimeout(() => {
-      if (_enabled && !S.is('speaking','closed','thinking','loading','greeting'))
+      // Double-check gate before attempting start
+      if (_enabled && !TTSLOCK.isLocked() &&
+          !S.is('speaking','thinking','closed','loading','greeting')) {
         start();
+      }
     }, ms);
   }
 
-  function enable()  { _enabled = true; }
+  // Public: enable recognition (doesn't start immediately)
+  function enable() {
+    // Only actually enable if TTS is not playing
+    if (TTSLOCK.isLocked()) {
+      // Queue up: enable when TTS finishes
+      TTSLOCK.onUnlock(() => { _enabled = true; });
+      return;
+    }
+    _enabled = true;
+  }
+
+  // Public: disable and stop recognition
   function disable() {
     _enabled = false;
-    clearTimeout(_commitTimer); clearTimeout(_warnTimer);
-    PAUSE.reset();
-    if (_active) { try { _r?.stop(); } catch {} }
+    clearTimeout(_commitT); clearTimeout(_warnT);
+    PVIS.reset();
+    if (_active && _r) { try { _r.stop(); } catch {} }
     _cleanup();
   }
 
+  // Public: start recognition (checks all gates)
   function start() {
-    if (_active || !_enabled || S.is('speaking','thinking','closed','loading','greeting')) return;
+    if (_active)              return; // already running
+    if (!_enabled)            return; // not enabled
+    if (TTSLOCK.isLocked())   return; // TTS playing — hard gate
+    if (S.is('speaking','thinking','closed','loading','greeting')) return;
+
     if (!_r && !_build()) return;
-    try { _r.start(); }
-    catch (e) {
+    try {
+      _r.start();
+    } catch (e) {
       console.warn('recog.start:', e.message);
       _r = null;
-      if (_build()) _sched(400);
+      if (_build()) _schedStart(500);
     }
   }
 
+  // Public: force-submit whatever is accumulated
   function forceCommit() {
-    // Interrupt — take what we have and submit
-    clearTimeout(_commitTimer); clearTimeout(_warnTimer);
-    PAUSE.reset();
+    clearTimeout(_commitT); clearTimeout(_warnT);
+    PVIS.reset();
     const spoken = (_accum + ' ' + _interim).trim();
     if (spoken && _enabled) {
       _accum = ''; _interim = '';
-      if (_r) try { _r.stop(); } catch {}
+      if (_active && _r) try { _r.stop(); } catch {}
       _enabled = false;
       CONV.handleUserSpeech(spoken);
     }
   }
 
-  return { enable, disable, start, forceCommit, isActive: () => _active };
+  function isActive() { return _active; }
+
+  return { enable, disable, start, forceCommit, isActive };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   PAUSE VISUAL — progress arc + bar
-   Shows user that we're waiting, not hanging
-═══════════════════════════════════════════════════════════ */
-const PAUSE = (() => {
+/* ═══════════════════════════════════════════════════════
+   PAUSE VISUAL
+═══════════════════════════════════════════════════════ */
+const PVIS = (() => {
   const arc    = document.getElementById('pauseArc');
   const circle = document.getElementById('pauseCircle');
-  const bar    = document.getElementById('pauseBar');
-  const FULL   = 182.2;
-  const WARN   = CFG.PAUSE_WARN_MS;
-  const TOTAL  = CFG.PAUSE_COMMIT_MS;
-  const DUR    = TOTAL - WARN;   // duration of the visual
-
+  const bar    = document.getElementById('pbar');
+  const FULL   = 188.5;
+  const DUR    = CFG.PAUSE_COMMIT_MS - CFG.PAUSE_WARN_MS;
   let _raf = null;
-  let _startTime = null;
+  let _t0  = null;
 
   function start() {
-    _startTime = Date.now();
+    _t0 = Date.now();
     arc.classList.add('show');
     bar.classList.add('show');
-    function tick() {
-      const elapsed = Date.now() - _startTime;
-      const pct = Math.min(elapsed / DUR, 1);
-      const offset = FULL * (1 - pct);
-      circle.setAttribute('stroke-dashoffset', offset.toFixed(1));
-      bar.style.width = (pct * 200) + 'px';
+    const tick = () => {
+      const pct = Math.min((Date.now() - _t0) / DUR, 1);
+      circle.setAttribute('stroke-dashoffset', (FULL * (1 - pct)).toFixed(1));
+      bar.style.width = (pct * 220) + 'px';
       if (pct < 1) _raf = requestAnimationFrame(tick);
-    }
+    };
     _raf = requestAnimationFrame(tick);
   }
 
@@ -1178,192 +1199,215 @@ const PAUSE = (() => {
     bar.classList.remove('show');
     circle.setAttribute('stroke-dashoffset', FULL.toFixed(1));
     bar.style.width = '0';
-    _startTime = null;
+    _t0 = null;
   }
 
   return { start, reset };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   WAVE VISUALISER — amplitude-reactive orb animation
-═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   WAVE VISUALIZER
+═══════════════════════════════════════════════════════ */
 const WAVE = (() => {
   const cvs = document.getElementById('waveCanvas');
   const ctx = cvs.getContext('2d');
-  const SZ = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb')) || 220;
+  const SZ  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb')) || 230;
   cvs.width = SZ; cvs.height = SZ;
-  const CX = SZ/2, CY = SZ/2, R = SZ * 0.42;
+  const CX = SZ/2, CY = SZ/2, R = SZ * 0.41;
   let phase = 0, amp = 0, target = 0;
 
   function setAmp(t) { target = t; }
 
-  function tick() {
+  const tick = () => {
     ctx.clearRect(0, 0, SZ, SZ);
-    amp += (target - amp) * 0.065;
-
+    amp += (target - amp) * 0.06;
     const st = S.get();
-    phase += st === 'speaking' ? 0.068
-           : st === 'listening' ? 0.042
-           : st === 'thinking' ? 0.022
-           : 0.009;
+    phase += st === 'speaking' ? 0.072
+            : st === 'listening' ? 0.045
+            : st === 'thinking'  ? 0.024
+            : 0.01;
 
     const g = ctx.createLinearGradient(0, 0, SZ, SZ);
     if (st === 'speaking' || st === 'greeting') {
-      g.addColorStop(0,'rgba(0,212,180,.85)');
-      g.addColorStop(1,'rgba(124,108,255,.75)');
+      g.addColorStop(0,'rgba(0,203,168,.88)');
+      g.addColorStop(1,'rgba(123,109,255,.78)');
     } else if (st === 'listening') {
-      g.addColorStop(0,'rgba(255,79,123,.78)');
-      g.addColorStop(1,'rgba(255,120,70,.65)');
+      g.addColorStop(0,'rgba(255,77,122,.82)');
+      g.addColorStop(1,'rgba(255,117,64,.7)');
     } else if (st === 'thinking') {
-      g.addColorStop(0,'rgba(240,184,64,.55)');
-      g.addColorStop(1,'rgba(240,184,64,.28)');
+      g.addColorStop(0,'rgba(240,181,62,.58)');
+      g.addColorStop(1,'rgba(240,181,62,.3)');
     } else {
-      g.addColorStop(0,'rgba(0,212,180,.06)');
-      g.addColorStop(1,'rgba(124,108,255,.04)');
+      g.addColorStop(0,'rgba(0,203,168,.06)');
+      g.addColorStop(1,'rgba(123,109,255,.04)');
     }
 
-    const pts = 280;
+    const pts = 300;
     ctx.beginPath();
     for (let i = 0; i <= pts; i++) {
       const a = (i/pts)*Math.PI*2 - Math.PI/2;
       const noise = Math.sin(a*3+phase)*amp
-                  + Math.sin(a*5-phase*1.3)*amp*0.3
-                  + Math.sin(a*9+phase*0.7)*amp*0.13
-                  + Math.sin(a*15-phase*0.45)*amp*0.05;
+                  + Math.sin(a*5-phase*1.4)*amp*.28
+                  + Math.sin(a*9+phase*.72)*amp*.12
+                  + Math.sin(a*17-phase*.46)*amp*.05;
       const r = R + noise;
       const x = CX + Math.cos(a)*r, y = CY + Math.sin(a)*r;
       i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
     }
     ctx.closePath();
     ctx.strokeStyle = g;
-    ctx.lineWidth = st === 'speaking' || st === 'greeting' ? 2.5
-                  : st === 'listening' ? 2.0 : 1.5;
+    ctx.lineWidth = st === 'speaking' || st === 'greeting' ? 2.6
+                  : st === 'listening' ? 2.2 : 1.6;
     ctx.stroke();
     requestAnimationFrame(tick);
-  }
+  };
   tick();
+
   return { setAmp };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   UI — all DOM mutations
-═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   UI
+═══════════════════════════════════════════════════════ */
 const UI = (() => {
   const $ = id => document.getElementById(id);
-  const els = {
-    dot:   $('sDot'), label: $('sLabel'),
-    hintL: $('hintL'), hintR: $('hintR'),
-    timer: $('timerEl'), dur: $('statDur'),
-    client: $('statClient'), market: $('statMarket'),
-    halo: $('orbHalo'),
-    txBubble: $('txBubble'), txWho: $('txWho'), txText: $('txText'),
-    mic: $('btnMic'), pr1: $('pr1'), pr2: $('pr2'),
-    toast: $('toast'), sync: $('syncDot'), mem: $('memTag'),
-    load: $('sLoad'), splash: $('sSplash'),
-    end: $('sEnd'), used: $('sUsed'), loadMsg: $('loadMsg'),
+  const e = {
+    pill:   $('pill'),
+    pdot:   $('pdot'),
+    plabel: $('plabel'),
+    hintL:  $('hintL'),
+    hintR:  $('hintR'),
+    timer:  $('timerEl'),
+    dur:    $('stDur'),
+    client: $('stClient'),
+    market: $('stMarket'),
+    halo:   $('orbHalo'),
+    lock:   $('orbLock'),
+    core:   $('orbCore'),
+    txB:    $('txBubble'),
+    txW:    $('txWho'),
+    txT:    $('txText'),
+    mic:    $('btnMic'),
+    pr1:    $('pr1'),
+    pr2:    $('pr2'),
+    toast:  $('toast'),
+    sync:   $('syncDot'),
+    mem:    $('memTag'),
+    load:   $('sLoad'),
+    splash: $('sSplash'),
+    end:    $('sEnd'),
+    used:   $('sUsed'),
+    lmsg:   $('loadMsg'),
   };
 
-  const CFG_STATE = {
-    idle:     { dot:'', label:'Connecting', hintL:'Please wait', wave:0 },
-    loading:  { dot:'', label:'Loading',    hintL:'Please wait', wave:0 },
-    greeting: { dot:'speak', label:'Speaking',  hintL:'Please wait…', wave:14 },
-    ready:    { dot:'ready', label:'Ready',     hintL:'Tap to speak',  wave:0 },
-    listening:{ dot:'listen',label:'Listening', hintL:'Listening…',   wave:9 },
-    thinking: { dot:'think', label:'Thinking',  hintL:'Please wait…', wave:4 },
-    speaking: { dot:'speak', label:'Speaking',  hintL:'Tap to interrupt', wave:15 },
-    closed:   { dot:'', label:'Done',        hintL:'Session ended', wave:0 },
+  const ST = {
+    idle:     { dot:'',       label:'Connecting', hintL:'Please wait',     wave:0  },
+    loading:  { dot:'',       label:'Loading',    hintL:'Please wait',     wave:0  },
+    greeting: { dot:'speak',  label:'Speaking',   hintL:'Please wait…',   wave:16 },
+    ready:    { dot:'ready',  label:'Ready',      hintL:'Tap to speak',    wave:0  },
+    listening:{ dot:'listen', label:'Listening',  hintL:'Listening…',      wave:9  },
+    thinking: { dot:'think',  label:'Thinking',   hintL:'Please wait…',   wave:5  },
+    speaking: { dot:'speak',  label:'Speaking',   hintL:'Tap to interrupt',wave:16 },
+    closed:   { dot:'',       label:'Done',       hintL:'Session ended',   wave:0  },
   };
 
   function sync(st) {
-    const c = CFG_STATE[st] || CFG_STATE.idle;
-    els.dot.className = 's-dot ' + c.dot;
-    els.label.textContent = c.label;
-    els.hintL.textContent = c.hintL;
+    const c = ST[st] || ST.idle;
+    // Pill dot + label
+    e.pdot.className   = 'pill-dot ' + c.dot;
+    e.plabel.textContent = c.label;
+    e.hintL.textContent  = c.hintL;
     WAVE.setAmp(c.wave);
 
+    // Pill border
+    e.pill.className = 'pill' +
+      (st==='listening' ? ' st-listen' : st==='speaking'||st==='greeting' ? ' st-speak' :
+       st==='thinking' ? ' st-think' : st==='ready' ? ' st-ready' : '');
+
     // Orb halo
-    els.halo.className = 'orb-halo'
-      + (st==='speaking'||st==='greeting' ? ' h-speak'
-        : st==='listening' ? ' h-listen'
-        : st==='thinking' ? ' h-think' : '');
+    e.halo.className = 'orb-halo' +
+      (st==='speaking'||st==='greeting' ? ' h-speak' :
+       st==='listening' ? ' h-listen' :
+       st==='thinking'  ? ' h-think' : '');
 
-    // Mic button
-    els.mic.classList.toggle('listening', st==='listening');
-    els.pr1.classList.toggle('listening', st==='listening');
-    els.pr2.classList.toggle('listening', st==='listening');
-    els.mic.classList.toggle('ready', st==='ready');
+    // Orb core border
+    e.core.className = 'orb-core' +
+      (st==='listening' ? ' st-listen' : st==='speaking'||st==='greeting' ? ' st-speak' :
+       st==='thinking' ? ' st-think' : '');
+
+    // TTS lock indicator
+    e.lock.className = 'orb-lock' + (st==='speaking'||st==='greeting' ? ' speaking' : '');
+
+    // Mic
+    e.mic.classList.toggle('listening', st==='listening');
+    e.pr1.classList.toggle('listening', st==='listening');
+    e.pr2.classList.toggle('listening', st==='listening');
+    e.mic.classList.toggle('ready', st==='ready');
   }
 
-  let _txTimer = null;
+  let _txT = null;
   function tx(who, text) {
-    els.txWho.textContent = who === 'you' ? 'You' : 'Dr. CV';
-    els.txWho.className = 'tx-who ' + (who === 'you' ? 'you' : 'ai');
-    els.txText.textContent = text;
-    els.txBubble.classList.add('open');
-    clearTimeout(_txTimer);
-    _txTimer = setTimeout(() => els.txBubble.classList.remove('open'), 7000);
+    e.txW.textContent = who === 'you' ? 'You' : 'Dr. CV';
+    e.txW.className   = 'tx-who ' + (who === 'you' ? 'you' : 'ai');
+    e.txT.textContent = text;
+    e.txB.classList.add('open');
+    clearTimeout(_txT);
+    _txT = setTimeout(() => e.txB.classList.remove('open'), 7500);
   }
 
-  function setTimer(fmt) {
-    els.timer.textContent = fmt;
-    els.dur.textContent = fmt;
-  }
+  function setTimer(fmt) { e.timer.textContent = fmt; e.dur.textContent = fmt; }
 
   function renderLead() {
-    els.client.textContent = (LEAD.name || 'Guest').split(' ')[0] || '—';
-    els.market.textContent = LEAD.country || '—';
+    e.client.textContent = (LEAD.name || 'Guest').split(' ')[0] || '—';
+    e.market.textContent = LEAD.country || '—';
   }
 
-  function showMem(v) { els.mem.classList.toggle('on', v); }
-
-  function setLoad(msg) { els.loadMsg.textContent = msg; }
-  function hideLoad() { els.load.classList.add('off'); }
+  function showMem(v)    { e.mem.classList.toggle('on', v); }
+  function setLoad(msg)  { e.lmsg.textContent = msg; }
+  function hideLoad()    { e.load.classList.add('off'); }
 
   function showSplash(cb) {
-    els.splash.classList.remove('off');
-    $('splashBtn').addEventListener('click', () => {
-      els.splash.classList.add('off');
-      cb();
-    }, { once: true });
+    e.splash.classList.remove('off');
+    $('spBtn').addEventListener('click', () => { e.splash.classList.add('off'); cb(); }, { once:true });
   }
 
   function showEnd(calUrl, hot) {
     const body = $('endBody'), cta = $('endCTA');
     if (hot && calUrl) {
       body.textContent = "You're a strong fit for what we do. Book a call below — no need to repeat yourself, we'll pick up right here.";
-      cta.href = calUrl;
-      cta.style.display = 'block';
+      cta.href = calUrl; cta.style.display = 'block';
     } else {
       body.textContent = "Thank you for your time. Our advisory team will review your session and reach out personally within one business day.";
       cta.style.display = 'none';
     }
-    els.end.classList.add('open');
+    e.end.classList.add('open');
   }
 
-  function showUsed() {
-    els.used.classList.remove('gone');
-    els.used.classList.add('on');
-  }
+  function showUsed() { e.used.classList.remove('gone'); e.used.classList.add('on'); }
 
-  let _toastTimer = null;
+  let _toastT = null;
   function toast(msg) {
-    els.toast.textContent = msg;
-    els.toast.style.display = 'block';
-    clearTimeout(_toastTimer);
-    _toastTimer = setTimeout(() => els.toast.style.display = 'none', 4000);
+    e.toast.textContent = msg; e.toast.style.display = 'block';
+    clearTimeout(_toastT);
+    _toastT = setTimeout(() => e.toast.style.display = 'none', 4000);
   }
 
   function setSyncDot(cls) {
-    els.sync.className = 'sync-dot ' + (cls||'');
-    if (cls==='ok'||cls==='err') setTimeout(()=>els.sync.className='sync-dot',2500);
+    e.sync.className = 'sync ' + (cls||'');
+    if (cls==='ok'||cls==='err') setTimeout(()=>e.sync.className='sync',2500);
   }
 
-  return { sync, tx, setTimer, renderLead, showMem, setLoad, hideLoad, showSplash, showEnd, showUsed, toast, setSyncDot };
+  function flashInterrupt() {
+    e.core.classList.add('interrupted');
+    setTimeout(() => e.core.classList.remove('interrupted'), 500);
+  }
+
+  return { sync, tx, setTimer, renderLead, showMem, setLoad, hideLoad, showSplash, showEnd, showUsed, toast, setSyncDot, flashInterrupt };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    SCORING ENGINE
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const SCORE = (() => {
   let s = { interest:0, engagement:0, intent:0, readiness:0 };
 
@@ -1399,7 +1443,7 @@ const SCORE = (() => {
     let depth=0, end=-1;
     for (let j=0;j<rem.length;j++) {
       if(rem[j]==='{') depth++;
-      else if(rem[j]==='}'){depth--;if(depth===0){end=j;break;}}
+      else if(rem[j]==='}'){ depth--; if(depth===0){end=j;break;} }
     }
     if (end===-1) { try{return JSON.parse(rem+'"}');}catch{return null;} }
     try { return JSON.parse(rem.slice(0,end+1)); } catch { return null; }
@@ -1408,22 +1452,20 @@ const SCORE = (() => {
   return { update, apply, total, fallback, parseFromText };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   SYNC — Google Sheet push
-═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   GSYNC — Google Sheet push
+═══════════════════════════════════════════════════════ */
 const GSYNC = (() => {
   function post(action, data) {
     if (!CFG.GAS || CFG.GAS.includes('YOUR')) return;
     UI.setSyncDot('ing');
-    fetch(CFG.GAS+'?action='+action,{
+    fetch(CFG.GAS+'?action='+action, {
       method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({action, data: JSON.stringify(data)}).toString(),
+      body: new URLSearchParams({action, data:JSON.stringify(data)}).toString(),
     }).then(()=>UI.setSyncDot('ok')).catch(()=>UI.setSyncDot('err'));
   }
-  function turn(u,b,n) {
-    post('update',{leadId:LEAD.id,sessionId:LEAD.sid,turnNumber:n,userMessage:u,botResponse:b});
-  }
+  function turn(u,b,n) { post('update',{leadId:LEAD.id,sessionId:LEAD.sid,turnNumber:n,userMessage:u,botResponse:b}); }
   function complete(sc,elapsed,turns) {
     post('complete',{
       leadId:LEAD.id,sessionId:LEAD.sid,
@@ -1436,106 +1478,103 @@ const GSYNC = (() => {
   return { turn, complete };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   SYSTEM PROMPT
-   Redesigned for BREVITY + human-like conversation
-   Key changes:
-   - Strict 1-2 sentence max (was 2 + question)
-   - Forbidden from asking 2 questions ever
-   - Must vary openers every turn (no pattern repeats)
-   - Can use natural interruption fillers
-   - Richer context injection
-═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   SYSTEM PROMPT — redesigned for natural conversation
+═══════════════════════════════════════════════════════ */
 function buildPrompt() {
   const ctx = MEM.ctxSummary();
   const memBlock = ctx
-    ? `\n\n── PRIOR CONTEXT ──\n${ctx}\n─────────────────\nContinue naturally from this. Do NOT repeat what was already covered.`
+    ? `\n\n── PRIOR CONTEXT ──\n${ctx}\n─────────────────\nContinue from this naturally. Do NOT re-ask what was already covered.`
     : '';
 
-  return `You are Dr. CV — a Global Expansion Strategist at Comply Globally. You're on a live voice call. You are warm, sharp, and ultra-concise.
+  return `You are Dr. CV — a Global Expansion Strategist at Comply Globally. You're on a LIVE VOICE CALL. Act like it.
 
-CLIENT: ${LEAD.name||'Guest'} | Company: ${LEAD.company||'?'} | Target market: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}${memBlock}
+CLIENT: ${LEAD.name||'Guest'} | Company: ${LEAD.company||'?'} | Target: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}${memBlock}
 
-════ STRICT CONVERSATION RULES ════
+═══ VOICE CALL RULES — NON-NEGOTIABLE ═══
 
-BREVITY IS EVERYTHING. You are on a PHONE CALL.
-- MAX 2 SHORT SENTENCES per turn. One is better. Short is always better.
-- ONE question per response. Always at the end.
-- NEVER explain unless asked directly.
-- NEVER list things. Never use bullet points.
-- NEVER use numbered steps.
-- Never say "Great question!" or fake enthusiasm.
-- ZERO markdown. No asterisks, headers, bold.
-- No form numbers ever. Say "annual filing" or "required report".
+BREVITY: This is a phone call. Speak like one.
+• MAX 1–2 short sentences. One is often better.
+• ONE question per turn, at the end.
+• NEVER explain unless directly asked.
+• NEVER use lists, bullets, or numbers.
+• ZERO markdown — no asterisks, headers, bold.
+• Never say form numbers — say "annual filing" or "required report".
+• Never say "Great question" or fake enthusiasm.
 
-VARY YOUR OPENINGS every single turn:
-Turn 1 opener: start with their topic directly
-Turn 2: "Hmm," / "Got it." / "Right," / "Yeah,"
-Turn 3+: "Interesting." / "That makes sense." / "Okay, so..." / "And then what?" / "Makes sense."
-NEVER start two consecutive responses the same way.
-
-NATURAL FILLERS — use SPARINGLY (once every 4-5 turns):
-"Yeah," / "Right," / "Hmm," / "Okay," / "Got it." / "Ah."
-Do NOT overdo them.
+VARY YOUR OPENER every single turn — never repeat patterns:
+• Direct reaction: start with what they said
+• Filler: "Hmm," / "Right," / "Got it." / "Yeah,"
+• Acknowledgment: "Interesting." / "Okay, so..." / "Makes sense."
+• Probe: "And then what?" / "Wait —" / "So..."
+• RULE: Never start two consecutive responses the same way.
 
 EMOTIONAL CALIBRATION:
-- If client sounds uncertain → be reassuring but brief
-- If client sounds excited → match energy, be brief
-- If client sounds frustrated → acknowledge, don't explain
-- If short answer → probe: "Tell me more?" or "What do you mean?"
+• Uncertain → brief and reassuring
+• Excited → match energy, stay short
+• Frustrated → acknowledge first, don't explain
+• Quiet/short → probe with "Tell me more?" or "What do you mean?"
 
-════ IDEAL RESPONSE EXAMPLES ════
+NATURAL FILLERS — once every 4–5 turns max:
+"Yeah," / "Right," / "Hmm," / "Got it." / "Ah." / "Okay."
+Do not repeat the same filler back-to-back. NEVER overuse.
 
-GREAT: "That's actually the smarter move. What's your timeline looking like?"
-GREAT: "Hmm. So Wyoming was your first instinct — what's driving that?"
-GREAT: "Got it. Have you looked at the banking side yet?"
-GREAT: "Makes sense. Who else is involved in this decision?"
-GREAT: "Right. So what's the biggest blocker right now?"
+═══ GOOD vs BAD EXAMPLES ═══
 
-BAD: "Great question! There are several things to consider here. First, you should look at..."
-BAD: "That's a really interesting point. So what I'd recommend is..."
+✓ "That's actually the smarter move. What's your timeline looking like?"
+✓ "Hmm. Wyoming was your first instinct — what's driving that?"
+✓ "Got it. Have you looked at the banking side yet?"
+✓ "Makes sense. Who else is involved in this decision?"
+✓ "Right. So what's the biggest blocker right now?"
+✓ "That must've been frustrating. What happened?"
+✓ "Interesting. And how long has that been sitting on your plate?"
 
-════ YOUR EXPERTISE (drop in naturally, 1 point per turn max) ════
-- Wyoming LLC: sixty-two dollars/year, private, zero state income tax — best for most founders
-- Delaware C-Corp: only for VC funding
-- S-Corp: unavailable to non-US citizens  
-- Process: online, 1-3 days, bank account within a week
-- Banking: Mercury or Relay — no US social security number needed
-- Tax: no US income tax if no physical US presence
-- Annual filing: one short report, ~three hundred dollars with accountant
-- Ownership report: free, fifteen minutes online
-- Money transfers home: Wise (under one and a half percent)
+✗ "Great question! There are several things to consider here. First..."
+✗ "That's a really interesting point. So what I'd recommend is..."
+✗ Long explanations. Repeated questions. Chatbot structure.
 
-════ SESSION GOAL ════
-Discover naturally: biggest challenge, timeline, who decides, budget signal, what success looks like.
+═══ EXPERTISE — one point per turn max, dropped naturally ═══
+• Wyoming LLC: sixty-two dollars/year, private, zero state income tax
+• Delaware C-Corp: only if raising VC
+• S-Corp: not available to non-US citizens
+• Process: online, 1–3 days, bank in a week
+• Banking: Mercury or Relay, no US SSN needed
+• Tax: no US income tax if no US physical presence
+• Annual filing: one short report, around three hundred dollars with accountant
+• Ownership report: free, fifteen minutes online
+• Transfers home: Wise, under one and a half percent fee
 
-Don't rush. Don't interrogate. One thread at a time.
+═══ SESSION GOAL ═══
+Discover: biggest challenge, timeline, who decides, budget signal, what success looks like.
+Don't rush. One thread at a time.
 
-════ CLOSING (after turn ${CFG.MIN_TURNS}) ════
-When you have good context, close warmly in 1-2 sentences. Then on a NEW LINE:
+═══ CLOSING — after turn ${CFG.MIN_TURNS} ═══
+When you have enough context, wrap warmly in 1–2 sentences. Then on a NEW LINE:
 
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"4-6 sentences: who, goal, timeline, blocker, decision-makers, honest fit assessment with specifics from what they said","level":"cold|warm|hot"}
+SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"4–6 sentences covering: who, goal, timeline, blockers, decision-makers, honest fit assessment with specifics from what they said","level":"cold|warm|hot"}
 
-hot ≥70 avg | warm 40-69 | cold <40. Never skip SCORE_JSON when closing.`;
+hot ≥70 avg | warm 40–69 | cold <40. Never skip SCORE_JSON when closing.`;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    CONVERSATION ORCHESTRATOR
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 const CONV = (() => {
-  let _hist = [];
-  let _turns = 0;
-  let _buf = '';
-  let _tStart = 0;
-  let _timerIval = null;
-  let _inited = false;
+  let _hist        = [];
+  let _turns       = 0;
+  let _buf         = '';
+  let _tStart      = 0;
+  let _timerIval   = null;
+  let _inited      = false;
   let _forceClosing = false;
 
+  // Called by VOICE when TTS fully drains + guard delay passes
   function onSpeakDone() {
     if (S.is('closed')) return;
     S.set('ready');
+    // enable() respects TTSLOCK internally
     RECOG.enable();
-    setTimeout(() => RECOG.start(), CFG.POST_SPEAK_DELAY);
+    setTimeout(() => RECOG.start(), CFG.POST_SPEAK_GAP);
   }
 
   function handleUserSpeech(text) {
@@ -1544,20 +1583,12 @@ const CONV = (() => {
     _send(text);
   }
 
-  // Sentence splitter — splits at natural sentence boundaries
-  function splitSentences(buf) {
-    const re = /(.+?[.!?])(?=\s+[A-Z"']|\s*$)/g;
-    const found = []; let last = 0; let m;
-    while ((m = re.exec(buf)) !== null) {
-      found.push(m[1].trim()); last = m.index + m[0].length;
-    }
-    return { sentences: found, rest: buf.slice(last).trim() };
-  }
-
   async function _send(userText) {
+    // Stop TTS immediately
     VOICE.stopAll();
     RECOG.disable();
     S.set('thinking');
+
     _hist.push({ role:'user', content:userText });
     MEM.push('user', userText);
     _turns++;
@@ -1569,13 +1600,13 @@ const CONV = (() => {
       const res = await fetch(CFG.WORKER + '/chat', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ system: buildPrompt(), messages: _hist }),
+        body: JSON.stringify({ system:buildPrompt(), messages:_hist }),
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
 
       const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let raw = '';
+      const dec    = new TextDecoder();
+      let raw      = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -1583,6 +1614,7 @@ const CONV = (() => {
         raw += dec.decode(value, { stream:true });
         const lines = raw.split('\n');
         raw = lines.pop();
+
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
           const chunk = line.slice(6).trim();
@@ -1592,8 +1624,8 @@ const CONV = (() => {
             if (p.type === 'content_block_delta' && p.delta?.text) {
               const tok = p.delta.text;
               fullReply += tok;
-              _buf += tok;
-              // Don't TTS the score block
+              _buf      += tok;
+              // Stream TTS — but NOT the score block
               if (!_buf.includes('SCORE_JSON:')) {
                 const { sentences, rest } = splitSentences(_buf);
                 _buf = rest;
@@ -1604,21 +1636,21 @@ const CONV = (() => {
         }
       }
 
-      // Flush remainder (but not SCORE_JSON)
+      // Flush remainder (strip score block)
       const preScore = _buf.split('SCORE_JSON:')[0].trim();
       if (preScore) VOICE.enqueue(preScore);
       _buf = '';
 
       const cleanReply = fullReply
-        .replace(/\nSCORE_JSON:[\s\S]*$/, '')
-        .replace(/SCORE_JSON:[\s\S]*$/, '')
+        .replace(/\nSCORE_JSON:[\s\S]*$/,'')
+        .replace(/SCORE_JSON:[\s\S]*$/,'')
         .trim();
 
-      UI.tx('ai', cleanReply.slice(0, 180) + (cleanReply.length > 180 ? '…' : ''));
+      UI.tx('ai', cleanReply.slice(0,200) + (cleanReply.length>200 ? '…' : ''));
       _hist.push({ role:'assistant', content:cleanReply });
       MEM.push('assistant', cleanReply);
 
-      // Rolling window — keep 20 turns
+      // Rolling 20-turn window
       if (_hist.length > 20) _hist = _hist.slice(-20);
 
       GSYNC.turn(userText, cleanReply, _turns);
@@ -1631,18 +1663,18 @@ const CONV = (() => {
         _close(cleanReply);
       } else if (fullReply.includes('SCORE_JSON:')) {
         const fb = SCORE.fallback('Score block malformed.');
-        const elapsed = Math.floor((Date.now()-_tStart)/1000);
-        GSYNC.complete(fb, elapsed, _turns);
+        GSYNC.complete(fb, Math.floor((Date.now()-_tStart)/1000), _turns);
         _close(cleanReply);
       }
-      // If no SCORE_JSON, onSpeakDone handles re-enabling recognition
+      // If no SCORE_JSON: onSpeakDone() handles re-enabling mic after TTS finishes
 
     } catch (err) {
       console.error('API:', err);
       UI.toast('Connection issue — please try again.');
+      TTSLOCK.unlock(); // ensure we don't get stuck locked
       S.set('ready');
       RECOG.enable();
-      setTimeout(() => RECOG.start(), 800);
+      setTimeout(() => RECOG.start(), 900);
     }
   }
 
@@ -1650,7 +1682,7 @@ const CONV = (() => {
     S.set('closed');
     MEM.lock();
     RECOG.disable();
-    const delay = Math.max(5500, lastText.split(' ').length * 340);
+    const delay = Math.max(6000, lastText.split(' ').length * 340);
     setTimeout(() => UI.showEnd(
       CFG.CAL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email),
       SCORE.total() >= CFG.SCORE_MIN
@@ -1661,10 +1693,10 @@ const CONV = (() => {
     _tStart = Date.now();
     clearInterval(_timerIval);
     _timerIval = setInterval(() => {
-      const s = Math.floor((Date.now()-_tStart)/1000);
+      const s   = Math.floor((Date.now()-_tStart)/1000);
       const fmt = Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
       UI.setTimer(fmt);
-      if (!S.is('closed') && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
+      if (!S.is('closed') && (Date.now()-_tStart)>=CFG.MAX_MS) _forceClose();
     }, 1000);
   }
 
@@ -1675,17 +1707,16 @@ const CONV = (() => {
     VOICE.stopAll();
     VOICE.enqueue(msg);
     const fb = SCORE.fallback('Session hit max duration.');
-    const elapsed = Math.floor((Date.now()-_tStart)/1000);
-    GSYNC.complete(fb, elapsed, _turns);
+    GSYNC.complete(fb, Math.floor((Date.now()-_tStart)/1000), _turns);
     S.set('closed'); MEM.lock(); RECOG.disable();
     setTimeout(() => UI.showEnd(null, false), 7000);
   }
 
   function _buildGreeting() {
     if (MEM.has()) {
-      const lastUser = MEM.get().filter(m=>m.role==='user').slice(-1)[0]?.content || '';
-      const topic = lastUser.slice(0, 50);
-      return `Good to have you back${FIRST ? ', '+FIRST : ''}. We were looking at ${topic} last time. Want to pick up there, or is something new on your mind?`;
+      const lastUser = MEM.get().filter(m=>m.role==='user').slice(-1)[0]?.content||'';
+      const topic = lastUser.slice(0, 52);
+      return `Good to have you back${FIRST?', '+FIRST:''}. We were looking at ${topic} last time. Want to pick up there, or is something new on your mind?`;
     }
     if (FIRST && LEAD.country && LEAD.company)
       return `Good to have you here, ${FIRST}. Looked at what you shared — ${LEAD.company} expanding into ${LEAD.country} is exactly what we work on. What's the biggest challenge on your mind right now?`;
@@ -1710,12 +1741,12 @@ const CONV = (() => {
 
     // Load voices
     let att = 0;
-    while (!VOICE.bestVoice() && att++ < 20) { VOICE.loadVoices(); await sleep(200); }
+    while (!VOICE.bestVoice() && att++ < 24) { VOICE.loadVoices(); await sleep(200); }
 
     UI.setLoad('Connecting to Dr. CV…');
-    try { await fetch(CFG.WORKER+'/', { signal: AbortSignal.timeout(12000) }); } catch {}
+    try { await fetch(CFG.WORKER+'/', { signal:AbortSignal.timeout(12000) }); } catch {}
     UI.setLoad('Ready');
-    await sleep(250);
+    await sleep(240);
     UI.hideLoad();
     _startTimer();
 
@@ -1723,28 +1754,24 @@ const CONV = (() => {
     _hist.push({ role:'assistant', content:greeting });
     MEM.push('assistant', greeting);
 
-    // Warm up TTS (unlock audio context — required by browser gesture policy)
+    // Unlock audio context (browser gesture policy)
     await new Promise(res => {
       const wu = new SpeechSynthesisUtterance('\u00A0');
-      wu.volume = 0; wu.onend = res; wu.onerror = res;
+      wu.volume=0; wu.onend=res; wu.onerror=res;
       speechSynthesis.speak(wu);
-      setTimeout(res, 600);
+      setTimeout(res, 650);
     });
-    await sleep(80);
+    await sleep(100);
 
     S.set('greeting');
-    const { sentences: gs, rest: gr } = (() => {
-      const re = /(.+?[.!?])(?=\s+[A-Z"']|\s*$)/g;
-      const found = []; let last = 0; let m;
-      while ((m = re.exec(greeting)) !== null) { found.push(m[1].trim()); last = m.index + m[0].length; }
-      return { sentences: found, rest: greeting.slice(last).trim() };
-    })();
+    const { sentences:gs, rest:gr } = splitSentences(greeting);
     const allG = [...gs]; if (gr) allG.push(gr);
     await VOICE.speakSeq(allG);
+    // speakSeq handles TTSLOCK internally
 
     S.set('ready');
     RECOG.enable();
-    await sleep(300);
+    await sleep(320);
     RECOG.start();
   }
 
@@ -1752,36 +1779,41 @@ const CONV = (() => {
     _inited = false; _forceClosing = false;
     MEM.clear();
     document.getElementById('sEnd').classList.remove('open');
-    VOICE.stopAll(); RECOG.disable();
-    setTimeout(() => init(), 300);
+    VOICE.stopAll();
+    RECOG.disable();
+    setTimeout(() => init(), 350);
   }
 
   return { init, reset, onSpeakDone, handleUserSpeech };
 })();
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    CONTROLS
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 document.getElementById('btnMic').addEventListener('click', () => {
   if (S.is('closed','loading','greeting')) return;
 
   if (S.is('speaking','thinking')) {
-    // User wants to interrupt — take current accumulation and commit, or just stop
+    // Interrupt AI
     VOICE.stopAll();
+    UI.flashInterrupt();
     RECOG.disable();
     S.set('ready');
-    RECOG.enable();
-    setTimeout(() => RECOG.start(), 250);
+    // Small delay to let audio fully stop before mic opens
+    setTimeout(() => {
+      RECOG.enable();
+      RECOG.start();
+    }, CFG.POST_SPEAK_GAP);
     return;
   }
 
   if (S.is('listening')) {
-    // User wants to force-commit what they've said so far
+    // Force-commit current speech
     RECOG.forceCommit();
     return;
   }
 
-  // Ready → start listening
+  // Ready → start
   RECOG.enable();
   RECOG.start();
 });
@@ -1799,24 +1831,20 @@ document.getElementById('btnMute').addEventListener('click', function () {
   document.getElementById('muteIcon').innerHTML = _muted
     ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
     : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-  if (!_muted && S.is('ready')) {
+  if (!_muted && S.is('ready') && !TTSLOCK.isLocked()) {
     RECOG.enable();
-    setTimeout(() => RECOG.start(), 250);
+    setTimeout(() => RECOG.start(), 260);
   }
 });
 
-// State side effects
-S.on('ready', () => {});
+/* ═══════════════════════════════════════════════════════
+   STATE HOOKS
+═══════════════════════════════════════════════════════ */
 S.on('closed', () => { RECOG.disable(); VOICE.stopAll(); });
 
-/* ═══════════════════════════════════════════════════════════
-   UTILITY
-═══════════════════════════════════════════════════════════ */
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    BOOT
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 speechSynthesis.onvoiceschanged = () => VOICE.loadVoices();
 
 (async () => {
@@ -1824,7 +1852,6 @@ speechSynthesis.onvoiceschanged = () => VOICE.loadVoices();
 
   VOICE.loadVoices();
 
-  // Test if gesture required
   let needGesture = false;
   try {
     await new Promise((res, rej) => {
