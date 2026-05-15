@@ -7,13 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    DESIGN SYSTEM
-═══════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 :root {
   --bg:   #f4f1eb;
   --bg1:  #ece8df;
-  --bg2:  #e4dfd4;
   --srf:  #faf8f4;
   --ink:  #1c1b17;
   --ink1: rgba(28,27,23,.72);
@@ -34,12 +33,12 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
 
-/* ── AMBIENT ── */
+/* ── AMBIENT BLOBS ── */
 .field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .blob{position:absolute;border-radius:50%;filter:blur(100px);will-change:transform}
-.b1{width:680px;height:600px;background:radial-gradient(ellipse,rgba(0,159,130,.08) 0%,transparent 65%);top:-12%;left:-10%;animation:d1 55s ease-in-out infinite alternate}
-.b2{width:580px;height:660px;background:radial-gradient(ellipse,rgba(94,82,224,.055) 0%,transparent 62%);bottom:-18%;right:-10%;animation:d2 65s 4s ease-in-out infinite alternate}
-.b3{width:360px;height:360px;background:radial-gradient(ellipse,rgba(184,134,11,.042) 0%,transparent 55%);top:42%;left:44%;animation:d3 38s 2s ease-in-out infinite alternate}
+.b1{width:680px;height:600px;background:radial-gradient(ellipse,rgba(0,159,130,.08),transparent 65%);top:-12%;left:-10%;animation:d1 55s ease-in-out infinite alternate}
+.b2{width:580px;height:660px;background:radial-gradient(ellipse,rgba(94,82,224,.055),transparent 62%);bottom:-18%;right:-10%;animation:d2 65s 4s ease-in-out infinite alternate}
+.b3{width:360px;height:360px;background:radial-gradient(ellipse,rgba(184,134,11,.042),transparent 55%);top:42%;left:44%;animation:d3 38s 2s ease-in-out infinite alternate}
 @keyframes d1{to{transform:translate(24px,-20px) scale(1.04)}}
 @keyframes d2{to{transform:translate(-22px,16px) scale(1.07)}}
 @keyframes d3{to{transform:translate(-12px,10px) scale(1.06)}}
@@ -48,14 +47,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 /* ── TOPBAR ── */
 .bar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;
-  background:rgba(244,241,235,.9);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+  background:rgba(244,241,235,.93);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(20px)}
 .logo{display:flex;align-items:center;gap:9px}
 .logo-hex{width:24px;height:24px;clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
   background:rgba(0,159,130,.1);border:1px solid rgba(0,159,130,.2);display:flex;align-items:center;justify-content:center}
 .logo-hex svg{color:var(--jade)}
 .logo-name{font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--jade2);text-transform:uppercase}
 .logo-sub{font-family:var(--mono);font-size:6px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase}
-.status-pill{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;
+.status-pill{display:flex;align-items:center;gap:7px;padding:5px 14px;border-radius:100px;
   background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.07);transition:all .35s}
 .status-pill.s-listen{border-color:rgba(217,79,110,.3);background:rgba(217,79,110,.05)}
 .status-pill.s-speak{border-color:rgba(0,159,130,.26);background:rgba(0,159,130,.05)}
@@ -92,9 +91,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 @keyframes vadpulse{0%{opacity:.8;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.32)}}
 #waveCanvas{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:6;pointer-events:none}
 .orb-core{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:5;overflow:hidden;
-  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.88) 0%,transparent 50%),
-             radial-gradient(circle at 64% 70%,rgba(0,159,130,.06) 0%,transparent 44%),
-             radial-gradient(circle at 50% 50%,#faf8f4 0%,#eee9df 55%,#e6dfd3 100%);
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.88),transparent 50%),
+             radial-gradient(circle at 64% 70%,rgba(0,159,130,.06),transparent 44%),
+             radial-gradient(circle at 50% 50%,#faf8f4,#eee9df 55%,#e6dfd3);
   border:1px solid rgba(0,159,130,.15);
   box-shadow:0 0 0 1px rgba(0,159,130,.04),0 3px 22px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.92),inset 0 -1px 0 rgba(0,0,0,.04);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
@@ -108,7 +107,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .orb-divider{width:18px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,114,96,.4),transparent);position:relative;z-index:1}
 .orb-sub{font-family:var(--mono);font-size:5.5px;letter-spacing:.3em;color:var(--ink2);text-transform:uppercase;position:relative;z-index:1;user-select:none}
 
-/* ── PANEL ── */
+/* ── INFO PANEL ── */
 .panel{display:flex;flex-direction:column;gap:18px;min-width:240px}
 .p-tag{font-family:var(--mono);font-size:6px;letter-spacing:.32em;color:var(--jade);text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .p-tag::before{content:'';width:12px;height:1px;background:var(--jade);opacity:.35}
@@ -120,9 +119,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .stat-k{font-family:var(--mono);font-size:5.5px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:4px}
 .stat-v{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink)}
 
-/* ── TRANSCRIPT ── */
+/* ── TRANSCRIPT BUBBLE ── */
 .tx-wrap{position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(10px);
-  width:min(580px,calc(100vw - 24px));padding:11px 17px;
+  width:min(600px,calc(100vw - 24px));padding:11px 18px;
   background:rgba(250,248,244,.97);border:1px solid rgba(0,0,0,.09);border-radius:14px;
   box-shadow:0 4px 26px rgba(0,0,0,.07);backdrop-filter:blur(20px);
   opacity:0;pointer-events:none;transition:opacity .28s,transform .32s var(--ease);text-align:center;z-index:50}
@@ -131,44 +130,43 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .tx-who.tx-you{color:rgba(184,134,11,.9)}
 .tx-who.tx-ai{color:rgba(0,114,96,.82)}
 .tx-text{font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--ink1)}
-
-/* live interim text */
-.interim-wrap{position:fixed;bottom:94px;left:50%;transform:translateX(-50%);
-  width:min(580px,calc(100vw - 24px));text-align:center;z-index:49;pointer-events:none;
-  opacity:0;transition:opacity .2s}
+/* live interim */
+.interim-wrap{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);
+  width:min(600px,calc(100vw - 24px));text-align:center;z-index:49;pointer-events:none;opacity:0;transition:opacity .2s}
 .interim-wrap.open{opacity:1}
 .interim-text{font-family:var(--sans);font-size:12px;color:var(--ink2);font-style:italic}
 
 /* ── CONTROLS ── */
 .ctrl{position:fixed;bottom:0;left:0;right:0;height:80px;z-index:100;
-  display:flex;align-items:center;justify-content:center;gap:28px;
+  display:flex;align-items:center;justify-content:center;gap:32px;
   background:rgba(244,241,235,.94);border-top:1px solid rgba(0,0,0,.06);backdrop-filter:blur(20px)}
 .ibtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(0,0,0,.1);background:transparent;
   color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .ibtn:hover{border-color:rgba(0,0,0,.18);color:var(--ink);background:rgba(255,255,255,.65);transform:scale(1.08)}
 .ibtn.active{border-color:rgba(217,79,110,.3);color:var(--blush);background:rgba(217,79,110,.05)}
-.ibtn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
-.ctrl-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;min-width:66px;text-align:center}
+.ctrl-label{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;text-align:center}
 
-/* ── MIC BUTTON — purely decorative now; mic is always on ── */
-.mic-rig{position:relative;display:flex;align-items:center;justify-content:center}
+/* Orb-style MIC indicator — purely status, not a button to press */
+.mic-rig{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
 .mring{position:absolute;border-radius:50%;border:1px solid transparent;pointer-events:none}
 .mr1{width:88px;height:88px}
 .mr2{width:72px;height:72px}
 .mr1.on{border-color:rgba(217,79,110,.18);animation:ripple 1.4s ease infinite}
 .mr2.on{border-color:rgba(217,79,110,.12);animation:ripple 1.4s .26s ease infinite}
 @keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.75);opacity:0}}
-.mic-btn{width:58px;height:58px;border-radius:50%;border:1px solid rgba(0,159,130,.22);
+/* The mic orb — tap to mute mic only as emergency option */
+.mic-btn{width:54px;height:54px;border-radius:50%;border:1px solid rgba(0,159,130,.22);
   background:rgba(255,255,255,.78);color:var(--jade2);cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .28s;
   box-shadow:0 2px 10px rgba(0,0,0,.06);position:relative;z-index:2}
-.mic-btn:hover{border-color:rgba(0,159,130,.4);box-shadow:0 4px 18px rgba(0,159,130,.12);background:rgba(255,255,255,.92)}
-.mic-btn.m-on{border-color:rgba(0,159,130,.38);color:var(--jade);animation:micglow 3s ease infinite}
-.mic-btn.m-listening{border-color:rgba(217,79,110,.38);color:var(--blush);background:rgba(255,255,255,.9);box-shadow:0 3px 16px rgba(217,79,110,.14)}
-.mic-btn.m-muted{border-color:rgba(0,0,0,.12);color:var(--ink3)}
-@keyframes micglow{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 0 rgba(0,159,130,.2)}50%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 10px rgba(0,159,130,0)}}
+.mic-btn:hover{border-color:rgba(0,159,130,.4);box-shadow:0 4px 18px rgba(0,159,130,.12)}
+.mic-btn.m-listening{border-color:rgba(217,79,110,.38);color:var(--blush);background:rgba(255,255,255,.9);
+  box-shadow:0 3px 16px rgba(217,79,110,.14);animation:micglow 2s ease infinite}
+.mic-btn.m-muted{border-color:rgba(0,0,0,.14);color:var(--ink3);background:rgba(255,255,255,.6)}
+@keyframes micglow{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 0 rgba(217,79,110,.22)}50%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 10px rgba(217,79,110,0)}}
+.mic-label{font-family:var(--mono);font-size:5.5px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;position:relative;z-index:3}
 
-/* ── LOADING / SPLASH / END SCREENS ── */
+/* ── SCREENS ── */
 .screen{position:fixed;inset:0;z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;transition:opacity .55s,visibility .55s}
 .screen.off{opacity:0;visibility:hidden;pointer-events:none}
 #sLoad{background:var(--bg);z-index:900}
@@ -176,17 +174,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .load-sep{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)}
 .load-spin{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,159,130,.14);border-top-color:var(--jade);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.load-msg{font-family:var(--mono);font-size:7px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
+.load-msg{font-family:var(--mono);font-size:7px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase;max-width:280px}
+
+/* Splash — unlock audio on mobile/Safari */
 #sSplash{background:var(--bg);z-index:1000;cursor:pointer}
 .sp-logo{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--jade)}
-.sp-play{width:68px;height:68px;border-radius:50%;border:1px solid rgba(0,159,130,.26);background:rgba(255,255,255,.82);
+.sp-play{width:72px;height:72px;border-radius:50%;border:1px solid rgba(0,159,130,.26);background:rgba(255,255,255,.82);
   display:flex;align-items:center;justify-content:center;color:var(--jade2);cursor:pointer;transition:all .3s;box-shadow:0 3px 14px rgba(0,0,0,.07)}
-.sp-play:hover{border-color:var(--jade);box-shadow:0 6px 24px rgba(0,159,130,.14);background:rgba(255,255,255,.95)}
+.sp-play:hover{border-color:var(--jade);box-shadow:0 6px 24px rgba(0,159,130,.14);background:#fff}
 .sp-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
-.sp-sub{font-family:var(--sans);font-size:12px;color:var(--ink2);max-width:260px;line-height:1.6}
+.sp-sub{font-family:var(--sans);font-size:13px;color:var(--ink2);max-width:280px;line-height:1.7}
+
+/* End screen */
 #sEnd{background:rgba(244,241,235,.97);backdrop-filter:blur(40px);z-index:600;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s}
 #sEnd.open{opacity:1;visibility:visible;pointer-events:all}
-.end-wrap{width:400px;max-width:90vw;padding:0 20px}
+.end-wrap{width:420px;max-width:90vw;padding:0 20px}
 .end-gl{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:22px}
 .end-mark{font-size:16px;color:var(--gold);margin-bottom:10px}
 .end-title{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--ink);margin-bottom:4px}
@@ -196,25 +198,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   background:rgba(0,159,130,.05);color:var(--jade2);font-family:var(--mono);font-size:6.5px;
   letter-spacing:.22em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .2s;border-radius:4px}
 .end-cta:hover{border-color:var(--jade);background:rgba(0,159,130,.1)}
-.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
-  background:rgba(217,79,110,.9);color:#fff;padding:7px 18px;z-index:999;
-  display:none;font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;
-  border-radius:100px;box-shadow:0 3px 12px rgba(217,79,110,.25)}
-.err-badge{position:fixed;top:60px;right:20px;background:rgba(217,79,110,.1);border:1px solid rgba(217,79,110,.25);
-  color:var(--blush);padding:4px 10px;border-radius:6px;font-family:var(--mono);font-size:6px;letter-spacing:.14em;
-  text-transform:uppercase;z-index:200;display:none}
 
-/* ── MUTE OVERLAY — tap to unmute ── */
-.mute-overlay{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;
-  background:rgba(244,241,235,.85);backdrop-filter:blur(16px);flex-direction:column;gap:16px;cursor:pointer}
-.mute-overlay.show{display:flex}
-.mute-icon{font-size:36px}
-.mute-msg{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase}
+/* Error badge */
+.err-badge{position:fixed;top:60px;right:20px;background:rgba(217,79,110,.1);border:1px solid rgba(217,79,110,.25);
+  color:var(--blush);padding:5px 12px;border-radius:6px;font-family:var(--mono);font-size:6px;letter-spacing:.14em;
+  text-transform:uppercase;z-index:200;display:none;max-width:320px;line-height:1.5}
+
+/* Toast */
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
+  background:rgba(28,27,23,.88);color:rgba(255,255,255,.9);padding:7px 18px;z-index:999;
+  display:none;font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;
+  border-radius:100px;white-space:nowrap}
 
 /* ── RESPONSIVE ── */
 @media(max-width:760px){
-  :root{--orb:155px}
-  .stage{flex-direction:column;gap:10px;padding:0 18px}
+  :root{--orb:150px}
+  .stage{flex-direction:column;gap:12px;padding:0 18px}
   .panel{align-items:center;text-align:center}
   .p-tag::before{display:none}
   .p-stats{justify-content:center}
@@ -222,8 +221,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   .p-name{font-size:38px}
 }
 @media(max-width:480px){
-  :root{--orb:138px}
-  .p-name{font-size:34px}
+  :root{--orb:132px}
+  .p-name{font-size:32px}
+  .ctrl{gap:20px}
 }
 </style>
 </head>
@@ -295,29 +295,27 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 <!-- CONTROLS -->
 <div class="ctrl">
+  <!-- Restart -->
   <button class="ibtn" id="btnReset" title="Restart session">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
     </svg>
   </button>
 
-  <div class="ctrl-hint" id="hintL">Just speak naturally</div>
-
+  <!-- MIC INDICATOR — tap to mute/unmute as emergency option only -->
   <div class="mic-rig">
     <div class="mring mr1" id="mr1"></div>
     <div class="mring mr2" id="mr2"></div>
-    <!-- Mic button: tap to mute/unmute your microphone -->
-    <button class="mic-btn m-on" id="btnMic" title="Tap to mute/unmute your mic">
+    <button class="mic-btn" id="btnMic" title="Tap to mute/unmute microphone">
       <svg id="micIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
         <rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
       </svg>
     </button>
+    <div class="mic-label" id="micLabel">Mic on</div>
   </div>
 
-  <div class="ctrl-hint" id="hintR">Mic always open</div>
-
-  <!-- Speaker mute (AI voice) -->
+  <!-- Speaker mute -->
   <button class="ibtn" id="btnSpkr" title="Mute AI voice">
     <svg id="spkrIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M11 5 6 9H2v6h4l5 4V5z"/>
@@ -331,23 +329,23 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <div class="load-mark">Comply Globally</div>
   <div class="load-sep"></div>
   <div class="load-spin"></div>
-  <div class="load-msg" id="loadMsg">Preparing your session</div>
+  <div class="load-msg" id="loadMsg">Preparing your session…</div>
 </div>
 
-<!-- SPLASH — needed to unlock audio on mobile/Safari -->
+<!-- SPLASH (required to unlock audio on mobile/Safari) -->
 <div class="screen" id="sSplash">
   <div class="sp-logo">Comply Globally</div>
   <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
   <div class="sp-play" id="spBtn">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <polygon points="5 3 19 12 5 21 5 3"/>
     </svg>
   </div>
-  <div class="sp-hint">Tap to begin your session</div>
-  <div class="sp-sub">This is a live voice conversation. You'll speak and Dr. CV will respond — no button pressing needed.</div>
+  <div class="sp-hint">Tap to begin your strategy session</div>
+  <div class="sp-sub">This is a live voice conversation with Dr. CV — no buttons needed. Just speak naturally.</div>
 </div>
 
-<!-- END -->
+<!-- END SCREEN -->
 <div class="screen" id="sEnd">
   <div class="end-wrap">
     <div class="end-gl"></div>
@@ -361,22 +359,29 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT — OpenAI Realtime API via WebRTC
-═══════════════════════════════════════════ -->
+<!-- ═════════════════════════════════════════════════════
+     JAVASCRIPT
+     ─────────────────────────────────────────────────
+     Architecture:
+       Browser ──WebRTC──▶ OpenAI Realtime API
+       Browser ──POST /session──▶ Your Render backend (to mint token)
+       Mic is ALWAYS on (server VAD handles turn detection)
+       AI audio → <audio autoplay> (echo-cancelled by browser AEC)
+       DataChannel carries all events / transcripts
+     ───────────────────────────────────────────────── -->
 <script>
 /* ── CONFIG ── */
 const CFG = {
-  BACKEND:   'https://drcv.onrender.com', // your Render URL, no trailing slash
+  BACKEND:   'https://drcv.onrender.com',  // ← your Render URL (no trailing slash)
   CAL:       'https://cal.com/udhay-marwah-wkeu9j/30mins',
   GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
   VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
-  MIN_TURNS: 7,
+  MIN_TURNS: 6,
   MAX_MS:    18 * 60 * 1000,
-  SCORE_MIN: 58,
+  SCORE_MIN: 55,
 };
 
-/* ── URL PARAMS ── */
+/* ── URL PARAMS (prefilled from form/email) ── */
 const Q = new URLSearchParams(location.search);
 const LEAD = {
   name:    decodeURIComponent(Q.get('name')    || ''),
@@ -390,18 +395,17 @@ const LEAD = {
 const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
 /* ── HELPERS ── */
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-const $  = id => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
 /* ── SCORE ENGINE ── */
 const SCORE = (() => {
   let s = { interest:0, engagement:0, intent:0, readiness:0 };
   function update(text) {
     const w = text.split(/\s+/).length;
-    s.engagement = Math.min(100, s.engagement + (w>18?15:w>8?8:3));
-    if (/interest|want|need|expand|grow|opportunit|market/i.test(text))  s.interest  = Math.min(100,s.interest+11);
+    s.engagement = Math.min(100, s.engagement + (w>18?14:w>8?7:3));
+    if (/interest|want|need|expand|grow|opportunit|market/i.test(text)) s.interest = Math.min(100,s.interest+10);
     if (/ready|plan|timeline|budget|invest|commit|month|quarter/i.test(text)) s.intent = Math.min(100,s.intent+14);
-    if (/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) s.readiness = Math.min(100,s.readiness+17);
+    if (/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) s.readiness = Math.min(100,s.readiness+16);
   }
   function total() { return Math.round((s.interest+s.engagement+s.intent+s.readiness)/4); }
   function level() { return total()>=70?'hot':total()>=40?'warm':'cold'; }
@@ -432,16 +436,15 @@ const GSYNC = (() => {
       interest:sc.interest,engagement:sc.engagement,intent:sc.intent,readiness:sc.readiness,
     });
   }
-  return {turn,complete};
+  return {turn, complete};
 })();
 
-/* ── MEMORY ── */
+/* ── SESSION LOCK (prevent double-use) ── */
 const MEM = (() => {
-  const MK = 'cg_m_' + LEAD.id;
   const LK = 'cg_lock_' + LEAD.id;
   function isLocked() { try{return !!localStorage.getItem(LK);}catch{return false;} }
   function lock()  { try{localStorage.setItem(LK,'1');}catch{} }
-  function clear() { try{localStorage.removeItem(MK);}catch{} }
+  function clear() { try{localStorage.removeItem(LK);}catch{} }
   return {isLocked,lock,clear};
 })();
 
@@ -451,7 +454,7 @@ const WAVE = (() => {
   const ctx = cvs.getContext('2d');
   const SZ  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb'))||196;
   cvs.width = SZ; cvs.height = SZ;
-  const CX = SZ/2, CY = SZ/2, R = SZ * 0.37;
+  const CX=SZ/2, CY=SZ/2, R=SZ*0.37;
   let phase=0, amp=0, target=0, state='idle';
   function setAmp(t){ target=Math.max(0,Math.min(t,30)); }
   function setState(s){ state=s; }
@@ -482,23 +485,21 @@ const WAVE = (() => {
   return{setAmp,setState};
 })();
 
-/* ── UI CONTROLLER ── */
+/* ── UI STATE MACHINE ── */
 const UI = (() => {
-  const map = {
-    idle:      {dot:'',        label:'Connecting',  hintL:'Please wait',     hintR:'—',             wave:0,  ws:'idle'},
-    connecting:{dot:'d-think', label:'Connecting',  hintL:'Setting up…',     hintR:'—',             wave:2,  ws:'think'},
-    ready:     {dot:'d-ready', label:'Listening',   hintL:'I\'m listening',  hintR:'Just speak',    wave:0,  ws:'idle'},
-    listening: {dot:'d-listen',label:'Listening',   hintL:'Go ahead…',       hintR:'I\'m listening',wave:9,  ws:'listen'},
-    thinking:  {dot:'d-think', label:'Thinking',    hintL:'Processing…',     hintR:'Just a moment', wave:3,  ws:'think'},
-    speaking:  {dot:'d-speak', label:'Speaking',    hintL:'You can interrupt',hintR:'Just speak',   wave:13, ws:'speak'},
-    closed:    {dot:'',        label:'Done',         hintL:'Session ended',   hintR:'—',             wave:0,  ws:'idle'},
+  const states = {
+    idle:      {dot:'',         label:'Connecting',   wave:0,  ws:'idle'},
+    connecting:{dot:'d-think',  label:'Connecting',   wave:2,  ws:'think'},
+    ready:     {dot:'d-ready',  label:'Ready',         wave:0,  ws:'idle'},
+    listening: {dot:'d-listen', label:'Listening',     wave:10, ws:'listen'},
+    thinking:  {dot:'d-think',  label:'Thinking',      wave:3,  ws:'think'},
+    speaking:  {dot:'d-speak',  label:'Speaking',      wave:14, ws:'speak'},
+    closed:    {dot:'',         label:'Done',          wave:0,  ws:'idle'},
   };
   function set(st){
-    const c=map[st]||map.idle;
+    const c=states[st]||states.idle;
     $('dot').className='dot '+c.dot;
     $('pillLabel').textContent=c.label;
-    $('hintL').textContent=c.hintL;
-    $('hintR').textContent=c.hintR;
     WAVE.setAmp(c.wave);
     WAVE.setState(c.ws);
     const pill=$('pill');
@@ -506,11 +507,11 @@ const UI = (() => {
     const core=$('orbCore');
     core.className='orb-core'+(st==='listening'?' c-listen':st==='speaking'?' c-speak':st==='thinking'?' c-think':'')+(st==='ready'||st==='idle'?' breathing':'');
     $('glow').className='orb-glow'+(st==='speaking'?' g-speak':st==='listening'?' g-listen':st==='thinking'?' g-think':'');
-    const ml=st==='listening';
-    $('btnMic').classList.toggle('m-listening',ml);
-    $('mr1').classList.toggle('on',ml);
-    $('mr2').classList.toggle('on',ml);
-    $('vadRing').classList.toggle('vad-on',ml);
+    const isListen=st==='listening';
+    $('btnMic').classList.toggle('m-listening',isListen);
+    $('mr1').classList.toggle('on',isListen);
+    $('mr2').classList.toggle('on',isListen);
+    $('vadRing').classList.toggle('vad-on',isListen);
   }
   let _txT=null;
   function showTx(who,text){
@@ -519,7 +520,7 @@ const UI = (() => {
     $('txText').textContent=text;
     $('txWrap').classList.add('open');
     clearTimeout(_txT);
-    _txT=setTimeout(()=>$('txWrap').classList.remove('open'),7000);
+    _txT=setTimeout(()=>$('txWrap').classList.remove('open'),8000);
   }
   function showInterim(text){
     if(text){$('interimText').textContent=text;$('interimWrap').classList.add('open');}
@@ -538,10 +539,10 @@ const UI = (() => {
   function showEnd(calUrl,hot){
     const body=$('endBody'),cta=$('endCTA');
     if(hot&&calUrl){
-      body.textContent="You're a great fit for our services. Book a strategy call — we'll pick up exactly where we left off.";
-      cta.href=calUrl;cta.style.display='block';
+      body.textContent='You\'re a strong fit for our services. Book a strategy call — we\'ll pick up right where we left off.';
+      cta.href=calUrl; cta.style.display='block';
     } else {
-      body.textContent="Thank you for your time. Our advisory team will review your session and reach out within one business day.";
+      body.textContent='Thank you for your time. Our team will review your session and reach out within one business day.';
       cta.style.display='none';
     }
     $('sEnd').classList.add('open');
@@ -549,205 +550,189 @@ const UI = (() => {
   let _toastT=null;
   function toast(msg){
     $('toast').textContent=msg;$('toast').style.display='block';
-    clearTimeout(_toastT);
-    _toastT=setTimeout(()=>$('toast').style.display='none',3800);
+    clearTimeout(_toastT);_toastT=setTimeout(()=>$('toast').style.display='none',4000);
   }
   function err(msg){
     $('errBadge').textContent=msg;$('errBadge').style.display='block';
-    setTimeout(()=>$('errBadge').style.display='none',5000);
+    setTimeout(()=>$('errBadge').style.display='none',7000);
   }
   return{set,showTx,showInterim,setTimer,renderLead,setLoad,hideLoad,showSplash,showEnd,toast,err};
 })();
 
-/* ═══════════════════════════════════════════════════════
-   REALTIME SESSION
-   ──────────────────────────────────────────────────────
-   Architecture:
-   1. Backend mints ephemeral OpenAI token → /session
-   2. We create a WebRTC peer connection to OpenAI
-   3. Mic stream → peer connection track (always on)
-   4. AI audio → remote track → AudioContext (with echo cancel)
-   5. DataChannel carries JSON events (transcripts, VAD, etc.)
-   6. Server-side VAD handles all turn detection — no browser logic
-   7. Barge-in is native — user speech interrupts AI mid-sentence
-═══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════
+   REALTIME SESSION — WebRTC to OpenAI
+   ══════════════════════════════════════════════════════
+   Key design decisions:
+   • Mic is ALWAYS open. No push-to-talk. No manual mic cycling.
+   • Server-side VAD with 900ms silence threshold (handles natural pauses).
+   • barge-in: user can always interrupt AI mid-sentence (OpenAI handles it).
+   • Echo cancellation: getUserMedia with echoCancellation:true prevents
+     the AI from hearing itself through the mic.
+   • The mic-mute button is an EMERGENCY control only, not part of normal flow.
+   ══════════════════════════════════════════════════════ */
 const SESSION = (() => {
-  let pc = null;          // RTCPeerConnection
-  let dc = null;          // DataChannel
-  let audioEl = null;     // <audio> for AI voice
+  let pc        = null;   // RTCPeerConnection
+  let dc        = null;   // DataChannel
+  let audioEl   = null;   // <audio> for AI voice
   let micStream = null;   // getUserMedia stream
-  let micSender = null;   // RTCRtpSender for mic track
-  let micMuted  = false;  // user pressed mic-mute
-  let spkrMuted = false;  // user pressed speaker-mute
+  let micMuted  = false;  // user emergency-muted
+  let spkrMuted = false;
   let _closed   = false;
   let _turns    = 0;
   let _tStart   = 0;
   let _timer    = null;
-  let _curUserText  = ''; // accumulate interim user transcript
-  let _curAiText    = ''; // accumulate AI response text
-  let _sessionReady = false;
+  let _curUserText = '';
+  let _curAiText   = '';
 
-  /* ── Build system prompt for OpenAI Realtime ── */
+  /* Build the system prompt */
   function buildPrompt() {
     const who = FIRST
-      ? `CLIENT: ${LEAD.name} | Company: ${LEAD.company||'?'} | Target market: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}`
-      : 'CLIENT: Not yet identified';
+      ? `CLIENT CONTEXT:\n  Name: ${LEAD.name}\n  Company: ${LEAD.company||'not provided'}\n  Target market: ${LEAD.country||'not provided'}\n  Stage: ${LEAD.stage||'exploring'}`
+      : 'CLIENT CONTEXT: Not yet identified — ask gently.';
 
-    return `You are Dr. CV — a Global Expansion Strategist at Comply Globally on a LIVE phone call.
+    return `You are Dr. CV — a Global Expansion Strategist at Comply Globally on a LIVE voice call.
 
 ${who}
 
 ═══ VOICE CALL RULES ═══
-This is a real-time phone call. Follow these exactly:
-
-BREVITY:
-• MAX 1–2 sentences per response. Never more.
+• MAX 1–2 sentences per turn. NEVER more.
 • ONE question per turn, at the end.
-• NO lists, bullets, asterisks, or markdown.
+• NO lists, bullets, asterisks, numbers, or markdown — this is spoken audio.
 • NO form numbers. Say "annual filing" not "Form 1120".
 • NEVER repeat a question you've already asked.
-• If interrupted mid-sentence — stop. Let the client speak.
+• If interrupted — stop immediately and let the client speak.
+• Natural pauses (1–2 seconds) are normal — do NOT jump in.
 
-OPENERS (rotate, never use same twice in a row):
-"Hmm," / "Right," / "Got it." / "Okay," / "Yeah," / "Ah." / "Interesting." / "Makes sense." / "And then?" / "Tell me more about that."
+CONVERSATION OPENERS (rotate, never repeat the same twice):
+"Hmm," / "Right," / "Got it." / "Okay," / "Yeah," / "Interesting." / "Makes sense." / "Tell me more."
 
-TONE: Warm, confident, expert. Like a trusted advisor on the phone.
-PAUSES: If client trails off or takes a long pause, wait — don't rush in.
+TONE: Warm, confident, expert. Like a trusted advisor on the phone — not a robot.
 
-EXPERTISE (weave in naturally, max one point per turn):
-• Wyoming LLC: $62/yr, private, no state tax — best for non-US founders
+KEY FACTS (weave naturally, one per turn max):
+• Wyoming LLC: $62/yr, privacy, no state tax — best for non-US founders
 • Delaware C-Corp: only for VC-backed startups
-• S-Corp: cannot be held by non-US citizens
-• Formation: 1–3 days, bank account in about a week
+• S-Corp: cannot be held by non-US persons
+• Formation: 1–3 days, bank account ~1 week
 • No US income tax if zero US physical presence
 
 DISCOVERY GOALS (complete by turn ${CFG.MIN_TURNS}):
-Uncover: main challenge, timeline, decision-maker, budget signal, what success looks like.
+Uncover: main challenge, timeline, decision-maker, budget signal, success criteria.
 
 OPENING (first turn only):
 ${FIRST && LEAD.country && LEAD.company
-  ? `Start with: "Great to have you here, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest challenge on your mind?"`
+  ? `Say: "Great to connect, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest challenge on your mind right now?"`
   : FIRST && LEAD.country
-  ? `Start with: "Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?"`
+  ? `Say: "Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?"`
   : FIRST
-  ? `Start with: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge right now?"`
-  : `Start with: "Welcome. Which market are you looking at expanding into, and what's the main challenge you're trying to solve?"`}
+  ? `Say: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge you're facing?"`
+  : `Say: "Welcome to Comply Globally. Which market are you looking to expand into, and what's the main challenge you'd like to solve?"`}
 
-SESSION END (after ${CFG.MIN_TURNS} turns):
-When you have enough context, wrap up warmly in 1 sentence. Then on a new line write exactly:
+SESSION END (after ${CFG.MIN_TURNS} turns or when you have enough context):
+Wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE`;
   }
 
-  /* ── Connect to OpenAI Realtime via WebRTC ── */
+  /* ── Connect ── */
   async function connect() {
-    UI.setLoad('Requesting mic access…');
+    UI.setLoad('Requesting microphone access…');
 
-    /* 1. Get mic with echo cancellation (so AI doesn't hear itself) */
+    /* 1. Mic with hardware echo cancellation */
     try {
       micStream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl:  true,
-          sampleRate:       24000,
+          echoCancellation:  true,
+          noiseSuppression:  true,
+          autoGainControl:   true,
+          sampleRate:        24000,
+          channelCount:      1,
         }
       });
     } catch (e) {
-      UI.err('Mic access denied');
-      UI.setLoad('Mic access denied — please allow microphone and reload.');
+      UI.err('Microphone access denied. Please allow mic and reload.');
+      UI.setLoad('Mic access denied — allow microphone then reload.');
       return;
     }
 
     UI.setLoad('Connecting to Dr. CV…');
 
-    /* 2. Mint ephemeral token from our backend */
+    /* 2. Mint ephemeral token from backend */
     let token;
     try {
       const r = await fetch(CFG.BACKEND + '/session', {
         method:  'POST',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ systemPrompt: buildPrompt(), voice: CFG.VOICE }),
-        signal:  AbortSignal.timeout(15000),
+        signal:  AbortSignal.timeout(20000),
       });
-      if (!r.ok) throw new Error('Session endpoint returned ' + r.status);
+      if (!r.ok) {
+        const txt = await r.text();
+        throw new Error(`Backend /session returned ${r.status}: ${txt}`);
+      }
       const d = await r.json();
-      token = d.client_secret?.value || d.client_secret;
-      if (!token) throw new Error('No client_secret in response');
+      token = d.client_secret?.value;
+      if (!token) throw new Error('No client_secret.value in backend response. Check OPENAI_API_KEY on Render.');
     } catch (e) {
-      console.error('Session mint failed:', e.message);
-      UI.err('Connection failed — ' + e.message);
-      UI.toast('Could not connect. Reload to try again.');
-      UI.setLoad('Connection failed. Please reload.');
+      console.error('Token error:', e.message);
+      UI.err('Connection failed: ' + e.message);
+      UI.setLoad('Could not connect. ' + e.message);
       return;
     }
 
-    /* 3. Create WebRTC peer connection */
+    /* 3. WebRTC peer connection */
     pc = new RTCPeerConnection();
 
-    /* 4. Audio element to play AI voice (uses browser echo cancellation) */
+    /* 4. AI audio → <audio> element (AEC-enabled playback) */
     audioEl = document.createElement('audio');
     audioEl.autoplay = true;
-    // Setting sink to 'default' and having getUserMedia with echoCancellation
-    // means the browser's AEC will cancel the AI voice from the mic feed.
     document.body.appendChild(audioEl);
+    pc.ontrack = e => { if(e.streams?.[0]) audioEl.srcObject = e.streams[0]; };
 
-    pc.ontrack = e => {
-      if (e.streams && e.streams[0]) {
-        audioEl.srcObject = e.streams[0];
-      }
-    };
+    /* 5. Mic track → peer connection (always on, AEC handles echo) */
+    micStream.getTracks().forEach(t => pc.addTrack(t, micStream));
 
-    /* 5. Add mic track to peer connection */
-    micStream.getTracks().forEach(t => {
-      micSender = pc.addTrack(t, micStream);
-    });
-
-    /* 6. DataChannel for events */
+    /* 6. Data channel for events */
     dc = pc.createDataChannel('oai-events');
     dc.onmessage = e => _handleEvent(JSON.parse(e.data));
-    dc.onopen    = () => { _sessionReady = true; console.log('DataChannel open'); };
+    dc.onopen    = () => console.log('DataChannel open');
 
-    /* 7. SDP exchange with OpenAI */
+    /* 7. SDP exchange with OpenAI Realtime */
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
 
-    const sdpRes = await fetch(`https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type':  'application/sdp',
-      },
-      body: offer.sdp,
-    });
+    const sdpRes = await fetch(
+      'https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17', {
+        method:  'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type':  'application/sdp',
+        },
+        body: offer.sdp,
+      }
+    );
 
     if (!sdpRes.ok) {
       const txt = await sdpRes.text();
-      console.error('SDP exchange failed:', txt);
-      UI.err('WebRTC setup failed');
-      UI.toast('Voice connection failed. Reload to try again.');
+      console.error('SDP error:', txt);
+      UI.err('WebRTC setup failed — ' + txt.slice(0,120));
       return;
     }
 
-    const answer = { type: 'answer', sdp: await sdpRes.text() };
-    await pc.setRemoteDescription(answer);
+    await pc.setRemoteDescription({ type:'answer', sdp: await sdpRes.text() });
 
-    /* 8. Monitor connection state */
+    /* 8. Connection state monitoring */
     pc.onconnectionstatechange = () => {
-      console.log('WebRTC state:', pc.connectionState);
-      if (pc.connectionState === 'connected') {
-        _onConnected();
-      } else if (['failed','disconnected','closed'].includes(pc.connectionState)) {
-        if (!_closed) UI.err('Connection dropped — reload to reconnect');
+      const s = pc.connectionState;
+      console.log('WebRTC state:', s);
+      if (s === 'connected') _onConnected();
+      else if (['failed','disconnected','closed'].includes(s) && !_closed) {
+        UI.err('Voice connection dropped — reload to reconnect.');
       }
     };
   }
 
   function _onConnected() {
-    UI.setLoad('Connected!');
     _tStart = Date.now();
     UI.renderLead();
-
-    /* Start session timer */
     clearInterval(_timer);
     _timer = setInterval(() => {
       const s = Math.floor((Date.now()-_tStart)/1000);
@@ -755,39 +740,27 @@ SESSION_COMPLETE`;
       UI.setTimer(fmt);
       if (!_closed && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
     }, 1000);
-
-    setTimeout(()=>{
-      UI.hideLoad();
-      UI.set('ready');
-    }, 400);
+    setTimeout(() => { UI.hideLoad(); UI.set('ready'); }, 400);
   }
 
   /* ── Handle OpenAI Realtime events ── */
   function _handleEvent(ev) {
-    // console.log('[RT]', ev.type, ev); // uncomment for debug
-
     switch (ev.type) {
 
-      /* User speech started (server VAD detected voice) */
+      /* Server VAD: user speech detected */
       case 'input_audio_buffer.speech_started':
         UI.set('listening');
         UI.showInterim('');
         WAVE.setAmp(12);
-        $('vadRing').classList.add('vad-on');
-        $('mr1').classList.add('on');
-        $('mr2').classList.add('on');
         break;
 
-      /* User speech stopped */
+      /* Server VAD: user speech ended (silence detected) */
       case 'input_audio_buffer.speech_stopped':
         UI.set('thinking');
-        $('vadRing').classList.remove('vad-on');
-        $('mr1').classList.remove('on');
-        $('mr2').classList.remove('on');
         WAVE.setAmp(3);
         break;
 
-      /* Live user transcript (interim) */
+      /* Live user transcript (streaming) */
       case 'conversation.item.input_audio_transcription.delta':
         _curUserText += (ev.delta || '');
         UI.showInterim(_curUserText);
@@ -795,7 +768,7 @@ SESSION_COMPLETE`;
 
       /* Final user transcript */
       case 'conversation.item.input_audio_transcription.completed': {
-        const text = ev.transcript?.trim() || _curUserText.trim();
+        const text = (ev.transcript || _curUserText).trim();
         _curUserText = '';
         UI.showInterim('');
         if (text) {
@@ -803,50 +776,46 @@ SESSION_COMPLETE`;
           SCORE.update(text);
           _turns++;
           GSYNC.turn(text, _curAiText, _turns);
+          _curAiText = '';
         }
         break;
       }
 
-      /* AI starts generating a response */
+      /* AI starting response */
       case 'response.created':
         _curAiText = '';
         UI.set('thinking');
-        WAVE.setAmp(3);
         break;
 
-      /* AI audio starting to play */
-      case 'response.audio.started':
+      /* AI audio is playing */
       case 'response.output_item.added':
+      case 'response.audio.started':
         UI.set('speaking');
-        WAVE.setAmp(13);
+        WAVE.setAmp(14);
         break;
 
-      /* AI text delta (for transcript) */
+      /* AI text delta */
       case 'response.text.delta':
         _curAiText += (ev.delta || '');
         break;
 
-      /* AI audio/response done */
+      /* AI response complete */
       case 'response.done': {
-        // Extract full AI text from the response
         const items = ev.response?.output || [];
-        let fullText = '';
+        let full = '';
         for (const item of items) {
           if (item.type === 'message' && item.role === 'assistant') {
             for (const c of (item.content||[])) {
-              if (c.type === 'text') fullText += c.text;
-              if (c.type === 'audio' && c.transcript) fullText += c.transcript;
+              if (c.type === 'text') full += c.text;
+              if (c.type === 'audio' && c.transcript) full += c.transcript;
             }
           }
         }
-        if (fullText) _curAiText = fullText;
-
+        if (full) _curAiText = full;
         const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
-        if (clean) UI.showTx('ai', clean.slice(0,220)+(clean.length>220?'…':''));
-
-        // Check for session-end signal
+        if (clean) UI.showTx('ai', clean.length > 240 ? clean.slice(0,240)+'…' : clean);
         if (/SESSION_COMPLETE/i.test(_curAiText)) {
-          setTimeout(()=>_close(), 3000);
+          setTimeout(_close, 3000);
         } else {
           UI.set('ready');
           WAVE.setAmp(0);
@@ -854,49 +823,17 @@ SESSION_COMPLETE`;
         break;
       }
 
-      /* AI was interrupted (user barged in) */
+      /* User interrupted AI */
       case 'response.cancelled':
         _curAiText = '';
         UI.set('listening');
         break;
 
-      /* Connection/session errors */
       case 'error':
         console.error('Realtime error:', ev.error);
         UI.err(ev.error?.message || 'Realtime error');
         break;
     }
-  }
-
-  /* ── Toggle user mic mute ── */
-  function toggleMicMute() {
-    micMuted = !micMuted;
-    if (micStream) {
-      micStream.getAudioTracks().forEach(t => { t.enabled = !micMuted; });
-    }
-    // Update button UI
-    const btn = $('btnMic');
-    btn.classList.toggle('m-muted', micMuted);
-    btn.classList.toggle('m-on', !micMuted);
-    $('hintR').textContent = micMuted ? 'Mic muted' : 'Mic always open';
-    if (micMuted) {
-      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
-        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
-        <line x1="3" y1="3" x2="21" y2="21" stroke-width="1.7"/>`;
-    } else {
-      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
-        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>`;
-    }
-  }
-
-  /* ── Toggle speaker/AI mute ── */
-  function toggleSpeaker() {
-    spkrMuted = !spkrMuted;
-    if (audioEl) audioEl.muted = spkrMuted;
-    $('btnSpkr').classList.toggle('active', spkrMuted);
-    $('spkrIcon').innerHTML = spkrMuted
-      ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-      : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
   }
 
   function _close() {
@@ -907,9 +844,9 @@ SESSION_COMPLETE`;
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
     GSYNC.complete(elapsed, _turns);
     UI.set('closed');
-    setTimeout(()=>{
+    setTimeout(() => {
       UI.showEnd(
-        CFG.CAL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email),
+        CFG.CAL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email),
         SCORE.total() >= CFG.SCORE_MIN
       );
     }, 2500);
@@ -917,70 +854,92 @@ SESSION_COMPLETE`;
 
   function _forceClose() {
     if (_closed) return;
-    // Send a text message to the AI telling it to wrap up
-    if (dc && dc.readyState === 'open') {
+    if (dc?.readyState === 'open') {
       dc.send(JSON.stringify({
         type: 'conversation.item.create',
-        item: {
-          type: 'message', role: 'user',
-          content: [{ type: 'input_text', text: '[Time limit reached. Wrap up the session gracefully in one sentence, then write SESSION_COMPLETE]' }],
-        },
+        item: { type:'message', role:'user', content:[{type:'input_text',
+          text:'[TIME LIMIT: Wrap up the session warmly in one sentence, then write SESSION_COMPLETE]'}]},
       }));
-      dc.send(JSON.stringify({ type: 'response.create' }));
+      dc.send(JSON.stringify({ type:'response.create' }));
+    } else { _close(); }
+  }
+
+  /* ── Mic mute toggle (emergency use) ── */
+  function toggleMicMute() {
+    micMuted = !micMuted;
+    micStream?.getAudioTracks().forEach(t => { t.enabled = !micMuted; });
+    const btn = $('btnMic');
+    btn.classList.toggle('m-muted', micMuted);
+    btn.classList.toggle('m-listening', false);
+    $('micLabel').textContent = micMuted ? 'Muted' : 'Mic on';
+    if (micMuted) {
+      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
+        <line x1="3" y1="3" x2="21" y2="21" stroke-width="1.7"/>`;
     } else {
-      _close();
+      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>`;
     }
+    UI.toast(micMuted ? 'Microphone muted' : 'Microphone on');
+  }
+
+  /* ── Speaker mute ── */
+  function toggleSpeaker() {
+    spkrMuted = !spkrMuted;
+    if (audioEl) audioEl.muted = spkrMuted;
+    $('btnSpkr').classList.toggle('active', spkrMuted);
+    $('spkrIcon').innerHTML = spkrMuted
+      ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+      : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+    UI.toast(spkrMuted ? 'AI voice muted' : 'AI voice on');
   }
 
   function reset() {
-    _closed = false; _turns = 0; _curUserText = ''; _curAiText = '';
+    _closed=false; _turns=0; _curUserText=''; _curAiText='';
     clearInterval(_timer);
     MEM.clear();
     $('sEnd').classList.remove('open');
-    // Tear down existing peer connection
-    if (pc) { try{pc.close();}catch{} pc = null; }
-    if (audioEl) { try{audioEl.remove();}catch{} audioEl = null; }
-    if (micStream) { micStream.getTracks().forEach(t=>t.stop()); micStream=null; }
+    try{pc?.close();}catch{}
+    try{audioEl?.remove();}catch{}
+    micStream?.getTracks().forEach(t=>t.stop());
+    pc=null; audioEl=null; micStream=null;
     UI.set('idle');
-    setTimeout(()=>connect(),300);
+    setTimeout(connect, 300);
   }
 
-  function isClosed() { return _closed; }
+  function isClosed(){ return _closed; }
   return { connect, reset, isClosed, toggleMicMute, toggleSpeaker };
 })();
 
-/* ── CONTROLS ── */
+/* ── BUTTON HANDLERS ── */
 $('btnMic').addEventListener('click', () => {
   if (!SESSION.isClosed()) SESSION.toggleMicMute();
 });
-
-$('btnSpkr').addEventListener('click', () => {
-  SESSION.toggleSpeaker();
-});
-
+$('btnSpkr').addEventListener('click', () => SESSION.toggleSpeaker());
 $('btnReset').addEventListener('click', () => {
-  if (!SESSION.isClosed()) {
-    if (confirm('Restart this session?')) SESSION.reset();
-  }
+  if (!SESSION.isClosed() && confirm('Restart this session?')) SESSION.reset();
 });
 
-/* ═══════════════════════════════════
+/* ══════════════════════════════
    BOOT
-═══════════════════════════════════ */
+══════════════════════════════ */
 (async () => {
+  /* If session was already completed, show locked screen */
   if (MEM.isLocked()) {
     document.body.innerHTML = `
-      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#f4f1eb;font-family:'Syne',sans-serif">
+      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:16px;background:#f4f1eb;font-family:'Syne',sans-serif">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#007260">Comply Globally</div>
         <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,#009f82,transparent)"></div>
         <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(28,27,23,.42)">Session Already Completed</div>
-        <div style="font-size:13px;color:rgba(28,27,23,.72);max-width:280px;text-align:center;line-height:1.7">Your strategy session has concluded. Our team will reach out soon.</div>
+        <div style="font-size:13px;color:rgba(28,27,23,.7);max-width:280px;text-align:center;line-height:1.7">
+          Your strategy session has concluded. Our advisory team will be in touch soon.
+        </div>
       </div>`;
     return;
   }
 
-  // WebRTC requires a user gesture on some browsers/mobile to allow audio.
-  // We always show the splash for this reason.
+  /* Splash gate — needed to unlock audio context on iOS/Safari */
   UI.showSplash(async () => {
     $('sLoad').classList.remove('off');
     await SESSION.connect();
