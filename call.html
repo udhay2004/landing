@@ -15,33 +15,26 @@
   --bg1:  #ece8df;
   --bg2:  #e4dfd4;
   --srf:  #faf8f4;
-
   --ink:  #1c1b17;
   --ink1: rgba(28,27,23,.72);
   --ink2: rgba(28,27,23,.42);
   --ink3: rgba(28,27,23,.18);
-
   --jade:  #009f82;
   --jade2: #007260;
   --jade3: rgba(0,159,130,.12);
-  --j-glow: rgba(0,159,130,.28);
-
   --blush: #d94f6e;
   --gold:  #b8860b;
   --aurora: #5e52e0;
-
   --sans:  'Syne', sans-serif;
   --serif: 'Cormorant Garamond', serif;
   --mono:  'DM Mono', monospace;
-
   --orb: 196px;
   --ease: cubic-bezier(.19,1,.22,1);
 }
-
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
 
-/* ── FIELD ── */
+/* ── AMBIENT ── */
 .field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .blob{position:absolute;border-radius:50%;filter:blur(100px);will-change:transform}
 .b1{width:680px;height:600px;background:radial-gradient(ellipse,rgba(0,159,130,.08) 0%,transparent 65%);top:-12%;left:-10%;animation:d1 55s ease-in-out infinite alternate}
@@ -50,21 +43,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 @keyframes d1{to{transform:translate(24px,-20px) scale(1.04)}}
 @keyframes d2{to{transform:translate(-22px,16px) scale(1.07)}}
 @keyframes d3{to{transform:translate(-12px,10px) scale(1.06)}}
-
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.018;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ── TOPBAR ── */
 .bar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;
   background:rgba(244,241,235,.9);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-
 .logo{display:flex;align-items:center;gap:9px}
 .logo-hex{width:24px;height:24px;clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
   background:rgba(0,159,130,.1);border:1px solid rgba(0,159,130,.2);display:flex;align-items:center;justify-content:center}
 .logo-hex svg{color:var(--jade)}
 .logo-name{font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--jade2);text-transform:uppercase}
 .logo-sub{font-family:var(--mono);font-size:6px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase}
-
 .status-pill{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;
   background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.07);transition:all .35s}
 .status-pill.s-listen{border-color:rgba(217,79,110,.3);background:rgba(217,79,110,.05)}
@@ -76,9 +66,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .dot.d-think{background:var(--gold);box-shadow:0 0 5px rgba(184,134,11,.45);animation:pulse 1.1s ease infinite}
 .dot.d-ready{background:var(--jade);box-shadow:0 0 5px rgba(0,159,130,.35);animation:pulse 2.4s ease infinite}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.8);opacity:.3}}
-
 .pill-label{font-family:var(--mono);font-size:7px;letter-spacing:.2em;color:var(--ink1);text-transform:uppercase;min-width:52px}
-
 .bar-r{display:flex;align-items:center;gap:12px}
 .timer{font-family:var(--mono);font-size:11px;color:var(--ink2);letter-spacing:.04em}
 
@@ -87,29 +75,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 /* ── ORB ── */
 .orb-wrap{position:relative;flex-shrink:0;width:var(--orb);height:var(--orb)}
-
 .ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid transparent;pointer-events:none}
 .r1{width:calc(var(--orb)*1.72);height:calc(var(--orb)*1.72);border-color:rgba(0,159,130,.05);animation:spin 70s linear infinite}
 .r2{width:calc(var(--orb)*1.38);height:calc(var(--orb)*1.38);border-color:rgba(94,82,224,.04);animation:spin 46s linear infinite reverse}
 .r3{width:calc(var(--orb)*1.13);height:calc(var(--orb)*1.13);border-color:rgba(0,159,130,.07);animation:spin 28s linear infinite}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-
 .ring::before{content:'';position:absolute;width:5px;height:5px;border-radius:50%;top:-2.5px;left:50%;transform:translateX(-50%);background:var(--jade);box-shadow:0 0 7px rgba(0,159,130,.5)}
 .r2::before{background:var(--aurora);box-shadow:0 0 5px rgba(94,82,224,.4);width:3px;height:3px}
 .r3::before{display:none}
-
 .orb-glow{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:2;transition:box-shadow .8s var(--ease)}
 .orb-glow.g-speak{box-shadow:0 0 55px 18px rgba(0,159,130,.1),0 0 130px 50px rgba(0,159,130,.04)}
 .orb-glow.g-listen{box-shadow:0 0 55px 18px rgba(217,79,110,.09),0 0 130px 50px rgba(217,79,110,.03)}
 .orb-glow.g-think{box-shadow:0 0 45px 14px rgba(184,134,11,.08),0 0 110px 40px rgba(184,134,11,.03)}
-
 .vad-ring{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid rgba(217,79,110,.25);z-index:3;pointer-events:none;opacity:0}
 .vad-ring.vad-on{animation:vadpulse .65s ease-out infinite}
 @keyframes vadpulse{0%{opacity:.8;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.32)}}
-
-/* ── Wave canvas ── */
 #waveCanvas{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:6;pointer-events:none}
-
 .orb-core{position:absolute;width:var(--orb);height:var(--orb);top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:5;overflow:hidden;
   background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.88) 0%,transparent 50%),
              radial-gradient(circle at 64% 70%,rgba(0,159,130,.06) 0%,transparent 44%),
@@ -123,7 +104,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .orb-core.c-think{border-color:rgba(184,134,11,.2);box-shadow:0 0 0 1px rgba(184,134,11,.05),0 3px 22px rgba(184,134,11,.07),inset 0 1px 0 rgba(255,255,255,.92)}
 .orb-core.breathing{animation:breathe 5s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.013)}}
-
 .orb-glyph{font-family:var(--serif);font-style:italic;font-size:50px;line-height:1;color:var(--jade2);text-shadow:0 0 28px rgba(0,159,130,.16);position:relative;z-index:1;user-select:none}
 .orb-divider{width:18px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,114,96,.4),transparent);position:relative;z-index:1}
 .orb-sub{font-family:var(--mono);font-size:5.5px;letter-spacing:.3em;color:var(--ink2);text-transform:uppercase;position:relative;z-index:1;user-select:none}
@@ -140,9 +120,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .stat-k{font-family:var(--mono);font-size:5.5px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:4px}
 .stat-v{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink)}
 
-/* ── TRANSCRIPT BUBBLE ── */
+/* ── TRANSCRIPT ── */
 .tx-wrap{position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(10px);
-  width:min(540px,calc(100vw - 24px));padding:11px 17px;
+  width:min(580px,calc(100vw - 24px));padding:11px 17px;
   background:rgba(250,248,244,.97);border:1px solid rgba(0,0,0,.09);border-radius:14px;
   box-shadow:0 4px 26px rgba(0,0,0,.07);backdrop-filter:blur(20px);
   opacity:0;pointer-events:none;transition:opacity .28s,transform .32s var(--ease);text-align:center;z-index:50}
@@ -152,9 +132,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .tx-who.tx-ai{color:rgba(0,114,96,.82)}
 .tx-text{font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--ink1)}
 
-/* ── INTERIM transcript (live) ── */
+/* live interim text */
 .interim-wrap{position:fixed;bottom:94px;left:50%;transform:translateX(-50%);
-  width:min(540px,calc(100vw - 24px));text-align:center;z-index:49;pointer-events:none;opacity:0;transition:opacity .2s}
+  width:min(580px,calc(100vw - 24px));text-align:center;z-index:49;pointer-events:none;
+  opacity:0;transition:opacity .2s}
 .interim-wrap.open{opacity:1}
 .interim-text{font-family:var(--sans);font-size:12px;color:var(--ink2);font-style:italic}
 
@@ -162,15 +143,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .ctrl{position:fixed;bottom:0;left:0;right:0;height:80px;z-index:100;
   display:flex;align-items:center;justify-content:center;gap:28px;
   background:rgba(244,241,235,.94);border-top:1px solid rgba(0,0,0,.06);backdrop-filter:blur(20px)}
-
 .ibtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(0,0,0,.1);background:transparent;
   color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .ibtn:hover{border-color:rgba(0,0,0,.18);color:var(--ink);background:rgba(255,255,255,.65);transform:scale(1.08)}
 .ibtn.active{border-color:rgba(217,79,110,.3);color:var(--blush);background:rgba(217,79,110,.05)}
-
+.ibtn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
 .ctrl-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;min-width:66px;text-align:center}
 
-/* ── MIC BUTTON ── */
+/* ── MIC BUTTON — purely decorative now; mic is always on ── */
 .mic-rig{position:relative;display:flex;align-items:center;justify-content:center}
 .mring{position:absolute;border-radius:50%;border:1px solid transparent;pointer-events:none}
 .mr1{width:88px;height:88px}
@@ -178,36 +158,32 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .mr1.on{border-color:rgba(217,79,110,.18);animation:ripple 1.4s ease infinite}
 .mr2.on{border-color:rgba(217,79,110,.12);animation:ripple 1.4s .26s ease infinite}
 @keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.75);opacity:0}}
-
 .mic-btn{width:58px;height:58px;border-radius:50%;border:1px solid rgba(0,159,130,.22);
   background:rgba(255,255,255,.78);color:var(--jade2);cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .28s;
   box-shadow:0 2px 10px rgba(0,0,0,.06);position:relative;z-index:2}
 .mic-btn:hover{border-color:rgba(0,159,130,.4);box-shadow:0 4px 18px rgba(0,159,130,.12);background:rgba(255,255,255,.92)}
-.mic-btn.m-listen{border-color:rgba(217,79,110,.38);color:var(--blush);background:rgba(255,255,255,.9);box-shadow:0 3px 16px rgba(217,79,110,.14)}
-.mic-btn.m-ready{animation:micglow 3s ease infinite}
+.mic-btn.m-on{border-color:rgba(0,159,130,.38);color:var(--jade);animation:micglow 3s ease infinite}
+.mic-btn.m-listening{border-color:rgba(217,79,110,.38);color:var(--blush);background:rgba(255,255,255,.9);box-shadow:0 3px 16px rgba(217,79,110,.14)}
+.mic-btn.m-muted{border-color:rgba(0,0,0,.12);color:var(--ink3)}
 @keyframes micglow{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 0 rgba(0,159,130,.2)}50%{box-shadow:0 2px 10px rgba(0,0,0,.06),0 0 0 10px rgba(0,159,130,0)}}
 
-/* ── SCREENS ── */
+/* ── LOADING / SPLASH / END SCREENS ── */
 .screen{position:fixed;inset:0;z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;transition:opacity .55s,visibility .55s}
 .screen.off{opacity:0;visibility:hidden;pointer-events:none}
-.screen.gone{display:none}
-
 #sLoad{background:var(--bg);z-index:900}
 .load-mark{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--jade)}
 .load-sep{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)}
 .load-spin{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,159,130,.14);border-top-color:var(--jade);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .load-msg{font-family:var(--mono);font-size:7px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
-
 #sSplash{background:var(--bg);z-index:1000;cursor:pointer}
 .sp-logo{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--jade)}
 .sp-play{width:68px;height:68px;border-radius:50%;border:1px solid rgba(0,159,130,.26);background:rgba(255,255,255,.82);
-  display:flex;align-items:center;justify-content:center;color:var(--jade2);cursor:pointer;
-  transition:all .3s;box-shadow:0 3px 14px rgba(0,0,0,.07)}
+  display:flex;align-items:center;justify-content:center;color:var(--jade2);cursor:pointer;transition:all .3s;box-shadow:0 3px 14px rgba(0,0,0,.07)}
 .sp-play:hover{border-color:var(--jade);box-shadow:0 6px 24px rgba(0,159,130,.14);background:rgba(255,255,255,.95)}
 .sp-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
-
+.sp-sub{font-family:var(--sans);font-size:12px;color:var(--ink2);max-width:260px;line-height:1.6}
 #sEnd{background:rgba(244,241,235,.97);backdrop-filter:blur(40px);z-index:600;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s}
 #sEnd.open{opacity:1;visibility:visible;pointer-events:all}
 .end-wrap{width:400px;max-width:90vw;padding:0 20px}
@@ -218,19 +194,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .end-body{font-family:var(--sans);font-size:13px;line-height:1.8;color:var(--ink1);margin-bottom:20px}
 .end-cta{display:block;width:100%;padding:13px 18px;border:1px solid rgba(0,159,130,.26);
   background:rgba(0,159,130,.05);color:var(--jade2);font-family:var(--mono);font-size:6.5px;
-  letter-spacing:.22em;text-transform:uppercase;text-decoration:none;cursor:pointer;
-  transition:all .2s;border-radius:4px}
+  letter-spacing:.22em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .2s;border-radius:4px}
 .end-cta:hover{border-color:var(--jade);background:rgba(0,159,130,.1)}
-
 .toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
   background:rgba(217,79,110,.9);color:#fff;padding:7px 18px;z-index:999;
   display:none;font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;
   border-radius:100px;box-shadow:0 3px 12px rgba(217,79,110,.25)}
-
-/* ── ERROR BADGE ── */
 .err-badge{position:fixed;top:60px;right:20px;background:rgba(217,79,110,.1);border:1px solid rgba(217,79,110,.25);
   color:var(--blush);padding:4px 10px;border-radius:6px;font-family:var(--mono);font-size:6px;letter-spacing:.14em;
   text-transform:uppercase;z-index:200;display:none}
+
+/* ── MUTE OVERLAY — tap to unmute ── */
+.mute-overlay{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;
+  background:rgba(244,241,235,.85);backdrop-filter:blur(16px);flex-direction:column;gap:16px;cursor:pointer}
+.mute-overlay.show{display:flex}
+.mute-icon{font-size:36px}
+.mute-msg{font-family:var(--mono);font-size:7px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase}
 
 /* ── RESPONSIVE ── */
 @media(max-width:760px){
@@ -250,15 +229,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 </head>
 <body>
 
-<!-- AMBIENT -->
-<div class="field">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-</div>
+<div class="field"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 <div class="grain"></div>
-
-<!-- ERROR BADGE -->
 <div class="err-badge" id="errBadge"></div>
 
 <!-- TOPBAR -->
@@ -274,12 +246,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
       <div class="logo-sub">Global Expansion Advisory</div>
     </div>
   </div>
-
   <div class="status-pill" id="pill">
     <div class="dot" id="dot"></div>
     <span class="pill-label" id="pillLabel">Connecting</span>
   </div>
-
   <div class="bar-r">
     <div class="timer" id="timerEl">0:00</div>
   </div>
@@ -288,9 +258,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 <!-- STAGE -->
 <div class="stage">
   <div class="orb-wrap">
-    <div class="ring r1"></div>
-    <div class="ring r2"></div>
-    <div class="ring r3"></div>
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
     <div class="orb-glow" id="glow"></div>
     <div class="vad-ring" id="vadRing"></div>
     <canvas id="waveCanvas"></canvas>
@@ -300,7 +268,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
       <div class="orb-sub">Dr. CV · Strategist</div>
     </div>
   </div>
-
   <div class="panel">
     <div>
       <div class="p-tag">Strategy Session</div>
@@ -322,8 +289,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <div class="tx-who" id="txWho"></div>
   <div class="tx-text" id="txText"></div>
 </div>
-
-<!-- INTERIM (live typing effect while user speaks) -->
 <div class="interim-wrap" id="interimWrap">
   <div class="interim-text" id="interimText"></div>
 </div>
@@ -336,12 +301,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     </svg>
   </button>
 
-  <div class="ctrl-hint" id="hintL">Please wait</div>
+  <div class="ctrl-hint" id="hintL">Just speak naturally</div>
 
   <div class="mic-rig">
     <div class="mring mr1" id="mr1"></div>
     <div class="mring mr2" id="mr2"></div>
-    <button class="mic-btn" id="btnMic">
+    <!-- Mic button: tap to mute/unmute your microphone -->
+    <button class="mic-btn m-on" id="btnMic" title="Tap to mute/unmute your mic">
       <svg id="micIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
         <rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
@@ -349,10 +315,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     </button>
   </div>
 
-  <div class="ctrl-hint" id="hintR">Tap to speak</div>
+  <div class="ctrl-hint" id="hintR">Mic always open</div>
 
-  <button class="ibtn" id="btnMute" title="Mute AI voice">
-    <svg id="muteIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+  <!-- Speaker mute (AI voice) -->
+  <button class="ibtn" id="btnSpkr" title="Mute AI voice">
+    <svg id="spkrIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M11 5 6 9H2v6h4l5 4V5z"/>
       <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
     </svg>
@@ -367,7 +334,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <div class="load-msg" id="loadMsg">Preparing your session</div>
 </div>
 
-<!-- SPLASH -->
+<!-- SPLASH — needed to unlock audio on mobile/Safari -->
 <div class="screen" id="sSplash">
   <div class="sp-logo">Comply Globally</div>
   <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
@@ -377,9 +344,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     </svg>
   </div>
   <div class="sp-hint">Tap to begin your session</div>
+  <div class="sp-sub">This is a live voice conversation. You'll speak and Dr. CV will respond — no button pressing needed.</div>
 </div>
 
-<!-- END SCREEN -->
+<!-- END -->
 <div class="screen" id="sEnd">
   <div class="end-wrap">
     <div class="end-gl"></div>
@@ -393,41 +361,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 <div class="toast" id="toast"></div>
 
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT — OpenAI Realtime API via WebRTC
+═══════════════════════════════════════════ -->
 <script>
-/* ═══════════════════════════════════════════════════════════
-   CONFIG — edit BACKEND to match your Render URL
-═══════════════════════════════════════════════════════════ */
+/* ── CONFIG ── */
 const CFG = {
-  // Your Render backend URL (no trailing slash)
-  BACKEND: 'https://drcv.onrender.com',
-
-  // Calendar booking link
-  CAL: 'https://cal.com/udhay-marwah-wkeu9j/30mins',
-
-  // Google Apps Script for CRM sync (optional, set '' to disable)
-  GAS: 'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
-
-  // Session limits
+  BACKEND:   'https://drcv.onrender.com', // your Render URL, no trailing slash
+  CAL:       'https://cal.com/udhay-marwah-wkeu9j/30mins',
+  GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
+  VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
   MIN_TURNS: 7,
   MAX_MS:    18 * 60 * 1000,
   SCORE_MIN: 58,
-
-  // VAD / turn-detection tuning (ms)
-  // These values come from 50k+ call production research: 255ms sweet spot
-  SILENCE_SHORT:  255,   // aggressive — after clear sentence-end punctuation
-  SILENCE_MID:    780,   // normal — user pausing mid-thought
-  SILENCE_LONG:   1600,  // long — user seems to be thinking
-  SILENCE_VERYLONG: 2600,// very long — user definitely done
-  MIN_SPEECH_MS:  220,   // minimum speech burst to count
-  POST_TTS_MS:    380,   // silence after TTS before mic opens
-
-  // TTS model (sent to backend)
-  TTS_VOICE: 'shimmer',  // fallback if ElevenLabs not configured
 };
 
-/* ═══════════════════════════════════════════════════════════
-   LEAD DATA FROM URL PARAMS
-═══════════════════════════════════════════════════════════ */
+/* ── URL PARAMS ── */
 const Q = new URLSearchParams(location.search);
 const LEAD = {
   name:    decodeURIComponent(Q.get('name')    || ''),
@@ -440,25 +389,13 @@ const LEAD = {
 };
 const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
-/* ═══════════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════════ */
+/* ── HELPERS ── */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const $ = id => document.getElementById(id);
+const $  = id => document.getElementById(id);
 
-function showErr(msg) {
-  const b = $('errBadge');
-  b.textContent = msg;
-  b.style.display = 'block';
-  setTimeout(() => b.style.display = 'none', 4000);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SCORE ENGINE
-═══════════════════════════════════════════════════════════ */
+/* ── SCORE ENGINE ── */
 const SCORE = (() => {
   let s = { interest:0, engagement:0, intent:0, readiness:0 };
-
   function update(text) {
     const w = text.split(/\s+/).length;
     s.engagement = Math.min(100, s.engagement + (w>18?15:w>8?8:3));
@@ -466,754 +403,351 @@ const SCORE = (() => {
     if (/ready|plan|timeline|budget|invest|commit|month|quarter/i.test(text)) s.intent = Math.min(100,s.intent+14);
     if (/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) s.readiness = Math.min(100,s.readiness+17);
   }
-
-  function apply(d) {
-    s.interest   = Number(d.interest)   || s.interest;
-    s.engagement = Number(d.engagement) || s.engagement;
-    s.intent     = Number(d.intent)     || s.intent;
-    s.readiness  = Number(d.readiness)  || s.readiness;
-  }
-
   function total() { return Math.round((s.interest+s.engagement+s.intent+s.readiness)/4); }
-
   function level() { return total()>=70?'hot':total()>=40?'warm':'cold'; }
-
-  function fallback(note) {
-    return {...s, level:level(), summary:`${LEAD.name||'Client'} from ${LEAD.company||'company'} exploring ${LEAD.country||'market'}. ${note}`};
-  }
-
-  function parseFromText(text) {
-    const i = text.indexOf('SCORE_JSON:');
-    if (i===-1) return null;
-    let rem = text.slice(i + 'SCORE_JSON:'.length).trim();
-    const st = rem.indexOf('{');
-    if (st===-1) return null;
-    rem = rem.slice(st);
-    let depth=0, end=-1;
-    for (let j=0;j<rem.length;j++){
-      if(rem[j]==='{') depth++;
-      else if(rem[j]==='}'){ depth--; if(depth===0){end=j;break;} }
-    }
-    if(end===-1) return null;
-    try { return JSON.parse(rem.slice(0,end+1)); } catch { return null; }
-  }
-
-  return { update, apply, total, level, fallback, parseFromText };
+  function snapshot() { return {...s, total:total(), level:level()}; }
+  return { update, total, level, snapshot };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   WAVE VISUALIZER
-═══════════════════════════════════════════════════════════ */
-const WAVE = (() => {
-  const cvs = $('waveCanvas');
-  const ctx = cvs.getContext('2d');
-  const SZ = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb')) || 196;
-  cvs.width = SZ; cvs.height = SZ;
-  const CX = SZ/2, CY = SZ/2, R = SZ * 0.37;
-  let phase = 0, amp = 0, target = 0, state = 'idle';
-
-  function setAmp(t) { target = Math.max(0, Math.min(t, 30)); }
-  function setState(s) { state = s; }
-
-  const tick = () => {
-    ctx.clearRect(0, 0, SZ, SZ);
-    amp += (target - amp) * 0.1;
-    phase += state==='speak'?0.072:state==='listen'?0.046:state==='think'?0.022:0.007;
-
-    const g = ctx.createLinearGradient(0, 0, SZ, SZ);
-    if (state==='speak') {
-      g.addColorStop(0,'rgba(0,114,96,.78)'); g.addColorStop(1,'rgba(94,82,224,.65)');
-    } else if (state==='listen') {
-      g.addColorStop(0,'rgba(217,79,110,.74)'); g.addColorStop(1,'rgba(232,96,42,.6)');
-    } else if (state==='think') {
-      g.addColorStop(0,'rgba(184,134,11,.52)'); g.addColorStop(1,'rgba(184,134,11,.28)');
-    } else {
-      g.addColorStop(0,'rgba(0,114,96,.09)'); g.addColorStop(1,'rgba(94,82,224,.07)');
-    }
-
-    const pts = 260;
-    ctx.beginPath();
-    for (let i=0;i<=pts;i++){
-      const a = (i/pts)*Math.PI*2 - Math.PI/2;
-      const n = Math.sin(a*3+phase)*amp + Math.sin(a*5-phase*1.3)*amp*.26 + Math.sin(a*9+phase*.65)*amp*.1;
-      const r = R + n;
-      const x = CX + Math.cos(a)*r, y = CY + Math.sin(a)*r;
-      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = g;
-    ctx.lineWidth = state==='speak'?2.1:state==='listen'?1.8:1.1;
-    ctx.stroke();
-    requestAnimationFrame(tick);
-  };
-  tick();
-
-  return { setAmp, setState };
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   UI CONTROLLER
-═══════════════════════════════════════════════════════════ */
-const UI = (() => {
-  const states = {
-    idle:      { dot:'',        label:'Connecting', hintL:'Please wait',    hintR:'—',               wave:0,  waveState:'idle'},
-    loading:   { dot:'',        label:'Loading',    hintL:'Please wait',    hintR:'—',               wave:0,  waveState:'idle'},
-    greeting:  { dot:'d-speak', label:'Speaking',   hintL:'Just a moment…', hintR:'Tap to interrupt', wave:12, waveState:'speak'},
-    ready:     { dot:'d-ready', label:'Ready',      hintL:'Listening for you',hintR:'Tap to speak',  wave:0,  waveState:'idle'},
-    listening: { dot:'d-listen',label:'Listening',  hintL:'I\'m listening…', hintR:'Tap to finish',  wave:9,  waveState:'listen'},
-    thinking:  { dot:'d-think', label:'Thinking',   hintL:'Processing…',    hintR:'Please wait',     wave:3,  waveState:'think'},
-    speaking:  { dot:'d-speak', label:'Speaking',   hintL:'Responding…',    hintR:'Tap to interrupt', wave:13, waveState:'speak'},
-    closed:    { dot:'',        label:'Done',        hintL:'Session ended',  hintR:'—',               wave:0,  waveState:'idle'},
-  };
-
-  function set(st) {
-    const c = states[st] || states.idle;
-    $('dot').className = 'dot ' + c.dot;
-    $('pillLabel').textContent = c.label;
-    $('hintL').textContent = c.hintL;
-    $('hintR').textContent = c.hintR;
-    WAVE.setAmp(c.wave);
-    WAVE.setState(c.waveState);
-
-    const pill = $('pill');
-    pill.className = 'status-pill' +
-      (st==='listening'?' s-listen':st==='speaking'||st==='greeting'?' s-speak':st==='thinking'?' s-think':st==='ready'?' s-ready':'');
-
-    const core = $('orbCore');
-    core.className = 'orb-core' +
-      (st==='listening'?' c-listen':st==='speaking'||st==='greeting'?' c-speak':st==='thinking'?' c-think':'') +
-      (st==='ready'||st==='idle'?' breathing':'');
-
-    $('glow').className = 'orb-glow' +
-      (st==='speaking'||st==='greeting'?' g-speak':st==='listening'?' g-listen':st==='thinking'?' g-think':'');
-
-    const ml = st==='listening';
-    $('btnMic').className = 'mic-btn' + (ml?' m-listen':st==='ready'?' m-ready':'');
-    $('mr1').className = 'mring mr1' + (ml?' on':'');
-    $('mr2').className = 'mring mr2' + (ml?' on':'');
-    $('vadRing').className = 'vad-ring' + (ml?' vad-on':'');
-  }
-
-  let _txT = null;
-  function showTx(who, text) {
-    $('txWho').textContent = who==='you' ? 'You' : 'Dr. CV';
-    $('txWho').className = 'tx-who ' + (who==='you'?'tx-you':'tx-ai');
-    $('txText').textContent = text;
-    $('txWrap').classList.add('open');
-    clearTimeout(_txT);
-    _txT = setTimeout(() => $('txWrap').classList.remove('open'), 7000);
-  }
-
-  function showInterim(text) {
-    if (text) {
-      $('interimText').textContent = text;
-      $('interimWrap').classList.add('open');
-    } else {
-      $('interimWrap').classList.remove('open');
-    }
-  }
-
-  function setTimer(fmt) { $('timerEl').textContent = fmt; $('stDur').textContent = fmt; }
-
-  function renderLead() {
-    $('stClient').textContent = FIRST || '—';
-    $('stMarket').textContent = LEAD.country || '—';
-  }
-
-  function setLoad(msg) { $('loadMsg').textContent = msg; }
-  function hideLoad() { $('sLoad').classList.add('off'); }
-
-  function showSplash(cb) {
-    $('sSplash').classList.remove('off');
-    $('spBtn').addEventListener('click', () => { $('sSplash').classList.add('off'); cb(); }, {once:true});
-    $('sSplash').addEventListener('click', () => { $('sSplash').classList.add('off'); cb(); }, {once:true});
-  }
-
-  function showEnd(calUrl, hot) {
-    const body = $('endBody'), cta = $('endCTA');
-    if (hot && calUrl) {
-      body.textContent = "You're a great fit for our services. Book a strategy call — we'll pick up exactly where we left off.";
-      cta.href = calUrl; cta.style.display = 'block';
-    } else {
-      body.textContent = "Thank you for your time. Our advisory team will review your session and reach out within one business day.";
-      cta.style.display = 'none';
-    }
-    $('sEnd').classList.add('open');
-  }
-
-  let _toastT = null;
-  function toast(msg) {
-    $('toast').textContent = msg; $('toast').style.display = 'block';
-    clearTimeout(_toastT);
-    _toastT = setTimeout(() => $('toast').style.display = 'none', 3800);
-  }
-
-  return { set, showTx, showInterim, setTimer, renderLead, setLoad, hideLoad, showSplash, showEnd, toast };
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   MEMORY (session persistence)
-═══════════════════════════════════════════════════════════ */
-const MEM = (() => {
-  const MK = 'cg_m_' + LEAD.id;
-  const LK = 'cg_lock_' + LEAD.id;
-  let _m = [];
-
-  function load()  { try { const r=localStorage.getItem(MK); if(r) _m=JSON.parse(r); } catch{ _m=[]; } return _m; }
-  function save()  { try { localStorage.setItem(MK,JSON.stringify(_m.slice(-30))); } catch{} }
-  function push(role,content) { _m.push({role,content}); save(); }
-  function clear() { try{ localStorage.removeItem(MK); }catch{} _m=[]; }
-  function get()   { return [..._m]; }
-  function has()   { return _m.length>0; }
-  function isLocked() { try{ return !!localStorage.getItem(LK); }catch{ return false; } }
-  function lock()  { try{ localStorage.setItem(LK,'1'); }catch{} }
-  function ctxSummary() {
-    if (!_m.length) return '';
-    return _m.slice(-6).map(m=>`${m.role==='user'?'Client':'Dr.CV'}: ${m.content.slice(0,90)}`).join('\n');
-  }
-  return { load,save,push,clear,get,has,isLocked,lock,ctxSummary };
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   TTS PLAYER
-   Uses your backend /tts endpoint (ElevenLabs or OpenAI)
-   CRITICAL: locks mic while audio plays, unlocks after
-═══════════════════════════════════════════════════════════ */
-const TTS = (() => {
-  let _audio = new Audio();
-  let _muted = false;
-  let _locked = false; // true = AI is talking, mic must be OFF
-  let _queue = [];
-  let _playing = false;
-  let _onDone = null;
-
-  _audio.preload = 'none';
-
-  function mute(v) { _muted = v; if (v) stop(); }
-  function isMuted() { return _muted; }
-  function isLocked() { return _locked; }
-
-  function stop() {
-    _queue = [];
-    _playing = false;
-    try { _audio.pause(); _audio.src = ''; } catch{}
-    _locked = false;
-    if (_onDone) { const cb = _onDone; _onDone = null; cb(); }
-  }
-
-  async function _playOne(text) {
-    if (_muted || !text.trim()) return;
-    try {
-      const res = await fetch(CFG.BACKEND + '/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice: CFG.TTS_VOICE }),
-      });
-      if (!res.ok) { console.warn('TTS fetch failed:', res.status); return; }
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      _audio.src = url;
-      await new Promise((res, rej) => {
-        _audio.onended  = () => { URL.revokeObjectURL(url); res(); };
-        _audio.onerror  = () => { URL.revokeObjectURL(url); res(); }; // don't rej, just continue
-        _audio.play().catch(() => res());
-      });
-    } catch(e) { console.warn('TTS error:', e); }
-  }
-
-  async function _drain() {
-    if (_playing) return;
-    _playing = true;
-    _locked = true;
-    while (_queue.length > 0) {
-      const chunk = _queue.shift();
-      if (chunk) await _playOne(chunk);
-    }
-    _playing = false;
-    _locked = false;
-    const cb = _onDone; _onDone = null;
-    if (cb) cb();
-  }
-
-  function enqueue(text, onAllDone) {
-    if (onAllDone) _onDone = onAllDone;
-    _queue.push(text);
-    _drain();
-  }
-
-  function speak(sentences, onDone) {
-    stop();
-    _onDone = onDone || null;
-    sentences.forEach(s => { if(s.trim()) _queue.push(s); });
-    _drain();
-  }
-
-  return { mute, isMuted, isLocked, stop, enqueue, speak };
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   SMART VAD + STT
-   ─────────────────────────────────────────────────────────
-   Architecture:
-   1. Web Speech API for continuous interim transcripts
-   2. Energy-based VAD with ADAPTIVE silence thresholds
-   3. Word count heuristic for semantic completeness
-   4. Strict gate: mic CANNOT activate while TTS.isLocked()
-═══════════════════════════════════════════════════════════ */
-const RECOG = (() => {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  let _r         = null;
-  let _active    = false;
-  let _enabled   = false;
-  let _accum     = '';
-  let _interim   = '';
-  let _commitT   = null;
-  let _warnT     = null;
-  let _lastWord  = 0;
-  let _ctx       = null;
-  let _analyser  = null;
-  let _stream    = null;
-  let _vadRaf    = null;
-  let _energy    = 0;
-  let _speechStart = null;
-
-  // Adaptive silence: shorter if sentence-ending punctuation, longer for mid-thought
-  function _silenceMs(text) {
-    const t = text.trim();
-    const words = t.split(/\s+/).length;
-    // Sentence-ending detected → shorter wait
-    if (/[.!?]$/.test(t)) return words > 6 ? CFG.SILENCE_SHORT : CFG.SILENCE_MID;
-    // Comma or conjunction → longer (mid-thought)
-    if (/[,;]$/.test(t) || /\b(and|but|or|so|then|because|if|when)\s*$/.test(t)) return CFG.SILENCE_LONG;
-    // Short utterance → wait longer (may continue)
-    if (words < 4) return CFG.SILENCE_VERYLONG;
-    // Normal
-    return CFG.SILENCE_MID;
-  }
-
-  function _startVAD(stream) {
-    try {
-      if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
-      if (_ctx.state === 'suspended') _ctx.resume();
-      _analyser = _ctx.createAnalyser();
-      _analyser.fftSize = 256;
-      _analyser.smoothingTimeConstant = 0.6;
-      const src = _ctx.createMediaStreamSource(stream);
-      src.connect(_analyser);
-      const data = new Float32Array(_analyser.frequencyBinCount);
-      const tick = () => {
-        if (!_analyser) return;
-        _analyser.getFloatTimeDomainData(data);
-        let sum = 0;
-        for (let i=0;i<data.length;i++) sum += data[i]*data[i];
-        _energy = Math.sqrt(sum/data.length);
-        // Drive wave visualizer with mic energy during listening
-        WAVE.setAmp(_energy * 380);
-        // VAD ring
-        $('vadRing').classList.toggle('vad-on', _energy > 0.012);
-        _vadRaf = requestAnimationFrame(tick);
-      };
-      _vadRaf = requestAnimationFrame(tick);
-    } catch(e) { console.warn('VAD init:', e); }
-  }
-
-  function _stopVAD() {
-    cancelAnimationFrame(_vadRaf);
-    _vadRaf = null;
-    if (_analyser) { try{ _analyser.disconnect(); }catch{} _analyser = null; }
-    if (_stream)   { try{ _stream.getTracks().forEach(t=>t.stop()); }catch{} _stream = null; }
-    WAVE.setAmp(0);
-    $('vadRing').classList.remove('vad-on');
-  }
-
-  function _build() {
-    if (!SR) { UI.toast('Speech recognition needs Chrome, Edge, or Safari.'); return false; }
-    try { if(_r){ _r.onend=null; _r.abort(); } } catch{}
-    _r = new SR();
-    _r.lang = 'en-US'; // Better accent support than en-IN for most users
-    _r.continuous = true;
-    _r.interimResults = true;
-    _r.maxAlternatives = 1;
-
-    _r.onstart = () => {
-      _active = true; _accum = ''; _interim = '';
-      UI.set('listening');
-      _speechStart = null;
-      // Get mic stream for VAD
-      navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, autoGainControl:true }})
-        .then(s => { _stream = s; _startVAD(s); })
-        .catch(() => {});
-    };
-
-    _r.onresult = e => {
-      if (!_enabled || TTS.isLocked()) return;
-      let fin='', int='';
-      for (let i=e.resultIndex;i<e.results.length;i++){
-        if (e.results[i].isFinal) fin += e.results[i][0].transcript + ' ';
-        else                       int += e.results[i][0].transcript;
-      }
-      _accum  += fin;
-      _interim = int;
-      _lastWord = Date.now();
-
-      const total = (_accum + _interim).trim();
-      if (total) {
-        UI.showInterim(total);
-        _schedCommit(total);
-      }
-    };
-
-    _r.onerror = e => {
-      _cleanup();
-      const err = e.error;
-      if (!['no-speech','aborted'].includes(err)) console.warn('STT error:', err);
-      if (_enabled && !TTS.isLocked()) {
-        const d = err==='no-speech'?350: Math.min(500*(_retryN++), 3000);
-        setTimeout(() => { if(_enabled && !TTS.isLocked()) _safeStart(); }, d);
-      }
-    };
-
-    _r.onend = () => {
-      _active = false;
-      _stopVAD();
-      const had = (_accum + _interim).trim();
-      if (had && _enabled && !_commitT) {
-        _doCommit();
-      } else if (_enabled && !TTS.isLocked()) {
-        setTimeout(() => { if(_enabled && !TTS.isLocked()) _safeStart(); }, 280);
-      } else {
-        UI.showInterim('');
-      }
-    };
-    return true;
-  }
-
-  let _retryN = 0;
-
-  function _schedCommit(text) {
-    const ms = _silenceMs(text);
-    clearTimeout(_commitT);
-    _commitT = setTimeout(_doCommit, ms);
-  }
-
-  function _doCommit() {
-    clearTimeout(_commitT); _commitT = null;
-    UI.showInterim('');
-    const spoken = (_accum + ' ' + _interim).trim();
-    _accum = ''; _interim = '';
-    if (_active && _r) { try{ _r.stop(); }catch{} }
-    _stopVAD();
-    if (spoken.length > 1 && _enabled) {
-      _enabled = false;
-      CONV.handleUserSpeech(spoken);
-    }
-  }
-
-  function _cleanup() {
-    _active = false;
-    clearTimeout(_commitT); _commitT = null;
-    UI.showInterim('');
-  }
-
-  function _safeStart() {
-    if (_active || !_enabled || TTS.isLocked()) return;
-    if (!_r && !_build()) return;
-    try { _r.start(); _retryN = 0; }
-    catch(e) {
-      console.warn('recog start:', e.message);
-      _r = null;
-      setTimeout(() => { if(_enabled && !TTS.isLocked() && _build()) { try{ _r.start(); }catch{} } }, 700);
-    }
-  }
-
-  function enable() {
-    _enabled = true;
-    if (!TTS.isLocked()) {
-      setTimeout(() => { if(_enabled && !TTS.isLocked()) _safeStart(); }, CFG.POST_TTS_MS);
-    }
-  }
-
-  function disable() {
-    _enabled = false;
-    clearTimeout(_commitT); _commitT = null;
-    UI.showInterim('');
-    _stopVAD();
-    if (_active && _r) { try{ _r.stop(); }catch{} }
-    _cleanup();
-  }
-
-  function forceCommit() {
-    clearTimeout(_commitT); _commitT = null;
-    UI.showInterim('');
-    const spoken = (_accum + ' ' + _interim).trim();
-    _accum = ''; _interim = '';
-    if (_active && _r) { try{ _r.stop(); }catch{} }
-    _stopVAD();
-    if (spoken.length > 1 && _enabled) {
-      _enabled = false;
-      CONV.handleUserSpeech(spoken);
-    }
-  }
-
-  function interrupt() {
-    TTS.stop();
-    disable();
-    setTimeout(() => {
-      if (!CONV.isClosed()) {
-        _enabled = true;
-        _safeStart();
-      }
-    }, 250);
-  }
-
-  function isActive() { return _active; }
-  return { enable, disable, forceCommit, interrupt, isActive };
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   GOOGLE SHEETS SYNC (CRM)
-═══════════════════════════════════════════════════════════ */
+/* ── GOOGLE SHEETS SYNC ── */
 const GSYNC = (() => {
   function post(action, data) {
     if (!CFG.GAS) return;
     fetch(CFG.GAS + '?action=' + action, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ action, data: JSON.stringify(data) }).toString(),
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({action, data:JSON.stringify(data)}).toString(),
     }).catch(()=>{});
   }
   function turn(u, b, n) {
-    post('update', { leadId:LEAD.id, sessionId:LEAD.sid, turnNumber:n, userMessage:u, botResponse:b });
+    post('update',{leadId:LEAD.id,sessionId:LEAD.sid,turnNumber:n,userMessage:u,botResponse:b});
   }
-  function complete(sc, elapsed, turns) {
-    post('complete', {
-      leadId:LEAD.id, sessionId:LEAD.sid,
-      name:LEAD.name, email:LEAD.email, company:LEAD.company, country:LEAD.country,
-      qualificationScore:SCORE.total(), qualificationLevel:sc.level,
-      duration:elapsed, turnCount:turns, summary:sc.summary,
-      interest:sc.interest, engagement:sc.engagement, intent:sc.intent, readiness:sc.readiness,
+  function complete(elapsed, turns) {
+    const sc = SCORE.snapshot();
+    post('complete',{
+      leadId:LEAD.id,sessionId:LEAD.sid,
+      name:LEAD.name,email:LEAD.email,company:LEAD.company,country:LEAD.country,
+      qualificationScore:sc.total,qualificationLevel:sc.level,
+      duration:elapsed,turnCount:turns,
+      interest:sc.interest,engagement:sc.engagement,intent:sc.intent,readiness:sc.readiness,
     });
   }
-  return { turn, complete };
+  return {turn,complete};
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   SYSTEM PROMPT
-═══════════════════════════════════════════════════════════ */
-function buildSystemPrompt() {
-  const ctx = MEM.ctxSummary();
-  const memBlock = ctx
-    ? `\n\n── PRIOR CONTEXT ──\n${ctx}\n─────────────────\nContinue naturally. DO NOT re-ask anything already covered.`
-    : '';
+/* ── MEMORY ── */
+const MEM = (() => {
+  const MK = 'cg_m_' + LEAD.id;
+  const LK = 'cg_lock_' + LEAD.id;
+  function isLocked() { try{return !!localStorage.getItem(LK);}catch{return false;} }
+  function lock()  { try{localStorage.setItem(LK,'1');}catch{} }
+  function clear() { try{localStorage.removeItem(MK);}catch{} }
+  return {isLocked,lock,clear};
+})();
 
-  return `You are Dr. CV — a Global Expansion Strategist at Comply Globally on a LIVE phone call.
+/* ── WAVE VISUALISER ── */
+const WAVE = (() => {
+  const cvs = $('waveCanvas');
+  const ctx = cvs.getContext('2d');
+  const SZ  = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--orb'))||196;
+  cvs.width = SZ; cvs.height = SZ;
+  const CX = SZ/2, CY = SZ/2, R = SZ * 0.37;
+  let phase=0, amp=0, target=0, state='idle';
+  function setAmp(t){ target=Math.max(0,Math.min(t,30)); }
+  function setState(s){ state=s; }
+  const tick=()=>{
+    ctx.clearRect(0,0,SZ,SZ);
+    amp+=(target-amp)*0.1;
+    phase+=state==='speak'?.072:state==='listen'?.046:state==='think'?.022:.007;
+    const g=ctx.createLinearGradient(0,0,SZ,SZ);
+    if(state==='speak'){g.addColorStop(0,'rgba(0,114,96,.78)');g.addColorStop(1,'rgba(94,82,224,.65)');}
+    else if(state==='listen'){g.addColorStop(0,'rgba(217,79,110,.74)');g.addColorStop(1,'rgba(232,96,42,.6)');}
+    else if(state==='think'){g.addColorStop(0,'rgba(184,134,11,.52)');g.addColorStop(1,'rgba(184,134,11,.28)');}
+    else{g.addColorStop(0,'rgba(0,114,96,.09)');g.addColorStop(1,'rgba(94,82,224,.07)');}
+    const pts=260;
+    ctx.beginPath();
+    for(let i=0;i<=pts;i++){
+      const a=(i/pts)*Math.PI*2-Math.PI/2;
+      const n=Math.sin(a*3+phase)*amp+Math.sin(a*5-phase*1.3)*amp*.26+Math.sin(a*9+phase*.65)*amp*.1;
+      const r=R+n, x=CX+Math.cos(a)*r, y=CY+Math.sin(a)*r;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle=g;
+    ctx.lineWidth=state==='speak'?2.1:state==='listen'?1.8:1.1;
+    ctx.stroke();
+    requestAnimationFrame(tick);
+  };
+  tick();
+  return{setAmp,setState};
+})();
 
-CLIENT: ${LEAD.name||'Guest'} | Company: ${LEAD.company||'?'} | Target market: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}${memBlock}
+/* ── UI CONTROLLER ── */
+const UI = (() => {
+  const map = {
+    idle:      {dot:'',        label:'Connecting',  hintL:'Please wait',     hintR:'—',             wave:0,  ws:'idle'},
+    connecting:{dot:'d-think', label:'Connecting',  hintL:'Setting up…',     hintR:'—',             wave:2,  ws:'think'},
+    ready:     {dot:'d-ready', label:'Listening',   hintL:'I\'m listening',  hintR:'Just speak',    wave:0,  ws:'idle'},
+    listening: {dot:'d-listen',label:'Listening',   hintL:'Go ahead…',       hintR:'I\'m listening',wave:9,  ws:'listen'},
+    thinking:  {dot:'d-think', label:'Thinking',    hintL:'Processing…',     hintR:'Just a moment', wave:3,  ws:'think'},
+    speaking:  {dot:'d-speak', label:'Speaking',    hintL:'You can interrupt',hintR:'Just speak',   wave:13, ws:'speak'},
+    closed:    {dot:'',        label:'Done',         hintL:'Session ended',   hintR:'—',             wave:0,  ws:'idle'},
+  };
+  function set(st){
+    const c=map[st]||map.idle;
+    $('dot').className='dot '+c.dot;
+    $('pillLabel').textContent=c.label;
+    $('hintL').textContent=c.hintL;
+    $('hintR').textContent=c.hintR;
+    WAVE.setAmp(c.wave);
+    WAVE.setState(c.ws);
+    const pill=$('pill');
+    pill.className='status-pill'+(st==='listening'?' s-listen':st==='speaking'?' s-speak':st==='thinking'?' s-think':'');
+    const core=$('orbCore');
+    core.className='orb-core'+(st==='listening'?' c-listen':st==='speaking'?' c-speak':st==='thinking'?' c-think':'')+(st==='ready'||st==='idle'?' breathing':'');
+    $('glow').className='orb-glow'+(st==='speaking'?' g-speak':st==='listening'?' g-listen':st==='thinking'?' g-think':'');
+    const ml=st==='listening';
+    $('btnMic').classList.toggle('m-listening',ml);
+    $('mr1').classList.toggle('on',ml);
+    $('mr2').classList.toggle('on',ml);
+    $('vadRing').classList.toggle('vad-on',ml);
+  }
+  let _txT=null;
+  function showTx(who,text){
+    $('txWho').textContent=who==='you'?'You':'Dr. CV';
+    $('txWho').className='tx-who '+(who==='you'?'tx-you':'tx-ai');
+    $('txText').textContent=text;
+    $('txWrap').classList.add('open');
+    clearTimeout(_txT);
+    _txT=setTimeout(()=>$('txWrap').classList.remove('open'),7000);
+  }
+  function showInterim(text){
+    if(text){$('interimText').textContent=text;$('interimWrap').classList.add('open');}
+    else{$('interimWrap').classList.remove('open');}
+  }
+  function setTimer(fmt){$('timerEl').textContent=fmt;$('stDur').textContent=fmt;}
+  function renderLead(){$('stClient').textContent=FIRST||'—';$('stMarket').textContent=LEAD.country||'—';}
+  function setLoad(msg){$('loadMsg').textContent=msg;}
+  function hideLoad(){$('sLoad').classList.add('off');}
+  function showSplash(cb){
+    $('sSplash').classList.remove('off');
+    const go=()=>{$('sSplash').classList.add('off');cb();};
+    $('spBtn').addEventListener('click',go,{once:true});
+    $('sSplash').addEventListener('click',go,{once:true});
+  }
+  function showEnd(calUrl,hot){
+    const body=$('endBody'),cta=$('endCTA');
+    if(hot&&calUrl){
+      body.textContent="You're a great fit for our services. Book a strategy call — we'll pick up exactly where we left off.";
+      cta.href=calUrl;cta.style.display='block';
+    } else {
+      body.textContent="Thank you for your time. Our advisory team will review your session and reach out within one business day.";
+      cta.style.display='none';
+    }
+    $('sEnd').classList.add('open');
+  }
+  let _toastT=null;
+  function toast(msg){
+    $('toast').textContent=msg;$('toast').style.display='block';
+    clearTimeout(_toastT);
+    _toastT=setTimeout(()=>$('toast').style.display='none',3800);
+  }
+  function err(msg){
+    $('errBadge').textContent=msg;$('errBadge').style.display='block';
+    setTimeout(()=>$('errBadge').style.display='none',5000);
+  }
+  return{set,showTx,showInterim,setTimer,renderLead,setLoad,hideLoad,showSplash,showEnd,toast,err};
+})();
 
-═══ VOICE CALL RULES — FOLLOW STRICTLY ═══
+/* ═══════════════════════════════════════════════════════
+   REALTIME SESSION
+   ──────────────────────────────────────────────────────
+   Architecture:
+   1. Backend mints ephemeral OpenAI token → /session
+   2. We create a WebRTC peer connection to OpenAI
+   3. Mic stream → peer connection track (always on)
+   4. AI audio → remote track → AudioContext (with echo cancel)
+   5. DataChannel carries JSON events (transcripts, VAD, etc.)
+   6. Server-side VAD handles all turn detection — no browser logic
+   7. Barge-in is native — user speech interrupts AI mid-sentence
+═══════════════════════════════════════════════════════ */
+const SESSION = (() => {
+  let pc = null;          // RTCPeerConnection
+  let dc = null;          // DataChannel
+  let audioEl = null;     // <audio> for AI voice
+  let micStream = null;   // getUserMedia stream
+  let micSender = null;   // RTCRtpSender for mic track
+  let micMuted  = false;  // user pressed mic-mute
+  let spkrMuted = false;  // user pressed speaker-mute
+  let _closed   = false;
+  let _turns    = 0;
+  let _tStart   = 0;
+  let _timer    = null;
+  let _curUserText  = ''; // accumulate interim user transcript
+  let _curAiText    = ''; // accumulate AI response text
+  let _sessionReady = false;
 
-BREVITY: This is a phone call. Short, human, warm.
-• MAX 1–2 sentences per turn.
+  /* ── Build system prompt for OpenAI Realtime ── */
+  function buildPrompt() {
+    const who = FIRST
+      ? `CLIENT: ${LEAD.name} | Company: ${LEAD.company||'?'} | Target market: ${LEAD.country||'?'} | Stage: ${LEAD.stage||'exploring'}`
+      : 'CLIENT: Not yet identified';
+
+    return `You are Dr. CV — a Global Expansion Strategist at Comply Globally on a LIVE phone call.
+
+${who}
+
+═══ VOICE CALL RULES ═══
+This is a real-time phone call. Follow these exactly:
+
+BREVITY:
+• MAX 1–2 sentences per response. Never more.
 • ONE question per turn, at the end.
-• NEVER use lists, bullets, asterisks, or markdown.
-• NEVER say form numbers (say "annual filing" not "Form 1120").
-• NEVER repeat a question you already asked.
+• NO lists, bullets, asterisks, or markdown.
+• NO form numbers. Say "annual filing" not "Form 1120".
+• NEVER repeat a question you've already asked.
+• If interrupted mid-sentence — stop. Let the client speak.
 
-OPENER VARIETY — rotate every turn, never repeat back-to-back:
-"Hmm," / "Right," / "Got it." / "Okay," / "Yeah," / "Ah." / "Interesting." / "Makes sense." / "And then?" / "Tell me more." / Direct reaction to their answer.
+OPENERS (rotate, never use same twice in a row):
+"Hmm," / "Right," / "Got it." / "Okay," / "Yeah," / "Ah." / "Interesting." / "Makes sense." / "And then?" / "Tell me more about that."
 
-ADAPT ENERGY:
-• Short/quiet answer → "Tell me more about that?"
-• Excited → match energy, stay brief
-• Uncertain → be reassuring, one concrete point
+TONE: Warm, confident, expert. Like a trusted advisor on the phone.
+PAUSES: If client trails off or takes a long pause, wait — don't rush in.
 
-PAUSES ARE FINE: If they trail off, wait. If they seem done, respond.
-NEVER cut someone off by starting your response mid-sentence.
-
-EXPERTISE (one point max per turn, woven in naturally):
-• Wyoming LLC: $62/year, private, no state tax — best for non-US founders
-• Delaware C-Corp: only for VC-raising companies
-• S-Corp: not for non-US citizens
-• Formation: 1–3 days online, bank account in a week
+EXPERTISE (weave in naturally, max one point per turn):
+• Wyoming LLC: $62/yr, private, no state tax — best for non-US founders
+• Delaware C-Corp: only for VC-backed startups
+• S-Corp: cannot be held by non-US citizens
+• Formation: 1–3 days, bank account in about a week
 • No US income tax if zero US physical presence
 
-DISCOVERY GOALS (by turn ${CFG.MIN_TURNS}):
-Find: main challenge, timeline, who makes decisions, budget signal, what success looks like.
+DISCOVERY GOALS (complete by turn ${CFG.MIN_TURNS}):
+Uncover: main challenge, timeline, decision-maker, budget signal, what success looks like.
 
-═══ CLOSING — after turn ${CFG.MIN_TURNS} ═══
-When you have enough, wrap warmly in 1–2 sentences. Then append:
+OPENING (first turn only):
+${FIRST && LEAD.country && LEAD.company
+  ? `Start with: "Great to have you here, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest challenge on your mind?"`
+  : FIRST && LEAD.country
+  ? `Start with: "Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?"`
+  : FIRST
+  ? `Start with: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge right now?"`
+  : `Start with: "Welcome. Which market are you looking at expanding into, and what's the main challenge you're trying to solve?"`}
 
-SCORE_JSON:{"interest":0-100,"engagement":0-100,"intent":0-100,"readiness":0-100,"summary":"3-5 sentences with specifics from this call","level":"cold|warm|hot"}`;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CONVERSATION ORCHESTRATOR
-═══════════════════════════════════════════════════════════ */
-const CONV = (() => {
-  let _hist    = [];
-  let _turns   = 0;
-  let _tStart  = 0;
-  let _timer   = null;
-  let _closed  = false;
-  let _inited  = false;
-
-  function isClosed() { return _closed; }
-
-  // Called by TTS when audio finishes → re-enable mic
-  function _onTTSDone() {
-    if (_closed) return;
-    UI.set('ready');
-    RECOG.enable();
+SESSION END (after ${CFG.MIN_TURNS} turns):
+When you have enough context, wrap up warmly in 1 sentence. Then on a new line write exactly:
+SESSION_COMPLETE`;
   }
 
-  async function handleUserSpeech(text) {
-    if (!text?.trim() || _closed) return;
-    UI.showTx('you', text);
-    SCORE.update(text);
-    _send(text);
-  }
+  /* ── Connect to OpenAI Realtime via WebRTC ── */
+  async function connect() {
+    UI.setLoad('Requesting mic access…');
 
-  async function _send(userText) {
-    TTS.stop();
-    RECOG.disable();
-    UI.set('thinking');
-
-    _hist.push({ role:'user', content:userText });
-    MEM.push('user', userText);
-    _turns++;
-
-    let fullReply = '';
-    let buf = '';
-
-    // Sentence splitter for streaming TTS
-    function flushBuf(force) {
-      if (!buf.trim()) return;
-      // Find complete sentence
-      const m = buf.match(/^(.+?[.!?…])(\s+|$)/s);
-      if (m) {
-        const sentence = m[1].trim();
-        buf = buf.slice(m[0].length);
-        if (!fullReply.includes('SCORE_JSON:')) {
-          TTS.enqueue(sentence);
-        }
-        flushBuf(false); // recurse for multiple sentences
-      } else if (force && buf.trim()) {
-        const pre = buf.split('SCORE_JSON:')[0].trim();
-        if (pre) TTS.enqueue(pre);
-        buf = '';
-      }
-    }
-
-    UI.set('speaking');
-
+    /* 1. Get mic with echo cancellation (so AI doesn't hear itself) */
     try {
-      const res = await fetch(CFG.BACKEND + '/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: buildSystemPrompt(),
-          messages: _hist.slice(-16),
-        }),
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let raw = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        raw += dec.decode(value, {stream:true});
-        const lines = raw.split('\n'); raw = lines.pop();
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const chunk = line.slice(6).trim();
-          if (chunk === '[DONE]') continue;
-          try {
-            const p = JSON.parse(chunk);
-            const tok = p?.delta?.text || p?.text || '';
-            if (tok) {
-              fullReply += tok;
-              buf += tok;
-              if (!fullReply.includes('SCORE_JSON:')) flushBuf(false);
-            }
-          } catch {}
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl:  true,
+          sampleRate:       24000,
         }
-      }
-
-      // Flush remaining
-      flushBuf(true);
-
-      // Clean reply for display & history
-      const cleanReply = fullReply
-        .replace(/\nSCORE_JSON:[\s\S]*$/, '')
-        .replace(/SCORE_JSON:[\s\S]*$/, '')
-        .trim();
-
-      UI.showTx('ai', cleanReply.slice(0, 200) + (cleanReply.length > 200 ? '…' : ''));
-      _hist.push({ role:'assistant', content:cleanReply });
-      MEM.push('assistant', cleanReply);
-      if (_hist.length > 18) _hist = _hist.slice(-18);
-
-      GSYNC.turn(userText, cleanReply, _turns);
-
-      // Check for session close signal
-      const scoreData = SCORE.parseFromText(fullReply);
-      if (scoreData) {
-        SCORE.apply(scoreData);
-        const elapsed = Math.floor((Date.now()-_tStart)/1000);
-        GSYNC.complete(scoreData, elapsed, _turns);
-        // Wait for TTS to finish, then show end screen
-        TTS.speak([], () => _close(cleanReply, true));
-        // Small hack: enqueue empty to trigger onDone
-        _closeAfterTTS(cleanReply);
-      } else {
-        // Normal turn — wait for TTS done, then re-enable mic
-        TTS.speak([], _onTTSDone);
-        // enqueue empty triggers _drain which calls onDone
-        // But we already enqueued sentences above, so just set the onDone
-        // Actually re-wire it:
-        TTS.enqueue('', _onTTSDone);
-      }
-
-    } catch(err) {
-      console.error('API error:', err);
-      UI.toast('Connection issue. Trying again…');
-      showErr('API error');
-      UI.set('ready');
-      RECOG.enable();
+      });
+    } catch (e) {
+      UI.err('Mic access denied');
+      UI.setLoad('Mic access denied — please allow microphone and reload.');
+      return;
     }
-  }
 
-  function _closeAfterTTS(lastText) {
-    // Wait for all queued TTS to finish, then show end
-    const waitAndClose = () => {
-      if (TTS.isLocked()) { setTimeout(waitAndClose, 200); return; }
-      _close(lastText, false);
+    UI.setLoad('Connecting to Dr. CV…');
+
+    /* 2. Mint ephemeral token from our backend */
+    let token;
+    try {
+      const r = await fetch(CFG.BACKEND + '/session', {
+        method:  'POST',
+        headers: {'Content-Type':'application/json'},
+        body:    JSON.stringify({ systemPrompt: buildPrompt(), voice: CFG.VOICE }),
+        signal:  AbortSignal.timeout(15000),
+      });
+      if (!r.ok) throw new Error('Session endpoint returned ' + r.status);
+      const d = await r.json();
+      token = d.client_secret?.value || d.client_secret;
+      if (!token) throw new Error('No client_secret in response');
+    } catch (e) {
+      console.error('Session mint failed:', e.message);
+      UI.err('Connection failed — ' + e.message);
+      UI.toast('Could not connect. Reload to try again.');
+      UI.setLoad('Connection failed. Please reload.');
+      return;
+    }
+
+    /* 3. Create WebRTC peer connection */
+    pc = new RTCPeerConnection();
+
+    /* 4. Audio element to play AI voice (uses browser echo cancellation) */
+    audioEl = document.createElement('audio');
+    audioEl.autoplay = true;
+    // Setting sink to 'default' and having getUserMedia with echoCancellation
+    // means the browser's AEC will cancel the AI voice from the mic feed.
+    document.body.appendChild(audioEl);
+
+    pc.ontrack = e => {
+      if (e.streams && e.streams[0]) {
+        audioEl.srcObject = e.streams[0];
+      }
     };
-    setTimeout(waitAndClose, 1200);
+
+    /* 5. Add mic track to peer connection */
+    micStream.getTracks().forEach(t => {
+      micSender = pc.addTrack(t, micStream);
+    });
+
+    /* 6. DataChannel for events */
+    dc = pc.createDataChannel('oai-events');
+    dc.onmessage = e => _handleEvent(JSON.parse(e.data));
+    dc.onopen    = () => { _sessionReady = true; console.log('DataChannel open'); };
+
+    /* 7. SDP exchange with OpenAI */
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    const sdpRes = await fetch(`https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type':  'application/sdp',
+      },
+      body: offer.sdp,
+    });
+
+    if (!sdpRes.ok) {
+      const txt = await sdpRes.text();
+      console.error('SDP exchange failed:', txt);
+      UI.err('WebRTC setup failed');
+      UI.toast('Voice connection failed. Reload to try again.');
+      return;
+    }
+
+    const answer = { type: 'answer', sdp: await sdpRes.text() };
+    await pc.setRemoteDescription(answer);
+
+    /* 8. Monitor connection state */
+    pc.onconnectionstatechange = () => {
+      console.log('WebRTC state:', pc.connectionState);
+      if (pc.connectionState === 'connected') {
+        _onConnected();
+      } else if (['failed','disconnected','closed'].includes(pc.connectionState)) {
+        if (!_closed) UI.err('Connection dropped — reload to reconnect');
+      }
+    };
   }
 
-  function _close(lastText, alreadySync) {
-    if (_closed) return;
-    _closed = true;
-    MEM.lock();
-    RECOG.disable();
-    TTS.stop();
-    UI.set('closed');
-    const delay = Math.max(3500, (lastText||'').split(' ').length * 340);
-    setTimeout(() => {
-      UI.showEnd(
-        CFG.CAL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email),
-        SCORE.total() >= CFG.SCORE_MIN
-      );
-    }, delay);
-  }
-
-  function _startTimer() {
+  function _onConnected() {
+    UI.setLoad('Connected!');
     _tStart = Date.now();
+    UI.renderLead();
+
+    /* Start session timer */
     clearInterval(_timer);
     _timer = setInterval(() => {
       const s = Math.floor((Date.now()-_tStart)/1000);
@@ -1221,155 +755,236 @@ const CONV = (() => {
       UI.setTimer(fmt);
       if (!_closed && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
     }, 1000);
+
+    setTimeout(()=>{
+      UI.hideLoad();
+      UI.set('ready');
+    }, 400);
   }
 
-  async function _forceClose() {
+  /* ── Handle OpenAI Realtime events ── */
+  function _handleEvent(ev) {
+    // console.log('[RT]', ev.type, ev); // uncomment for debug
+
+    switch (ev.type) {
+
+      /* User speech started (server VAD detected voice) */
+      case 'input_audio_buffer.speech_started':
+        UI.set('listening');
+        UI.showInterim('');
+        WAVE.setAmp(12);
+        $('vadRing').classList.add('vad-on');
+        $('mr1').classList.add('on');
+        $('mr2').classList.add('on');
+        break;
+
+      /* User speech stopped */
+      case 'input_audio_buffer.speech_stopped':
+        UI.set('thinking');
+        $('vadRing').classList.remove('vad-on');
+        $('mr1').classList.remove('on');
+        $('mr2').classList.remove('on');
+        WAVE.setAmp(3);
+        break;
+
+      /* Live user transcript (interim) */
+      case 'conversation.item.input_audio_transcription.delta':
+        _curUserText += (ev.delta || '');
+        UI.showInterim(_curUserText);
+        break;
+
+      /* Final user transcript */
+      case 'conversation.item.input_audio_transcription.completed': {
+        const text = ev.transcript?.trim() || _curUserText.trim();
+        _curUserText = '';
+        UI.showInterim('');
+        if (text) {
+          UI.showTx('you', text);
+          SCORE.update(text);
+          _turns++;
+          GSYNC.turn(text, _curAiText, _turns);
+        }
+        break;
+      }
+
+      /* AI starts generating a response */
+      case 'response.created':
+        _curAiText = '';
+        UI.set('thinking');
+        WAVE.setAmp(3);
+        break;
+
+      /* AI audio starting to play */
+      case 'response.audio.started':
+      case 'response.output_item.added':
+        UI.set('speaking');
+        WAVE.setAmp(13);
+        break;
+
+      /* AI text delta (for transcript) */
+      case 'response.text.delta':
+        _curAiText += (ev.delta || '');
+        break;
+
+      /* AI audio/response done */
+      case 'response.done': {
+        // Extract full AI text from the response
+        const items = ev.response?.output || [];
+        let fullText = '';
+        for (const item of items) {
+          if (item.type === 'message' && item.role === 'assistant') {
+            for (const c of (item.content||[])) {
+              if (c.type === 'text') fullText += c.text;
+              if (c.type === 'audio' && c.transcript) fullText += c.transcript;
+            }
+          }
+        }
+        if (fullText) _curAiText = fullText;
+
+        const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
+        if (clean) UI.showTx('ai', clean.slice(0,220)+(clean.length>220?'…':''));
+
+        // Check for session-end signal
+        if (/SESSION_COMPLETE/i.test(_curAiText)) {
+          setTimeout(()=>_close(), 3000);
+        } else {
+          UI.set('ready');
+          WAVE.setAmp(0);
+        }
+        break;
+      }
+
+      /* AI was interrupted (user barged in) */
+      case 'response.cancelled':
+        _curAiText = '';
+        UI.set('listening');
+        break;
+
+      /* Connection/session errors */
+      case 'error':
+        console.error('Realtime error:', ev.error);
+        UI.err(ev.error?.message || 'Realtime error');
+        break;
+    }
+  }
+
+  /* ── Toggle user mic mute ── */
+  function toggleMicMute() {
+    micMuted = !micMuted;
+    if (micStream) {
+      micStream.getAudioTracks().forEach(t => { t.enabled = !micMuted; });
+    }
+    // Update button UI
+    const btn = $('btnMic');
+    btn.classList.toggle('m-muted', micMuted);
+    btn.classList.toggle('m-on', !micMuted);
+    $('hintR').textContent = micMuted ? 'Mic muted' : 'Mic always open';
+    if (micMuted) {
+      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
+        <line x1="3" y1="3" x2="21" y2="21" stroke-width="1.7"/>`;
+    } else {
+      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+        <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>`;
+    }
+  }
+
+  /* ── Toggle speaker/AI mute ── */
+  function toggleSpeaker() {
+    spkrMuted = !spkrMuted;
+    if (audioEl) audioEl.muted = spkrMuted;
+    $('btnSpkr').classList.toggle('active', spkrMuted);
+    $('spkrIcon').innerHTML = spkrMuted
+      ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+      : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+  }
+
+  function _close() {
     if (_closed) return;
     _closed = true;
-    MEM.lock(); RECOG.disable(); UI.set('closed');
-    const msg = "We've covered a lot — I really appreciate your time. Our team will be in touch soon.";
-    UI.showTx('ai', msg);
-    TTS.enqueue(msg);
-    const fb = SCORE.fallback('Session time limit.');
-    GSYNC.complete(fb, Math.floor((Date.now()-_tStart)/1000), _turns);
-    setTimeout(() => UI.showEnd(null, false), 7000);
-  }
-
-  function _greeting() {
-    if (MEM.has()) {
-      const lastUser = MEM.get().filter(m=>m.role==='user').slice(-1)[0]?.content||'';
-      return `Good to have you back${FIRST?', '+FIRST:''}. We were discussing ${lastUser.slice(0,50)}. Want to pick up there, or is there something new on your mind?`;
-    }
-    if (FIRST && LEAD.country && LEAD.company)
-      return `Great to have you here, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest challenge on your mind?`;
-    if (FIRST && LEAD.country)
-      return `Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?`;
-    if (FIRST)
-      return `Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge right now?`;
-    return `Welcome. Which market are you looking at expanding into, and what's the main challenge you're trying to solve?`;
-  }
-
-  async function init() {
-    if (_inited || MEM.isLocked()) return;
-    _inited = true;
-    _closed = false;
-    _hist = []; _turns = 0;
     clearInterval(_timer);
-    TTS.stop(); RECOG.disable();
-    UI.set('loading');
-    MEM.load();
-    UI.renderLead();
+    MEM.lock();
+    const elapsed = Math.floor((Date.now()-_tStart)/1000);
+    GSYNC.complete(elapsed, _turns);
+    UI.set('closed');
+    setTimeout(()=>{
+      UI.showEnd(
+        CFG.CAL + '?name=' + encodeURIComponent(LEAD.name) + '&email=' + encodeURIComponent(LEAD.email),
+        SCORE.total() >= CFG.SCORE_MIN
+      );
+    }, 2500);
+  }
 
-    // Ping backend
-    UI.setLoad('Connecting to Dr. CV…');
-    try { await fetch(CFG.BACKEND + '/', { signal: AbortSignal.timeout(8000) }); } catch{}
-    UI.setLoad('Ready');
-    await sleep(120);
-    UI.hideLoad();
-    _startTimer();
-
-    const greet = _greeting();
-    _hist.push({ role:'assistant', content:greet });
-    MEM.push('assistant', greet);
-
-    UI.set('greeting');
-    UI.showTx('ai', greet);
-
-    // Speak greeting, then enable mic
-    TTS.enqueue(greet, () => {
-      if (!_closed) {
-        UI.set('ready');
-        RECOG.enable();
-      }
-    });
+  function _forceClose() {
+    if (_closed) return;
+    // Send a text message to the AI telling it to wrap up
+    if (dc && dc.readyState === 'open') {
+      dc.send(JSON.stringify({
+        type: 'conversation.item.create',
+        item: {
+          type: 'message', role: 'user',
+          content: [{ type: 'input_text', text: '[Time limit reached. Wrap up the session gracefully in one sentence, then write SESSION_COMPLETE]' }],
+        },
+      }));
+      dc.send(JSON.stringify({ type: 'response.create' }));
+    } else {
+      _close();
+    }
   }
 
   function reset() {
-    _closed = false; _inited = false;
+    _closed = false; _turns = 0; _curUserText = ''; _curAiText = '';
     clearInterval(_timer);
     MEM.clear();
     $('sEnd').classList.remove('open');
-    TTS.stop();
-    RECOG.disable();
+    // Tear down existing peer connection
+    if (pc) { try{pc.close();}catch{} pc = null; }
+    if (audioEl) { try{audioEl.remove();}catch{} audioEl = null; }
+    if (micStream) { micStream.getTracks().forEach(t=>t.stop()); micStream=null; }
     UI.set('idle');
-    setTimeout(() => init(), 280);
+    setTimeout(()=>connect(),300);
   }
 
-  return { init, reset, handleUserSpeech, isClosed };
+  function isClosed() { return _closed; }
+  return { connect, reset, isClosed, toggleMicMute, toggleSpeaker };
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   CONTROLS
-═══════════════════════════════════════════════════════════ */
+/* ── CONTROLS ── */
 $('btnMic').addEventListener('click', () => {
-  if (CONV.isClosed()) return;
+  if (!SESSION.isClosed()) SESSION.toggleMicMute();
+});
 
-  // Interrupt AI speaking
-  if (TTS.isLocked()) {
-    RECOG.interrupt();
-    return;
-  }
-
-  // Force commit if currently listening
-  if (RECOG.isActive()) {
-    RECOG.forceCommit();
-    return;
-  }
-
-  // Start listening
-  if (!TTS.isLocked()) {
-    RECOG.enable();
-  }
+$('btnSpkr').addEventListener('click', () => {
+  SESSION.toggleSpeaker();
 });
 
 $('btnReset').addEventListener('click', () => {
-  if (MEM.isLocked()) return;
-  CONV.reset();
+  if (!SESSION.isClosed()) {
+    if (confirm('Restart this session?')) SESSION.reset();
+  }
 });
 
-let _muted = false;
-$('btnMute').addEventListener('click', function() {
-  _muted = !_muted;
-  TTS.mute(_muted);
-  this.classList.toggle('active', _muted);
-  $('muteIcon').innerHTML = _muted
-    ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-    : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-  if (!_muted && !CONV.isClosed() && !TTS.isLocked()) RECOG.enable();
-});
-
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════
    BOOT
-═══════════════════════════════════════════════════════════ */
+═══════════════════════════════════ */
 (async () => {
   if (MEM.isLocked()) {
-    // Already used — show message
     document.body.innerHTML = `
-      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--bg);font-family:var(--sans)">
-        <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--jade)">Comply Globally</div>
-        <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
-        <div style="font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2)">Session Already Completed</div>
-        <div style="font-family:var(--sans);font-size:13px;color:var(--ink1);max-width:280px;text-align:center;line-height:1.7">Your strategy session has concluded. Our team will reach out soon.</div>
+      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#f4f1eb;font-family:'Syne',sans-serif">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#007260">Comply Globally</div>
+        <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,#009f82,transparent)"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(28,27,23,.42)">Session Already Completed</div>
+        <div style="font-size:13px;color:rgba(28,27,23,.72);max-width:280px;text-align:center;line-height:1.7">Your strategy session has concluded. Our team will reach out soon.</div>
       </div>`;
     return;
   }
 
-  // Check if gesture needed (mobile/Safari)
-  let needsGesture = false;
-  try {
-    const a = new Audio();
-    a.volume = 0;
-    await a.play().catch(e => { if (e.name === 'NotAllowedError') needsGesture = true; });
-  } catch { needsGesture = true; }
-
-  if (needsGesture) {
-    $('sLoad').classList.add('off');
-    UI.showSplash(() => CONV.init());
-  } else {
-    $('sSplash').classList.add('off');
-    await sleep(200);
-    CONV.init();
-  }
+  // WebRTC requires a user gesture on some browsers/mobile to allow audio.
+  // We always show the splash for this reason.
+  UI.showSplash(async () => {
+    $('sLoad').classList.remove('off');
+    await SESSION.connect();
+  });
 })();
 </script>
 </body>
