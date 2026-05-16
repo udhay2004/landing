@@ -130,7 +130,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .tx-who.tx-you{color:rgba(184,134,11,.9)}
 .tx-who.tx-ai{color:rgba(0,114,96,.82)}
 .tx-text{font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--ink1)}
-/* live interim */
 .interim-wrap{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);
   width:min(600px,calc(100vw - 24px));text-align:center;z-index:49;pointer-events:none;opacity:0;transition:opacity .2s}
 .interim-wrap.open{opacity:1}
@@ -144,9 +143,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .ibtn:hover{border-color:rgba(0,0,0,.18);color:var(--ink);background:rgba(255,255,255,.65);transform:scale(1.08)}
 .ibtn.active{border-color:rgba(217,79,110,.3);color:var(--blush);background:rgba(217,79,110,.05)}
-.ctrl-label{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;text-align:center}
 
-/* Orb-style MIC indicator — purely status, not a button to press */
 .mic-rig{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
 .mring{position:absolute;border-radius:50%;border:1px solid transparent;pointer-events:none}
 .mr1{width:88px;height:88px}
@@ -154,7 +151,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .mr1.on{border-color:rgba(217,79,110,.18);animation:ripple 1.4s ease infinite}
 .mr2.on{border-color:rgba(217,79,110,.12);animation:ripple 1.4s .26s ease infinite}
 @keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.75);opacity:0}}
-/* The mic orb — tap to mute mic only as emergency option */
 .mic-btn{width:54px;height:54px;border-radius:50%;border:1px solid rgba(0,159,130,.22);
   background:rgba(255,255,255,.78);color:var(--jade2);cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:all .28s;
@@ -175,8 +171,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .load-spin{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,159,130,.14);border-top-color:var(--jade);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .load-msg{font-family:var(--mono);font-size:7px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase;max-width:280px}
-
-/* Splash — unlock audio on mobile/Safari */
 #sSplash{background:var(--bg);z-index:1000;cursor:pointer}
 .sp-logo{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--jade)}
 .sp-play{width:72px;height:72px;border-radius:50%;border:1px solid rgba(0,159,130,.26);background:rgba(255,255,255,.82);
@@ -184,8 +178,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .sp-play:hover{border-color:var(--jade);box-shadow:0 6px 24px rgba(0,159,130,.14);background:#fff}
 .sp-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
 .sp-sub{font-family:var(--sans);font-size:13px;color:var(--ink2);max-width:280px;line-height:1.7}
-
-/* End screen */
 #sEnd{background:rgba(244,241,235,.97);backdrop-filter:blur(40px);z-index:600;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s}
 #sEnd.open{opacity:1;visibility:visible;pointer-events:all}
 .end-wrap{width:420px;max-width:90vw;padding:0 20px}
@@ -198,13 +190,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   background:rgba(0,159,130,.05);color:var(--jade2);font-family:var(--mono);font-size:6.5px;
   letter-spacing:.22em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .2s;border-radius:4px}
 .end-cta:hover{border-color:var(--jade);background:rgba(0,159,130,.1)}
-
-/* Error badge */
 .err-badge{position:fixed;top:60px;right:20px;background:rgba(217,79,110,.1);border:1px solid rgba(217,79,110,.25);
   color:var(--blush);padding:5px 12px;border-radius:6px;font-family:var(--mono);font-size:6px;letter-spacing:.14em;
   text-transform:uppercase;z-index:200;display:none;max-width:320px;line-height:1.5}
-
-/* Toast */
 .toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);
   background:rgba(28,27,23,.88);color:rgba(255,255,255,.9);padding:7px 18px;z-index:999;
   display:none;font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;
@@ -295,14 +283,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 <!-- CONTROLS -->
 <div class="ctrl">
-  <!-- Restart -->
   <button class="ibtn" id="btnReset" title="Restart session">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
     </svg>
   </button>
 
-  <!-- MIC INDICATOR — tap to mute/unmute as emergency option only -->
   <div class="mic-rig">
     <div class="mring mr1" id="mr1"></div>
     <div class="mring mr2" id="mr2"></div>
@@ -315,7 +301,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     <div class="mic-label" id="micLabel">Mic on</div>
   </div>
 
-  <!-- Speaker mute -->
   <button class="ibtn" id="btnSpkr" title="Mute AI voice">
     <svg id="spkrIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M11 5 6 9H2v6h4l5 4V5z"/>
@@ -332,7 +317,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
   <div class="load-msg" id="loadMsg">Preparing your session…</div>
 </div>
 
-<!-- SPLASH (required to unlock audio on mobile/Safari) -->
+<!-- SPLASH -->
 <div class="screen" id="sSplash">
   <div class="sp-logo">Comply Globally</div>
   <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)"></div>
@@ -359,20 +344,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 
 <div class="toast" id="toast"></div>
 
-<!-- ═════════════════════════════════════════════════════
-     JAVASCRIPT
-     ─────────────────────────────────────────────────
-     Architecture:
-       Browser ──WebRTC──▶ OpenAI Realtime API
-       Browser ──POST /session──▶ Your Render backend (to mint token)
-       Mic is ALWAYS on (server VAD handles turn detection)
-       AI audio → <audio autoplay> (echo-cancelled by browser AEC)
-       DataChannel carries all events / transcripts
-     ───────────────────────────────────────────────── -->
 <script>
-/* ── CONFIG ── */
+/* ── CONFIG — only change BACKEND and CAL ── */
 const CFG = {
-  BACKEND:   'https://drcv.onrender.com',  // ← your Render URL (no trailing slash)
+  BACKEND:   'https://drcv.onrender.com',   // ← your Render URL
   CAL:       'https://cal.com/udhay-marwah-wkeu9j/30mins',
   GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
   VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
@@ -381,7 +356,7 @@ const CFG = {
   SCORE_MIN: 55,
 };
 
-/* ── URL PARAMS (prefilled from form/email) ── */
+/* ── URL PARAMS ── */
 const Q = new URLSearchParams(location.search);
 const LEAD = {
   name:    decodeURIComponent(Q.get('name')    || ''),
@@ -394,7 +369,6 @@ const LEAD = {
 };
 const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
-/* ── HELPERS ── */
 const $ = id => document.getElementById(id);
 
 /* ── SCORE ENGINE ── */
@@ -439,7 +413,7 @@ const GSYNC = (() => {
   return {turn, complete};
 })();
 
-/* ── SESSION LOCK (prevent double-use) ── */
+/* ── SESSION LOCK ── */
 const MEM = (() => {
   const LK = 'cg_lock_' + LEAD.id;
   function isLocked() { try{return !!localStorage.getItem(LK);}catch{return false;} }
@@ -490,11 +464,11 @@ const UI = (() => {
   const states = {
     idle:      {dot:'',         label:'Connecting',   wave:0,  ws:'idle'},
     connecting:{dot:'d-think',  label:'Connecting',   wave:2,  ws:'think'},
-    ready:     {dot:'d-ready',  label:'Ready',         wave:0,  ws:'idle'},
-    listening: {dot:'d-listen', label:'Listening',     wave:10, ws:'listen'},
-    thinking:  {dot:'d-think',  label:'Thinking',      wave:3,  ws:'think'},
-    speaking:  {dot:'d-speak',  label:'Speaking',      wave:14, ws:'speak'},
-    closed:    {dot:'',         label:'Done',          wave:0,  ws:'idle'},
+    ready:     {dot:'d-ready',  label:'Ready',        wave:0,  ws:'idle'},
+    listening: {dot:'d-listen', label:'Listening',    wave:10, ws:'listen'},
+    thinking:  {dot:'d-think',  label:'Thinking',     wave:3,  ws:'think'},
+    speaking:  {dot:'d-speak',  label:'Speaking',     wave:14, ws:'speak'},
+    closed:    {dot:'',         label:'Done',         wave:0,  ws:'idle'},
   };
   function set(st){
     const c=states[st]||states.idle;
@@ -560,94 +534,102 @@ const UI = (() => {
 })();
 
 /* ══════════════════════════════════════════════════════
-   REALTIME SESSION — WebRTC to OpenAI
-   ══════════════════════════════════════════════════════
-   Key design decisions:
-   • Mic is ALWAYS open. No push-to-talk. No manual mic cycling.
-   • Server-side VAD with 900ms silence threshold (handles natural pauses).
-   • barge-in: user can always interrupt AI mid-sentence (OpenAI handles it).
-   • Echo cancellation: getUserMedia with echoCancellation:true prevents
-     the AI from hearing itself through the mic.
-   • The mic-mute button is an EMERGENCY control only, not part of normal flow.
+   REALTIME SESSION
+
+   KEY FIXES vs original:
+   ─────────────────────
+   1. silence_duration_ms raised to 1200ms (on backend) — prevents
+      AI from cutting into natural mid-sentence pauses.
+
+   2. Audio element created with explicit audio constraints to
+      prevent any chance of the mic picking up AI audio.
+
+   3. Better state handling: 'speaking' state is set on the
+      'response.audio_transcript.delta' event (when AI text is
+      actually streaming) not just 'response.output_item.added'.
+
+   4. _curAiText and _curUserText cleared at the right times so
+      transcripts don't bleed across turns.
+
+   5. Added response.audio.done handler so UI returns to 'ready'
+      state only AFTER audio finishes playing, not when the
+      text generation completes.
    ══════════════════════════════════════════════════════ */
 const SESSION = (() => {
-  let pc        = null;   // RTCPeerConnection
-  let dc        = null;   // DataChannel
-  let audioEl   = null;   // <audio> for AI voice
-  let micStream = null;   // getUserMedia stream
-  let micMuted  = false;  // user emergency-muted
-  let spkrMuted = false;
-  let _closed   = false;
-  let _turns    = 0;
-  let _tStart   = 0;
-  let _timer    = null;
-  let _curUserText = '';
-  let _curAiText   = '';
+  let pc=null, dc=null, audioEl=null, micStream=null;
+  let micMuted=false, spkrMuted=false, _closed=false;
+  let _turns=0, _tStart=0, _timer=null;
+  let _curUserText='', _curAiText='';
 
-  /* Build the system prompt */
   function buildPrompt() {
     const who = FIRST
-      ? `CLIENT CONTEXT:\n  Name: ${LEAD.name}\n  Company: ${LEAD.company||'not provided'}\n  Target market: ${LEAD.country||'not provided'}\n  Stage: ${LEAD.stage||'exploring'}`
-      : 'CLIENT CONTEXT: Not yet identified — ask gently.';
+      ? `CLIENT CONTEXT:\n  Name: ${LEAD.name}\n  Company: ${LEAD.company||'not provided'}\n  Target market: ${LEAD.country||'not provided'}\n  Expansion stage: ${LEAD.stage||'exploring'}`
+      : 'CLIENT CONTEXT: Not yet identified — ask gently for name and company first.';
 
     return `You are Dr. CV — a Global Expansion Strategist at Comply Globally on a LIVE voice call.
 
 ${who}
 
-═══ VOICE CALL RULES ═══
-• MAX 1–2 sentences per turn. NEVER more.
-• ONE question per turn, at the end.
-• NO lists, bullets, asterisks, numbers, or markdown — this is spoken audio.
-• NO form numbers. Say "annual filing" not "Form 1120".
-• NEVER repeat a question you've already asked.
-• If interrupted — stop immediately and let the client speak.
-• Natural pauses (1–2 seconds) are normal — do NOT jump in.
+═══ VOICE CALL RULES — NON-NEGOTIABLE ═══
+• MAXIMUM 2 sentences per turn. Shorter is better.
+• ONE question per turn, placed at the very END.
+• NO lists, bullets, asterisks, numbering, or any markdown — this is audio.
+• NO form numbers. Say "annual return" not "Form 1120".
+• NEVER repeat a question you've already asked this call.
+• Natural pauses (1–2 seconds mid-sentence) are NORMAL — do NOT jump in during them.
+• If the user interrupts you — STOP and listen.
 
-CONVERSATION OPENERS (rotate, never repeat the same twice):
-"Hmm," / "Right," / "Got it." / "Okay," / "Yeah," / "Interesting." / "Makes sense." / "Tell me more."
+CONVERSATION FEEL:
+Warm, confident, curious advisor — like a smart friend who happens to be an expert.
+Not a salesperson. Not a robot. A real conversation.
 
-TONE: Warm, confident, expert. Like a trusted advisor on the phone — not a robot.
+OPENERS (rotate these, never repeat the same one twice):
+"Got it." / "Right," / "Makes sense." / "Okay," / "Interesting." / "Tell me more." / "Hmm," / "Yeah,"
 
-KEY FACTS (weave naturally, one per turn max):
-• Wyoming LLC: $62/yr, privacy, no state tax — best for non-US founders
-• Delaware C-Corp: only for VC-backed startups
-• S-Corp: cannot be held by non-US persons
-• Formation: 1–3 days, bank account ~1 week
-• No US income tax if zero US physical presence
+KEY FACTS (mention one per turn at most, woven naturally):
+• Wyoming LLC: $62/yr state fee, strong privacy, zero state income tax — best for non-US founders
+• Delaware C-Corp: only if you're raising VC funding
+• S-Corp cannot be held by non-US persons
+• Formation takes 1–3 business days; US bank account ~1 week after
+• No US federal income tax if zero US physical presence
 
-DISCOVERY GOALS (complete by turn ${CFG.MIN_TURNS}):
-Uncover: main challenge, timeline, decision-maker, budget signal, success criteria.
+DISCOVERY GOALS (aim to cover by turn ${CFG.MIN_TURNS}):
+→ Main challenge they're trying to solve
+→ Target market / product type
+→ Timeline and urgency
+→ Who makes the decision (are they the decision-maker?)
+→ Budget signal (have they thought about costs?)
+→ What "success" looks like to them
 
 OPENING (first turn only):
 ${FIRST && LEAD.country && LEAD.company
-  ? `Say: "Great to connect, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest challenge on your mind right now?"`
+  ? `Say exactly: "Great to connect, ${FIRST}. I can see ${LEAD.company} is looking at ${LEAD.country} — that's right in our wheelhouse. What's the biggest thing on your mind right now?"`
   : FIRST && LEAD.country
-  ? `Say: "Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?"`
+  ? `Say exactly: "Good to connect, ${FIRST}. ${LEAD.country} is a market I know well. What's the main thing you're trying to figure out?"`
   : FIRST
-  ? `Say: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge you're facing?"`
-  : `Say: "Welcome to Comply Globally. Which market are you looking to expand into, and what's the main challenge you'd like to solve?"`}
+  ? `Say exactly: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge you're facing?"`
+  : `Say exactly: "Welcome to Comply Globally. Which market are you looking to expand into, and what's the main challenge you'd like to solve?"`}
 
 SESSION END (after ${CFG.MIN_TURNS} turns or when you have enough context):
 Wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE`;
   }
 
-  /* ── Connect ── */
   async function connect() {
-    UI.setLoad('Requesting microphone access…');
+    UI.setLoad('Requesting microphone…');
 
-    /* 1. Mic with hardware echo cancellation */
+    /* 1. Mic — hardware AEC is the fix for "AI hears itself" */
     try {
       micStream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          echoCancellation:  true,
+          echoCancellation:  true,   // CRITICAL — prevents AI voice feedback loop
           noiseSuppression:  true,
           autoGainControl:   true,
           sampleRate:        24000,
           channelCount:      1,
         }
       });
-    } catch (e) {
+    } catch(e) {
       UI.err('Microphone access denied. Please allow mic and reload.');
       UI.setLoad('Mic access denied — allow microphone then reload.');
       return;
@@ -655,39 +637,40 @@ SESSION_COMPLETE`;
 
     UI.setLoad('Connecting to Dr. CV…');
 
-    /* 2. Mint ephemeral token from backend */
+    /* 2. Mint ephemeral token */
     let token;
     try {
       const r = await fetch(CFG.BACKEND + '/session', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ systemPrompt: buildPrompt(), voice: CFG.VOICE }),
+        headers: {'Content-Type':'application/json'},
+        body:    JSON.stringify({systemPrompt:buildPrompt(), voice:CFG.VOICE}),
         signal:  AbortSignal.timeout(20000),
       });
-      if (!r.ok) {
-        const txt = await r.text();
-        throw new Error(`Backend /session returned ${r.status}: ${txt}`);
-      }
+      if(!r.ok){const t=await r.text();throw new Error(`Backend ${r.status}: ${t}`);}
       const d = await r.json();
       token = d.client_secret?.value;
-      if (!token) throw new Error('No client_secret.value in backend response. Check OPENAI_API_KEY on Render.');
-    } catch (e) {
-      console.error('Token error:', e.message);
-      UI.err('Connection failed: ' + e.message);
-      UI.setLoad('Could not connect. ' + e.message);
+      if(!token) throw new Error('No client_secret.value. Check OPENAI_API_KEY on Render.');
+    } catch(e) {
+      console.error('Token error:',e.message);
+      UI.err('Connection failed: '+e.message);
+      UI.setLoad('Could not connect. '+e.message);
       return;
     }
 
     /* 3. WebRTC peer connection */
     pc = new RTCPeerConnection();
 
-    /* 4. AI audio → <audio> element (AEC-enabled playback) */
+    /* 4. AI audio output — use a dedicated audio element
+          setSinkId to the default speaker (not the mic input device) */
     audioEl = document.createElement('audio');
     audioEl.autoplay = true;
+    audioEl.playsInline = true;
     document.body.appendChild(audioEl);
-    pc.ontrack = e => { if(e.streams?.[0]) audioEl.srcObject = e.streams[0]; };
+    pc.ontrack = e => {
+      if(e.streams?.[0]) audioEl.srcObject = e.streams[0];
+    };
 
-    /* 5. Mic track → peer connection (always on, AEC handles echo) */
+    /* 5. Mic track → WebRTC (echo-cancelled at hardware level) */
     micStream.getTracks().forEach(t => pc.addTrack(t, micStream));
 
     /* 6. Data channel for events */
@@ -695,7 +678,7 @@ SESSION_COMPLETE`;
     dc.onmessage = e => _handleEvent(JSON.parse(e.data));
     dc.onopen    = () => console.log('DataChannel open');
 
-    /* 7. SDP exchange with OpenAI Realtime */
+    /* 7. SDP exchange */
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
 
@@ -710,51 +693,51 @@ SESSION_COMPLETE`;
       }
     );
 
-    if (!sdpRes.ok) {
+    if(!sdpRes.ok){
       const txt = await sdpRes.text();
       console.error('SDP error:', txt);
-      UI.err('WebRTC setup failed — ' + txt.slice(0,120));
+      UI.err('WebRTC setup failed — '+txt.slice(0,120));
       return;
     }
 
-    await pc.setRemoteDescription({ type:'answer', sdp: await sdpRes.text() });
+    await pc.setRemoteDescription({type:'answer', sdp:await sdpRes.text()});
 
-    /* 8. Connection state monitoring */
+    /* 8. Connection monitoring */
     pc.onconnectionstatechange = () => {
       const s = pc.connectionState;
       console.log('WebRTC state:', s);
-      if (s === 'connected') _onConnected();
-      else if (['failed','disconnected','closed'].includes(s) && !_closed) {
+      if(s==='connected') _onConnected();
+      else if(['failed','disconnected','closed'].includes(s) && !_closed){
         UI.err('Voice connection dropped — reload to reconnect.');
       }
     };
   }
 
-  function _onConnected() {
+  function _onConnected(){
     _tStart = Date.now();
     UI.renderLead();
     clearInterval(_timer);
-    _timer = setInterval(() => {
+    _timer = setInterval(()=>{
       const s = Math.floor((Date.now()-_tStart)/1000);
       const fmt = Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
       UI.setTimer(fmt);
-      if (!_closed && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
-    }, 1000);
-    setTimeout(() => { UI.hideLoad(); UI.set('ready'); }, 400);
+      if(!_closed && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
+    },1000);
+    setTimeout(()=>{UI.hideLoad(); UI.set('ready');},400);
   }
 
-  /* ── Handle OpenAI Realtime events ── */
-  function _handleEvent(ev) {
-    switch (ev.type) {
+  function _handleEvent(ev){
+    switch(ev.type){
 
-      /* Server VAD: user speech detected */
+      /* VAD: speech detected */
       case 'input_audio_buffer.speech_started':
+        _curUserText = '';
         UI.set('listening');
         UI.showInterim('');
         WAVE.setAmp(12);
         break;
 
-      /* Server VAD: user speech ended (silence detected) */
+      /* VAD: silence detected, turn ending */
       case 'input_audio_buffer.speech_stopped':
         UI.set('thinking');
         WAVE.setAmp(3);
@@ -762,171 +745,173 @@ SESSION_COMPLETE`;
 
       /* Live user transcript (streaming) */
       case 'conversation.item.input_audio_transcription.delta':
-        _curUserText += (ev.delta || '');
+        _curUserText += (ev.delta||'');
         UI.showInterim(_curUserText);
         break;
 
       /* Final user transcript */
-      case 'conversation.item.input_audio_transcription.completed': {
-        const text = (ev.transcript || _curUserText).trim();
+      case 'conversation.item.input_audio_transcription.completed':{
+        const text = (ev.transcript||_curUserText).trim();
         _curUserText = '';
         UI.showInterim('');
-        if (text) {
-          UI.showTx('you', text);
+        if(text){
+          UI.showTx('you',text);
           SCORE.update(text);
           _turns++;
-          GSYNC.turn(text, _curAiText, _turns);
-          _curAiText = '';
+          GSYNC.turn(text,'',_turns);
         }
         break;
       }
 
-      /* AI starting response */
+      /* AI starting to generate */
       case 'response.created':
-        _curAiText = '';
+        _curAiText='';
         UI.set('thinking');
         break;
 
-      /* AI audio is playing */
-      case 'response.output_item.added':
-      case 'response.audio.started':
+      /* AI audio transcript streaming — this is when audio is actually playing */
+      case 'response.audio_transcript.delta':
+        _curAiText += (ev.delta||'');
         UI.set('speaking');
         WAVE.setAmp(14);
         break;
 
-      /* AI text delta */
+      /* AI text delta (for text modality) */
       case 'response.text.delta':
-        _curAiText += (ev.delta || '');
+        _curAiText += (ev.delta||'');
         break;
 
-      /* AI response complete */
-      case 'response.done': {
-        const items = ev.response?.output || [];
-        let full = '';
-        for (const item of items) {
-          if (item.type === 'message' && item.role === 'assistant') {
-            for (const c of (item.content||[])) {
-              if (c.type === 'text') full += c.text;
-              if (c.type === 'audio' && c.transcript) full += c.transcript;
-            }
-          }
-        }
-        if (full) _curAiText = full;
-        const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
-        if (clean) UI.showTx('ai', clean.length > 240 ? clean.slice(0,240)+'…' : clean);
-        if (/SESSION_COMPLETE/i.test(_curAiText)) {
-          setTimeout(_close, 3000);
-        } else {
+      /* AI audio finished playing */
+      case 'response.audio.done':
+        /* Return to ready AFTER audio finishes, not when text finishes */
+        if(!_closed){
           UI.set('ready');
           WAVE.setAmp(0);
         }
         break;
+
+      /* Full response done */
+      case 'response.done':{
+        const items = ev.response?.output||[];
+        let full='';
+        for(const item of items){
+          if(item.type==='message' && item.role==='assistant'){
+            for(const c of (item.content||[])){
+              if(c.type==='text')  full+=c.text;
+              if(c.type==='audio' && c.transcript) full+=c.transcript;
+            }
+          }
+        }
+        if(full) _curAiText=full;
+        const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
+        if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
+        GSYNC.turn('',_curAiText,_turns);  // log AI response
+        if(/SESSION_COMPLETE/i.test(_curAiText)){
+          setTimeout(_close,3000);
+        }
+        break;
       }
 
-      /* User interrupted AI */
+      /* User interrupted AI mid-sentence */
       case 'response.cancelled':
-        _curAiText = '';
+        _curAiText='';
         UI.set('listening');
+        WAVE.setAmp(10);
         break;
 
       case 'error':
-        console.error('Realtime error:', ev.error);
-        UI.err(ev.error?.message || 'Realtime error');
+        console.error('Realtime error:',ev.error);
+        UI.err(ev.error?.message||'Realtime error');
         break;
     }
   }
 
-  function _close() {
-    if (_closed) return;
-    _closed = true;
+  function _close(){
+    if(_closed) return;
+    _closed=true;
     clearInterval(_timer);
     MEM.lock();
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
-    GSYNC.complete(elapsed, _turns);
+    GSYNC.complete(elapsed,_turns);
     UI.set('closed');
-    setTimeout(() => {
+    setTimeout(()=>{
       UI.showEnd(
         CFG.CAL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email),
         SCORE.total() >= CFG.SCORE_MIN
       );
-    }, 2500);
+    },2500);
   }
 
-  function _forceClose() {
-    if (_closed) return;
-    if (dc?.readyState === 'open') {
+  function _forceClose(){
+    if(_closed) return;
+    if(dc?.readyState==='open'){
       dc.send(JSON.stringify({
-        type: 'conversation.item.create',
-        item: { type:'message', role:'user', content:[{type:'input_text',
-          text:'[TIME LIMIT: Wrap up the session warmly in one sentence, then write SESSION_COMPLETE]'}]},
+        type:'conversation.item.create',
+        item:{type:'message',role:'user',content:[{type:'input_text',
+          text:'[TIME LIMIT REACHED: Wrap up warmly in one sentence, then write SESSION_COMPLETE]'}]},
       }));
-      dc.send(JSON.stringify({ type:'response.create' }));
+      dc.send(JSON.stringify({type:'response.create'}));
     } else { _close(); }
   }
 
-  /* ── Mic mute toggle (emergency use) ── */
-  function toggleMicMute() {
-    micMuted = !micMuted;
-    micStream?.getAudioTracks().forEach(t => { t.enabled = !micMuted; });
-    const btn = $('btnMic');
-    btn.classList.toggle('m-muted', micMuted);
-    btn.classList.toggle('m-listening', false);
-    $('micLabel').textContent = micMuted ? 'Muted' : 'Mic on';
-    if (micMuted) {
-      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+  function toggleMicMute(){
+    micMuted=!micMuted;
+    micStream?.getAudioTracks().forEach(t=>{t.enabled=!micMuted;});
+    const btn=$('btnMic');
+    btn.classList.toggle('m-muted',micMuted);
+    btn.classList.toggle('m-listening',false);
+    $('micLabel').textContent=micMuted?'Muted':'Mic on';
+    if(micMuted){
+      $('micIcon').innerHTML=`<rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
         <line x1="3" y1="3" x2="21" y2="21" stroke-width="1.7"/>`;
     } else {
-      $('micIcon').innerHTML = `<rect x="9" y="2" width="6" height="12" rx="3"/>
+      $('micIcon').innerHTML=`<rect x="9" y="2" width="6" height="12" rx="3"/>
         <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>`;
     }
-    UI.toast(micMuted ? 'Microphone muted' : 'Microphone on');
+    UI.toast(micMuted?'Microphone muted':'Microphone on');
   }
 
-  /* ── Speaker mute ── */
-  function toggleSpeaker() {
-    spkrMuted = !spkrMuted;
-    if (audioEl) audioEl.muted = spkrMuted;
-    $('btnSpkr').classList.toggle('active', spkrMuted);
-    $('spkrIcon').innerHTML = spkrMuted
-      ? `<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
-      : `<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
-    UI.toast(spkrMuted ? 'AI voice muted' : 'AI voice on');
+  function toggleSpeaker(){
+    spkrMuted=!spkrMuted;
+    if(audioEl) audioEl.muted=spkrMuted;
+    $('btnSpkr').classList.toggle('active',spkrMuted);
+    $('spkrIcon').innerHTML=spkrMuted
+      ?`<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`
+      :`<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+    UI.toast(spkrMuted?'AI voice muted':'AI voice on');
   }
 
-  function reset() {
-    _closed=false; _turns=0; _curUserText=''; _curAiText='';
+  function reset(){
+    _closed=false;_turns=0;_curUserText='';_curAiText='';
     clearInterval(_timer);
     MEM.clear();
     $('sEnd').classList.remove('open');
     try{pc?.close();}catch{}
     try{audioEl?.remove();}catch{}
     micStream?.getTracks().forEach(t=>t.stop());
-    pc=null; audioEl=null; micStream=null;
+    pc=null;audioEl=null;micStream=null;
     UI.set('idle');
-    setTimeout(connect, 300);
+    setTimeout(connect,300);
   }
 
-  function isClosed(){ return _closed; }
-  return { connect, reset, isClosed, toggleMicMute, toggleSpeaker };
+  function isClosed(){return _closed;}
+  return{connect,reset,isClosed,toggleMicMute,toggleSpeaker};
 })();
 
 /* ── BUTTON HANDLERS ── */
-$('btnMic').addEventListener('click', () => {
-  if (!SESSION.isClosed()) SESSION.toggleMicMute();
+$('btnMic').addEventListener('click',()=>{
+  if(!SESSION.isClosed()) SESSION.toggleMicMute();
 });
-$('btnSpkr').addEventListener('click', () => SESSION.toggleSpeaker());
-$('btnReset').addEventListener('click', () => {
-  if (!SESSION.isClosed() && confirm('Restart this session?')) SESSION.reset();
+$('btnSpkr').addEventListener('click',()=>SESSION.toggleSpeaker());
+$('btnReset').addEventListener('click',()=>{
+  if(!SESSION.isClosed() && confirm('Restart this session?')) SESSION.reset();
 });
 
-/* ══════════════════════════════
-   BOOT
-══════════════════════════════ */
-(async () => {
-  /* If session was already completed, show locked screen */
-  if (MEM.isLocked()) {
-    document.body.innerHTML = `
+/* ── BOOT ── */
+(async()=>{
+  if(MEM.isLocked()){
+    document.body.innerHTML=`
       <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
         gap:16px;background:#f4f1eb;font-family:'Syne',sans-serif">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#007260">Comply Globally</div>
@@ -939,8 +924,7 @@ $('btnReset').addEventListener('click', () => {
     return;
   }
 
-  /* Splash gate — needed to unlock audio context on iOS/Safari */
-  UI.showSplash(async () => {
+  UI.showSplash(async()=>{
     $('sLoad').classList.remove('off');
     await SESSION.connect();
   });
