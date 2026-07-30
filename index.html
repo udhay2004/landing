@@ -68,9 +68,20 @@ nav {
 .nav-links a {
   font-size: 0.8rem; font-weight: 500; letter-spacing: 0.07em;
   color: var(--text-muted); text-decoration: none; text-transform: uppercase;
-  transition: color 0.2s;
+  transition: color 0.2s; position: relative;
+}
+.nav-links a::after {
+  content: ""; position: absolute; left: 0; bottom: -4px;
+  width: 100%; height: 1.5px; background: var(--gold);
+  transform: scaleX(0); transform-origin: right; transition: transform 0.3s ease;
 }
 .nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+.scroll-progress {
+  position: fixed; top: 61px; left: 0; height: 2.5px; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  z-index: 900; transition: width 0.1s linear;
+}
 .btn-nav {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
@@ -137,7 +148,14 @@ h1 {
   font-weight: 900; line-height: 1.12;
   letter-spacing: -0.01em; margin-bottom: clamp(0.8rem, 2vh, 1.3rem);
 }
-h1 em { font-style: italic; color: var(--gold); }
+h1 em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--green), var(--gold-dark));
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmerText 6s ease-in-out infinite;
+}
+@keyframes shimmerText { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 .hero-desc {
   font-size: 1rem; color: var(--text-muted); line-height: 1.65;
   max-width: 480px; margin-bottom: clamp(1.1rem, 2.6vh, 2rem);
@@ -148,7 +166,16 @@ h1 em { font-style: italic; color: var(--gold); }
   font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--ink); background: var(--gold); border: none; cursor: pointer;
   padding: 0.8rem 2rem; border-radius: 3rem; transition: all 0.25s;
+  position: relative; overflow: hidden;
 }
+.btn-primary::after {
+  content: ""; position: absolute; top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+  transform: skewX(-20deg);
+}
+.btn-primary:hover::after { animation: shineSweep 0.9s ease; }
+@keyframes shineSweep { to { left: 125%; } }
 .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(20,103,166,0.28); }
 .btn-outline {
   font-family: 'DM Sans', sans-serif;
@@ -259,7 +286,9 @@ h1 em { font-style: italic; color: var(--gold); }
   padding: 0.35rem 1.1rem; margin: 0 0.35rem;
   border: 1px solid var(--border); border-radius: 2rem;
   font-size: 0.76rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+  transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
+.market-pill:hover { transform: translateY(-2px); border-color: rgba(20,103,166,0.4); color: var(--gold); }
 
 /* VIDEO */
 .video-section {
@@ -284,7 +313,9 @@ h2 em { font-style: italic; color: var(--gold); }
   border-radius: var(--r); overflow: hidden;
   border: 1px solid var(--border); background: #000;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
+.video-frame:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 36px 70px rgba(20,103,166,0.28); }
 .video-frame iframe { display: block; width: 100%; aspect-ratio: 16/9; border: none; }
 
 /* SERVICES */
@@ -313,13 +344,15 @@ h2 em { font-style: italic; color: var(--gold); }
   background: linear-gradient(90deg, var(--gold), var(--green));
   opacity: 0; transition: opacity 0.3s;
 }
-.service-card:hover { border-color: rgba(20,103,166,0.25); transform: translateY(-4px); background: #fbfefd; box-shadow: 0 12px 28px rgba(13,58,74,0.09); }
+.service-card:hover { border-color: rgba(20,103,166,0.25); transform: translateY(-6px); background: #fbfefd; box-shadow: 0 16px 34px rgba(13,58,74,0.11); }
 .service-card:hover::before { opacity: 1; }
 .card-num {
   font-family: 'Playfair Display', serif;
   font-size: 2.3rem; font-weight: 700;
   color: rgba(20,103,166,0.14); line-height: 1; margin-bottom: 1rem;
+  transition: transform 0.35s ease, color 0.35s ease;
 }
+.service-card:hover .card-num { transform: scale(1.12) translateY(-2px); color: rgba(20,103,166,0.28); }
 .card-title { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.55rem; color: var(--text); }
 .card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
 
@@ -334,12 +367,14 @@ h2 em { font-style: italic; color: var(--gold); }
   padding: 1.5rem; background: var(--surface); transition: all 0.25s;
   box-shadow: 0 4px 16px rgba(13,58,74,0.05);
 }
-.audience-card:hover { border-color: rgba(24,155,115,0.35); transform: translateY(-3px); box-shadow: 0 12px 26px rgba(13,58,74,0.09); }
+.audience-card:hover { border-color: rgba(24,155,115,0.35); transform: translateY(-5px); box-shadow: 0 16px 30px rgba(13,58,74,0.11); }
 .aud-icon {
   width: 38px; height: 38px; margin-bottom: 0.85rem;
   display: flex; align-items: center; justify-content: center;
   border-radius: 10px; background: rgba(24,155,115,0.1); color: var(--green);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), background 0.3s;
 }
+.audience-card:hover .aud-icon { transform: rotate(-8deg) scale(1.12); background: rgba(24,155,115,0.18); }
 .aud-icon svg { width: 20px; height: 20px; }
 .aud-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; }
 .aud-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; }
@@ -448,6 +483,14 @@ footer {
 @media (max-width: 1180px) { .hero-network { display: none; } }
 
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.65s ease; }
+.services-grid .service-card:nth-child(1) { transition-delay: 0s; }
+.services-grid .service-card:nth-child(2) { transition-delay: 0.09s; }
+.services-grid .service-card:nth-child(3) { transition-delay: 0.18s; }
+.services-grid .service-card:nth-child(4) { transition-delay: 0.27s; }
+.audience-grid .audience-card:nth-child(1) { transition-delay: 0s; }
+.audience-grid .audience-card:nth-child(2) { transition-delay: 0.09s; }
+.audience-grid .audience-card:nth-child(3) { transition-delay: 0.18s; }
+.audience-grid .audience-card:nth-child(4) { transition-delay: 0.27s; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* INLINE FORM MOBILE */
@@ -556,6 +599,7 @@ footer {
   </div>
   <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
 </nav>
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <div class="page-wrap">
 
@@ -781,10 +825,10 @@ footer {
       </p>
     </div>
     <div class="services-grid">
-      <div class="service-card"><div class="card-num">01</div><div class="card-title">Company Formation</div><p class="card-desc">Incorporation, legal entity structuring, and secretarial compliance across 30+ jurisdictions.</p></div>
-      <div class="service-card"><div class="card-num">02</div><div class="card-title">Global Taxation</div><p class="card-desc">Cross-border tax strategy, IRS compliance, VAT registration, transfer pricing, and international payroll alignment.</p></div>
-      <div class="service-card"><div class="card-num">03</div><div class="card-title">Corporate Restructuring</div><p class="card-desc">Mergers, holding reorganizations, group restructuring, and M&amp;A advisory for agile global scaling.</p></div>
-      <div class="service-card"><div class="card-num">04</div><div class="card-title">Cross-Border Banking</div><p class="card-desc">Multi-currency accounts, FEMA compliance, treasury management, and global payment infrastructure.</p></div>
+      <div class="service-card reveal"><div class="card-num">01</div><div class="card-title">Company Formation</div><p class="card-desc">Incorporation, legal entity structuring, and secretarial compliance across 30+ jurisdictions.</p></div>
+      <div class="service-card reveal"><div class="card-num">02</div><div class="card-title">Global Taxation</div><p class="card-desc">Cross-border tax strategy, IRS compliance, VAT registration, transfer pricing, and international payroll alignment.</p></div>
+      <div class="service-card reveal"><div class="card-num">03</div><div class="card-title">Corporate Restructuring</div><p class="card-desc">Mergers, holding reorganizations, group restructuring, and M&amp;A advisory for agile global scaling.</p></div>
+      <div class="service-card reveal"><div class="card-num">04</div><div class="card-title">Cross-Border Banking</div><p class="card-desc">Multi-currency accounts, FEMA compliance, treasury management, and global payment infrastructure.</p></div>
     </div>
   </section>
 
@@ -793,10 +837,10 @@ footer {
     <span class="section-eyebrow">Who We Empower</span>
     <h2>Built for ambitious<br>global operators.</h2>
     <div class="audience-grid">
-      <div class="audience-card"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 15 L21 5"/><path d="M15 5 H21 V11"/></svg></span><div class="aud-title">Startup Founders</div><p class="aud-desc">US, UK, UAE, Singapore expansion without compliance gaps.</p></div>
-      <div class="audience-card"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><rect x="8" y="7" width="2.4" height="2.4"/><rect x="13.6" y="7" width="2.4" height="2.4"/><rect x="8" y="12" width="2.4" height="2.4"/><rect x="13.6" y="12" width="2.4" height="2.4"/><rect x="9.6" y="17" width="4.8" height="4"/></svg></span><div class="aud-title">Enterprises &amp; SMEs</div><p class="aud-desc">Complete governance, tax health checks, and end-to-end cross-border support.</p></div>
-      <div class="audience-card"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></span><div class="aud-title">CFOs &amp; Legal Heads</div><p class="aud-desc">International tax regimes, structural optimization, and audit defense.</p></div>
-      <div class="audience-card"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span><div class="aud-title">Investor-Backed Firms</div><p class="aud-desc">Rapid entity setup, SAFE compliance, and post-investment restructuring.</p></div>
+      <div class="audience-card reveal"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 15 L21 5"/><path d="M15 5 H21 V11"/></svg></span><div class="aud-title">Startup Founders</div><p class="aud-desc">US, UK, UAE, Singapore expansion without compliance gaps.</p></div>
+      <div class="audience-card reveal"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><rect x="8" y="7" width="2.4" height="2.4"/><rect x="13.6" y="7" width="2.4" height="2.4"/><rect x="8" y="12" width="2.4" height="2.4"/><rect x="13.6" y="12" width="2.4" height="2.4"/><rect x="9.6" y="17" width="4.8" height="4"/></svg></span><div class="aud-title">Enterprises &amp; SMEs</div><p class="aud-desc">Complete governance, tax health checks, and end-to-end cross-border support.</p></div>
+      <div class="audience-card reveal"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></span><div class="aud-title">CFOs &amp; Legal Heads</div><p class="aud-desc">International tax regimes, structural optimization, and audit defense.</p></div>
+      <div class="audience-card reveal"><span class="aud-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span><div class="aud-title">Investor-Backed Firms</div><p class="aud-desc">Rapid entity setup, SAFE compliance, and post-investment restructuring.</p></div>
     </div>
   </section>
 
@@ -954,6 +998,58 @@ document.querySelectorAll('.stat-item strong').forEach(el => {
   }
   requestAnimationFrame(tick);
 });
+
+// Scroll progress bar
+const progressBar = document.getElementById('scrollProgress');
+function updateProgress() {
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  if (progressBar) progressBar.style.width = scrolled + '%';
+}
+document.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();
+
+// Count-up for leadership metrics, triggered once when scrolled into view
+function animateCountEl(el) {
+  const raw = el.textContent.trim();
+  const match = raw.match(/[\d.,]+/);
+  if (!match) return;
+  const target = parseFloat(match[0].replace(/,/g, ''));
+  const prefix = raw.slice(0, match.index);
+  const suffix = raw.slice(match.index + match[0].length);
+  const duration = 1200;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = raw;
+  }
+  requestAnimationFrame(tick);
+}
+const metricEls = document.querySelectorAll('.metric-item strong');
+const metricObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { animateCountEl(e.target); metricObs.unobserve(e.target); }
+  });
+}, { threshold: 0.5 });
+metricEls.forEach(el => metricObs.observe(el));
+
+// Cursor-follow glow inside the hero (subtle spotlight, desktop only)
+const heroEl = document.getElementById('hero');
+if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const glow = document.createElement('div');
+  glow.style.cssText = 'position:absolute;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;opacity:0;transition:opacity .3s;background:radial-gradient(circle,rgba(20,103,166,0.07),transparent 70%);';
+  heroEl.appendChild(glow);
+  heroEl.addEventListener('mousemove', (e) => {
+    const r = heroEl.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left - 210) + 'px';
+    glow.style.top  = (e.clientY - r.top - 210) + 'px';
+    glow.style.opacity = '1';
+  });
+  heroEl.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+}
 </script>
 </body>
 </html>
