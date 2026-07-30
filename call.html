@@ -648,8 +648,8 @@ SESSION_COMPLETE`;
       });
       if(!r.ok){const t=await r.text();throw new Error(`Backend ${r.status}: ${t}`);}
       const d = await r.json();
-      token = d.client_secret?.value;
-      if(!token) throw new Error('No client_secret.value. Check OPENAI_API_KEY on Render.');
+      token = d.value || d.client_secret?.value;
+      if(!token) throw new Error('No ephemeral token in response. Check OPENAI_API_KEY on Render.');
     } catch(e) {
       console.error('Token error:',e.message);
       UI.err('Connection failed: '+e.message);
@@ -683,7 +683,7 @@ SESSION_COMPLETE`;
     await pc.setLocalDescription(offer);
 
     const sdpRes = await fetch(
-      'https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17', {
+      'https://api.openai.com/v1/realtime/calls', {
         method:  'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
