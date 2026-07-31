@@ -338,23 +338,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     <div class="end-title">Session Complete</div>
     <div class="end-sub">Thank you for speaking with Dr. CV</div>
     <div class="end-body" id="endBody"></div>
-    <a href="#" class="end-cta" id="endCTA" style="display:none">Schedule a Strategy Call →</a>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── CONFIG — only change BACKEND and CAL ── */
+/* ── CONFIG — only change BACKEND ── */
 const CFG = {
   BACKEND:   'https://landing-call-backend.vercel.app',   // ← your Vercel backend
-  CAL:       'https://cal.com/udhay-marwah-wkeu9j/30mins',
   GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
   VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
   MIN_TURNS: 6,
   MAX_MS:    18 * 60 * 1000,
-  SCORE_MIN: 55,
 };
+
 
 /* ── URL PARAMS ── */
 const Q = new URLSearchParams(location.search);
@@ -371,22 +369,6 @@ const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
 const $ = id => document.getElementById(id);
 
-/* ── SCORE ENGINE ── */
-const SCORE = (() => {
-  let s = { interest:0, engagement:0, intent:0, readiness:0 };
-  function update(text) {
-    const w = text.split(/\s+/).length;
-    s.engagement = Math.min(100, s.engagement + (w>18?14:w>8?7:3));
-    if (/interest|want|need|expand|grow|opportunit|market/i.test(text)) s.interest = Math.min(100,s.interest+10);
-    if (/ready|plan|timeline|budget|invest|commit|month|quarter/i.test(text)) s.intent = Math.min(100,s.intent+14);
-    if (/now|asap|urgent|immediate|this year|next month|soon/i.test(text)) s.readiness = Math.min(100,s.readiness+16);
-  }
-  function total() { return Math.round((s.interest+s.engagement+s.intent+s.readiness)/4); }
-  function level() { return total()>=70?'hot':total()>=40?'warm':'cold'; }
-  function snapshot() { return {...s, total:total(), level:level()}; }
-  return { update, total, level, snapshot };
-})();
-
 /* ── GOOGLE SHEETS SYNC ── */
 const GSYNC = (() => {
   function post(action, data) {
@@ -401,19 +383,17 @@ const GSYNC = (() => {
     post('update',{leadId:LEAD.id,sessionId:LEAD.sid,turnNumber:n,userMessage:u,botResponse:b});
   }
   function complete(elapsed, turns) {
-    const sc = SCORE.snapshot();
     post('complete',{
       leadId:LEAD.id,sessionId:LEAD.sid,
       name:LEAD.name,email:LEAD.email,company:LEAD.company,country:LEAD.country,
-      qualificationScore:sc.total,qualificationLevel:sc.level,
       duration:elapsed,turnCount:turns,
-      interest:sc.interest,engagement:sc.engagement,intent:sc.intent,readiness:sc.readiness,
     });
   }
   return {turn, complete};
 })();
 
-/* ── BACKEND SYNC — stores the live transcript + final score for the CRM/human handoff ── */
+/* ── BACKEND SYNC — stores the live transcript; backend generates the structured
+   summary for the CRM once the call ends (see /transcript on the server) ── */
 const BSYNC = (() => {
   function post(body) {
     fetch(CFG.BACKEND + '/transcript', {
@@ -427,7 +407,7 @@ const BSYNC = (() => {
     post({ turn: { role, text, n, ts: Date.now() } });
   }
   function complete(elapsed, turns) {
-    post({ complete: true, duration: elapsed, turnCount: turns, score: SCORE.snapshot() });
+    post({ complete: true, duration: elapsed, turnCount: turns });
   }
   return { turn, complete };
 })();
@@ -529,15 +509,9 @@ const UI = (() => {
     $('spBtn').addEventListener('click',go,{once:true});
     $('sSplash').addEventListener('click',go,{once:true});
   }
-  function showEnd(calUrl,hot){
-    const body=$('endBody'),cta=$('endCTA');
-    if(hot&&calUrl){
-      body.textContent='You\'re a strong fit for our services. Book a strategy call — we\'ll pick up right where we left off.';
-      cta.href=calUrl; cta.style.display='block';
-    } else {
-      body.textContent='Thank you for your time. Our team will review your session and reach out within one business day.';
-      cta.style.display='none';
-    }
+  function showEnd(){
+    const body=$('endBody');
+    body.textContent='Thank you for your time. Our team will review your conversation and reach out soon.';
     $('sEnd').classList.add('open');
   }
   let _toastT=null;
@@ -775,7 +749,6 @@ SESSION_COMPLETE`;
         UI.showInterim('');
         if(text){
           UI.showTx('you',text);
-          SCORE.update(text);
           _turns++;
           GSYNC.turn(text,'',_turns);
           BSYNC.turn('user',text,_turns);
@@ -856,12 +829,7 @@ SESSION_COMPLETE`;
     GSYNC.complete(elapsed,_turns);
     BSYNC.complete(elapsed,_turns);
     UI.set('closed');
-    setTimeout(()=>{
-      UI.showEnd(
-        CFG.CAL+'?name='+encodeURIComponent(LEAD.name)+'&email='+encodeURIComponent(LEAD.email),
-        SCORE.total() >= CFG.SCORE_MIN
-      );
-    },2500);
+    setTimeout(()=>{ UI.showEnd(); },2500);
   }
 
   function _forceClose(){
