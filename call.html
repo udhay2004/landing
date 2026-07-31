@@ -165,16 +165,39 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 /* ── SCREENS ── */
 .screen{position:fixed;inset:0;z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;transition:opacity .55s,visibility .55s}
 .screen.off{opacity:0;visibility:hidden;pointer-events:none}
+.screen::before,.screen::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;animation:screenOrbFloat 16s ease-in-out infinite}
+.screen::before{width:360px;height:360px;top:-100px;left:-80px;background:radial-gradient(circle,rgba(0,159,130,.14),transparent 70%)}
+.screen::after{width:320px;height:320px;bottom:-90px;right:-70px;background:radial-gradient(circle,rgba(184,134,11,.12),transparent 70%);animation-duration:20s;animation-delay:-7s}
+@keyframes screenOrbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-18px) scale(1.08)}}
+.screen>*{position:relative;animation:screenRise .7s cubic-bezier(.16,.84,.44,1) both}
+.screen>*:nth-child(1){animation-delay:.03s}
+.screen>*:nth-child(2){animation-delay:.10s}
+.screen>*:nth-child(3){animation-delay:.17s}
+.screen>*:nth-child(4){animation-delay:.24s}
+.screen>*:nth-child(5){animation-delay:.31s}
+@keyframes screenRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 #sLoad{background:var(--bg);z-index:900}
-.load-mark{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--jade)}
+.load-mark{font-family:var(--serif);font-style:italic;font-size:26px;
+  background:linear-gradient(90deg,var(--jade2),var(--jade),var(--gold),var(--jade2));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:screenRise .7s cubic-bezier(.16,.84,.44,1) both,markShimmer 5s ease-in-out infinite .7s}
+@keyframes markShimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .load-sep{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--jade),transparent)}
-.load-spin{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,159,130,.14);border-top-color:var(--jade);animation:sp 1s linear infinite}
+.load-spin{width:30px;height:30px;border-radius:50%;position:relative}
+.load-spin::before,.load-spin::after{content:"";position:absolute;inset:0;border-radius:50%}
+.load-spin::before{border:1px solid rgba(0,159,130,.14)}
+.load-spin::after{border:1.5px solid transparent;border-top-color:var(--jade);border-right-color:rgba(0,159,130,.35);animation:sp .9s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .load-msg{font-family:var(--mono);font-size:7px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase;max-width:280px}
 #sSplash{background:var(--bg);z-index:1000;cursor:pointer}
-.sp-logo{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--jade)}
+.sp-logo{font-family:var(--serif);font-style:italic;font-size:22px;
+  background:linear-gradient(90deg,var(--jade2),var(--jade),var(--gold),var(--jade2));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:screenRise .7s cubic-bezier(.16,.84,.44,1) both,markShimmer 5s ease-in-out infinite .7s}
 .sp-play{width:72px;height:72px;border-radius:50%;border:1px solid rgba(0,159,130,.26);background:rgba(255,255,255,.82);
-  display:flex;align-items:center;justify-content:center;color:var(--jade2);cursor:pointer;transition:all .3s;box-shadow:0 3px 14px rgba(0,0,0,.07)}
+  display:flex;align-items:center;justify-content:center;color:var(--jade2);cursor:pointer;transition:all .3s;box-shadow:0 3px 14px rgba(0,0,0,.07);position:relative}
+.sp-play::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(0,159,130,.22);animation:playPulse 2.4s ease-out infinite}
+@keyframes playPulse{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.35);opacity:0}}
 .sp-play:hover{border-color:var(--jade);box-shadow:0 6px 24px rgba(0,159,130,.14);background:#fff}
 .sp-hint{font-family:var(--mono);font-size:6.5px;letter-spacing:.24em;color:var(--ink2);text-transform:uppercase}
 .sp-sub{font-family:var(--sans);font-size:13px;color:var(--ink2);max-width:280px;line-height:1.7}
@@ -182,7 +205,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 #sEnd.open{opacity:1;visibility:visible;pointer-events:all}
 .end-wrap{width:420px;max-width:90vw;padding:0 20px}
 .end-gl{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:22px}
-.end-mark{font-size:16px;color:var(--gold);margin-bottom:10px}
+.end-mark{font-size:16px;color:var(--gold);margin-bottom:10px;display:inline-block;animation:screenRise .7s cubic-bezier(.16,.84,.44,1) both,endMarkPop .6s cubic-bezier(.34,1.56,.64,1) .5s both}
+@keyframes endMarkPop{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.25) rotate(6deg)}100%{transform:scale(1) rotate(0)}}
 .end-title{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--ink);margin-bottom:4px}
 .end-sub{font-family:var(--mono);font-size:6.5px;letter-spacing:.22em;color:var(--ink2);text-transform:uppercase;margin-bottom:16px}
 .end-body{font-family:var(--sans);font-size:13px;line-height:1.8;color:var(--ink1);margin-bottom:20px}
@@ -305,6 +329,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
     <svg id="spkrIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M11 5 6 9H2v6h4l5 4V5z"/>
       <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
+  </button>
+
+  <button class="ibtn ibtn-end" id="btnEnd" title="End call">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 9c-2.5 0-4.85.6-6.9 1.66a1.13 1.13 0 0 0-.6 1.24l.6 2.85c.11.5.5.9 1 1a11 11 0 0 0 2.2.28c.5 0 .96-.3 1.14-.77l.5-1.28a.8.8 0 0 1 .9-.5c1.1.2 2.32.2 3.42 0a.8.8 0 0 1 .9.5l.5 1.28c.18.47.64.77 1.14.77.76 0 1.5-.1 2.2-.28.5-.1.9-.5 1-1l.6-2.85a1.13 1.13 0 0 0-.6-1.24A15.9 15.9 0 0 0 12 9z" transform="rotate(135 12 12)"/>
     </svg>
   </button>
 </div>
@@ -549,7 +579,7 @@ const UI = (() => {
       text generation completes.
    ══════════════════════════════════════════════════════ */
 const SESSION = (() => {
-  let pc=null, dc=null, audioEl=null, micStream=null;
+  let pc=null, dc=null, audioEl=null, micStream=null, _greeted=false;
   let micMuted=false, spkrMuted=false, _closed=false;
   let _turns=0, _tStart=0, _timer=null;
   let _curUserText='', _curAiText='';
@@ -605,6 +635,12 @@ ${FIRST && LEAD.country && LEAD.company
 
 SESSION END (after ${CFG.MIN_TURNS} turns or when you have enough context):
 Wrap up warmly in one sentence. Then on a new line write exactly:
+SESSION_COMPLETE
+
+IF THE USER ASKS TO END THE CALL — phrases like "end the call", "hang up", "stop",
+"that's all", "I have to go", "bye", or similar — this OVERRIDES everything above,
+even on turn 1. Immediately say one short warm closing line (e.g. "Of course — thanks
+for your time today!"), then on a new line write exactly:
 SESSION_COMPLETE`;
   }
 
@@ -693,7 +729,7 @@ SESSION_COMPLETE`;
     /* 6. Data channel for events */
     dc = pc.createDataChannel('oai-events');
     dc.onmessage = e => _handleEvent(JSON.parse(e.data));
-    dc.onopen    = () => console.log('DataChannel open');
+    dc.onopen    = () => { console.log('DataChannel open'); _maybeGreet(); };
 
     /* 7. SDP exchange — OpenAI's endpoint is a single HTTP POST, not a live
           signaling channel, so our offer must already contain the FULL set
@@ -743,6 +779,16 @@ SESSION_COMPLETE`;
     };
   }
 
+  function _maybeGreet(){
+    if(_greeted) return;
+    if(pc && pc.connectionState==='connected' && dc && dc.readyState==='open'){
+      _greeted = true;
+      // Small delay lets the session config fully settle server-side before
+      // we ask it to speak — without this the very first response can be cut off.
+      setTimeout(()=>{ dc.send(JSON.stringify({type:'response.create'})); }, 350);
+    }
+  }
+
   function _onConnected(){
     _tStart = Date.now();
     UI.renderLead();
@@ -754,6 +800,7 @@ SESSION_COMPLETE`;
       if(!_closed && (Date.now()-_tStart) >= CFG.MAX_MS) _forceClose();
     },1000);
     setTimeout(()=>{UI.hideLoad(); UI.set('ready');},400);
+    _maybeGreet();
   }
 
   function _handleEvent(ev){
