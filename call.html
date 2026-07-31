@@ -608,6 +608,22 @@ Wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE`;
   }
 
+  function waitForIceGathering(pc, timeoutMs) {
+    if (pc.iceGatheringState === 'complete') return Promise.resolve();
+    return new Promise(resolve => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        pc.removeEventListener('icegatheringstatechange', check);
+        resolve();
+      };
+      const check = () => { if (pc.iceGatheringState === 'complete') finish(); };
+      pc.addEventListener('icegatheringstatechange', check);
+      setTimeout(finish, timeoutMs); // don't hang forever if gathering stalls
+    });
+  }
+
   async function connect() {
     UI.setLoad('Requesting microphone…');
 
@@ -679,9 +695,15 @@ SESSION_COMPLETE`;
     dc.onmessage = e => _handleEvent(JSON.parse(e.data));
     dc.onopen    = () => console.log('DataChannel open');
 
-    /* 7. SDP exchange */
+    /* 7. SDP exchange — OpenAI's endpoint is a single HTTP POST, not a live
+          signaling channel, so our offer must already contain the FULL set
+          of ICE candidates before we send it. createOffer()/setLocalDescription()
+          only *start* gathering — sending immediately races that process and
+          usually ships an offer with zero usable candidates, which is why
+          the call would hang indefinitely instead of connecting. */
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
+    await waitForIceGathering(pc, 4000);
 
     const sdpRes = await fetch(
       'https://api.openai.com/v1/realtime/calls', {
@@ -690,7 +712,7 @@ SESSION_COMPLETE`;
           'Authorization': `Bearer ${token}`,
           'Content-Type':  'application/sdp',
         },
-        body: offer.sdp,
+        body: pc.localDescription.sdp,
       }
     );
 
