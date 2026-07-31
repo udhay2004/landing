@@ -263,6 +263,29 @@ h1 em {
 #formMsg.error, #formMsg2.error { background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); color: #f97316; display: block; }
 #formMsg.loading, #formMsg2.loading { background: rgba(20,103,166,0.08); border: 1px solid rgba(20,103,166,0.25); color: var(--gold); display: block; }
 
+/* CONSENT OVERLAY — "connect me with Dr. CV now?" */
+.consent-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  display: none; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: rgba(13,43,58,0.45); backdrop-filter: blur(6px);
+}
+.consent-overlay.open { display: flex; }
+.consent-modal {
+  background: #ffffff; border-radius: var(--r-lg);
+  padding: 2rem 2.2rem; max-width: 420px; width: 100%;
+  box-shadow: 0 30px 70px rgba(13,58,74,0.25);
+  animation: heroRise 0.4s cubic-bezier(.16,.84,.44,1) forwards;
+  text-align: center;
+}
+.consent-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem; font-weight: 700; margin-bottom: 0.7rem; color: var(--text);
+}
+.consent-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
+.consent-actions { display: flex; flex-direction: column; gap: 0.7rem; }
+.consent-actions .btn-primary, .consent-actions .btn-outline { width: 100%; }
+
 /* MARKETS STRIP */
 .markets-strip {
   padding: 2.2rem 3.5rem;
@@ -880,6 +903,8 @@ footer {
 <script>
 // ─── PASTE YOUR LATEST DEPLOYED WEB APP URL HERE ───────────────────
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwWnq7UzZmHOGEJVX95R0_-XxNhbrrzZyg4Z6khPknW_h1D0bNNYm8fdcMeJ-RngFFDlg/exec";
+// ← must match your deployed backend on Vercel exactly
+const BACKEND = "https://landing-call-backend.vercel.app";
 // ───────────────────────────────────────────────────────────────────
 
 function showMsg(id, text, type) {
@@ -920,31 +945,85 @@ async function submitForm(ids, msgId) {
   btn.textContent = 'Submitting...';
   showMsg(msgId, '⏳ Sending your request...', 'loading');
 
+  // Fire-and-forget: keep logging to the Sheet exactly as before
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ name, email, phone, company, country, stage }).toString()
+  }).catch(() => {});
+
   try {
-    await fetch(WEBHOOK_URL, {
+    // Backend is the source of truth for leadId/sessionId from here on
+    const leadRes = await fetch(BACKEND + '/lead', {
       method: 'POST',
-      mode: 'no-cors', // required for Google Apps Script — we can't read response but data goes through
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ name, email, phone, company, country, stage }).toString()
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, company, country, stage })
     });
+    if (!leadRes.ok) throw new Error('lead create failed');
+    const { leadId, sessionId } = await leadRes.json();
 
-    showMsg(msgId, '✅ Got it! Connecting you to Dr. CV now…', 'success');
+    showMsg(msgId, '✅ Got it!', 'success');
+    btn.disabled = false;
+    btn.textContent = 'Request Strategy Session →';
 
-    // Hand off straight into the live voice call, carrying the lead's info with it
-    const params = new URLSearchParams({
-      name: name, email: email, company: company,
-      country: country, stage: stage,
-      leadId: 'l_' + Date.now(), sessionId: 's_' + Date.now()
-    });
-    setTimeout(() => {
-      window.location.href = 'call.html?' + params.toString();
-    }, 1200);
+    showConsent({ name, email, company, country, stage, leadId, sessionId });
 
   } catch (err) {
     showMsg(msgId, '❌ Something went wrong. Please try again.', 'error');
     btn.disabled = false;
     btn.textContent = 'Request Strategy Session →';
   }
+}
+
+/* ── CONSENT STEP — "connect me with Dr. CV now?" ── */
+function showConsent(lead) {
+  const overlay = document.getElementById('consentOverlay');
+  const first = (lead.name || '').split(' ')[0] || 'there';
+
+  overlay.innerHTML = `
+    <div class="consent-modal">
+      <div class="consent-title">Got it, ${first}! 👋</div>
+      <p class="consent-text">Want to speak with <strong>Dr.&nbsp;CV</strong>, our compliance champion, right now? It's a quick live voice conversation — no scheduling needed.</p>
+      <div class="consent-actions">
+        <button class="btn-primary" id="consentYes">Yes, connect me now →</button>
+        <button class="btn-outline" id="consentNo">Not now, email me a link</button>
+      </div>
+    </div>`;
+  overlay.classList.add('open');
+
+  document.getElementById('consentYes').addEventListener('click', async () => {
+    postConsent(lead, 'yes');
+    const params = new URLSearchParams({
+      name: lead.name, email: lead.email, company: lead.company,
+      country: lead.country, stage: lead.stage,
+      leadId: lead.leadId, sessionId: lead.sessionId
+    });
+    window.location.href = 'call.html?' + params.toString();
+  });
+
+  document.getElementById('consentNo').addEventListener('click', async () => {
+    await postConsent(lead, 'no');
+    overlay.innerHTML = `
+      <div class="consent-modal">
+        <div class="consent-title">✅ Check your inbox</div>
+        <p class="consent-text">We've emailed <strong>${lead.email}</strong> a link to talk to Dr. CV whenever you're ready. It'll be waiting for you.</p>
+        <div class="consent-actions">
+          <button class="btn-outline" id="consentClose">Close</button>
+        </div>
+      </div>`;
+    document.getElementById('consentClose').addEventListener('click', () => overlay.classList.remove('open'));
+  });
+}
+
+async function postConsent(lead, consent) {
+  try {
+    await fetch(BACKEND + '/consent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadId: lead.leadId, sessionId: lead.sessionId, consent })
+    });
+  } catch (err) { /* non-blocking — worst case they just don't get the email */ }
 }
 
 // Desktop form
@@ -1051,5 +1130,7 @@ if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   heroEl.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
 }
 </script>
+<div class="consent-overlay" id="consentOverlay"></div>
+
 </body>
 </html>
