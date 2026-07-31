@@ -650,8 +650,16 @@ SESSION_COMPLETE`;
       return;
     }
 
-    /* 3. WebRTC peer connection */
-    pc = new RTCPeerConnection();
+    /* 3. WebRTC peer connection — STUN servers are required so ICE can
+          discover your public address behind NAT (home WiFi/mobile data
+          almost always sit behind one). Without this, negotiation just
+          hangs indefinitely instead of connecting or failing cleanly. */
+    pc = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+      ],
+    });
 
     /* 4. AI audio output — use a dedicated audio element
           setSinkId to the default speaker (not the mic input device) */
@@ -696,11 +704,18 @@ SESSION_COMPLETE`;
     await pc.setRemoteDescription({type:'answer', sdp:await sdpRes.text()});
 
     /* 8. Connection monitoring */
+    let _connectWatchdog = setTimeout(() => {
+      if (pc && pc.connectionState !== 'connected') {
+        UI.err('Connection is taking too long — check your network and reload.');
+        UI.setLoad('Still trying to connect… if this persists, reload the page.');
+      }
+    }, 15000);
     pc.onconnectionstatechange = () => {
       const s = pc.connectionState;
       console.log('WebRTC state:', s);
-      if(s==='connected') _onConnected();
+      if(s==='connected'){ clearTimeout(_connectWatchdog); _onConnected(); }
       else if(['failed','disconnected','closed'].includes(s) && !_closed){
+        clearTimeout(_connectWatchdog);
         UI.err('Voice connection dropped — reload to reconnect.');
       }
     };
