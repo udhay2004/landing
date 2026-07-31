@@ -413,6 +413,25 @@ const GSYNC = (() => {
   return {turn, complete};
 })();
 
+/* ── BACKEND SYNC — stores the live transcript + final score for the CRM/human handoff ── */
+const BSYNC = (() => {
+  function post(body) {
+    fetch(CFG.BACKEND + '/transcript', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadId: LEAD.id, sessionId: LEAD.sid, ...body }),
+    }).catch(()=>{});
+  }
+  function turn(role, text, n) {
+    if (!text) return;
+    post({ turn: { role, text, n, ts: Date.now() } });
+  }
+  function complete(elapsed, turns) {
+    post({ complete: true, duration: elapsed, turnCount: turns, score: SCORE.snapshot() });
+  }
+  return { turn, complete };
+})();
+
 /* ── SESSION LOCK ── */
 const MEM = (() => {
   const LK = 'cg_lock_' + LEAD.id;
@@ -759,6 +778,7 @@ SESSION_COMPLETE`;
           SCORE.update(text);
           _turns++;
           GSYNC.turn(text,'',_turns);
+          BSYNC.turn('user',text,_turns);
         }
         break;
       }
@@ -806,6 +826,7 @@ SESSION_COMPLETE`;
         const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
         GSYNC.turn('',_curAiText,_turns);  // log AI response
+        BSYNC.turn('ai',_curAiText,_turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
           setTimeout(_close,3000);
         }
@@ -833,6 +854,7 @@ SESSION_COMPLETE`;
     MEM.lock();
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
     GSYNC.complete(elapsed,_turns);
+    BSYNC.complete(elapsed,_turns);
     UI.set('closed');
     setTimeout(()=>{
       UI.showEnd(
