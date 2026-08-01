@@ -376,8 +376,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 <script>
 /* ── CONFIG — only change BACKEND ── */
 const CFG = {
-  BACKEND:   'https://landing-call-backend.vercel.app',   // ← your Vercel backend
-  GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
+  BACKEND:   'https://landing-call-backend.vercel.app',   // ← your Vercel backend — single source of truth (Mongo CRM)
   VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
   MIN_TURNS: 6,
   MIN_MS:    5 * 60 * 1000,   // don't let the call end before ~5 min, even if the model wants to
@@ -399,29 +398,6 @@ const LEAD = {
 const FIRST = (LEAD.name || '').split(' ')[0].trim();
 
 const $ = id => document.getElementById(id);
-
-/* ── GOOGLE SHEETS SYNC ── */
-const GSYNC = (() => {
-  function post(action, data) {
-    if (!CFG.GAS) return;
-    fetch(CFG.GAS + '?action=' + action, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({action, data:JSON.stringify(data)}).toString(),
-    }).catch(()=>{});
-  }
-  function turn(u, b, n) {
-    post('update',{leadId:LEAD.id,sessionId:LEAD.sid,turnNumber:n,userMessage:u,botResponse:b});
-  }
-  function complete(elapsed, turns) {
-    post('complete',{
-      leadId:LEAD.id,sessionId:LEAD.sid,
-      name:LEAD.name,email:LEAD.email,company:LEAD.company,country:LEAD.country,
-      duration:elapsed,turnCount:turns,
-    });
-  }
-  return {turn, complete};
-})();
 
 /* ── BACKEND SYNC — stores the live transcript; backend generates the structured
    summary for the CRM once the call ends (see /transcript on the server) ── */
@@ -845,7 +821,6 @@ SESSION_COMPLETE`;
           _lastUserText = text;
           UI.showTx('you',text);
           _turns++;
-          GSYNC.turn(text,'',_turns);
           BSYNC.turn('user',text,_turns);
         }
         break;
@@ -893,7 +868,6 @@ SESSION_COMPLETE`;
         if(full) _curAiText=full;
         const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
-        GSYNC.turn('',_curAiText,_turns);  // log AI response
         BSYNC.turn('ai',_curAiText,_turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
           const userAskedToEnd = /\b(end (the )?call|hang up|stop( the call)?|that'?s all|i (have|need|got) to go|i'?m done|bye|goodbye)\b/i.test(_lastUserText);
@@ -933,7 +907,6 @@ SESSION_COMPLETE`;
     clearInterval(_timer);
     MEM.lock();
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
-    GSYNC.complete(elapsed,_turns);
     BSYNC.complete(elapsed,_turns);
     UI.set('closed');
     setTimeout(()=>{ UI.showEnd(); },2500);
