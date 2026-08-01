@@ -380,6 +380,7 @@ const CFG = {
   GAS:       'https://script.google.com/macros/s/AKfycbyqtGniYJWNFa6Y5YrIYIGSwn5KyIkfGN2iJF0Q-9gvIMuLXFmipy0Vs8AdEuNIas9g-Q/exec',
   VOICE:     'shimmer',   // alloy | ash | ballad | coral | echo | sage | shimmer | verse
   MIN_TURNS: 6,
+  MIN_MS:    5 * 60 * 1000,   // don't let the call end before ~5 min, even if the model wants to
   MAX_MS:    18 * 60 * 1000,
 };
 
@@ -582,7 +583,7 @@ const SESSION = (() => {
   let pc=null, dc=null, audioEl=null, micStream=null, _greeted=false;
   let micMuted=false, spkrMuted=false, _closed=false;
   let _turns=0, _tStart=0, _timer=null;
-  let _curUserText='', _curAiText='';
+  let _curUserText='', _curAiText='', _lastUserText='';
 
   function buildPrompt() {
     const who = FIRST
@@ -633,8 +634,17 @@ ${FIRST && LEAD.country && LEAD.company
   ? `Say exactly: "Good to meet you, ${FIRST}. Which market are you focused on, and what's the biggest challenge you're facing?"`
   : `Say exactly: "Welcome to Comply Globally. Which market are you looking to expand into, and what's the main challenge you'd like to solve?"`}
 
-SESSION END (after ${CFG.MIN_TURNS} turns or when you have enough context):
-Wrap up warmly in one sentence. Then on a new line write exactly:
+SESSION END — READ CAREFULLY, DO NOT END EARLY:
+Do NOT write SESSION_COMPLETE just because you feel you have "enough" — that instinct
+ends calls too soon. Only even consider ending once BOTH are true:
+  1. You've reached at least turn ${CFG.MIN_TURNS} of natural conversation.
+  2. You've genuinely covered the discovery goals above (challenge, market, timeline,
+     decision-maker, budget signal, what success looks like) — not just one or two of them.
+Even once both are true, do NOT end abruptly. First check in with one short line like:
+"Sounds like I've got a good picture — anything else on your mind before we wrap up?"
+Only write SESSION_COMPLETE after the client confirms they're done, or after you've
+checked in and they have nothing more to add.
+When you do end, wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE
 
 IF THE USER ASKS TO END THE CALL — phrases like "end the call", "hang up", "stop",
@@ -832,6 +842,7 @@ SESSION_COMPLETE`;
         _curUserText = '';
         UI.showInterim('');
         if(text){
+          _lastUserText = text;
           UI.showTx('you',text);
           _turns++;
           GSYNC.turn(text,'',_turns);
@@ -885,7 +896,19 @@ SESSION_COMPLETE`;
         GSYNC.turn('',_curAiText,_turns);  // log AI response
         BSYNC.turn('ai',_curAiText,_turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
-          setTimeout(_close,3000);
+          const userAskedToEnd = /\b(end (the )?call|hang up|stop( the call)?|that'?s all|i (have|need|got) to go|i'?m done|bye|goodbye)\b/i.test(_lastUserText);
+          const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
+          if(userAskedToEnd || minimumsMet){
+            setTimeout(_close,3000);
+          } else if(dc?.readyState==='open'){
+            /* Model tried to end early — decline and keep the conversation going */
+            dc.send(JSON.stringify({
+              type:'conversation.item.create',
+              item:{type:'message',role:'user',content:[{type:'input_text',
+                text:'[Not yet — the conversation has not covered enough ground. Continue naturally, ask a relevant follow-up, and do NOT write SESSION_COMPLETE.]'}]},
+            }));
+            dc.send(JSON.stringify({type:'response.create'}));
+          }
         }
         break;
       }
