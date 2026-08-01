@@ -901,8 +901,6 @@ footer {
 </div>
 
 <script>
-// ─── PASTE YOUR LATEST DEPLOYED WEB APP URL HERE ───────────────────
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwWnq7UzZmHOGEJVX95R0_-XxNhbrrzZyg4Z6khPknW_h1D0bNNYm8fdcMeJ-RngFFDlg/exec";
 // ← must match your deployed backend on Vercel exactly
 const BACKEND = "https://landing-call-backend.vercel.app";
 // ───────────────────────────────────────────────────────────────────
@@ -944,14 +942,6 @@ async function submitForm(ids, msgId) {
   btn.disabled = true;
   btn.textContent = 'Submitting...';
   showMsg(msgId, '⏳ Sending your request...', 'loading');
-
-  // Fire-and-forget: keep logging to the Sheet exactly as before
-  fetch(WEBHOOK_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ name, email, phone, company, country, stage }).toString()
-  }).catch(() => {});
 
   try {
     // Backend is the source of truth for leadId/sessionId from here on
