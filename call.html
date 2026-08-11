@@ -384,9 +384,14 @@ const CFG = {
 };
 
 
-/* ── URL PARAMS ── */
+/* ── URL PARAMS ──
+   Two ways to arrive here:
+   1. Straight from the landing page form — full details in the query string.
+   2. From the emailed "resume" link — just ?leadId=..., everything else is
+      fetched from the backend below (see hydrateLead()) so the emailed
+      link stays short and doesn't carry PII in the URL. */
 const Q = new URLSearchParams(location.search);
-const LEAD = {
+let LEAD = {
   name:    decodeURIComponent(Q.get('name')    || ''),
   email:   decodeURIComponent(Q.get('email')   || ''),
   company: decodeURIComponent(Q.get('company') || ''),
@@ -395,9 +400,34 @@ const LEAD = {
   id:      Q.get('leadId')    || ('l_' + Date.now()),
   sid:     Q.get('sessionId') || ('s_' + Date.now()),
 };
-const FIRST = (LEAD.name || '').split(' ')[0].trim();
+let FIRST = (LEAD.name || '').split(' ')[0].trim();
 
 const $ = id => document.getElementById(id);
+
+/* ── HYDRATE FROM SHORT LINK ──
+   If we only got a leadId (no name/email), pull the rest from the backend
+   before anything else runs, so the prompt and UI have real client context. */
+async function hydrateLead() {
+  const cameFromShortLink = Q.get('leadId') && !Q.get('name') && !Q.get('email');
+  if (!cameFromShortLink) return;
+  try {
+    const r = await fetch(CFG.BACKEND + '/resume/' + encodeURIComponent(LEAD.id));
+    if (!r.ok) return; // link is stale/invalid — fall back to whatever we have
+    const data = await r.json();
+    LEAD = {
+      ...LEAD,
+      name:    data.name    || '',
+      email:   data.email   || '',
+      company: data.company || '',
+      country: data.country || '',
+      stage:   data.stage   || '',
+      sid:     data.sessionId || LEAD.sid,
+    };
+    FIRST = (LEAD.name || '').split(' ')[0].trim();
+  } catch (err) {
+    console.error('Could not hydrate lead from resume link:', err.message);
+  }
+}
 
 /* ── BACKEND SYNC — stores the live transcript; backend generates the structured
    summary for the CRM once the call ends (see /transcript on the server) ── */
@@ -623,10 +653,10 @@ checked in and they have nothing more to add.
 When you do end, wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE
 
-IF THE USER ASKS TO END THE CALL — phrases like "end the call", "hang up", "stop",
-"that's all", "I have to go", "bye", or similar — this OVERRIDES everything above,
-even on turn 1. Immediately say one short warm closing line (e.g. "Of course — thanks
-for your time today!"), then on a new line write exactly:
+IF THE USER ASKS TO END THE CALL — phrases like "end the call", "end the conversation",
+"hang up", "stop", "that's all", "I have to go", "I'm good", "bye", or similar — this
+OVERRIDES everything above, even on turn 1. Immediately say one short warm closing line
+(e.g. "Of course — thanks for your time today!"), then on a new line write exactly:
 SESSION_COMPLETE`;
   }
 
@@ -870,7 +900,7 @@ SESSION_COMPLETE`;
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
         BSYNC.turn('ai',_curAiText,_turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
-          const userAskedToEnd = /\b(end (the )?call|hang up|stop( the call)?|that'?s all|i (have|need|got) to go|i'?m done|bye|goodbye)\b/i.test(_lastUserText);
+          const userAskedToEnd = /\b(end (the )?(call|conversation|session)|hang up|stop( the (call|conversation))?|that'?s all|i (have|need|got) to go|i'?m (done|good|all set)|no more questions|nothing (else|more)|bye|goodbye)\b/i.test(_lastUserText);
           const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
           if(userAskedToEnd || minimumsMet){
             setTimeout(_close,3000);
@@ -993,6 +1023,9 @@ $('btnReset').addEventListener('click',()=>{
       </div>`;
     return;
   }
+
+  await hydrateLead();
+  UI.renderLead();
 
   UI.showSplash(async()=>{
     $('sLoad').classList.remove('off');
