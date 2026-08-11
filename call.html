@@ -404,6 +404,11 @@ let FIRST = (LEAD.name || '').split(' ')[0].trim();
 
 const $ = id => document.getElementById(id);
 
+/* Phrases that mean "I want to end this call" — shared by the transcript
+   listener (which arms a guaranteed close-out below) and the response.done
+   handler (which decides whether the AI is allowed to actually end). */
+const END_INTENT_RE = /\b(end (the )?(call|conversation|session)|hang up|stop( the (call|conversation))?|that'?s all|i (have|need|got) to go|i'?m (done|good|all set)|no more questions|nothing (else|more)|bye|goodbye)\b/i;
+
 /* ── HYDRATE FROM SHORT LINK ──
    If we only got a leadId (no name/email), pull the rest from the backend
    before anything else runs, so the prompt and UI have real client context. */
@@ -588,7 +593,7 @@ const UI = (() => {
 const SESSION = (() => {
   let pc=null, dc=null, audioEl=null, micStream=null, _greeted=false;
   let micMuted=false, spkrMuted=false, _closed=false;
-  let _turns=0, _tStart=0, _timer=null;
+  let _turns=0, _tStart=0, _timer=null, _endFallbackT=null;
   let _curUserText='', _curAiText='', _lastUserText='';
 
   function buildPrompt() {
@@ -852,6 +857,16 @@ SESSION_COMPLETE`;
           UI.showTx('you',text);
           _turns++;
           BSYNC.turn('user',text,_turns);
+          if(END_INTENT_RE.test(text)){
+            /* The user just asked to end. The AI still gets to say a warm
+               goodbye and write SESSION_COMPLETE (handled in response.done
+               below) — but we no longer depend on that response completing
+               cleanly. If it gets interrupted, lags, or the model just
+               acknowledges without the marker, the call still ends on its
+               own within a few seconds instead of hanging open. */
+            clearTimeout(_endFallbackT);
+            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 8000);
+          }
         }
         break;
       }
@@ -900,9 +915,10 @@ SESSION_COMPLETE`;
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
         BSYNC.turn('ai',_curAiText,_turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
-          const userAskedToEnd = /\b(end (the )?(call|conversation|session)|hang up|stop( the (call|conversation))?|that'?s all|i (have|need|got) to go|i'?m (done|good|all set)|no more questions|nothing (else|more)|bye|goodbye)\b/i.test(_lastUserText);
+          const userAskedToEnd = END_INTENT_RE.test(_lastUserText);
           const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
           if(userAskedToEnd || minimumsMet){
+            clearTimeout(_endFallbackT);
             setTimeout(_close,3000);
           } else if(dc?.readyState==='open'){
             /* Model tried to end early — decline and keep the conversation going */
@@ -942,16 +958,33 @@ SESSION_COMPLETE`;
     setTimeout(()=>{ UI.showEnd(); },2500);
   }
 
-  function _forceClose(){
-    if(_closed) return;
+  function _sendModelInstruction(text){
     if(dc?.readyState==='open'){
       dc.send(JSON.stringify({
         type:'conversation.item.create',
-        item:{type:'message',role:'user',content:[{type:'input_text',
-          text:'[TIME LIMIT REACHED: Wrap up warmly in one sentence, then write SESSION_COMPLETE]'}]},
+        item:{type:'message',role:'user',content:[{type:'input_text',text}]},
       }));
       dc.send(JSON.stringify({type:'response.create'}));
-    } else { _close(); }
+    }
+  }
+
+  function _forceClose(){
+    if(_closed) return;
+    _sendModelInstruction('[TIME LIMIT REACHED: Wrap up warmly in one sentence, then write SESSION_COMPLETE]');
+    /* Guaranteed close — don't just hope the model complies before the
+       browser tab sits open indefinitely. */
+    clearTimeout(_endFallbackT);
+    _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 4500);
+  }
+
+  function endNow(){
+    if(_closed) return;
+    _sendModelInstruction('[USER TAPPED "END CALL" — say one short warm closing line right now, then write SESSION_COMPLETE. Nothing else.]');
+    /* This button must always work, even if the model is slow, lagging,
+       mid-sentence, or doesn't comply — the call ends within a few
+       seconds of the tap no matter what. */
+    clearTimeout(_endFallbackT);
+    _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 3500);
   }
 
   function toggleMicMute(){
@@ -985,6 +1018,7 @@ SESSION_COMPLETE`;
   function reset(){
     _closed=false;_turns=0;_curUserText='';_curAiText='';
     clearInterval(_timer);
+    clearTimeout(_endFallbackT);
     MEM.clear();
     $('sEnd').classList.remove('open');
     try{pc?.close();}catch{}
@@ -996,7 +1030,7 @@ SESSION_COMPLETE`;
   }
 
   function isClosed(){return _closed;}
-  return{connect,reset,isClosed,toggleMicMute,toggleSpeaker};
+  return{connect,reset,isClosed,toggleMicMute,toggleSpeaker,endNow};
 })();
 
 /* ── BUTTON HANDLERS ── */
@@ -1006,6 +1040,9 @@ $('btnMic').addEventListener('click',()=>{
 $('btnSpkr').addEventListener('click',()=>SESSION.toggleSpeaker());
 $('btnReset').addEventListener('click',()=>{
   if(!SESSION.isClosed() && confirm('Restart this session?')) SESSION.reset();
+});
+$('btnEnd').addEventListener('click',()=>{
+  if(!SESSION.isClosed()) SESSION.endNow();
 });
 
 /* ── BOOT ── */
