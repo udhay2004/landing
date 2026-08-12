@@ -678,7 +678,7 @@ footer {
       </div>
       <button class="submit-btn" id="submitMainBtn">Request Strategy Session →</button>
       <div id="formMsg"></div>
-      <p class="form-note">🔒 Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
+      <p class="form-note">Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
     </div>
   </aside>
 
@@ -777,7 +777,7 @@ footer {
       </div>
       <button class="submit-btn" id="submitMobileBtn">Request Strategy Session →</button>
       <div id="formMsg2"></div>
-      <p class="form-note">🔒 Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
+      <p class="form-note">Confidential &nbsp;·&nbsp; Senior expert response &nbsp;·&nbsp; No spam</p>
     </div>
   </div>
 
@@ -850,8 +850,8 @@ footer {
     <div class="services-grid">
       <div class="service-card reveal"><div class="card-num">01</div><div class="card-title">Company Formation</div><p class="card-desc">Incorporation, legal entity structuring, and secretarial compliance across 30+ jurisdictions.</p></div>
       <div class="service-card reveal"><div class="card-num">02</div><div class="card-title">Global Taxation</div><p class="card-desc">Cross-border tax strategy, IRS compliance, VAT registration, transfer pricing, and international payroll alignment.</p></div>
-      <div class="service-card reveal"><div class="card-num">03</div><div class="card-title">Corporate Restructuring</div><p class="card-desc">Mergers, holding reorganizations, group restructuring, and M&amp;A advisory for agile global scaling.</p></div>
-      <div class="service-card reveal"><div class="card-num">04</div><div class="card-title">Cross-Border Banking</div><p class="card-desc">Multi-currency accounts, FEMA compliance, treasury management, and global payment infrastructure.</p></div>
+      <div class="service-card reveal"><div class="card-num">03</div><div class="card-title">Special-Purpose Companies</div><p class="card-desc">Purpose-built entity structures for gaming studios, fintech platforms, and universities or ed-tech ventures navigating sector-specific licensing.</p></div>
+      <div class="service-card reveal"><div class="card-num">04</div><div class="card-title">E-Commerce Exporters</div><p class="card-desc">Export-ready company structures, customs and GST/VAT alignment, and payment-gateway compliance for cross-border online sellers.</p></div>
     </div>
   </section>
 
@@ -930,11 +930,11 @@ async function submitForm(ids, msgId) {
 
   // Validate
   if (!name || !email || !phone || !country || !stage) {
-    showMsg(msgId, '❌ Please complete all required fields.', 'error');
+    showMsg(msgId, 'Please complete all required fields.', 'error');
     return;
   }
   if (!email.includes('@') || !email.includes('.')) {
-    showMsg(msgId, '❌ Please enter a valid email address.', 'error');
+    showMsg(msgId, 'Please enter a valid email address.', 'error');
     return;
   }
 
@@ -953,14 +953,14 @@ async function submitForm(ids, msgId) {
     if (!leadRes.ok) throw new Error('lead create failed');
     const { leadId, sessionId } = await leadRes.json();
 
-    showMsg(msgId, '✅ Got it!', 'success');
+    showMsg(msgId, 'Got it!', 'success');
     btn.disabled = false;
     btn.textContent = 'Request Strategy Session →';
 
     showConsent({ name, email, company, country, stage, leadId, sessionId });
 
   } catch (err) {
-    showMsg(msgId, '❌ Something went wrong. Please try again.', 'error');
+    showMsg(msgId, 'Something went wrong. Please try again.', 'error');
     btn.disabled = false;
     btn.textContent = 'Request Strategy Session →';
   }
@@ -973,7 +973,7 @@ function showConsent(lead) {
 
   overlay.innerHTML = `
     <div class="consent-modal">
-      <div class="consent-title">Got it, ${first}! 👋</div>
+      <div class="consent-title">Got it, ${first}.</div>
       <p class="consent-text">Want to speak with <strong>Dr.&nbsp;CV</strong>, our compliance champion, right now? It's a quick live voice conversation — no scheduling needed.</p>
       <div class="consent-actions">
         <button class="btn-primary" id="consentYes">Yes, connect me now →</button>
@@ -996,7 +996,7 @@ function showConsent(lead) {
     await postConsent(lead, 'no');
     overlay.innerHTML = `
       <div class="consent-modal">
-        <div class="consent-title">✅ Check your inbox</div>
+        <div class="consent-title">Check your inbox</div>
         <p class="consent-text">We've emailed <strong>${lead.email}</strong> a link to talk to Dr. CV whenever you're ready. It'll be waiting for you.</p>
         <div class="consent-actions">
           <button class="btn-outline" id="consentClose">Close</button>
