@@ -120,6 +120,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--san
 .stat-v{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink)}
 
 /* ── TRANSCRIPT BUBBLE ── */
+.tx-wrap,.interim-wrap{display:none!important}
 .tx-wrap{position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(10px);
   width:min(600px,calc(100vw - 24px));padding:11px 18px;
   background:rgba(250,248,244,.97);border:1px solid rgba(0,0,0,.09);border-radius:14px;
@@ -528,19 +529,12 @@ const UI = (() => {
     $('mr2').classList.toggle('on',isListen);
     $('vadRing').classList.toggle('vad-on',isListen);
   }
-  let _txT=null;
-  function showTx(who,text){
-    $('txWho').textContent=who==='you'?'You':'Dr. CV';
-    $('txWho').className='tx-who '+(who==='you'?'tx-you':'tx-ai');
-    $('txText').textContent=text;
-    $('txWrap').classList.add('open');
-    clearTimeout(_txT);
-    _txT=setTimeout(()=>$('txWrap').classList.remove('open'),8000);
-  }
-  function showInterim(text){
-    if(text){$('interimText').textContent=text;$('interimWrap').classList.add('open');}
-    else{$('interimWrap').classList.remove('open');}
-  }
+  /* Subtitles/captions disabled on purpose — voice-only experience, no
+     transcript bubble and no live interim text shown on screen. Transcript
+     is still recorded server-side via BSYNC for the CRM, this only affects
+     what's displayed during the call. */
+  function showTx(){}
+  function showInterim(){}
   function setTimer(fmt){$('timerEl').textContent=fmt;$('stDur').textContent=fmt;}
   function renderLead(){$('stClient').textContent=FIRST||'—';$('stMarket').textContent=LEAD.country||'—';}
   function setLoad(msg){$('loadMsg').textContent=msg;}
@@ -624,12 +618,32 @@ CONVERSATION FEEL:
 Warm, confident, curious advisor — like a smart friend who happens to be an expert.
 Not a salesperson. Not a robot. A real conversation.
 
+COMPANY KNOWLEDGE — this is who you represent, use it naturally when relevant:
+Comply Globally is a global compliance and corporate-services brand under Connect
+Ventures Inc. Founded and led by Dr. Anil Gupta (Founder & Chief Strategist), the
+firm has structured $2.8B+ in cross-border assets, supported 1,000+ organizations,
+operates across 30+ jurisdictions, and works with a network of 20,000+ licensed
+legal and tax professionals worldwide. Clients are typically startup founders,
+enterprises and SMEs, CFOs and legal heads, and investor-backed firms expanding
+internationally.
+
+Four service pillars:
+1. Company Formation — incorporation, entity structuring, and secretarial
+   compliance across 30+ jurisdictions.
+2. Global Taxation — cross-border tax strategy, IRS compliance, VAT
+   registration, transfer pricing, international payroll alignment.
+3. Special-Purpose Companies — purpose-built entity structures for gaming
+   studios, fintech platforms, and universities/ed-tech ventures navigating
+   sector-specific licensing.
+4. E-Commerce Exporters — export-ready company structures, customs/GST-VAT
+   alignment, and payment-gateway compliance for cross-border online sellers.
+
 SCOPE — STAY IN YOUR LANE:
-You ONLY discuss company formation, compliance, tax structure, and market-entry
+You ONLY discuss the four pillars above, tax structure, and market-entry
 strategy for expanding into the US or India. If the client asks about anything
 outside that (marketing, branding, celebrity endorsements, hiring, product design,
 etc.), do NOT improvise an answer — briefly acknowledge it, say that's outside
-what you personally advise on, and steer back to formation/compliance with a
+what you personally advise on, and steer back to one of the four pillars with a
 related question. Never invent facts, recommendations, or names in a domain you
 don't actually cover.
 
@@ -944,6 +958,11 @@ SESSION_COMPLETE`;
              talking", no matter how early it happens in the call. */
           if(_manualEnd || userAskedToEnd || minimumsMet){
             _pendingClose = true;
+            /* Stop listening the moment we've decided to end — a stray
+               cough or background noise must not be able to trigger a new
+               AI turn while we're waiting for this goodbye line to finish
+               playing. This is what caused "it speaks again after ending". */
+            try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
             /* Close as soon as response.audio.done fires (the real signal
                that the goodbye line finished playing). This fallback timer
                is just a safety net in case that event never arrives. */
@@ -980,6 +999,16 @@ SESSION_COMPLETE`;
     if(_closed) return;
     _closed=true;
     clearInterval(_timer);
+    clearTimeout(_endFallbackT);
+    /* Actually tear the call down — don't just update the UI and leave the
+       WebRTC connection + audio element alive in the background. Leaving
+       them alive is what let the AI speak again after the end screen was
+       already showing (a leftover response, or the mic itself picking up
+       something, could still reach the open connection). */
+    try{ micStream?.getTracks().forEach(t=>t.stop()); }catch{}
+    try{ dc?.close(); }catch{}
+    try{ pc?.close(); }catch{}
+    try{ if(audioEl){ audioEl.pause(); audioEl.srcObject=null; audioEl.remove(); } }catch{}
     MEM.lock();
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
     BSYNC.complete(elapsed,_turns);
@@ -1002,6 +1031,7 @@ SESSION_COMPLETE`;
   function _forceClose(){
     if(_closed) return;
     _manualEnd = true;
+    try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
     _sendModelInstruction('[TIME LIMIT REACHED: Wrap up warmly in one sentence, then write SESSION_COMPLETE]');
     /* Guaranteed close — don't just hope the model complies before the
        browser tab sits open indefinitely. */
@@ -1012,6 +1042,7 @@ SESSION_COMPLETE`;
   function endNow(){
     if(_closed) return;
     _manualEnd = true;
+    try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
     _sendModelInstruction('[USER TAPPED "END CALL" — say one short warm closing line right now, then write SESSION_COMPLETE. Nothing else.]');
     /* This button must always work, even if the model is slow, lagging,
        mid-sentence, or doesn't comply — the call ends within a few
