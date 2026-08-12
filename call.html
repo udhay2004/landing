@@ -436,21 +436,35 @@ async function hydrateLead() {
 }
 
 /* ── BACKEND SYNC — stores the live transcript; backend generates the structured
-   summary for the CRM once the call ends (see /transcript on the server) ── */
+   summary for the CRM once the call ends (see /transcript on the server) ──
+
+   IMPORTANT: requests are chained through a queue, not fired independently.
+   Each call to /transcript with a "turn" is a separate HTTP request, and
+   without ordering them, the final "complete" request (which triggers the
+   backend to read the stored transcript and generate the summary) could
+   reach the server and get processed BEFORE the last turn's own request —
+   especially the AI's closing line, which fires right as the call is
+   ending. That would silently produce a summary missing the last thing
+   either party said. Queuing guarantees each POST only starts after the
+   previous one has actually been acknowledged by the server. */
 const BSYNC = (() => {
+  let _chain = Promise.resolve();
   function post(body) {
-    fetch(CFG.BACKEND + '/transcript', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ leadId: LEAD.id, sessionId: LEAD.sid, ...body }),
-    }).catch(()=>{});
+    _chain = _chain.then(() =>
+      fetch(CFG.BACKEND + '/transcript', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leadId: LEAD.id, sessionId: LEAD.sid, ...body }),
+      }).catch(()=>{})
+    );
+    return _chain;
   }
   function turn(role, text, n) {
-    if (!text) return;
-    post({ turn: { role, text, n, ts: Date.now() } });
+    if (!text) return Promise.resolve();
+    return post({ turn: { role, text, n, ts: Date.now() } });
   }
   function complete(elapsed, turns) {
-    post({ complete: true, duration: elapsed, turnCount: turns });
+    return post({ complete: true, duration: elapsed, turnCount: turns });
   }
   return { turn, complete };
 })();
@@ -938,14 +952,17 @@ SESSION_COMPLETE`;
           _turns++;
           BSYNC.turn('user',text,_turns);
           if(END_INTENT_RE.test(text)){
-            /* The user just asked to end. The AI still gets to say a warm
-               goodbye and write SESSION_COMPLETE (handled in response.done
-               below) — but we no longer depend on that response completing
-               cleanly. If it gets interrupted, lags, or the model just
-               acknowledges without the marker, the call still ends on its
-               own within a few seconds instead of hanging open. */
+            /* The user just asked to end, out loud. The AI still gets to
+               say a warm goodbye and write SESSION_COMPLETE (picked up
+               instantly by _maybeArmClose() as it streams in) — but we no
+               longer depend on that response completing cleanly. Two
+               timers, same pattern as the manual button: the normal
+               fallback (can be tightened by _maybeArmClose if the marker
+               shows up), plus a hard, untouchable guarantee underneath it. */
             clearTimeout(_endFallbackT);
-            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 6000);
+            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 4000);
+            clearTimeout(_hardCloseT);
+            _hardCloseT = setTimeout(()=>{ if(!_closed) _close(); }, 6000);
           }
         }
         break;
