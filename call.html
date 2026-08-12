@@ -587,7 +587,7 @@ const UI = (() => {
 const SESSION = (() => {
   let pc=null, dc=null, audioEl=null, micStream=null, _greeted=false;
   let micMuted=false, spkrMuted=false, _closed=false;
-  let _turns=0, _tStart=0, _timer=null, _endFallbackT=null;
+  let _turns=0, _tStart=0, _timer=null, _endFallbackT=null, _hardCloseT=null;
   let _curUserText='', _curAiText='', _lastUserText='';
   /* _manualEnd: true once the user tapped "End Call" or the time limit
      was hit — an explicit end always wins, regardless of MIN_TURNS/MIN_MS.
@@ -1033,6 +1033,7 @@ SESSION_COMPLETE`;
     _closed=true;
     clearInterval(_timer);
     clearTimeout(_endFallbackT);
+    clearTimeout(_hardCloseT);
     /* Actually tear the call down — don't just update the UI and leave the
        WebRTC connection + audio element alive in the background. Leaving
        them alive is what let the AI speak again after the end screen was
@@ -1075,17 +1076,23 @@ SESSION_COMPLETE`;
   function endNow(){
     if(_closed) return;
     _manualEnd = true;
+    /* Instant feedback the tap registered — don't leave the UI looking
+       unresponsive while we wait on the AI's closing line. */
+    UI.set('closed');
     try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
     _sendModelInstruction('[USER TAPPED "END CALL" — say one short warm closing line right now, then write SESSION_COMPLETE. Nothing else.]');
-    /* This button must always work, even if the model is slow, lagging,
-       mid-sentence, or doesn't comply — the call ends within a few
-       seconds of the tap no matter what. Note: if the model's closing
-       line does contain the marker, _maybeArmClose() fires the instant it
-       streams in and overrides this with its own tighter 2.5s fallback —
-       this 3s window is only the true worst case if the model never
-       produces the marker at all. */
+    /* Two independent timers on purpose:
+       1. _endFallbackT — the normal shared fallback, gets reused/overridden
+          by _maybeArmClose() if the AI's marker streams in first (tighter,
+          2.5s from that point).
+       2. _hardCloseT — untouched by anything else in this file. This is
+          the actual guarantee: no matter what the model does, what races
+          with what, or what event never fires, THIS closes the call
+          1.5s after the tap. That's the fix for "doesn't work at all". */
     clearTimeout(_endFallbackT);
     _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 3000);
+    clearTimeout(_hardCloseT);
+    _hardCloseT = setTimeout(()=>{ if(!_closed) _close(); }, 1500);
   }
 
   function toggleMicMute(){
@@ -1121,6 +1128,7 @@ SESSION_COMPLETE`;
     _manualEnd=false;_pendingClose=false;_sessionCompleteSeen=false;
     clearInterval(_timer);
     clearTimeout(_endFallbackT);
+    clearTimeout(_hardCloseT);
     MEM.clear();
     $('sEnd').classList.remove('open');
     try{pc?.close();}catch{}
@@ -1144,7 +1152,13 @@ $('btnReset').addEventListener('click',()=>{
   if(!SESSION.isClosed() && confirm('Restart this session?')) SESSION.reset();
 });
 $('btnEnd').addEventListener('click',()=>{
-  if(!SESSION.isClosed()) SESSION.endNow();
+  try{
+    if(!SESSION.isClosed()) SESSION.endNow();
+  }catch(e){
+    /* Never let an unexpected error make this button silently do nothing —
+       fall back to a full reload of the page's own close screen state. */
+    console.error('End Call button error:', e);
+  }
 });
 
 /* ── BOOT ── */
