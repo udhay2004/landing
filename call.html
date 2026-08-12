@@ -595,6 +595,55 @@ const SESSION = (() => {
      final goodbye — close as soon as that audio finishes playing instead
      of guessing with a fixed timer. */
   let _manualEnd=false, _pendingClose=false;
+  /* _sessionCompleteSeen: guards against processing the SESSION_COMPLETE
+     marker twice (once early from the streaming transcript delta, once
+     again from response.done) once we've already armed the close. */
+  let _sessionCompleteSeen=false;
+
+  /* Shared by both the early (delta) and late (response.done) detection
+     paths below — decides whether the marker actually means "close now"
+     and, if so, arms the close immediately instead of waiting for a
+     later event. This is what response.audio.done used to wait on, but
+     by the time response.done fired (the only place this used to run),
+     response.audio.done had ALREADY fired and found _pendingClose still
+     false — so the immediate-close path never actually ran, and every
+     call fell through to the multi-second fallback timer instead. That's
+     the "end screen shows up much later" bug. Running this as soon as the
+     marker appears in the streaming transcript — well before the audio
+     finishes playing — closes both that gap and the window where the mic
+     stayed live and could pick up more speech ("speaks again"). */
+  function _maybeArmClose(){
+    if(_sessionCompleteSeen || _closed) return;
+    const userAskedToEnd = /EXPLICIT_END/i.test(_curAiText) || END_INTENT_RE.test(_lastUserText);
+    const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
+    if(!(_manualEnd || userAskedToEnd || minimumsMet)){
+      /* Model tried to end early — decline and keep going. Only makes
+         sense to do this once per response, so gate it too. */
+      _sessionCompleteSeen = true;
+      if(dc?.readyState==='open'){
+        dc.send(JSON.stringify({
+          type:'conversation.item.create',
+          item:{type:'message',role:'user',content:[{type:'input_text',
+            text:'[Not yet — the conversation has not covered enough ground. Continue naturally, ask a relevant follow-up, and do NOT write SESSION_COMPLETE.]'}]},
+        }));
+        dc.send(JSON.stringify({type:'response.create'}));
+      }
+      return;
+    }
+    _sessionCompleteSeen = true;
+    _pendingClose = true;
+    /* Stop listening the instant we've decided to end — this now happens
+       as soon as the marker text streams in, not after the full response
+       (including audio) has finished. */
+    try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
+    /* If audio.done already fired before we got here (rare, but possible
+       on very short goodbye lines), close right now. Otherwise the
+       audio.done handler below will see _pendingClose=true and close as
+       soon as it fires — this fallback timer is just the safety net in
+       case that event never arrives. */
+    clearTimeout(_endFallbackT);
+    _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 2500);
+  }
 
   function buildPrompt() {
     const who = FIRST
@@ -896,7 +945,7 @@ SESSION_COMPLETE`;
                acknowledges without the marker, the call still ends on its
                own within a few seconds instead of hanging open. */
             clearTimeout(_endFallbackT);
-            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 8000);
+            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 6000);
           }
         }
         break;
@@ -913,19 +962,22 @@ SESSION_COMPLETE`;
         _curAiText += (ev.delta||'');
         UI.set('speaking');
         WAVE.setAmp(14);
+        /* Check for the marker as soon as it streams in, not after the
+           whole response (incl. audio) is done — see _maybeArmClose(). */
+        if(/SESSION_COMPLETE/i.test(_curAiText)) _maybeArmClose();
         break;
 
       /* AI text delta (for text modality) */
       case 'response.text.delta':
         _curAiText += (ev.delta||'');
+        if(/SESSION_COMPLETE/i.test(_curAiText)) _maybeArmClose();
         break;
 
       /* AI audio finished playing */
       case 'response.audio.done':
         if(!_closed){
           if(_pendingClose){
-            /* This was the goodbye line — close right now, audio has
-               actually finished, no more guessing with a fixed delay. */
+            /* Goodbye line's audio has actually finished — close now. */
             clearTimeout(_endFallbackT);
             _close();
           } else {
@@ -953,38 +1005,12 @@ SESSION_COMPLETE`;
         const clean = _curAiText.replace(/EXPLICIT_END[\s\S]*/i,'').replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
         BSYNC.turn('ai', _curAiText.replace(/\bEXPLICIT_END\b/gi,'').trim(), _turns);
-        if(/SESSION_COMPLETE/i.test(_curAiText)){
-          /* Primary signal: the AI itself understood the user asked to end
-             and tagged it explicitly — this covers any phrasing, not just
-             the handful of patterns a regex can anticipate. The regex is
-             kept only as a backstop in case that tag gets dropped. */
-          const userAskedToEnd = /EXPLICIT_END/i.test(_curAiText) || END_INTENT_RE.test(_lastUserText);
-          const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
-          /* _manualEnd (End Call button tapped, or time limit hit) always
-             wins — an explicit end must never get overridden into "keep
-             talking", no matter how early it happens in the call. */
-          if(_manualEnd || userAskedToEnd || minimumsMet){
-            _pendingClose = true;
-            /* Stop listening the moment we've decided to end — a stray
-               cough or background noise must not be able to trigger a new
-               AI turn while we're waiting for this goodbye line to finish
-               playing. This is what caused "it speaks again after ending". */
-            try{ micStream?.getAudioTracks().forEach(t=>{t.enabled=false;}); }catch{}
-            /* Close as soon as response.audio.done fires (the real signal
-               that the goodbye line finished playing). This fallback timer
-               is just a safety net in case that event never arrives. */
-            clearTimeout(_endFallbackT);
-            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 4000);
-          } else if(dc?.readyState==='open'){
-            /* Model tried to end early — decline and keep the conversation going */
-            dc.send(JSON.stringify({
-              type:'conversation.item.create',
-              item:{type:'message',role:'user',content:[{type:'input_text',
-                text:'[Not yet — the conversation has not covered enough ground. Continue naturally, ask a relevant follow-up, and do NOT write SESSION_COMPLETE.]'}]},
-            }));
-            dc.send(JSON.stringify({type:'response.create'}));
-          }
-        }
+        /* Backstop only: normally _maybeArmClose() already ran the instant
+           the marker streamed in above (delta handlers), well before this
+           event fires. This just catches the rare case where the marker
+           landed in a single non-streamed chunk and was never seen there. */
+        if(/SESSION_COMPLETE/i.test(_curAiText)) _maybeArmClose();
+        _sessionCompleteSeen = false; // reset for the next response cycle
         break;
       }
 
@@ -1053,9 +1079,13 @@ SESSION_COMPLETE`;
     _sendModelInstruction('[USER TAPPED "END CALL" — say one short warm closing line right now, then write SESSION_COMPLETE. Nothing else.]');
     /* This button must always work, even if the model is slow, lagging,
        mid-sentence, or doesn't comply — the call ends within a few
-       seconds of the tap no matter what. */
+       seconds of the tap no matter what. Note: if the model's closing
+       line does contain the marker, _maybeArmClose() fires the instant it
+       streams in and overrides this with its own tighter 2.5s fallback —
+       this 3s window is only the true worst case if the model never
+       produces the marker at all. */
     clearTimeout(_endFallbackT);
-    _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 3500);
+    _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 3000);
   }
 
   function toggleMicMute(){
@@ -1088,7 +1118,7 @@ SESSION_COMPLETE`;
 
   function reset(){
     _closed=false;_turns=0;_curUserText='';_curAiText='';
-    _manualEnd=false;_pendingClose=false;
+    _manualEnd=false;_pendingClose=false;_sessionCompleteSeen=false;
     clearInterval(_timer);
     clearTimeout(_endFallbackT);
     MEM.clear();
