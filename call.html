@@ -408,7 +408,7 @@ const $ = id => document.getElementById(id);
 /* Phrases that mean "I want to end this call" — shared by the transcript
    listener (which arms a guaranteed close-out below) and the response.done
    handler (which decides whether the AI is allowed to actually end). */
-const END_INTENT_RE = /\b(end (the )?(call|conversation|session)|hang up|stop( the (call|conversation))?|that'?s all|i (have|need|got) to go|i'?m (done|good|all set)|no more questions|nothing (else|more)|bye|goodbye)\b/i;
+const END_INTENT_RE = /\b(end (the |this |our )?(call|conversation|session)|please end|let'?s end|can you end|wrap (it |this )?up|hang (up|this up)|disconnect|cut the call|stop( the (call|conversation))?|that'?s all|that (will|would) be all|i (have|need|got|gotta) to (go|run|head out|jump off)|i'?m (done|good|all set|finished)|we'?re done|we are done|no more questions|nothing (else|more)|not interested|bye|goodbye)\b/i;
 
 /* ── HYDRATE FROM SHORT LINK ──
    If we only got a leadId (no name/email), pull the rest from the backend
@@ -687,10 +687,12 @@ checked in and they have nothing more to add.
 When you do end, wrap up warmly in one sentence. Then on a new line write exactly:
 SESSION_COMPLETE
 
-IF THE USER ASKS TO END THE CALL — phrases like "end the call", "end the conversation",
-"hang up", "stop", "that's all", "I have to go", "I'm good", "bye", or similar — this
-OVERRIDES everything above, even on turn 1. Immediately say one short warm closing line
-(e.g. "Of course — thanks for your time today!"), then on a new line write exactly:
+IF THE USER ASKS TO END THE CALL — in ANY phrasing, explicit or implied ("end the
+call", "I have to go", "let's wrap up", "that's enough for now", "I need to run",
+etc.) — this OVERRIDES everything above, even on turn 1, no matter how few turns
+you've had. Immediately say one short warm closing line (e.g. "Of course — thanks
+for your time today!"), then on two new lines write exactly:
+EXPLICIT_END
 SESSION_COMPLETE`;
   }
 
@@ -947,11 +949,16 @@ SESSION_COMPLETE`;
           }
         }
         if(full) _curAiText=full;
-        const clean = _curAiText.replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
+        /* Store and display without the internal control tags */
+        const clean = _curAiText.replace(/EXPLICIT_END[\s\S]*/i,'').replace(/SESSION_COMPLETE[\s\S]*/i,'').trim();
         if(clean) UI.showTx('ai', clean.length>240 ? clean.slice(0,240)+'…' : clean);
-        BSYNC.turn('ai',_curAiText,_turns);
+        BSYNC.turn('ai', _curAiText.replace(/\bEXPLICIT_END\b/gi,'').trim(), _turns);
         if(/SESSION_COMPLETE/i.test(_curAiText)){
-          const userAskedToEnd = END_INTENT_RE.test(_lastUserText);
+          /* Primary signal: the AI itself understood the user asked to end
+             and tagged it explicitly — this covers any phrasing, not just
+             the handful of patterns a regex can anticipate. The regex is
+             kept only as a backstop in case that tag gets dropped. */
+          const userAskedToEnd = /EXPLICIT_END/i.test(_curAiText) || END_INTENT_RE.test(_lastUserText);
           const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
           /* _manualEnd (End Call button tapped, or time limit hit) always
              wins — an explicit end must never get overridden into "keep
