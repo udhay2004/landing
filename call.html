@@ -595,6 +595,12 @@ const SESSION = (() => {
   let micMuted=false, spkrMuted=false, _closed=false;
   let _turns=0, _tStart=0, _timer=null, _endFallbackT=null;
   let _curUserText='', _curAiText='', _lastUserText='';
+  /* _manualEnd: true once the user tapped "End Call" or the time limit
+     was hit — an explicit end always wins, regardless of MIN_TURNS/MIN_MS.
+     _pendingClose: true once we've decided this response's audio is the
+     final goodbye — close as soon as that audio finishes playing instead
+     of guessing with a fixed timer. */
+  let _manualEnd=false, _pendingClose=false;
 
   function buildPrompt() {
     const who = FIRST
@@ -891,10 +897,17 @@ SESSION_COMPLETE`;
 
       /* AI audio finished playing */
       case 'response.audio.done':
-        /* Return to ready AFTER audio finishes, not when text finishes */
         if(!_closed){
-          UI.set('ready');
-          WAVE.setAmp(0);
+          if(_pendingClose){
+            /* This was the goodbye line — close right now, audio has
+               actually finished, no more guessing with a fixed delay. */
+            clearTimeout(_endFallbackT);
+            _close();
+          } else {
+            /* Return to ready AFTER audio finishes, not when text finishes */
+            UI.set('ready');
+            WAVE.setAmp(0);
+          }
         }
         break;
 
@@ -917,9 +930,16 @@ SESSION_COMPLETE`;
         if(/SESSION_COMPLETE/i.test(_curAiText)){
           const userAskedToEnd = END_INTENT_RE.test(_lastUserText);
           const minimumsMet = _turns >= CFG.MIN_TURNS && (Date.now()-_tStart) >= CFG.MIN_MS;
-          if(userAskedToEnd || minimumsMet){
+          /* _manualEnd (End Call button tapped, or time limit hit) always
+             wins — an explicit end must never get overridden into "keep
+             talking", no matter how early it happens in the call. */
+          if(_manualEnd || userAskedToEnd || minimumsMet){
+            _pendingClose = true;
+            /* Close as soon as response.audio.done fires (the real signal
+               that the goodbye line finished playing). This fallback timer
+               is just a safety net in case that event never arrives. */
             clearTimeout(_endFallbackT);
-            setTimeout(_close,3000);
+            _endFallbackT = setTimeout(()=>{ if(!_closed) _close(); }, 4000);
           } else if(dc?.readyState==='open'){
             /* Model tried to end early — decline and keep the conversation going */
             dc.send(JSON.stringify({
@@ -955,7 +975,9 @@ SESSION_COMPLETE`;
     const elapsed = Math.floor((Date.now()-_tStart)/1000);
     BSYNC.complete(elapsed,_turns);
     UI.set('closed');
-    setTimeout(()=>{ UI.showEnd(); },2500);
+    /* Short beat only, for the "closed" pill state to visibly register
+       before the end screen replaces it — not a multi-second wait. */
+    setTimeout(()=>{ UI.showEnd(); },400);
   }
 
   function _sendModelInstruction(text){
@@ -970,6 +992,7 @@ SESSION_COMPLETE`;
 
   function _forceClose(){
     if(_closed) return;
+    _manualEnd = true;
     _sendModelInstruction('[TIME LIMIT REACHED: Wrap up warmly in one sentence, then write SESSION_COMPLETE]');
     /* Guaranteed close — don't just hope the model complies before the
        browser tab sits open indefinitely. */
@@ -979,6 +1002,7 @@ SESSION_COMPLETE`;
 
   function endNow(){
     if(_closed) return;
+    _manualEnd = true;
     _sendModelInstruction('[USER TAPPED "END CALL" — say one short warm closing line right now, then write SESSION_COMPLETE. Nothing else.]');
     /* This button must always work, even if the model is slow, lagging,
        mid-sentence, or doesn't comply — the call ends within a few
@@ -1017,6 +1041,7 @@ SESSION_COMPLETE`;
 
   function reset(){
     _closed=false;_turns=0;_curUserText='';_curAiText='';
+    _manualEnd=false;_pendingClose=false;
     clearInterval(_timer);
     clearTimeout(_endFallbackT);
     MEM.clear();
